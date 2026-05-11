@@ -370,8 +370,10 @@ function EventsCard() {
 }
 
 function PlanningTV() {
+  const kiosk = useKiosk();
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+      <KioskControls {...kiosk} />
       <Header />
       <ParashaBanner />
 
