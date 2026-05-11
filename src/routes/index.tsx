@@ -81,28 +81,28 @@ function Header() {
     : "";
 
   return (
-    <header className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-border">
-      <div className="flex items-center gap-5">
+    <header className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-4">
         <img
           src={logo}
           alt="Hasdé Tsion"
-          className="h-40 md:h-56 lg:h-64 xl:h-72 w-auto drop-shadow-[0_0_40px_rgba(201,169,110,0.55)]"
+          className="h-[16vh] w-auto drop-shadow-[0_0_30px_rgba(201,169,110,0.55)]"
         />
-        <div className="hidden md:block">
-          <h1 className="font-display text-3xl lg:text-4xl xl:text-5xl font-bold text-primary leading-none tracking-wide">
+        <div>
+          <h1 className="font-display text-[3.2vh] font-bold text-primary leading-none tracking-wide">
             HASDÉ TSION
           </h1>
-          <p className="text-xs lg:text-sm uppercase tracking-[0.4em] text-muted-foreground mt-2">
+          <p className="text-[1.1vh] uppercase tracking-[0.4em] text-muted-foreground mt-1">
             Torah & Hessed
           </p>
         </div>
       </div>
 
-      <div className="text-center md:text-right">
-        <div className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tabular-nums leading-none text-foreground">
+      <div className="text-right">
+        <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-foreground">
           {time}
         </div>
-        <p className="text-sm md:text-base uppercase tracking-[0.25em] text-muted-foreground mt-2 capitalize">
+        <p className="text-[1.2vh] uppercase tracking-[0.25em] text-muted-foreground mt-1 capitalize">
           {date}
         </p>
       </div>
@@ -112,20 +112,20 @@ function Header() {
 
 function ParashaBanner() {
   return (
-    <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 md:p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+    <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
       <div>
-        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-1">
+        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
           Parashat Hashavoua
         </p>
-        <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-none">
+        <h2 className="font-display text-[4.5vh] font-bold text-foreground leading-none">
           {week.parasha.fr}
         </h2>
       </div>
-      <div className="text-center md:text-right">
-        <p className="font-hebrew text-4xl md:text-5xl lg:text-6xl text-primary leading-none" dir="rtl">
+      <div className="text-right">
+        <p className="font-hebrew text-[4vh] text-primary leading-none" dir="rtl">
           {week.parasha.he}
         </p>
-        <p className="mt-2 text-sm md:text-base text-muted-foreground uppercase tracking-wider">
+        <p className="mt-1 text-[1.1vh] text-muted-foreground uppercase tracking-wider">
           {week.parasha.chap}
         </p>
       </div>
@@ -137,29 +137,23 @@ function TimeRow({
   label,
   value,
   tone,
-  size = "md",
 }: {
   label: string;
   value: string;
   tone?: "gold" | "red";
-  size?: "md" | "lg";
 }) {
   const valueColor =
     tone === "gold" ? "text-primary" : tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
-  const valSize =
-    size === "lg"
-      ? "text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
-      : "text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
   return (
     <div
-      className={`flex items-center justify-between gap-4 py-3 md:py-4 border-b border-border/60 last:border-0 ${
-        tone ? "px-3 -mx-3 rounded-lg" : ""
+      className={`flex items-center justify-between gap-3 py-[0.7vh] border-b border-border/60 last:border-0 ${
+        tone ? "px-2 -mx-2 rounded-md" : ""
       } ${tone === "gold" ? "bg-[var(--gold-soft)]" : tone === "red" ? "bg-[var(--red-soft)]" : ""}`}
     >
-      <span className="text-base md:text-lg lg:text-xl uppercase tracking-[0.18em] text-muted-foreground font-medium">
+      <span className="text-[1.4vh] uppercase tracking-[0.18em] text-muted-foreground font-medium">
         {label}
       </span>
-      <span className={`font-display font-bold tabular-nums leading-none ${valSize} ${valueColor}`}>
+      <span className={`font-display font-bold tabular-nums leading-none text-[3.6vh] ${valueColor}`}>
         {value}
       </span>
     </div>
@@ -191,38 +185,38 @@ function DayCard({
 }) {
   const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
   return (
-    <article className="rounded-2xl border border-border bg-card p-5 md:p-6 lg:p-8 flex flex-col gap-5 md:gap-6">
+    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col gap-[1vh] min-h-0 overflow-hidden">
       <div>
-        <span className={`inline-block px-3 py-1 rounded-full text-xs md:text-sm uppercase tracking-[0.25em] font-bold ${badgeBg}`}>
+        <span className={`inline-block px-2 py-0.5 rounded-full text-[1.1vh] uppercase tracking-[0.25em] font-bold ${badgeBg}`}>
           {badge}
         </span>
-        <h3 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-3 leading-tight">
+        <h3 className="font-display text-[2.6vh] font-bold text-foreground mt-1 leading-tight">
           {title}
         </h3>
-        <p className="text-sm md:text-base text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
-        <p className="text-sm md:text-base text-muted-foreground/70 mt-1">{hebrew}</p>
+        <p className="text-[1.2vh] text-muted-foreground mt-0.5 uppercase tracking-wider">{subtitle}</p>
+        <p className="text-[1.1vh] text-muted-foreground/70">{hebrew}</p>
       </div>
 
       {highlight}
 
       {/* TEHILIM — biggest visual element */}
-      <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 md:p-6 text-center">
-        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-2">
+      <div className="rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-[1vh] px-3 text-center">
+        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
           📖 Tehilim du jour
         </p>
-        <p className="font-display font-bold text-primary tabular-nums leading-none text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+        <p className="font-display font-bold text-primary tabular-nums leading-none text-[5.5vh]">
           {tehilim}
         </p>
       </div>
 
-      <div className="flex items-center justify-between text-sm md:text-base lg:text-lg">
+      <div className="flex items-center justify-between text-[1.3vh]">
         <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
-        <span className="font-display font-semibold text-foreground tabular-nums">{shema}</span>
+        <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{shema}</span>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-1 min-h-0">
         {times.map((t) => (
-          <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} size="lg" />
+          <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} />
         ))}
       </div>
 
@@ -233,28 +227,28 @@ function DayCard({
 
 function EventsCard() {
   return (
-    <article className="rounded-2xl border border-border bg-card p-5 md:p-6 lg:p-8">
-      <div className="flex items-center gap-3 mb-5">
-        <span className="inline-block w-2 h-8 bg-primary rounded-full" />
-        <h3 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
+    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
+      <div className="flex items-center gap-2 mb-[1vh]">
+        <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
+        <h3 className="font-display text-[2.6vh] font-bold text-foreground">
           Événements à venir
         </h3>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-1 min-h-0">
         {week.events.map((e) => {
           const valueColor =
             e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
           return (
             <div
               key={e.date + e.title}
-              className="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-3 md:py-4 border-b border-border/60 last:border-0"
+              className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-[0.7vh] border-b border-border/60 last:border-0"
             >
-              <span className="text-sm md:text-base lg:text-lg font-semibold uppercase tracking-wider text-muted-foreground min-w-[110px]">
+              <span className="text-[1.2vh] font-semibold uppercase tracking-wider text-muted-foreground min-w-[7vw]">
                 {e.date}
               </span>
-              <span className="text-base md:text-lg lg:text-xl font-medium text-foreground">{e.title}</span>
-              <span className={`font-display font-bold tabular-nums text-2xl md:text-3xl lg:text-4xl ${valueColor}`}>
+              <span className="text-[1.5vh] font-medium text-foreground">{e.title}</span>
+              <span className={`font-display font-bold tabular-nums text-[2.8vh] ${valueColor}`}>
                 {e.time}
               </span>
             </div>
@@ -262,13 +256,13 @@ function EventsCard() {
         })}
       </div>
 
-      <div className="mt-6 pt-5 border-t border-border">
-        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-2">
+      <div className="mt-[1vh] pt-[1vh] border-t border-border">
+        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-1">
           🕯 Yahrtzeit · 28 Iyar
         </p>
-        <ul className="space-y-1">
+        <ul className="space-y-0.5">
           {week.yahrtzeit.map((n) => (
-            <li key={n} className="font-display italic text-base md:text-lg text-muted-foreground">
+            <li key={n} className="font-display italic text-[1.4vh] text-muted-foreground leading-tight">
               {n}
             </li>
           ))}
@@ -280,11 +274,11 @@ function EventsCard() {
 
 function PlanningTV() {
   return (
-    <main className="min-h-screen w-full bg-background text-foreground p-5 md:p-8 lg:p-10 xl:p-12 flex flex-col gap-6 md:gap-8">
+    <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <Header />
       <ParashaBanner />
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
+      <section className="grid grid-cols-3 gap-[1vw] min-h-0">
         <DayCard
           badge="Vendredi"
           badgeTone="blue"
@@ -295,11 +289,11 @@ function PlanningTV() {
           shema={week.vendredi.shema}
           times={week.vendredi.times}
           highlight={
-            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-5 py-4 flex items-center justify-between">
-              <span className="text-sm md:text-base uppercase tracking-[0.2em] text-accent font-semibold">
+            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
+              <span className="text-[1.1vh] uppercase tracking-[0.2em] text-accent font-semibold">
                 Omer · ce soir
               </span>
-              <span className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-accent leading-none">
+              <span className="font-display text-[3.5vh] font-bold text-accent leading-none">
                 {week.vendredi.omer}
               </span>
             </div>
@@ -316,12 +310,12 @@ function PlanningTV() {
           shema={week.samedi.shema}
           times={week.samedi.times}
         >
-          <div className="rounded-xl border border-border bg-secondary/50 p-4 space-y-2">
-            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+          <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
+            <div className="flex justify-between items-center text-[1.4vh]">
               <span className="uppercase tracking-wider text-muted-foreground">Officiant</span>
               <span className="font-semibold text-accent">{week.samedi.officiant}</span>
             </div>
-            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+            <div className="flex justify-between items-center text-[1.4vh]">
               <span className="uppercase tracking-wider text-muted-foreground">Cours</span>
               <span className="font-semibold text-accent">{week.samedi.cours}</span>
             </div>
@@ -331,8 +325,8 @@ function PlanningTV() {
         <EventsCard />
       </section>
 
-      <footer className="text-center text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground pt-4 border-t border-border">
-        בס״ד · Hasdé Tsion · Affichage planning de la semaine
+      <footer className="text-center text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground">
+        בס״ד · Hasdé Tsion · Planning de la semaine
       </footer>
     </main>
   );
