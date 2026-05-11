@@ -14,30 +14,54 @@ export const Route = createFileRoute("/")({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+Hebrew:wght@300;400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Noto+Serif+Hebrew:wght@400;700&display=swap",
       },
     ],
   }),
   component: PlanningTV,
 });
 
-const tickerItems = [
-  "במדבר",
-  "Parashat Bamidbar",
-  "כ״ח אייר תשפ״ו",
-  "28 Iyar 5786",
-  "Yom Yeroushalayim",
-  "Pirkei Avot · Chapitre 6",
-  "Daf Yomi · חולין יד",
-];
+// ============ DATA ============
+const week = {
+  parasha: { fr: "Bamidbar", he: "במדבר", chap: "Pirkei Avot · Ch. 6" },
+  vendredi: {
+    date: "Vendredi 15 mai 2026",
+    heb: "27 Iyar 5786",
+    daf: "Daf Yomi · חולין יד",
+    omer: 42,
+    tehilim: "79 · 80 · 81",
+    shema: "08:54 / 10:03",
+    times: [
+      { label: "Minha", value: "19:30" },
+      { label: "Entrée Shabbat", value: "21:07", tone: "gold" as const },
+    ],
+  },
+  samedi: {
+    date: "Samedi 16 mai 2026",
+    heb: "28 Iyar 5786 · Yom Yeroushalayim",
+    daf: "Daf Yomi · חולין טו",
+    tehilim: "82 · 83 · 84 · 85",
+    shema: "08:53 / 10:02",
+    times: [
+      { label: "Chaharit", value: "09:15" },
+      { label: "Minha", value: "20:40" },
+      { label: "Chekia", value: "21:25" },
+      { label: "Sortie Shabbat", value: "22:26", tone: "red" as const },
+    ],
+    officiant: "Aharon Djian",
+    cours: "Jacob Elgrably",
+  },
+  events: [
+    { date: "Dim. 17 mai", title: "Cours du Rav", time: "20:30" },
+    { date: "Lun. 18 mai", title: "Arvit + Daf Yomi", time: "21:00" },
+    { date: "Mer. 20 mai", title: "Cours femmes", time: "14:30" },
+    { date: "Ven. 22 mai", title: "Chavouot — Entrée", time: "21:12", tone: "gold" as const },
+    { date: "Sam. 23 mai", title: "Chavouot — Sortie", time: "22:32", tone: "red" as const },
+  ],
+  yahrtzeit: ["Rabbi Yitshak Molko z.t.l", "Rabbi Éliyahou Danino z.t.l"],
+};
 
-const yahrtzeit = [
-  "Rabbi Yitshak Molko z.t.l",
-  "Rabbi Éliyahou Danino z.t.l",
-  "Rabbi Chmouël Chlomo Laïner z.t.l",
-  "Rabbi Makhlouf Chétrit Baba Yalo z.t.l",
-];
-
+// ============ HOOKS ============
 function useClock() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
@@ -48,213 +72,267 @@ function useClock() {
   return now;
 }
 
-function Ticker() {
-  const items = [...tickerItems, ...tickerItems];
+// ============ COMPONENTS ============
+function Header() {
+  const now = useClock();
+  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+  const date = now
+    ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+    : "";
+
   return (
-    <div className="overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-      <div className="flex gap-[60px] whitespace-nowrap animate-ticker text-[clamp(10px,0.75vw,11px)] uppercase tracking-[0.12em] text-[var(--dim)]">
-        {items.map((t, i) => (
-          <span key={i} className="flex items-center gap-[60px]">
-            {t}
-            <span className="text-primary opacity-40">·</span>
-          </span>
+    <header className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-border">
+      <div className="flex items-center gap-5">
+        <img
+          src={logo}
+          alt="Hasdé Tsion"
+          className="h-20 md:h-28 lg:h-32 w-auto drop-shadow-[0_0_30px_rgba(201,169,110,0.5)]"
+        />
+        <div className="hidden md:block">
+          <h1 className="font-display text-3xl lg:text-4xl xl:text-5xl font-bold text-primary leading-none tracking-wide">
+            HASDÉ TSION
+          </h1>
+          <p className="text-xs lg:text-sm uppercase tracking-[0.4em] text-muted-foreground mt-2">
+            Torah & Hessed
+          </p>
+        </div>
+      </div>
+
+      <div className="text-center md:text-right">
+        <div className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tabular-nums leading-none text-foreground">
+          {time}
+        </div>
+        <p className="text-sm md:text-base uppercase tracking-[0.25em] text-muted-foreground mt-2 capitalize">
+          {date}
+        </p>
+      </div>
+    </header>
+  );
+}
+
+function ParashaBanner() {
+  return (
+    <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 md:p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+      <div>
+        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-1">
+          Parashat Hashavoua
+        </p>
+        <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-none">
+          {week.parasha.fr}
+        </h2>
+      </div>
+      <div className="text-center md:text-right">
+        <p className="font-hebrew text-4xl md:text-5xl lg:text-6xl text-primary leading-none" dir="rtl">
+          {week.parasha.he}
+        </p>
+        <p className="mt-2 text-sm md:text-base text-muted-foreground uppercase tracking-wider">
+          {week.parasha.chap}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function TimeRow({
+  label,
+  value,
+  tone,
+  size = "md",
+}: {
+  label: string;
+  value: string;
+  tone?: "gold" | "red";
+  size?: "md" | "lg";
+}) {
+  const valueColor =
+    tone === "gold" ? "text-primary" : tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
+  const valSize =
+    size === "lg"
+      ? "text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+      : "text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
+  return (
+    <div
+      className={`flex items-center justify-between gap-4 py-3 md:py-4 border-b border-border/60 last:border-0 ${
+        tone ? "px-3 -mx-3 rounded-lg" : ""
+      } ${tone === "gold" ? "bg-[var(--gold-soft)]" : tone === "red" ? "bg-[var(--red-soft)]" : ""}`}
+    >
+      <span className="text-base md:text-lg lg:text-xl uppercase tracking-[0.18em] text-muted-foreground font-medium">
+        {label}
+      </span>
+      <span className={`font-display font-bold tabular-nums leading-none ${valSize} ${valueColor}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function DayCard({
+  badge,
+  badgeTone = "blue",
+  title,
+  subtitle,
+  hebrew,
+  tehilim,
+  shema,
+  times,
+  children,
+  highlight,
+}: {
+  badge: string;
+  badgeTone?: "blue" | "gold";
+  title: string;
+  subtitle: string;
+  hebrew: string;
+  tehilim: string;
+  shema: string;
+  times: { label: string; value: string; tone?: "gold" | "red" }[];
+  children?: React.ReactNode;
+  highlight?: React.ReactNode;
+}) {
+  const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+  return (
+    <article className="rounded-2xl border border-border bg-card p-5 md:p-6 lg:p-8 flex flex-col gap-5 md:gap-6">
+      <div>
+        <span className={`inline-block px-3 py-1 rounded-full text-xs md:text-sm uppercase tracking-[0.25em] font-bold ${badgeBg}`}>
+          {badge}
+        </span>
+        <h3 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-3 leading-tight">
+          {title}
+        </h3>
+        <p className="text-sm md:text-base text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
+        <p className="text-sm md:text-base text-muted-foreground/70 mt-1">{hebrew}</p>
+      </div>
+
+      {highlight}
+
+      {/* TEHILIM — biggest visual element */}
+      <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 md:p-6 text-center">
+        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-2">
+          📖 Tehilim du jour
+        </p>
+        <p className="font-display font-bold text-primary tabular-nums leading-none text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+          {tehilim}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between text-sm md:text-base lg:text-lg">
+        <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
+        <span className="font-display font-semibold text-foreground tabular-nums">{shema}</span>
+      </div>
+
+      <div className="flex flex-col">
+        {times.map((t) => (
+          <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} size="lg" />
         ))}
       </div>
-    </div>
-  );
-}
 
-function Clock() {
-  const now = useClock();
-  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "--:--:--";
-  const date = now ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }) : "";
-  return (
-    <div className="text-right">
-      <div className="font-display text-[clamp(32px,4vw,58px)] font-light leading-none tabular-nums tracking-tight">
-        {time}
-      </div>
-      <div className="text-[clamp(8px,0.6vw,9px)] uppercase tracking-[0.25em] text-[var(--dim)] mt-1">{date}</div>
-    </div>
-  );
-}
-
-function Panel({ children, badge, className = "" }: { children: React.ReactNode; badge?: string; className?: string }) {
-  return (
-    <article
-      className={`relative overflow-hidden rounded-2xl border border-border bg-card p-[clamp(18px,2.2vw,30px)] flex flex-col gap-[clamp(12px,1.4vh,18px)] min-h-0 animate-fade-up ${className}`}
-    >
-      {badge && (
-        <div className="absolute top-3.5 right-4 flex items-center gap-1.5 text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.22em] font-medium text-[var(--green-live)]">
-          <span className="w-[5px] h-[5px] rounded-full bg-[var(--green-live)] animate-pulse-dot" />
-          {badge}
-        </div>
-      )}
       {children}
     </article>
   );
 }
 
-function DayHeader({ title, sub, day, heb }: { title?: string; sub?: string; day: string; heb: string }) {
+function EventsCard() {
   return (
-    <div>
-      {title && (
-        <div className="text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.28em] font-medium text-primary mb-1.5">{title}</div>
-      )}
-      <h2 className="font-display text-[clamp(20px,2.2vw,30px)] font-light leading-none">{day}</h2>
-      {sub && (
-        <div className="flex flex-wrap items-center gap-2.5 text-[clamp(9px,0.7vw,10px)] uppercase tracking-[0.18em] text-muted-foreground mt-1.5 font-normal">
-          {sub.split("·").map((s, i, arr) => (
-            <span key={i} className="flex items-center gap-2.5">
-              {s.trim()}
-              {i < arr.length - 1 && <span className="text-primary/35">·</span>}
-            </span>
-          ))}
-        </div>
-      )}
-      <div className="font-hebrew text-[clamp(10px,0.8vw,12px)] text-[var(--dim)] mt-1" dir="rtl">{heb}</div>
-    </div>
-  );
-}
+    <article className="rounded-2xl border border-border bg-card p-5 md:p-6 lg:p-8">
+      <div className="flex items-center gap-3 mb-5">
+        <span className="inline-block w-2 h-8 bg-primary rounded-full" />
+        <h3 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
+          Événements à venir
+        </h3>
+      </div>
 
-function TimeItem({
-  label, value, sub, variant = "default", wide = false, valueSize = "lg", emphasize = false,
-}: {
-  label: string; value: string; sub?: string;
-  variant?: "default" | "gold" | "red";
-  wide?: boolean; valueSize?: "lg" | "sm" | "xl"; emphasize?: boolean;
-}) {
-  const borderBg =
-    variant === "gold" ? "border-[var(--gold-line)] bg-[var(--gold-soft)]" :
-    variant === "red"  ? "border-[rgba(192,99,90,0.25)] bg-[var(--red-soft)]" :
-    "border-[rgba(255,255,255,0.04)] bg-secondary";
-  const valueColor =
-    variant === "gold" ? "text-primary" :
-    variant === "red"  ? "text-[var(--highlight)]" :
-    "text-foreground";
-  const valueClass =
-    valueSize === "sm" ? "font-sans text-[clamp(20px,2vw,30px)] font-medium tabular-nums tracking-wide" :
-    valueSize === "xl" ? "font-display text-[clamp(40px,4.4vw,72px)] font-light leading-none tracking-tight tabular-nums" :
-    "font-display text-[clamp(32px,3.4vw,52px)] font-light leading-none tracking-tight tabular-nums";
-  return (
-    <div className={`rounded-[12px] border p-[clamp(12px,1.4vw,20px)_clamp(14px,1.6vw,22px)] flex gap-2 ${borderBg} ${wide ? "col-span-2 flex-row items-center justify-between" : "flex-col justify-between"} ${emphasize ? "ring-1 ring-[var(--gold-line)]" : ""}`}>
-      <div className="text-[clamp(10px,0.85vw,13px)] uppercase tracking-[0.24em] text-[var(--dim)] font-medium">{label}</div>
-      <div className={`${valueClass} ${valueColor}`}>{value}</div>
-      {sub && <div className="text-[clamp(9px,0.7vw,11px)] tracking-[0.1em] text-[var(--dim)]">{sub}</div>}
-    </div>
+      <div className="flex flex-col">
+        {week.events.map((e) => {
+          const valueColor =
+            e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
+          return (
+            <div
+              key={e.date + e.title}
+              className="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-3 md:py-4 border-b border-border/60 last:border-0"
+            >
+              <span className="text-sm md:text-base lg:text-lg font-semibold uppercase tracking-wider text-muted-foreground min-w-[110px]">
+                {e.date}
+              </span>
+              <span className="text-base md:text-lg lg:text-xl font-medium text-foreground">{e.title}</span>
+              <span className={`font-display font-bold tabular-nums text-2xl md:text-3xl lg:text-4xl ${valueColor}`}>
+                {e.time}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 pt-5 border-t border-border">
+        <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-2">
+          🕯 Yahrtzeit · 28 Iyar
+        </p>
+        <ul className="space-y-1">
+          {week.yahrtzeit.map((n) => (
+            <li key={n} className="font-display italic text-base md:text-lg text-muted-foreground">
+              {n}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
   );
 }
 
 function PlanningTV() {
   return (
-    <main className="relative z-10 w-screen h-screen grid grid-rows-[auto_auto_1fr_auto] gap-[clamp(16px,2vh,28px)] p-[clamp(20px,2.8vh,40px)_clamp(24px,3vw,52px)]">
-      {/* Ambient glows */}
-      <div className="fixed pointer-events-none rounded-full blur-[120px] w-[40vw] h-[40vw] -top-[10vh] -left-[5vw] bg-[rgba(201,169,110,0.04)] z-0" />
-      <div className="fixed pointer-events-none rounded-full blur-[120px] w-[30vw] h-[30vw] -bottom-[5vh] right-[5vw] bg-[rgba(91,143,201,0.04)] z-0" />
+    <main className="min-h-screen w-full bg-background text-foreground p-5 md:p-8 lg:p-10 xl:p-12 flex flex-col gap-6 md:gap-8">
+      <Header />
+      <ParashaBanner />
 
-      {/* HEADER */}
-      <header className="grid grid-cols-[auto_1fr_auto] items-center gap-8 relative z-10">
-        <div className="flex items-center gap-3.5">
-          <img src={logo} alt="Hasdé Tsion" className="h-[clamp(72px,8vw,128px)] w-auto drop-shadow-[0_0_28px_rgba(201,169,110,0.45)]" />
-        </div>
-        <Ticker />
-        <Clock />
-      </header>
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
+        <DayCard
+          badge="Vendredi"
+          badgeTone="blue"
+          title={week.vendredi.date}
+          subtitle={week.vendredi.heb}
+          hebrew={week.vendredi.daf}
+          tehilim={week.vendredi.tehilim}
+          shema={week.vendredi.shema}
+          times={week.vendredi.times}
+          highlight={
+            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-5 py-4 flex items-center justify-between">
+              <span className="text-sm md:text-base uppercase tracking-[0.2em] text-accent font-semibold">
+                Omer · ce soir
+              </span>
+              <span className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-accent leading-none">
+                {week.vendredi.omer}
+              </span>
+            </div>
+          }
+        />
 
-      <div className="h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.04)_20%,rgba(255,255,255,0.06)_50%,rgba(255,255,255,0.04)_80%,transparent)]" />
-
-      {/* BODY */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-[clamp(12px,1.5vw,20px)] min-h-0">
-        {/* VENDREDI */}
-        <Panel>
-          <DayHeader
-            title="Vendredi prochain"
-            day="Vendredi 15 mai 2026"
-            sub="27 Iyar 5786 · Tahanounim le matin"
-            heb="דף יומי: חולין יד"
-          />
-
-          <div className="flex items-center justify-between p-[clamp(10px,1.1vw,14px)_clamp(14px,1.5vw,20px)] rounded-[10px] border border-[var(--blue-soft)] bg-[var(--blue-soft)]">
-            <div className="text-[clamp(9px,0.7vw,10px)] uppercase tracking-[0.18em] text-accent">Ce soir — Omer</div>
-            <div className="flex items-baseline gap-2">
-              <div className="font-display text-[clamp(26px,3vw,42px)] font-light leading-none text-accent">42</div>
-              <div className="text-[clamp(7px,0.5vw,8px)] uppercase tracking-[0.2em] text-accent/45">jours</div>
+        <DayCard
+          badge="Shabbat"
+          badgeTone="gold"
+          title={week.samedi.date}
+          subtitle={week.samedi.heb}
+          hebrew={week.samedi.daf}
+          tehilim={week.samedi.tehilim}
+          shema={week.samedi.shema}
+          times={week.samedi.times}
+        >
+          <div className="rounded-xl border border-border bg-secondary/50 p-4 space-y-2">
+            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+              <span className="uppercase tracking-wider text-muted-foreground">Officiant</span>
+              <span className="font-semibold text-accent">{week.samedi.officiant}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+              <span className="uppercase tracking-wider text-muted-foreground">Cours</span>
+              <span className="font-semibold text-accent">{week.samedi.cours}</span>
             </div>
           </div>
+        </DayCard>
 
-          <div className="grid grid-cols-2 gap-[clamp(7px,0.8vw,10px)] flex-1 min-h-0">
-            <TimeItem wide label="Tehilim du jour" value="79 · 80 · 81" valueSize="xl" variant="gold" emphasize />
-            <TimeItem wide label="Limite Shema" value="08:54  /  10:03" valueSize="sm" />
-            <TimeItem label="Minha" value="19:30" sub="Heure locale" />
-            <TimeItem label="Entrée Shabbat" value="21:07" sub="Allumage bougies · Paris" variant="gold" />
-          </div>
-        </Panel>
-
-        {/* SAMEDI */}
-        <Panel badge="Today" className="[animation-delay:80ms]">
-          <DayHeader
-            day="Samedi 16 mai 2026"
-            sub="28 Iyar 5786 · Yom Yeroushalayim · Tsidqatkha"
-            heb="דף יומי: חולין טו  ·  יום ירושלים"
-          />
-
-          <div className="text-center p-[clamp(12px,1.3vw,18px)] rounded-[10px] border border-[var(--gold-line)] bg-[var(--gold-soft)]">
-            <div className="text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.28em] font-medium text-primary mb-1.5">Paracha de la semaine</div>
-            <div className="font-display text-[clamp(18px,2.1vw,28px)] font-normal leading-tight">Bamidbar</div>
-            <div className="font-hebrew text-[clamp(12px,1.1vw,15px)] text-primary/60 mt-1" dir="rtl">במדבר</div>
-            <div className="inline-flex items-center gap-1.5 mt-2 text-[clamp(8px,0.6vw,9px)] uppercase tracking-[0.15em] text-muted-foreground border border-border rounded-full px-2.5 py-1">
-              📖 Pirkei Avot · Chapitre 6
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-[clamp(7px,0.8vw,10px)] flex-1 min-h-0">
-            <TimeItem wide label="Tehilim du jour" value="82 · 83 · 84 · 85" valueSize="xl" variant="gold" emphasize />
-            <TimeItem wide label="Limite Shema" value="08:53  /  10:02" valueSize="sm" />
-            <TimeItem label="Chaharit" value="09:15" />
-            <TimeItem label="Minha" value="20:40" />
-            <TimeItem label="Chekia" value="21:25" />
-            <TimeItem label="Sortie Shabbat" value="22:26" variant="red" />
-          </div>
-
-          <div className="border-t border-[rgba(255,255,255,0.04)] pt-[clamp(10px,1.1vh,14px)] flex flex-col gap-1.5">
-            {[
-              ["Officiant", "Aharon Djian"],
-              ["Cours", "Jacob Elgrably"],
-              ["Pirkei Avot · 19h40", "Aharon Djian"],
-            ].map(([role, name]) => (
-              <div key={role} className="flex justify-between items-center text-[clamp(9px,0.72vw,11px)]">
-                <span className="text-[var(--dim)] font-light tracking-[0.08em]">{role}</span>
-                <span className="text-accent font-normal tracking-[0.04em]">{name}</span>
-              </div>
-            ))}
-          </div>
-        </Panel>
+        <EventsCard />
       </section>
 
-      {/* FOOTER */}
-      <footer className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-6">
-        <div>
-          <div className="flex items-center gap-1.5 text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.25em] font-medium text-primary mb-1.5">
-            <span className="animate-flicker">🕯</span> Yahrtzeit · 28 Iyar
-          </div>
-          <div className="flex flex-wrap gap-y-0.5 gap-x-4">
-            {yahrtzeit.map((n) => (
-              <span key={n} className="font-display italic font-light text-[clamp(9px,0.72vw,10px)] text-muted-foreground">{n}</span>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center gap-1.5">
-          <div className="font-hebrew text-[clamp(11px,0.9vw,14px)] text-[var(--dim)]" dir="rtl">ב״יה</div>
-          <div className="border border-[var(--gold-line)] rounded-full px-[clamp(14px,1.8vw,22px)] py-[clamp(4px,0.4vw,6px)] text-[clamp(9px,0.7vw,10px)] tracking-[0.1em] text-muted-foreground whitespace-nowrap">
-            Séouda offerte par <strong className="text-primary font-medium">LIBRE</strong>
-          </div>
-        </div>
-
-        <div className="text-right">
-          <div className="text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.25em] text-[var(--dim)] mb-1">Prochaine fête</div>
-          <div className="font-display text-[clamp(14px,1.3vw,20px)] font-light text-primary">Chavouot</div>
-          <div className="text-[clamp(8px,0.6vw,9px)] tracking-[0.1em] text-[var(--dim)] mt-0.5">Ven. 22 — Sam. 23 mai</div>
-        </div>
+      <footer className="text-center text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground pt-4 border-t border-border">
+        בס״ד · Hasdé Tsion · Affichage planning de la semaine
       </footer>
     </main>
   );
