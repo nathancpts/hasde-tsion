@@ -280,11 +280,11 @@ function EventsCard() {
 
 function PlanningTV() {
   return (
-    <main className="min-h-screen w-full bg-background text-foreground p-5 md:p-8 lg:p-10 xl:p-12 flex flex-col gap-6 md:gap-8">
+    <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <Header />
       <ParashaBanner />
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
+      <section className="grid grid-cols-3 gap-[1vw] min-h-0">
         <DayCard
           badge="Vendredi"
           badgeTone="blue"
@@ -295,11 +295,11 @@ function PlanningTV() {
           shema={week.vendredi.shema}
           times={week.vendredi.times}
           highlight={
-            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-5 py-4 flex items-center justify-between">
-              <span className="text-sm md:text-base uppercase tracking-[0.2em] text-accent font-semibold">
+            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
+              <span className="text-[1.1vh] uppercase tracking-[0.2em] text-accent font-semibold">
                 Omer · ce soir
               </span>
-              <span className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-accent leading-none">
+              <span className="font-display text-[3.5vh] font-bold text-accent leading-none">
                 {week.vendredi.omer}
               </span>
             </div>
@@ -316,12 +316,12 @@ function PlanningTV() {
           shema={week.samedi.shema}
           times={week.samedi.times}
         >
-          <div className="rounded-xl border border-border bg-secondary/50 p-4 space-y-2">
-            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+          <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
+            <div className="flex justify-between items-center text-[1.4vh]">
               <span className="uppercase tracking-wider text-muted-foreground">Officiant</span>
               <span className="font-semibold text-accent">{week.samedi.officiant}</span>
             </div>
-            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+            <div className="flex justify-between items-center text-[1.4vh]">
               <span className="uppercase tracking-wider text-muted-foreground">Cours</span>
               <span className="font-semibold text-accent">{week.samedi.cours}</span>
             </div>
@@ -331,8 +331,8 @@ function PlanningTV() {
         <EventsCard />
       </section>
 
-      <footer className="text-center text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground pt-4 border-t border-border">
-        בס״ד · Hasdé Tsion · Affichage planning de la semaine
+      <footer className="text-center text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground">
+        בס״ד · Hasdé Tsion · Planning de la semaine
       </footer>
     </main>
   );
