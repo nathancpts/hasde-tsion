@@ -207,7 +207,7 @@ function PlanningTV() {
           </div>
 
           <div className="grid grid-cols-2 gap-[clamp(7px,0.8vw,10px)] flex-1 min-h-0">
-            <TimeItem wide label="Tehilim du jour" value="82 · 83 · 84 · 85" valueSize="sm" />
+            <TimeItem wide label="Tehilim du jour" value="82 · 83 · 84 · 85" valueSize="xl" variant="gold" emphasize />
             <TimeItem wide label="Limite Shema" value="08:53  /  10:02" valueSize="sm" />
             <TimeItem label="Chaharit" value="09:15" />
             <TimeItem label="Minha" value="20:40" />
