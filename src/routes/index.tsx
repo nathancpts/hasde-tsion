@@ -117,11 +117,11 @@ function DayHeader({ title, sub, day, heb }: { title?: string; sub?: string; day
 }
 
 function TimeItem({
-  label, value, sub, variant = "default", wide = false, valueSize = "lg",
+  label, value, sub, variant = "default", wide = false, valueSize = "lg", emphasize = false,
 }: {
   label: string; value: string; sub?: string;
   variant?: "default" | "gold" | "red";
-  wide?: boolean; valueSize?: "lg" | "sm";
+  wide?: boolean; valueSize?: "lg" | "sm" | "xl"; emphasize?: boolean;
 }) {
   const borderBg =
     variant === "gold" ? "border-[var(--gold-line)] bg-[var(--gold-soft)]" :
@@ -131,14 +131,15 @@ function TimeItem({
     variant === "gold" ? "text-primary" :
     variant === "red"  ? "text-[var(--highlight)]" :
     "text-foreground";
-  const valueClass = valueSize === "sm"
-    ? "font-sans text-[clamp(12px,1.1vw,16px)] font-light"
-    : "font-display text-[clamp(22px,2.4vw,34px)] font-light leading-none tracking-tight";
+  const valueClass =
+    valueSize === "sm" ? "font-sans text-[clamp(20px,2vw,30px)] font-medium tabular-nums tracking-wide" :
+    valueSize === "xl" ? "font-display text-[clamp(40px,4.4vw,72px)] font-light leading-none tracking-tight tabular-nums" :
+    "font-display text-[clamp(32px,3.4vw,52px)] font-light leading-none tracking-tight tabular-nums";
   return (
-    <div className={`rounded-[10px] border p-[clamp(10px,1.1vw,15px)_clamp(12px,1.3vw,17px)] flex gap-1 ${borderBg} ${wide ? "col-span-2 flex-row items-center justify-between" : "flex-col justify-between"}`}>
-      <div className="text-[clamp(7px,0.55vw,8px)] uppercase tracking-[0.22em] text-[var(--dim)]">{label}</div>
+    <div className={`rounded-[12px] border p-[clamp(12px,1.4vw,20px)_clamp(14px,1.6vw,22px)] flex gap-2 ${borderBg} ${wide ? "col-span-2 flex-row items-center justify-between" : "flex-col justify-between"} ${emphasize ? "ring-1 ring-[var(--gold-line)]" : ""}`}>
+      <div className="text-[clamp(10px,0.85vw,13px)] uppercase tracking-[0.24em] text-[var(--dim)] font-medium">{label}</div>
       <div className={`${valueClass} ${valueColor}`}>{value}</div>
-      {sub && <div className="text-[clamp(7px,0.5vw,8px)] tracking-[0.1em] text-[var(--dim)]">{sub}</div>}
+      {sub && <div className="text-[clamp(9px,0.7vw,11px)] tracking-[0.1em] text-[var(--dim)]">{sub}</div>}
     </div>
   );
 }
