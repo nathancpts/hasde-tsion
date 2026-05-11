@@ -154,7 +154,7 @@ function PlanningTV() {
       {/* HEADER */}
       <header className="grid grid-cols-[auto_1fr_auto] items-center gap-8 relative z-10">
         <div className="flex items-center gap-3.5">
-          <img src={logo} alt="Hasdé Tsion" className="h-[clamp(40px,4.5vw,64px)] w-auto drop-shadow-[0_0_16px_rgba(201,169,110,0.25)]" />
+          <img src={logo} alt="Hasdé Tsion" className="h-[clamp(72px,8vw,128px)] w-auto drop-shadow-[0_0_28px_rgba(201,169,110,0.45)]" />
         </div>
         <Ticker />
         <Clock />
