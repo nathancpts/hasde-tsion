@@ -59,7 +59,7 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { min-height: 100%; }
+  html, body { height: 100%; overflow: hidden; }
   body {
     background: var(--color-background);
     color: var(--color-foreground);
