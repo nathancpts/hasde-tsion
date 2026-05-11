@@ -10,8 +10,7 @@ function useKiosk() {
   const enter = useCallback(async () => {
     try {
       await document.documentElement.requestFullscreen();
-      // Lock orientation to landscape if supported (TVs/tablets)
-      const so = (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> }) | undefined;
+      const so = screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> };
       if (so?.lock) { try { await so.lock("landscape"); } catch { /* ignore */ } }
     } catch { /* user gesture required */ }
   }, []);
