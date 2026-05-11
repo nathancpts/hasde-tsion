@@ -1,6 +1,103 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import logo from "@/assets/hasde-tsion-logo.png";
+
+function useKiosk() {
+  const [isFs, setIsFs] = useState(false);
+  const [hint, setHint] = useState(true);
+
+  const enter = useCallback(async () => {
+    try {
+      await document.documentElement.requestFullscreen();
+      const so = screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> };
+      if (so?.lock) { try { await so.lock("landscape"); } catch { /* ignore */ } }
+    } catch { /* user gesture required */ }
+  }, []);
+
+  const exit = useCallback(async () => {
+    if (document.fullscreenElement) await document.exitFullscreen();
+  }, []);
+
+  const toggle = useCallback(() => {
+    if (document.fullscreenElement) exit(); else enter();
+  }, [enter, exit]);
+
+  useEffect(() => {
+    const onChange = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+
+    // Keyboard: F = toggle fullscreen, Esc handled by browser
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "f" || e.key === "F") toggle();
+    };
+    window.addEventListener("keydown", onKey);
+
+    // Auto-hide cursor in kiosk mode
+    let timer: ReturnType<typeof setTimeout>;
+    const onMove = () => {
+      document.body.style.cursor = "";
+      clearTimeout(timer);
+      timer = setTimeout(() => { document.body.style.cursor = "none"; }, 3000);
+    };
+    window.addEventListener("mousemove", onMove);
+    onMove();
+
+    // Prevent screen from sleeping (Wake Lock API)
+    let wakeLock: WakeLockSentinel | null = null;
+    const requestWake = async () => {
+      try {
+        const nav = navigator as Navigator & { wakeLock?: { request: (t: "screen") => Promise<WakeLockSentinel> } };
+        if (nav.wakeLock) wakeLock = await nav.wakeLock.request("screen");
+      } catch { /* ignore */ }
+    };
+    requestWake();
+    const onVis = () => { if (document.visibilityState === "visible") requestWake(); };
+    document.addEventListener("visibilitychange", onVis);
+
+    // Hide hint after 8s
+    const hintTimer = setTimeout(() => setHint(false), 8000);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", onChange);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("visibilitychange", onVis);
+      clearTimeout(timer);
+      clearTimeout(hintTimer);
+      wakeLock?.release().catch(() => {});
+      document.body.style.cursor = "";
+    };
+  }, [toggle]);
+
+  return { isFs, toggle, hint, dismissHint: () => setHint(false) };
+}
+
+function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof useKiosk>) {
+  return (
+    <>
+      <button
+        onClick={toggle}
+        aria-label={isFs ? "Quitter plein écran" : "Mode kiosque plein écran"}
+        className="fixed bottom-4 right-4 z-50 p-2.5 rounded-full bg-card/80 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition opacity-30 hover:opacity-100 backdrop-blur-sm"
+      >
+        {isFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+      </button>
+
+      {hint && !isFs && (
+        <button
+          onClick={() => { toggle(); dismissHint(); }}
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-primary text-primary-foreground text-xs md:text-sm font-semibold uppercase tracking-wider shadow-[0_0_30px_rgba(201,169,110,0.4)] hover:scale-105 transition flex items-center gap-2"
+        >
+          <Maximize2 className="w-4 h-4" />
+          Lancer mode TV plein écran
+          <span className="opacity-60 hidden md:inline">· touche F</span>
+        </button>
+      )}
+    </>
+  );
+}
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -273,8 +370,10 @@ function EventsCard() {
 }
 
 function PlanningTV() {
+  const kiosk = useKiosk();
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+      <KioskControls {...kiosk} />
       <Header />
       <ParashaBanner />
 
