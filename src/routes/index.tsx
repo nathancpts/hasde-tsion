@@ -86,7 +86,7 @@ function Header() {
         <img
           src={logo}
           alt="Hasdé Tsion"
-          className="h-20 md:h-28 lg:h-32 w-auto drop-shadow-[0_0_30px_rgba(201,169,110,0.5)]"
+          className="h-40 md:h-56 lg:h-64 xl:h-72 w-auto drop-shadow-[0_0_40px_rgba(201,169,110,0.55)]"
         />
         <div className="hidden md:block">
           <h1 className="font-display text-3xl lg:text-4xl xl:text-5xl font-bold text-primary leading-none tracking-wide">
