@@ -187,8 +187,20 @@ function useLiveWeek() {
   return live;
 }
 
+function useIsTV() {
+  const [isTV, setIsTV] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsTV(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return isTV;
+}
 
 // ============ COMPONENTS ============
+
 function Header() {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
