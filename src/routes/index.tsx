@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import logo from "@/assets/hasde-tsion-logo.png";
+import { fetchLiveWeek, type LiveWeek } from "@/lib/jewish-calendar";
+
 
 function useKiosk() {
   const [isFs, setIsFs] = useState(false);
