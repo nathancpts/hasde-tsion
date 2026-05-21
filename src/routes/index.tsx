@@ -226,7 +226,9 @@ function Header() {
   );
 }
 
-function ParashaBanner() {
+function ParashaBanner({ live }: { live: LiveWeek | null }) {
+  const fr = live?.parasha.fr ?? week.parasha.fr;
+  const he = live?.parasha.he ?? week.parasha.he;
   return (
     <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
       <div>
@@ -234,10 +236,11 @@ function ParashaBanner() {
           Parashat Hashavoua
         </p>
         <h2 className="font-display text-[4.5vh] font-bold text-foreground leading-none">
-          {week.parasha.fr}
+          {fr}
         </h2>
       </div>
       <div className="text-right">
+
         <p className="font-hebrew text-[4vh] text-primary leading-none" dir="rtl">
           {week.parasha.he}
         </p>
