@@ -240,13 +240,13 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
         </h2>
       </div>
       <div className="text-right">
-
         <p className="font-hebrew text-[4vh] text-primary leading-none" dir="rtl">
-          {week.parasha.he}
+          {he}
         </p>
         <p className="mt-1 text-[1.1vh] text-muted-foreground uppercase tracking-wider">
           {week.parasha.chap}
         </p>
+
       </div>
     </div>
   );
