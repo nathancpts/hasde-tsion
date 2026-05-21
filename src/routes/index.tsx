@@ -171,6 +171,23 @@ function useClock() {
   return now;
 }
 
+function useLiveWeek() {
+  const [live, setLive] = useState<LiveWeek | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetchLiveWeek()
+        .then((d) => { if (!cancelled) setLive(d); })
+        .catch((e) => console.warn("Hebcal fetch failed", e));
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000); // refresh every hour
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+  return live;
+}
+
+
 // ============ COMPONENTS ============
 function Header() {
   const now = useClock();
