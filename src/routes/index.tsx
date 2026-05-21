@@ -395,29 +395,56 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 
 function PlanningTV() {
   const kiosk = useKiosk();
+  const live = useLiveWeek();
+
+  // Merge live data into static fallbacks
+  const vDate = live?.vendredi.date ?? week.vendredi.date;
+  const vHeb = live?.vendredi.heb ?? week.vendredi.heb;
+  const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
+  const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
+  const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
+
+  const sDate = live?.samedi.date ?? week.samedi.date;
+  const sHeb = live?.samedi.heb ?? week.samedi.heb;
+  const sDaf = live?.samedi.daf ?? week.samedi.daf;
+  const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
+
+  // Override entry/exit Shabbat with live candle/havdalah when available
+  const vTimes = live?.vendredi.candleLighting
+    ? week.vendredi.times.map(t =>
+        t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t,
+      )
+    : week.vendredi.times;
+
+  const sTimes = live?.samedi.havdalah
+    ? week.samedi.times.map(t =>
+        t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t,
+      )
+    : week.samedi.times;
+
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <KioskControls {...kiosk} />
       <Header />
-      <ParashaBanner />
+      <ParashaBanner live={live} />
 
       <section className="grid grid-cols-3 gap-[1vw] min-h-0">
         <DayCard
           badge="Vendredi"
           badgeTone="blue"
-          title={week.vendredi.date}
-          subtitle={week.vendredi.heb}
-          hebrew={week.vendredi.daf}
-          tehilim={week.vendredi.tehilim}
+          title={vDate}
+          subtitle={vHeb}
+          hebrew={vDaf}
+          tehilim={vTeh}
           shema={week.vendredi.shema}
-          times={week.vendredi.times}
+          times={vTimes}
           highlight={
             <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
               <span className="text-[1.1vh] uppercase tracking-[0.2em] text-accent font-semibold">
                 Omer · ce soir
               </span>
               <span className="font-display text-[3.5vh] font-bold text-accent leading-none">
-                {week.vendredi.omer}
+                {vOmer ?? "—"}
               </span>
             </div>
           }
@@ -426,12 +453,12 @@ function PlanningTV() {
         <DayCard
           badge="Shabbat"
           badgeTone="gold"
-          title={week.samedi.date}
-          subtitle={week.samedi.heb}
-          hebrew={week.samedi.daf}
-          tehilim={week.samedi.tehilim}
+          title={sDate}
+          subtitle={sHeb}
+          hebrew={sDaf}
+          tehilim={sTeh}
           shema={week.samedi.shema}
-          times={week.samedi.times}
+          times={sTimes}
         >
           <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
             <div className="flex justify-between items-center text-[1.4vh]">
@@ -445,8 +472,9 @@ function PlanningTV() {
           </div>
         </DayCard>
 
-        <EventsCard />
+        <EventsCard live={live} />
       </section>
+
 
       <footer className="text-center text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground">
         בס״ד · Hasdé Tsion · Planning de la semaine
