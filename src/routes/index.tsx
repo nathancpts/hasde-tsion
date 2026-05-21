@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import logo from "@/assets/hasde-tsion-logo.png";
+import { fetchLiveWeek, type LiveWeek } from "@/lib/jewish-calendar";
+
 
 function useKiosk() {
   const [isFs, setIsFs] = useState(false);
@@ -169,6 +171,23 @@ function useClock() {
   return now;
 }
 
+function useLiveWeek() {
+  const [live, setLive] = useState<LiveWeek | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetchLiveWeek()
+        .then((d) => { if (!cancelled) setLive(d); })
+        .catch((e) => console.warn("Hebcal fetch failed", e));
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000); // refresh every hour
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+  return live;
+}
+
+
 // ============ COMPONENTS ============
 function Header() {
   const now = useClock();
@@ -207,7 +226,9 @@ function Header() {
   );
 }
 
-function ParashaBanner() {
+function ParashaBanner({ live }: { live: LiveWeek | null }) {
+  const fr = live?.parasha.fr ?? week.parasha.fr;
+  const he = live?.parasha.he ?? week.parasha.he;
   return (
     <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
       <div>
@@ -215,16 +236,17 @@ function ParashaBanner() {
           Parashat Hashavoua
         </p>
         <h2 className="font-display text-[4.5vh] font-bold text-foreground leading-none">
-          {week.parasha.fr}
+          {fr}
         </h2>
       </div>
       <div className="text-right">
         <p className="font-hebrew text-[4vh] text-primary leading-none" dir="rtl">
-          {week.parasha.he}
+          {he}
         </p>
         <p className="mt-1 text-[1.1vh] text-muted-foreground uppercase tracking-wider">
           {week.parasha.chap}
         </p>
+
       </div>
     </div>
   );
@@ -322,7 +344,8 @@ function DayCard({
   );
 }
 
-function EventsCard() {
+function EventsCard({ live }: { live: LiveWeek | null }) {
+  const events = live?.events?.length ? live.events : week.events;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
@@ -333,7 +356,8 @@ function EventsCard() {
       </div>
 
       <div className="flex flex-col flex-1 min-h-0">
-        {week.events.map((e) => {
+        {events.map((e) => {
+
           const valueColor =
             e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
           return (
@@ -371,29 +395,56 @@ function EventsCard() {
 
 function PlanningTV() {
   const kiosk = useKiosk();
+  const live = useLiveWeek();
+
+  // Merge live data into static fallbacks
+  const vDate = live?.vendredi.date ?? week.vendredi.date;
+  const vHeb = live?.vendredi.heb ?? week.vendredi.heb;
+  const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
+  const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
+  const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
+
+  const sDate = live?.samedi.date ?? week.samedi.date;
+  const sHeb = live?.samedi.heb ?? week.samedi.heb;
+  const sDaf = live?.samedi.daf ?? week.samedi.daf;
+  const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
+
+  // Override entry/exit Shabbat with live candle/havdalah when available
+  const vTimes = live?.vendredi.candleLighting
+    ? week.vendredi.times.map(t =>
+        t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t,
+      )
+    : week.vendredi.times;
+
+  const sTimes = live?.samedi.havdalah
+    ? week.samedi.times.map(t =>
+        t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t,
+      )
+    : week.samedi.times;
+
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <KioskControls {...kiosk} />
       <Header />
-      <ParashaBanner />
+      <ParashaBanner live={live} />
 
       <section className="grid grid-cols-3 gap-[1vw] min-h-0">
         <DayCard
           badge="Vendredi"
           badgeTone="blue"
-          title={week.vendredi.date}
-          subtitle={week.vendredi.heb}
-          hebrew={week.vendredi.daf}
-          tehilim={week.vendredi.tehilim}
+          title={vDate}
+          subtitle={vHeb}
+          hebrew={vDaf}
+          tehilim={vTeh}
           shema={week.vendredi.shema}
-          times={week.vendredi.times}
+          times={vTimes}
           highlight={
             <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
               <span className="text-[1.1vh] uppercase tracking-[0.2em] text-accent font-semibold">
                 Omer · ce soir
               </span>
               <span className="font-display text-[3.5vh] font-bold text-accent leading-none">
-                {week.vendredi.omer}
+                {vOmer ?? "—"}
               </span>
             </div>
           }
@@ -402,12 +453,12 @@ function PlanningTV() {
         <DayCard
           badge="Shabbat"
           badgeTone="gold"
-          title={week.samedi.date}
-          subtitle={week.samedi.heb}
-          hebrew={week.samedi.daf}
-          tehilim={week.samedi.tehilim}
+          title={sDate}
+          subtitle={sHeb}
+          hebrew={sDaf}
+          tehilim={sTeh}
           shema={week.samedi.shema}
-          times={week.samedi.times}
+          times={sTimes}
         >
           <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
             <div className="flex justify-between items-center text-[1.4vh]">
@@ -421,8 +472,9 @@ function PlanningTV() {
           </div>
         </DayCard>
 
-        <EventsCard />
+        <EventsCard live={live} />
       </section>
+
 
       <footer className="text-center text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground">
         בס״ד · Hasdé Tsion · Planning de la semaine
