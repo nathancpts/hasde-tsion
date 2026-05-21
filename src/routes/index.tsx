@@ -214,7 +214,7 @@ function Header() {
         <img
           src={logo}
           alt="Hasdé Tsion"
-          className="h-[16vh] w-auto drop-shadow-[0_0_30px_rgba(201,169,110,0.55)]"
+          className="h-[16vh] w-auto invert brightness-0"
         />
         <div>
           <h1 className="font-display text-[3.2vh] font-bold text-primary leading-none tracking-wide">
