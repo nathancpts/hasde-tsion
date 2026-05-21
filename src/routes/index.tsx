@@ -580,9 +580,12 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
 }
 
 function PlanningTV() {
-
-  const kiosk = useKiosk();
+  const isTV = useIsTV();
   const live = useLiveWeek();
+  const kiosk = useKiosk();
+
+  if (!isTV) return <MobileLayout live={live} />;
+
 
   // Merge live data into static fallbacks
   const vDate = live?.vendredi.date ?? week.vendredi.date;
