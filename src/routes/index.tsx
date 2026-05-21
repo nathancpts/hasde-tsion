@@ -486,7 +486,7 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     <main className="min-h-screen w-full bg-background text-foreground overflow-x-hidden">
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">
         <header className="flex items-center justify-between gap-3">
-          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto drop-shadow-[0_0_20px_rgba(201,169,110,0.4)]" />
+          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto invert brightness-0" />
           <div className="text-right">
             <div className="font-display text-3xl font-bold tabular-nums leading-none text-foreground">{time}</div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
