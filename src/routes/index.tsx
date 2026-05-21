@@ -405,7 +405,182 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
   );
 }
 
+// ============ MOBILE LAYOUT ============
+function MobileLayout({ live }: { live: LiveWeek | null }) {
+  const now = useClock();
+  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+  const date = now
+    ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+    : "";
+
+  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
+  const parashaHe = live?.parasha.he ?? week.parasha.he;
+
+  const vDate = live?.vendredi.date ?? week.vendredi.date;
+  const vHeb = live?.vendredi.heb ?? week.vendredi.heb;
+  const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
+  const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
+  const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
+  const vTimes = live?.vendredi.candleLighting
+    ? week.vendredi.times.map(t => t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t)
+    : week.vendredi.times;
+
+  const sDate = live?.samedi.date ?? week.samedi.date;
+  const sHeb = live?.samedi.heb ?? week.samedi.heb;
+  const sDaf = live?.samedi.daf ?? week.samedi.daf;
+  const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
+  const sTimes = live?.samedi.havdalah
+    ? week.samedi.times.map(t => t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t)
+    : week.samedi.times;
+
+  const events = live?.events?.length ? live.events : week.events;
+
+  const MobileDay = ({
+    badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
+  }: {
+    badge: string; badgeTone: "blue" | "gold"; title: string; subtitle: string;
+    daf: string; tehilim: string; shema: string;
+    times: { label: string; value: string; tone?: "gold" | "red" }[];
+    extra?: React.ReactNode;
+  }) => {
+    const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+    return (
+      <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
+        <div>
+          <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] ${badgeBg}`}>
+            {badge}
+          </span>
+          <h3 className="font-display text-2xl font-bold text-foreground mt-2 leading-tight">{title}</h3>
+          <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
+          <p className="text-xs text-muted-foreground/70 mt-0.5">{daf}</p>
+        </div>
+
+        {extra}
+
+        <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-4 px-4 text-center">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim du jour</p>
+          <p className="font-display font-bold text-primary tabular-nums leading-none text-4xl">{tehilim}</p>
+        </div>
+
+        <div className="flex items-center justify-between text-sm">
+          <span className="uppercase tracking-[0.2em] text-muted-foreground text-xs">Limite Shema</span>
+          <span className="font-display font-semibold text-foreground tabular-nums">{shema}</span>
+        </div>
+
+        <div className="space-y-2">
+          {times.map((t) => {
+            const valueColor = t.tone === "gold" ? "text-primary" : t.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
+            const rowBg = t.tone === "gold" ? "bg-[var(--gold-soft)]" : t.tone === "red" ? "bg-[var(--red-soft)]" : "";
+            return (
+              <div key={t.label} className={`flex items-center justify-between gap-3 py-2 px-3 rounded-lg ${rowBg}`}>
+                <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium">{t.label}</span>
+                <span className={`font-display font-bold tabular-nums text-2xl ${valueColor}`}>{t.value}</span>
+              </div>
+            );
+          })}
+        </div>
+      </article>
+    );
+  };
+
+  return (
+    <main className="min-h-screen w-full bg-background text-foreground overflow-x-hidden">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-5">
+        {/* Header */}
+        <header className="flex items-center justify-between gap-3">
+          <img src={logo} alt="Hasdé Tsion" className="h-16 w-auto drop-shadow-[0_0_20px_rgba(201,169,110,0.4)]" />
+          <div className="text-right">
+            <div className="font-display text-3xl font-bold tabular-nums leading-none text-foreground">{time}</div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
+          </div>
+        </header>
+
+        <div className="text-center">
+          <h1 className="font-display text-2xl font-bold text-primary tracking-wide leading-none">HASDÉ TSION</h1>
+          <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mt-1">Torah & Hessed</p>
+        </div>
+
+        {/* Parasha */}
+        <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 text-center">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">Parashat Hashavoua</p>
+          <h2 className="font-display text-3xl font-bold text-foreground leading-tight">{parashaFr}</h2>
+          {parashaHe && (
+            <p className="font-hebrew text-2xl text-primary leading-none mt-2" dir="rtl">{parashaHe}</p>
+          )}
+        </div>
+
+        {/* Days */}
+        <MobileDay
+          badge="Vendredi" badgeTone="blue"
+          title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
+          shema={week.vendredi.shema} times={vTimes}
+          extra={vOmer != null && (
+            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-3 flex items-center justify-between">
+              <span className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Omer · ce soir</span>
+              <span className="font-display text-3xl font-bold text-accent leading-none">{vOmer}</span>
+            </div>
+          )}
+        />
+
+        <MobileDay
+          badge="Shabbat" badgeTone="gold"
+          title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
+          shema={week.samedi.shema} times={sTimes}
+          extra={
+            <div className="rounded-xl border border-border bg-secondary/50 p-3 space-y-1.5">
+              <div className="flex justify-between text-sm">
+                <span className="uppercase tracking-wider text-muted-foreground text-xs">Officiant</span>
+                <span className="font-semibold text-accent">{week.samedi.officiant}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="uppercase tracking-wider text-muted-foreground text-xs">Cours</span>
+                <span className="font-semibold text-accent">{week.samedi.cours}</span>
+              </div>
+            </div>
+          }
+        />
+
+        {/* Events */}
+        <article className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-block w-1.5 h-6 bg-primary rounded-full" />
+            <h3 className="font-display text-xl font-bold text-foreground">Événements à venir</h3>
+          </div>
+          <ul className="divide-y divide-border/60">
+            {events.map((e) => {
+              const valueColor = e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
+              return (
+                <li key={e.date + e.title} className="flex items-center gap-3 py-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground w-20 shrink-0">{e.date}</span>
+                  <span className="text-sm font-medium text-foreground flex-1">{e.title}</span>
+                  {e.time && (
+                    <span className={`font-display font-bold tabular-nums text-lg ${valueColor}`}>{e.time}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">🕯 Yahrtzeit</p>
+            <ul className="space-y-1">
+              {week.yahrtzeit.map((n) => (
+                <li key={n} className="font-display italic text-sm text-muted-foreground leading-tight">{n}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+
+        <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
+          בס״ד · Hasdé Tsion
+        </footer>
+      </div>
+    </main>
+  );
+}
+
 function PlanningTV() {
+
   const kiosk = useKiosk();
   const live = useLiveWeek();
 
