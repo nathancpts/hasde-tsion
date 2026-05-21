@@ -444,6 +444,9 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     extra?: React.ReactNode;
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+    // Mobile: only essential times
+    const essentialLabels = new Set(["Entrée Shabbat", "Sortie Shabbat", "Chaharit", "Minha"]);
+    const shownTimes = times.filter(t => essentialLabels.has(t.label));
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
         <div>
@@ -452,23 +455,17 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
           </span>
           <h3 className="font-display text-2xl font-bold text-foreground mt-2 leading-tight">{title}</h3>
           <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
-          <p className="text-xs text-muted-foreground/70 mt-0.5">{daf}</p>
         </div>
 
         {extra}
 
         <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-4 px-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim du jour</p>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim</p>
           <p className="font-display font-bold text-primary tabular-nums leading-none text-4xl">{tehilim}</p>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
-          <span className="uppercase tracking-[0.2em] text-muted-foreground text-xs">Limite Shema</span>
-          <span className="font-display font-semibold text-foreground tabular-nums">{shema}</span>
-        </div>
-
         <div className="space-y-2">
-          {times.map((t) => {
+          {shownTimes.map((t) => {
             const valueColor = t.tone === "gold" ? "text-primary" : t.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
             const rowBg = t.tone === "gold" ? "bg-[var(--gold-soft)]" : t.tone === "red" ? "bg-[var(--red-soft)]" : "";
             return (
@@ -483,24 +480,19 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     );
   };
 
+  const upcoming = events.slice(0, 3);
+
   return (
     <main className="min-h-screen w-full bg-background text-foreground overflow-x-hidden">
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">
-        {/* Header */}
         <header className="flex items-center justify-between gap-3">
-          <img src={logo} alt="Hasdé Tsion" className="h-16 w-auto drop-shadow-[0_0_20px_rgba(201,169,110,0.4)]" />
+          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto drop-shadow-[0_0_20px_rgba(201,169,110,0.4)]" />
           <div className="text-right">
             <div className="font-display text-3xl font-bold tabular-nums leading-none text-foreground">{time}</div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
           </div>
         </header>
 
-        <div className="text-center">
-          <h1 className="font-display text-2xl font-bold text-primary tracking-wide leading-none">HASDÉ TSION</h1>
-          <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mt-1">Torah & Hessed</p>
-        </div>
-
-        {/* Parasha */}
         <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">Parashat Hashavoua</p>
           <h2 className="font-display text-3xl font-bold text-foreground leading-tight">{parashaFr}</h2>
@@ -509,7 +501,6 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
           )}
         </div>
 
-        {/* Days */}
         <MobileDay
           badge="Vendredi" badgeTone="blue"
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
@@ -526,50 +517,27 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
           badge="Shabbat" badgeTone="gold"
           title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
           shema={week.samedi.shema} times={sTimes}
-          extra={
-            <div className="rounded-xl border border-border bg-secondary/50 p-3 space-y-1.5">
-              <div className="flex justify-between text-sm">
-                <span className="uppercase tracking-wider text-muted-foreground text-xs">Officiant</span>
-                <span className="font-semibold text-accent">{week.samedi.officiant}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="uppercase tracking-wider text-muted-foreground text-xs">Cours</span>
-                <span className="font-semibold text-accent">{week.samedi.cours}</span>
-              </div>
-            </div>
-          }
         />
 
-        {/* Events */}
-        <article className="rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="inline-block w-1.5 h-6 bg-primary rounded-full" />
-            <h3 className="font-display text-xl font-bold text-foreground">Événements à venir</h3>
-          </div>
-          <ul className="divide-y divide-border/60">
-            {events.map((e) => {
-              const valueColor = e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
-              return (
-                <li key={e.date + e.title} className="flex items-center gap-3 py-3">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground w-20 shrink-0">{e.date}</span>
-                  <span className="text-sm font-medium text-foreground flex-1">{e.title}</span>
-                  {e.time && (
-                    <span className={`font-display font-bold tabular-nums text-lg ${valueColor}`}>{e.time}</span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="mt-4 pt-4 border-t border-border">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">🕯 Yahrtzeit</p>
-            <ul className="space-y-1">
-              {week.yahrtzeit.map((n) => (
-                <li key={n} className="font-display italic text-sm text-muted-foreground leading-tight">{n}</li>
-              ))}
+        {upcoming.length > 0 && (
+          <article className="rounded-2xl border border-border bg-card p-5">
+            <h3 className="font-display text-lg font-bold text-foreground mb-3">À venir</h3>
+            <ul className="divide-y divide-border/60">
+              {upcoming.map((e) => {
+                const valueColor = e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
+                return (
+                  <li key={e.date + e.title} className="flex items-center gap-3 py-2.5">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground w-16 shrink-0">{e.date}</span>
+                    <span className="text-sm font-medium text-foreground flex-1 truncate">{e.title}</span>
+                    {e.time && (
+                      <span className={`font-display font-bold tabular-nums text-base ${valueColor}`}>{e.time}</span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
-          </div>
-        </article>
+          </article>
+        )}
 
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
@@ -578,6 +546,7 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     </main>
   );
 }
+
 
 function PlanningTV() {
   const isTV = useIsTV();
