@@ -91,26 +91,24 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
     fetch(`https://www.hebcal.com/converter?cfg=json&date=${ymd(saturday)}&g2h=1&strict=1`).then(r => r.json()),
   ]) as [{ hebrew: string; hd: number; hm: string }, { hebrew: string; hd: number; hm: string }];
 
-  // Daf Yomi
-  const [dafFri, dafSat] = await Promise.all([
-    fetch(`https://www.hebcal.com/dafyomi?cfg=json&date=${ymd(friday)}`).then(r => r.json()),
-    fetch(`https://www.hebcal.com/dafyomi?cfg=json&date=${ymd(saturday)}`).then(r => r.json()),
-  ]) as [{ name: string; pn: number }, { name: string; pn: number }];
+  // Daf Yomi — extracted from items (separate /dafyomi endpoint is deprecated)
+  const dafItem = (d: string) => items.find(it => it.category === "dafyomi" && it.date === d);
+  const dafFri = dafItem(ymd(friday));
+  const dafSat = dafItem(ymd(saturday));
 
-  // Parasha du samedi
-  const parashaItem = items.find(it => it.category === "parashat" && it.date === ymd(saturday));
+  // Parasha — fallback to next upcoming parasha if Shabbat is a Yom Tov
+  const parashaItem =
+    items.find(it => it.category === "parashat" && it.date === ymd(saturday)) ??
+    items.find(it => it.category === "parashat");
   const parashaFr = parashaItem?.title?.replace(/^Parashat\s+/i, "") ?? "—";
-  const parashaHe = parashaItem?.hebrew ?? "";
+  const parashaHe = parashaItem?.hebrew?.replace(/^פרשת\s+/, "") ?? "";
 
-  // Candle lighting & havdalah
   const candle = items.find(it => it.category === "candles" && it.date.startsWith(ymd(friday)));
   const havdal = items.find(it => it.category === "havdalah" && it.date.startsWith(ymd(saturday)));
 
-  // Omer (vendredi)
   const omerFri = items.find(it => it.category === "omer" && it.date === ymd(friday));
   const omerNum = omerFri ? parseInt(omerFri.title.match(/\d+/)?.[0] ?? "0", 10) || null : null;
 
-  // Événements à venir (hors candles/havdalah/omer/parashat/daf)
   const skip = new Set(["candles", "havdalah", "omer", "parashat", "dafyomi", "mishna_yomi", "nach_yomi", "yerushalmi_yomi"]);
   const events = items
     .filter(it => !skip.has(it.category) && it.date >= start)
@@ -131,7 +129,7 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
     vendredi: {
       date: frLong(friday),
       heb: convFri.hebrew,
-      daf: `Daf Yomi · ${dafFri.name}`,
+      daf: dafFri ? `Daf Yomi · ${dafFri.hebrew ?? dafFri.title}` : "—",
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
       candleLighting: candle ? timeOnly(candle.date) : null,
@@ -139,7 +137,7 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
     samedi: {
       date: frLong(saturday),
       heb: convSat.hebrew,
-      daf: `Daf Yomi · ${dafSat.name}`,
+      daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
       havdalah: havdal ? timeOnly(havdal.date) : null,
     },
@@ -147,3 +145,4 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
     fetchedAt: new Date().toISOString(),
   };
 }
+
