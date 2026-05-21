@@ -344,7 +344,8 @@ function DayCard({
   );
 }
 
-function EventsCard() {
+function EventsCard({ live }: { live: LiveWeek | null }) {
+  const events = live?.events?.length ? live.events : week.events;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
@@ -355,7 +356,8 @@ function EventsCard() {
       </div>
 
       <div className="flex flex-col flex-1 min-h-0">
-        {week.events.map((e) => {
+        {events.map((e) => {
+
           const valueColor =
             e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
           return (
