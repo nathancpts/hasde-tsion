@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
-import logo from "@/assets/hasde-tsion-logo.png";
+import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, type LiveWeek } from "@/lib/jewish-calendar";
 
 
@@ -214,7 +214,7 @@ function Header() {
         <img
           src={logo}
           alt="Hasdé Tsion"
-          className="h-[16vh] w-auto invert brightness-0"
+          className="h-[16vh] w-auto"
         />
         <div>
           <h1 className="font-display text-[3.2vh] font-bold text-primary leading-none tracking-wide">
@@ -486,7 +486,7 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     <main className="min-h-screen w-full bg-background text-foreground overflow-x-hidden">
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">
         <header className="flex items-center justify-between gap-3">
-          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto invert brightness-0" />
+          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
           <div className="text-right">
             <div className="font-display text-3xl font-bold tabular-nums leading-none text-foreground">{time}</div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
