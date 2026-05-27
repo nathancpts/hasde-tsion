@@ -216,8 +216,8 @@ function Header() {
           alt="Hasdé Tsion"
           className="h-[16vh] w-auto"
         />
-        </div>
       </div>
+
 
       <div className="text-right">
         <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-foreground">
