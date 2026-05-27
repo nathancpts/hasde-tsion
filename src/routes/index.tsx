@@ -216,13 +216,6 @@ function Header() {
           alt="Hasdé Tsion"
           className="h-[16vh] w-auto"
         />
-        <div>
-          <h1 className="font-display text-[3.2vh] font-bold text-primary leading-none tracking-wide">
-            HASDÉ TSION
-          </h1>
-          <p className="text-[1.1vh] uppercase tracking-[0.4em] text-muted-foreground mt-1">
-            Torah & Hessed
-          </p>
         </div>
       </div>
 
