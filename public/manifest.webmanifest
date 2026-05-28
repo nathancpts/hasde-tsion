@@ -1,0 +1,14 @@
+{
+  "name": "Hasdé Tsion",
+  "short_name": "Hasdé Tsion",
+  "description": "Planning de la semaine — Hasdé Tsion",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a3a",
+  "theme_color": "#1a1a3a",
+  "icons": [
+    { "src": "/app-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
