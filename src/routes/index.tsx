@@ -226,7 +226,7 @@ function useLiveWeek(loc: StoredLoc) {
         .catch((e) => console.warn("Hebcal fetch failed", e));
     };
     load();
-    const id = setInterval(load, 60 * 60 * 1000); // refresh every hour
+    const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
     return () => { cancelled = true; clearInterval(id); };
   }, [loc]);
   return live;
