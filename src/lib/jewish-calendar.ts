@@ -70,7 +70,8 @@ function timeOnly(iso: string): string {
   return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 }
 
-export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
+export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<LiveWeek> {
+  const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const friday = nextDow(now, 5);
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
@@ -80,7 +81,7 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
 
-  // Hebcal calendar — Neuilly-sur-Seine (50 Rue du Bois de Boulogne)
+  // Hebcal calendar — localisation dynamique (par défaut : 50 Rue du Bois de Boulogne, Neuilly)
   const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
   const calRes = await fetch(calUrl);
   if (!calRes.ok) throw new Error("Hebcal calendar fetch failed");
