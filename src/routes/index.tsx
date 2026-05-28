@@ -569,7 +569,7 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
           </div>
         </header>
 
-        <GeoBanner geo={geo} />
+        
 
 
 
