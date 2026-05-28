@@ -589,7 +589,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
   const sTimes = [
     ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
     ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
   ];
