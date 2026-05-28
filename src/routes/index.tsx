@@ -445,6 +445,43 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
   );
 }
 
+function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
+  const times = zmanim?.times ?? [];
+  return (
+    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
+      <div className="flex items-center gap-2 mb-[0.8vh]">
+        <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full" />
+        <h3 className="font-display text-[2.4vh] font-bold text-foreground">Zmanim du jour</h3>
+      </div>
+
+      {zmanim?.birkatLevana && (
+        <div className="rounded-md border border-[var(--gold-line)] bg-[var(--gold-soft)] px-2 py-[0.6vh] mb-[0.8vh] text-center">
+          <p className="text-[0.95vh] uppercase tracking-[0.25em] text-primary font-semibold">Bircat HaLevana</p>
+          <p className="font-display text-[1.6vh] font-bold text-primary leading-none mt-0.5">
+            {zmanim.birkatLevana.start} – {zmanim.birkatLevana.end}
+          </p>
+        </div>
+      )}
+
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+        {times.map((t) => (
+          <div
+            key={t.label}
+            className="flex items-center justify-between gap-2 py-[0.35vh] border-b border-border/40 last:border-0"
+          >
+            <span className="text-[1.15vh] text-muted-foreground tracking-wide">{t.label}</span>
+            <span className="font-display font-semibold tabular-nums text-[1.7vh] text-foreground">{t.value}</span>
+          </div>
+        ))}
+        {times.length === 0 && (
+          <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
+        )}
+      </div>
+    </article>
+  );
+}
+
+
 // ============ MOBILE LAYOUT ============
 
 function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadWeek | null }) {
