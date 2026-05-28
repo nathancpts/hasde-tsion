@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Maximize2, Minimize2, BookOpen } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, type LiveWeek } from "@/lib/jewish-calendar";
+import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 
 
 function useKiosk() {
@@ -192,6 +193,26 @@ function useLiveWeek(loc: StoredLoc) {
     return () => { cancelled = true; clearInterval(id); };
   }, [loc]);
   return live;
+}
+
+function useChabad() {
+  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetchChabadShabbat()
+        .then((d) => { if (!cancelled) setWeeks(d); })
+        .catch((e) => console.warn("Chabad fetch failed", e));
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+
+  // Pick the upcoming (or current) Shabbat
+  const today = new Date().toISOString().slice(0, 10);
+  const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
+  return current;
 }
 
 function useIsTV() {
@@ -408,7 +429,7 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 
 // ============ MOBILE LAYOUT ============
 
-function MobileLayout({ live }: { live: LiveWeek | null }) {
+function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadWeek | null }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
@@ -423,13 +444,17 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = week.vendredi.times;
+  const vTimes = chabad
+    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    : week.vendredi.times;
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = week.samedi.times;
+  const sTimes = chabad
+    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    : week.samedi.times;
 
   const liveEvents = live?.events ?? [];
   const events = liveEvents.length > 0 ? liveEvents : week.events;
@@ -562,9 +587,10 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
 function PlanningTV() {
   const isTV = useIsTV();
   const live = useLiveWeek(null);
+  const chabad = useChabad();
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} />;
+  if (!isTV) return <MobileLayout live={live} chabad={chabad} />;
 
 
   // Merge live data into static fallbacks
@@ -579,9 +605,13 @@ function PlanningTV() {
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
-  // Horaires fixes (saisis manuellement) — pas de surcharge live
-  const vTimes = week.vendredi.times;
-  const sTimes = week.samedi.times;
+  // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
+  const vTimes = chabad
+    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    : week.vendredi.times;
+  const sTimes = chabad
+    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    : week.samedi.times;
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
