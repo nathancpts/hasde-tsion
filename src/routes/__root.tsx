@@ -72,6 +72,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google", content: "notranslate" },
+
       { title: "Hasdé Tsion" },
       { name: "description", content: "Synagogue Schedule Display creates a micro-site to show synagogue schedules on a TV." },
       { name: "author", content: "Lovable" },
