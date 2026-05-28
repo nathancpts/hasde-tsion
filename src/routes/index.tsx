@@ -583,9 +583,10 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
 function PlanningTV() {
   const isTV = useIsTV();
   const live = useLiveWeek(null);
+  const chabad = useChabad();
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} />;
+  if (!isTV) return <MobileLayout live={live} chabad={chabad} />;
 
 
   // Merge live data into static fallbacks
@@ -600,9 +601,13 @@ function PlanningTV() {
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
-  // Horaires fixes (saisis manuellement) — pas de surcharge live
-  const vTimes = week.vendredi.times;
-  const sTimes = week.samedi.times;
+  // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
+  const vTimes = chabad
+    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    : week.vendredi.times;
+  const sTimes = chabad
+    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    : week.samedi.times;
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
