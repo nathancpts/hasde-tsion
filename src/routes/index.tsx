@@ -177,46 +177,6 @@ type StoredLoc = { lat: number; lon: number; label?: string } | null;
 const LOC_KEY = "ht.geoloc.v1";
 const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
 
-function useGeoLocation() {
-  const [loc, setLoc] = useState<StoredLoc>(() => {
-    if (typeof window === "undefined") return null;
-    try { const raw = localStorage.getItem(LOC_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
-  });
-  const [dismissed, setDismissed] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem(LOC_DISMISS_KEY) === "1";
-  });
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
-
-  const request = useCallback(() => {
-    if (!navigator.geolocation) { setStatus("error"); return; }
-    setStatus("loading");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const next = { lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4) };
-        localStorage.setItem(LOC_KEY, JSON.stringify(next));
-        setLoc(next);
-        setStatus("idle");
-      },
-      () => { setStatus("error"); },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 24 * 3600 * 1000 },
-    );
-  }, []);
-
-  const dismiss = useCallback(() => {
-    localStorage.setItem(LOC_DISMISS_KEY, "1");
-    setDismissed(true);
-  }, []);
-
-  const reset = useCallback(() => {
-    localStorage.removeItem(LOC_KEY);
-    localStorage.removeItem(LOC_DISMISS_KEY);
-    setLoc(null);
-    setDismissed(false);
-  }, []);
-
-  return { loc, status, dismissed, request, dismiss, reset };
-}
 
 function useLiveWeek(loc: StoredLoc) {
   const [live, setLive] = useState<LiveWeek | null>(null);
