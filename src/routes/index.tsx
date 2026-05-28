@@ -568,31 +568,35 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
           </div>
         )}
         {times.length === 0 && (
-          <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
-        )}
-      </div>
-    </article>
-  );
-}
+  const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
+  const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
+  const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
+  const vTimes = (chabad
+    ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
+    : week.vendredi.times
+  )
+    .filter((t) => t.label !== "Arvit")
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
 
+  const sDate = live?.samedi.date ?? week.samedi.date;
+  const sHeb = live?.samedi.heb ?? week.samedi.heb;
+  const sDaf = live?.samedi.daf ?? week.samedi.daf;
+  const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
+  const sShemaMA = pickZman(shabbatZ.samedi, "Limite Shema M\"A");
+  const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
+  const sShema = sShemaMA && sShemaGRA ? `${sShemaMA} | ${sShemaGRA}` : week.samedi.shema;
+  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
+  const sMinha = subtractMinutes(sSheqyia, 40);
+  const sTimes = (chabad
+    ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    : week.samedi.times
+  ).map((t) => {
+    if (t.label === "Minha" && sMinha) return { ...t, value: sMinha };
+    if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
+    if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
+    return t;
+  });
 
-// ============ MOBILE LAYOUT ============
-
-function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null }) {
-  const now = useClock();
-  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
-  const date = now
-    ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
-    : "";
-
-  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
-  const parashaHe = live?.parasha.he ?? week.parasha.he;
-
-  const vDate = live?.vendredi.date ?? week.vendredi.date;
-  const vHeb = live?.vendredi.heb ?? week.vendredi.heb;
-  const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
-  const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
-  const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
   const shabbatZ = useShabbatZmanim(null);
   const vTimesBase = chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
