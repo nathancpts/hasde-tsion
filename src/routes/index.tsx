@@ -596,10 +596,11 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
 
 function PlanningTV() {
   const isTV = useIsTV();
-  const live = useLiveWeek();
+  const geo = useGeoLocation();
+  const live = useLiveWeek(geo.loc);
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} />;
+  if (!isTV) return <MobileLayout live={live} geo={geo} />;
 
 
   // Merge live data into static fallbacks
