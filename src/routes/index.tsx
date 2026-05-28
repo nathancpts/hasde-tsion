@@ -122,40 +122,42 @@ export const Route = createFileRoute("/")({
 
 // ============ DATA ============
 const week = {
-  parasha: { fr: "Bamidbar", he: "במדבר", chap: "Pirkei Avot · Ch. 6" },
+  parasha: { fr: "Nasso", he: "נשא", chap: "Pirkei Avot · Ch. 1" },
   vendredi: {
-    date: "Vendredi 15 mai 2026",
-    heb: "27 Iyar 5786",
-    daf: "Daf Yomi · חולין יד",
-    omer: 42,
-    tehilim: "79 · 80 · 81",
-    shema: "08:54 / 10:03",
+    date: "Vendredi 29 mai 2026",
+    heb: "13 Sivan 5786",
+    daf: "Daf Yomi · חולין כ״ט",
+    omer: null as number | null,
+    tehilim: "69 · 70 · 71",
+    shema: "—",
     times: [
-      { label: "Minha", value: "19:30" },
-      { label: "Entrée Shabbat", value: "21:07", tone: "gold" as const },
+      { label: "Minha", value: "20:00" },
+      { label: "Arvit", value: "20:45" },
+      { label: "Allumage des nérot", value: "20:04 – 20:24", tone: "gold" as const },
     ],
   },
   samedi: {
-    date: "Samedi 16 mai 2026",
-    heb: "28 Iyar 5786 · Yom Yeroushalayim",
-    daf: "Daf Yomi · חולין טו",
-    tehilim: "82 · 83 · 84 · 85",
-    shema: "08:53 / 10:02",
+    date: "Samedi 30 mai 2026",
+    heb: "14 Sivan 5786",
+    daf: "Daf Yomi · חולין ל׳",
+    tehilim: "72 · 73 · 74 · 75 · 76",
+    shema: "08:35 / 09:45",
     times: [
       { label: "Chaharit", value: "09:15" },
-      { label: "Minha", value: "20:40" },
-      { label: "Chekia", value: "21:25" },
-      { label: "Sortie Shabbat", value: "22:26", tone: "red" as const },
+      { label: "Minha", value: "21:00" },
+      { label: "Chekia", value: "21:42" },
+      { label: "Motsaé Chabbat", value: "22:46", tone: "red" as const },
     ],
     officiant: "Aharon Djian",
-    cours: "Jacob Elgrably",
+    cours: "Étude + Séouda chlichit",
   },
   events: [
-    { date: "Dim. 17 mai", title: "Cours du Rav", time: "20:30" },
-    { date: "Lun. 18 mai", title: "Arvit + Daf Yomi", time: "21:00" },
-    { date: "Mer. 20 mai", title: "Cours femmes", time: "14:30" },
-    { date: "Ven. 22 mai", title: "Chavouot — Entrée", time: "21:12", tone: "gold" as const },
-    { date: "Sam. 23 mai", title: "Chavouot — Sortie", time: "22:32", tone: "red" as const },
+    { date: "Ven. 29 mai", title: "Minha", time: "20:00" },
+    { date: "Ven. 29 mai", title: "Arvit", time: "20:45" },
+    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "20:04 – 20:24", tone: "gold" as const },
+    { date: "Sam. 30 mai", title: "Chaharit", time: "09:15" },
+    { date: "Sam. 30 mai", title: "Minha + Étude + Séouda chlichit", time: "21:00" },
+    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:46", tone: "red" as const },
   ],
   yahrtzeit: ["Rabbi Yitshak Molko z.t.l", "Rabbi Éliyahou Danino z.t.l"],
 };
@@ -499,17 +501,13 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = live?.vendredi.candleLighting
-    ? week.vendredi.times.map(t => t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t)
-    : week.vendredi.times;
+  const vTimes = week.vendredi.times;
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = live?.samedi.havdalah
-    ? week.samedi.times.map(t => t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t)
-    : week.samedi.times;
+  const sTimes = week.samedi.times;
 
   const events = live?.events ?? [];
 
@@ -659,18 +657,9 @@ function PlanningTV() {
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
-  // Override entry/exit Shabbat with live candle/havdalah when available
-  const vTimes = live?.vendredi.candleLighting
-    ? week.vendredi.times.map(t =>
-        t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t,
-      )
-    : week.vendredi.times;
-
-  const sTimes = live?.samedi.havdalah
-    ? week.samedi.times.map(t =>
-        t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t,
-      )
-    : week.samedi.times;
+  // Horaires fixes (saisis manuellement) — pas de surcharge live
+  const vTimes = week.vendredi.times;
+  const sTimes = week.samedi.times;
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
