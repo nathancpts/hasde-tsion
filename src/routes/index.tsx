@@ -889,7 +889,8 @@ function PlanningTV() {
           subtitle={vHeb}
           hebrew={vDaf}
           tehilim={vTeh}
-          shema={week.vendredi.shema}
+          shema={vShema}
+
           times={vTimes}
           highlight={
             <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
