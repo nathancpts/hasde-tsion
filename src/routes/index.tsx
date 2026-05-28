@@ -531,6 +531,10 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
           </div>
         </header>
 
+        <GeoBanner geo={geo} />
+
+
+
         <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">Parashat Hashavoua</p>
           <h2 className="font-display text-3xl font-bold text-foreground leading-tight">{parashaFr}</h2>
