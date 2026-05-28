@@ -154,10 +154,10 @@ const week = {
   events: [
     { date: "Ven. 29 mai", title: "Minha", time: "20:00" },
     { date: "Ven. 29 mai", title: "Arvit", time: "20:45" },
-    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "20:04 – 20:24", tone: "gold" as const },
+    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "21:25", tone: "gold" as const },
     { date: "Sam. 30 mai", title: "Chaharit", time: "09:15" },
     { date: "Sam. 30 mai", title: "Minha + Étude + Séouda chlichit", time: "21:00" },
-    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:46", tone: "red" as const },
+    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:47", tone: "red" as const },
   ],
   yahrtzeit: ["Rabbi Yitshak Molko z.t.l", "Rabbi Éliyahou Danino z.t.l"],
 };
