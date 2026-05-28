@@ -494,6 +494,14 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
           )}
         </div>
 
+        <Link
+          to="/textes"
+          className="flex items-center justify-center gap-2 rounded-2xl border-2 border-primary bg-primary text-primary-foreground px-5 py-4 font-display text-lg font-bold shadow hover:opacity-90 transition"
+        >
+          <BookOpen className="h-5 w-5" />
+          Textes & Prières
+        </Link>
+
         <MobileDay
           badge="Vendredi" badgeTone="blue"
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
