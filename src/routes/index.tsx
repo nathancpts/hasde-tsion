@@ -413,19 +413,45 @@ function DayCard({
       {highlight}
 
       {/* TEHILIM — biggest visual element */}
-      <div className="rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-[1vh] px-3 text-center">
-        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
-          📖 Tehilim du jour
-        </p>
-        <p className="font-display font-bold text-primary tabular-nums leading-none text-[5.5vh]">
-          {tehilim}
-        </p>
-      </div>
+      {(() => {
+        const parts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
+        const display = parts.length >= 2 ? [parts[0], parts[parts.length - 1]] : parts;
+        return (
+          <div className="rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-[1vh] px-3 text-center">
+            <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
+              📖 Tehilim du jour
+            </p>
+            <div className={`grid ${display.length === 2 ? "grid-cols-2 gap-2" : "grid-cols-1"}`}>
+              {display.map((v, i) => (
+                <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-[5.5vh]">{v}</p>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
-      <div className="flex items-center justify-between text-[1.3vh]">
-        <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
-        <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{shema}</span>
-      </div>
+      {(() => {
+        const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
+        if (shemaParts.length >= 2) {
+          return (
+            <div className="rounded-lg border border-border bg-muted/30 py-[0.8vh] px-3 text-center">
+              <p className="text-[1vh] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-0.5">Limite Shema</p>
+              <div className="grid grid-cols-2 gap-2">
+                {shemaParts.map((v, i) => (
+                  <span key={i} className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{v}</span>
+                ))}
+              </div>
+            </div>
+          );
+        }
+        return (
+          <div className="flex items-center justify-between text-[1.3vh]">
+            <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
+            <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{shema}</span>
+          </div>
+        );
+      })()}
+
 
       <div className="flex flex-col flex-1 min-h-0">
         {times.map((t) => (
