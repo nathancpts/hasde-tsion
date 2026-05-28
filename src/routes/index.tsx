@@ -675,7 +675,9 @@ function PlanningTV() {
       <Header />
       <ParashaBanner live={live} />
 
-      <section className="grid grid-cols-3 gap-[1vw] min-h-0">
+      <section className="grid grid-cols-4 gap-[1vw] min-h-0">
+        <ZmanimCard zmanim={zmanim} />
+
         <DayCard
           badge="Vendredi"
           badgeTone="blue"
