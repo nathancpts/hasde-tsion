@@ -264,6 +264,16 @@ function pickZman(z: Zmanim | null, label: string): string | null {
   return z?.times.find(t => t.label === label)?.value ?? null;
 }
 
+// Soustrait N minutes à un horaire "HH:MM" (ou "HHhMM") et renvoie "HH:MM"
+function subtractMinutes(time: string | null, minutes: number): string | null {
+  if (!time) return null;
+  const m = time.match(/(\d{1,2})[h:](\d{2})/);
+  if (!m) return null;
+  const total = parseInt(m[1], 10) * 60 + parseInt(m[2], 10) - minutes;
+  const norm = ((total % 1440) + 1440) % 1440;
+  return `${String(Math.floor(norm / 60)).padStart(2, "0")}:${String(norm % 60).padStart(2, "0")}`;
+}
+
 
 
 function useIsTV() {
