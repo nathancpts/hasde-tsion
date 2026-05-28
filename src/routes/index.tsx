@@ -395,7 +395,7 @@ function DayCard({
 }
 
 function EventsCard({ live }: { live: LiveWeek | null }) {
-  const events = live?.events?.length ? live.events : week.events;
+  const events = live?.events ?? [];
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
@@ -471,7 +471,7 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
     ? week.samedi.times.map(t => t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t)
     : week.samedi.times;
 
-  const events = live?.events?.length ? live.events : week.events;
+  const events = live?.events ?? [];
 
   const MobileDay = ({
     badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
