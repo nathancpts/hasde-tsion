@@ -568,6 +568,32 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
           </div>
         )}
         {times.length === 0 && (
+          <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
+        )}
+      </div>
+    </article>
+  );
+}
+
+
+// ============ MOBILE LAYOUT ============
+
+function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null }) {
+  const now = useClock();
+  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+  const date = now
+    ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+    : "";
+
+  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
+  const parashaHe = live?.parasha.he ?? week.parasha.he;
+
+  const vDate = live?.vendredi.date ?? week.vendredi.date;
+  const vHeb = live?.vendredi.heb ?? week.vendredi.heb;
+  const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
+  const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
+  const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
+  const shabbatZ = useShabbatZmanim(null);
   const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
@@ -597,32 +623,6 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
     return t;
   });
 
-  const shabbatZ = useShabbatZmanim(null);
-  const vTimesBase = chabad
-    ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
-    : week.vendredi.times;
-  const vTimes = [
-    ...vTimesBase,
-    ...(pickZman(shabbatZ.vendredi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema M\"A")! }] : []),
-    ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
-  ];
-
-  const sDate = live?.samedi.date ?? week.samedi.date;
-  const sHeb = live?.samedi.heb ?? week.samedi.heb;
-  const sDaf = live?.samedi.daf ?? week.samedi.daf;
-  const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
-  const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimesBase = (chabad
-    ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
-    : week.samedi.times
-  ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
-  const sTimes = [
-    ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
-    ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
-    ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
-  ];
 
   const liveEvents = live?.events ?? [];
   const events = liveEvents.length > 0 ? liveEvents : week.events;
