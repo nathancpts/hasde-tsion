@@ -637,8 +637,10 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
     // Mobile: only essential times
-    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit", "Limite Shema M\"A", "Limite Shema GR\"A", "Sheqyia"]);
-    const shownTimes = times.filter(t => essentialLabels.has(t.label));
+    const shownTimes = times;
+    const tehilimParts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
+    const tehilimDisplay = tehilimParts.length >= 2 ? [tehilimParts[0], tehilimParts[tehilimParts.length - 1]] : tehilimParts;
+    const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
         <div>
@@ -652,9 +654,24 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
         {extra}
 
         <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-4 px-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim</p>
-          <p className="font-display font-bold text-primary tabular-nums leading-none text-4xl">{tehilim}</p>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim du jour</p>
+          <div className={`grid ${tehilimDisplay.length === 2 ? "grid-cols-2 gap-3" : "grid-cols-1"}`}>
+            {tehilimDisplay.map((v, i) => (
+              <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-4xl">{v}</p>
+            ))}
+          </div>
         </div>
+
+        {shemaParts.length >= 2 && (
+          <div className="rounded-lg border border-border bg-muted/30 py-2 px-3 text-center">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">Limite Shema</p>
+            <div className="grid grid-cols-2 gap-3">
+              {shemaParts.map((v, i) => (
+                <span key={i} className="font-display font-semibold text-foreground tabular-nums text-lg">{v}</span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-2">
           {shownTimes.map((t) => {
@@ -668,6 +685,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
             );
           })}
         </div>
+
       </article>
     );
   };
