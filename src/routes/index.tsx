@@ -469,7 +469,7 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
     // Mobile: only essential times
-    const essentialLabels = new Set(["Entrée Shabbat", "Sortie Shabbat", "Chaharit", "Minha"]);
+    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit"]);
     const shownTimes = times.filter(t => essentialLabels.has(t.label));
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
