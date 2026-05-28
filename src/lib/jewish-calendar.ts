@@ -113,8 +113,15 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   const omerNum = omerFri ? parseInt(omerFri.title.match(/\d+/)?.[0] ?? "0", 10) || null : null;
 
   const skip = new Set(["candles", "havdalah", "omer", "parashat", "dafyomi", "mishna_yomi", "nach_yomi", "yerushalmi_yomi"]);
+  const todayStr = ymd(now);
   const events = items
-    .filter(it => !skip.has(it.category) && it.date >= start)
+    .filter(it => {
+      if (skip.has(it.category)) return false;
+      // All-day events: date is "YYYY-MM-DD" — must be today or later
+      // Timed events: must be strictly in the future
+      if (it.date.includes("T")) return new Date(it.date).getTime() >= now.getTime();
+      return it.date >= todayStr;
+    })
     .slice(0, 6)
     .map(it => {
       const hasTime = it.date.includes("T");
