@@ -42,7 +42,8 @@ export type LiveWeek = {
   fetchedAt: string;
 };
 
-const PARIS_GEONAME = 2988507;
+// Localisation : 50 Rue du Bois de Boulogne, 92200 Neuilly-sur-Seine
+const LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
 
 type HebcalItem = {
   title: string;
