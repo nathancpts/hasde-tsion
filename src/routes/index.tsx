@@ -431,7 +431,8 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
   const sTimes = week.samedi.times;
 
-  const events = live?.events ?? [];
+  const liveEvents = live?.events ?? [];
+  const events = liveEvents.length > 0 ? liveEvents : week.events;
 
   const MobileDay = ({
     badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
