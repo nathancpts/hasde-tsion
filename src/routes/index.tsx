@@ -484,7 +484,7 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
 
 // ============ MOBILE LAYOUT ============
 
-function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadWeek | null }) {
+function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
