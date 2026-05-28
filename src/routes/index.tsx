@@ -444,7 +444,7 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 }
 
 // ============ MOBILE LAYOUT ============
-function MobileLayout({ live }: { live: LiveWeek | null }) {
+function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<typeof useGeoLocation> }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
