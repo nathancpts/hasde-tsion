@@ -146,7 +146,7 @@ const week = {
       { label: "Chaharit", value: "09:15" },
       { label: "Minha", value: "21:00" },
       { label: "Chekia", value: "21:42" },
-      { label: "Motsaé Chabbat", value: "22:46", tone: "red" as const },
+      { label: "Motsaé Chabbat", value: "22:47", tone: "red" as const },
     ],
     officiant: "Aharon Djian",
     cours: "Étude + Séouda chlichit",
