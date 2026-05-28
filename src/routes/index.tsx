@@ -910,7 +910,8 @@ function PlanningTV() {
           title={sDate}
           subtitle={sHeb}
           hebrew={sDaf}
-          tehilim={sTeh}
+          shema={sShema}
+
           shema={week.samedi.shema}
           times={sTimes}
         >
