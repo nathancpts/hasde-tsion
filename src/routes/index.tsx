@@ -133,7 +133,7 @@ const week = {
     times: [
       { label: "Minha", value: "20:00" },
       { label: "Arvit", value: "20:45" },
-      { label: "Allumage des nérot", value: "20:04 – 20:24", tone: "gold" as const },
+      { label: "Allumage des nérot", value: "21:25", tone: "gold" as const },
     ],
   },
   samedi: {
