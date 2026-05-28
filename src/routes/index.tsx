@@ -454,6 +454,15 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
         <h3 className="font-display text-[2.4vh] font-bold text-foreground">Zmanim du jour</h3>
       </div>
 
+      {zmanim?.tahanun && (
+        <div className={`rounded-md border px-2 py-[0.5vh] mb-[0.6vh] text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
+          <p className="text-[0.9vh] uppercase tracking-[0.2em] text-muted-foreground font-semibold">Liturgie du jour</p>
+          <p className={`font-display text-[1.4vh] font-bold leading-tight mt-0.5 ${zmanim.tahanun.recited ? "text-foreground" : "text-primary"}`}>
+            {zmanim.tahanun.reason}
+          </p>
+        </div>
+      )}
+
       {zmanim?.birkatLevana && (
         <div className="rounded-md border border-[var(--gold-line)] bg-[var(--gold-soft)] px-2 py-[0.6vh] mb-[0.8vh] text-center">
           <p className="text-[0.95vh] uppercase tracking-[0.25em] text-primary font-semibold">Bircat HaLevana</p>
@@ -467,12 +476,28 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
         {times.map((t) => (
           <div
             key={t.label}
-            className="flex items-center justify-between gap-2 py-[0.35vh] border-b border-border/40 last:border-0"
+            className="flex items-center justify-between gap-2 py-[0.3vh] border-b border-border/40 last:border-0"
           >
-            <span className="text-[1.15vh] text-muted-foreground tracking-wide">{t.label}</span>
-            <span className="font-display font-semibold tabular-nums text-[1.7vh] text-foreground">{t.value}</span>
+            <span className="text-[1.1vh] text-muted-foreground tracking-wide">{t.label}</span>
+            <span className="font-display font-semibold tabular-nums text-[1.55vh] text-foreground">{t.value}</span>
           </div>
         ))}
+        {(zmanim?.mishnaYomi || zmanim?.yerushalmiYomi) && (
+          <div className="mt-[0.6vh] pt-[0.6vh] border-t border-border/60 space-y-[0.4vh]">
+            {zmanim?.mishnaYomi && (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[1.05vh] text-muted-foreground">Mishna Yomi</span>
+                <span className="font-display font-semibold text-[1.35vh] text-foreground">{zmanim.mishnaYomi.fr}</span>
+              </div>
+            )}
+            {zmanim?.yerushalmiYomi && (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[1.05vh] text-muted-foreground">Yerushalmi Yomi</span>
+                <span className="font-display font-semibold text-[1.35vh] text-foreground">{zmanim.yerushalmiYomi.fr}</span>
+              </div>
+            )}
+          </div>
+        )}
         {times.length === 0 && (
           <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
         )}
