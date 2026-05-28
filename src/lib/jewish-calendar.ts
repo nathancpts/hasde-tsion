@@ -43,7 +43,8 @@ export type LiveWeek = {
 };
 
 // Localisation : 50 Rue du Bois de Boulogne, 92200 Neuilly-sur-Seine
-const LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
+const DEFAULT_LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
+export type GeoLoc = { lat: number; lon: number; tzid?: string };
 
 type HebcalItem = {
   title: string;
@@ -69,7 +70,8 @@ function timeOnly(iso: string): string {
   return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 }
 
-export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
+export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<LiveWeek> {
+  const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const friday = nextDow(now, 5);
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
@@ -79,7 +81,7 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
 
-  // Hebcal calendar — Neuilly-sur-Seine (50 Rue du Bois de Boulogne)
+  // Hebcal calendar — localisation dynamique (par défaut : 50 Rue du Bois de Boulogne, Neuilly)
   const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
   const calRes = await fetch(calUrl);
   if (!calRes.ok) throw new Error("Hebcal calendar fetch failed");
@@ -111,8 +113,15 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
   const omerNum = omerFri ? parseInt(omerFri.title.match(/\d+/)?.[0] ?? "0", 10) || null : null;
 
   const skip = new Set(["candles", "havdalah", "omer", "parashat", "dafyomi", "mishna_yomi", "nach_yomi", "yerushalmi_yomi"]);
+  const todayStr = ymd(now);
   const events = items
-    .filter(it => !skip.has(it.category) && it.date >= start)
+    .filter(it => {
+      if (skip.has(it.category)) return false;
+      // All-day events: date is "YYYY-MM-DD" — must be today or later
+      // Timed events: must be strictly in the future
+      if (it.date.includes("T")) return new Date(it.date).getTime() >= now.getTime();
+      return it.date >= todayStr;
+    })
     .slice(0, 6)
     .map(it => {
       const hasTime = it.date.includes("T");

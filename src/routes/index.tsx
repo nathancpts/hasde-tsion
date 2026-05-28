@@ -171,19 +171,64 @@ function useClock() {
   return now;
 }
 
-function useLiveWeek() {
+type StoredLoc = { lat: number; lon: number; label?: string } | null;
+const LOC_KEY = "ht.geoloc.v1";
+const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
+
+function useGeoLocation() {
+  const [loc, setLoc] = useState<StoredLoc>(() => {
+    if (typeof window === "undefined") return null;
+    try { const raw = localStorage.getItem(LOC_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
+  });
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(LOC_DISMISS_KEY) === "1";
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+
+  const request = useCallback(() => {
+    if (!navigator.geolocation) { setStatus("error"); return; }
+    setStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const next = { lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4) };
+        localStorage.setItem(LOC_KEY, JSON.stringify(next));
+        setLoc(next);
+        setStatus("idle");
+      },
+      () => { setStatus("error"); },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 24 * 3600 * 1000 },
+    );
+  }, []);
+
+  const dismiss = useCallback(() => {
+    localStorage.setItem(LOC_DISMISS_KEY, "1");
+    setDismissed(true);
+  }, []);
+
+  const reset = useCallback(() => {
+    localStorage.removeItem(LOC_KEY);
+    localStorage.removeItem(LOC_DISMISS_KEY);
+    setLoc(null);
+    setDismissed(false);
+  }, []);
+
+  return { loc, status, dismissed, request, dismiss, reset };
+}
+
+function useLiveWeek(loc: StoredLoc) {
   const [live, setLive] = useState<LiveWeek | null>(null);
   useEffect(() => {
     let cancelled = false;
     const load = () => {
-      fetchLiveWeek()
+      fetchLiveWeek(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
         .then((d) => { if (!cancelled) setLive(d); })
         .catch((e) => console.warn("Hebcal fetch failed", e));
     };
     load();
     const id = setInterval(load, 60 * 60 * 1000); // refresh every hour
     return () => { cancelled = true; clearInterval(id); };
-  }, []);
+  }, [loc]);
   return live;
 }
 
@@ -350,7 +395,7 @@ function DayCard({
 }
 
 function EventsCard({ live }: { live: LiveWeek | null }) {
-  const events = live?.events?.length ? live.events : week.events;
+  const events = live?.events ?? [];
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
@@ -399,7 +444,47 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 }
 
 // ============ MOBILE LAYOUT ============
-function MobileLayout({ live }: { live: LiveWeek | null }) {
+function GeoBanner({ geo }: { geo: ReturnType<typeof useGeoLocation> }) {
+  if (geo.loc) {
+    return (
+      <div className="rounded-xl border border-border bg-card/60 px-4 py-2 flex items-center justify-between gap-3">
+        <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+          📍 Horaires Shabbat · ma position ({geo.loc.lat.toFixed(2)}, {geo.loc.lon.toFixed(2)})
+        </span>
+        <button onClick={geo.reset} className="text-[11px] underline text-muted-foreground hover:text-foreground">
+          Réinit.
+        </button>
+      </div>
+    );
+  }
+  if (geo.dismissed) return null;
+  return (
+    <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-3 flex items-center justify-between gap-3">
+      <div className="flex-1">
+        <p className="text-xs font-semibold text-accent">📍 Adapter à ma position</p>
+        <p className="text-[11px] text-muted-foreground mt-0.5">
+          {geo.status === "error"
+            ? "Localisation refusée. Horaires basés sur Neuilly-sur-Seine."
+            : "Pour des horaires d'entrée/sortie Shabbat précis à votre adresse."}
+        </p>
+      </div>
+      <div className="flex flex-col gap-1 shrink-0">
+        <button
+          onClick={geo.request}
+          disabled={geo.status === "loading"}
+          className="rounded-md bg-accent text-accent-foreground px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
+        >
+          {geo.status === "loading" ? "…" : "Autoriser"}
+        </button>
+        <button onClick={geo.dismiss} className="text-[10px] text-muted-foreground hover:text-foreground">
+          Plus tard
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<typeof useGeoLocation> }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
@@ -426,7 +511,7 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
     ? week.samedi.times.map(t => t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t)
     : week.samedi.times;
 
-  const events = live?.events?.length ? live.events : week.events;
+  const events = live?.events ?? [];
 
   const MobileDay = ({
     badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
@@ -485,6 +570,10 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
           </div>
         </header>
+
+        <GeoBanner geo={geo} />
+
+
 
         <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">Parashat Hashavoua</p>
@@ -551,10 +640,11 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
 
 function PlanningTV() {
   const isTV = useIsTV();
-  const live = useLiveWeek();
+  const geo = useGeoLocation();
+  const live = useLiveWeek(geo.loc);
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} />;
+  if (!isTV) return <MobileLayout live={live} geo={geo} />;
 
 
   // Merge live data into static fallbacks
