@@ -195,6 +195,26 @@ function useLiveWeek(loc: StoredLoc) {
   return live;
 }
 
+function useChabad() {
+  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetchChabadShabbat()
+        .then((d) => { if (!cancelled) setWeeks(d); })
+        .catch((e) => console.warn("Chabad fetch failed", e));
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+
+  // Pick the upcoming (or current) Shabbat
+  const today = new Date().toISOString().slice(0, 10);
+  const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
+  return current;
+}
+
 function useIsTV() {
   const [isTV, setIsTV] = useState(false);
   useEffect(() => {
