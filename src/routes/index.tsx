@@ -444,13 +444,17 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = week.vendredi.times;
+  const vTimes = chabad
+    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    : week.vendredi.times;
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = week.samedi.times;
+  const sTimes = chabad
+    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    : week.samedi.times;
 
   const liveEvents = live?.events ?? [];
   const events = liveEvents.length > 0 ? liveEvents : week.events;
