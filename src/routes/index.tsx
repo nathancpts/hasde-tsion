@@ -134,7 +134,7 @@ const week = {
     times: [
       { label: "Minha", value: "20:00" },
       { label: "Arvit", value: "20:45" },
-      { label: "Allumage des nérot", value: "21:25", tone: "gold" as const },
+      { label: "Allumer les bougies", value: "21:25", tone: "gold" as const },
     ],
   },
   samedi: {
@@ -147,7 +147,7 @@ const week = {
       { label: "Chaharit", value: "09:15" },
       { label: "Minha", value: "21:00" },
       { label: "Chekia", value: "21:42" },
-      { label: "Motsaé Chabbat", value: "22:47", tone: "red" as const },
+      { label: "Fin du Chabbat", value: "22:47", tone: "red" as const },
     ],
     officiant: "Aharon Djian",
     cours: "Étude + Séouda chlichit",
@@ -155,10 +155,10 @@ const week = {
   events: [
     { date: "Ven. 29 mai", title: "Minha", time: "20:00" },
     { date: "Ven. 29 mai", title: "Arvit", time: "20:45" },
-    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "21:25", tone: "gold" as const },
+    { date: "Ven. 29 mai", title: "Allumer les bougies", time: "21:25", tone: "gold" as const },
     { date: "Sam. 30 mai", title: "Chaharit", time: "09:15" },
     { date: "Sam. 30 mai", title: "Minha + Étude + Séouda chlichit", time: "21:00" },
-    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:47", tone: "red" as const },
+    { date: "Sam. 30 mai", title: "Arvit & Fin du Chabbat", time: "22:47", tone: "red" as const },
   ],
   yahrtzeit: ["Rabbi Yitshak Molko z.t.l", "Rabbi Éliyahou Danino z.t.l"],
 };
@@ -445,7 +445,7 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
   const vTimes = chabad
-    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times;
 
   const sDate = live?.samedi.date ?? week.samedi.date;
@@ -453,7 +453,7 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
   const sTimes = chabad
-    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times;
 
   const liveEvents = live?.events ?? [];
@@ -469,7 +469,7 @@ function MobileLayout({ live, chabad }: { live: LiveWeek | null; chabad: ChabadW
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
     // Mobile: only essential times
-    const essentialLabels = new Set(["Entrée Shabbat", "Sortie Shabbat", "Chaharit", "Minha"]);
+    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit"]);
     const shownTimes = times.filter(t => essentialLabels.has(t.label));
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
@@ -607,10 +607,10 @@ function PlanningTV() {
 
   // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
   const vTimes = chabad
-    ? week.vendredi.times.map((t) => t.label === "Allumage des nérot" ? { ...t, value: chabad.candle } : t)
+    ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times;
   const sTimes = chabad
-    ? week.samedi.times.map((t) => t.label === "Motsaé Chabbat" ? { ...t, value: chabad.havdalah } : t)
+    ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times;
 
   return (
