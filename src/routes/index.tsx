@@ -576,7 +576,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
     : week.samedi.times;
   const sTimes = [
     ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Misheyakir / Tefilin") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Sheqyia") ? [{ label: "Sheqyia", value: pickZman(shabbatZ.samedi, "Sheqyia")! }] : []),
   ];
