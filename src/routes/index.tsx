@@ -231,6 +231,39 @@ function useZmanim(loc: StoredLoc) {
   return z;
 }
 
+function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } {
+  const d = new Date(now);
+  const diff = (5 - d.getDay() + 7) % 7;
+  const friday = new Date(d);
+  friday.setDate(d.getDate() + diff);
+  const saturday = new Date(friday);
+  saturday.setDate(friday.getDate() + 1);
+  return { friday, saturday };
+}
+
+function useShabbatZmanim(loc: StoredLoc) {
+  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>({ vendredi: null, samedi: null });
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const { friday, saturday } = nextFridaySaturday();
+      const geo = loc ? { lat: loc.lat, lon: loc.lon } : undefined;
+      try {
+        const [v, s] = await Promise.all([fetchZmanim(friday, geo), fetchZmanim(saturday, geo)]);
+        if (!cancelled) setData({ vendredi: v, samedi: s });
+      } catch (e) { console.warn("Shabbat zmanim fetch failed", e); }
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [loc]);
+  return data;
+}
+
+function pickZman(z: Zmanim | null, label: string): string | null {
+  return z?.times.find(t => t.label === label)?.value ?? null;
+}
+
 
 
 function useIsTV() {
