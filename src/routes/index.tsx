@@ -215,6 +215,21 @@ function useChabad() {
   return current;
 }
 
+function useZmanim(loc: StoredLoc) {
+  const [z, setZ] = useState<Zmanim | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetchZmanim(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
+        .then((d) => { if (!cancelled) setZ(d); })
+        .catch((e) => console.warn("Zmanim fetch failed", e));
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    return () => { cancelled = true; clearInterval(id); };
+  }, [loc]);
+  return z;
+
 function useIsTV() {
   const [isTV, setIsTV] = useState(false);
   useEffect(() => {
