@@ -581,14 +581,17 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimesBase = chabad
+  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
+  const sMinha = subtractMinutes(sSheqyia, 40);
+  const sTimesBase = (chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
-    : week.samedi.times;
+    : week.samedi.times
+  ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
   const sTimes = [
     ...sTimesBase,
     ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
-    ...(pickZman(shabbatZ.samedi, "Sheqyia") ? [{ label: "Sheqyia", value: pickZman(shabbatZ.samedi, "Sheqyia")! }] : []),
+    ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
   ];
 
   const liveEvents = live?.events ?? [];
