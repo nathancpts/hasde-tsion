@@ -501,17 +501,13 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = live?.vendredi.candleLighting
-    ? week.vendredi.times.map(t => t.label === "Entrée Shabbat" ? { ...t, value: live.vendredi.candleLighting! } : t)
-    : week.vendredi.times;
+  const vTimes = week.vendredi.times;
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = live?.samedi.havdalah
-    ? week.samedi.times.map(t => t.label === "Sortie Shabbat" ? { ...t, value: live.samedi.havdalah! } : t)
-    : week.samedi.times;
+  const sTimes = week.samedi.times;
 
   const events = live?.events ?? [];
 
