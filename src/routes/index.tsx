@@ -486,7 +486,7 @@ function GeoBanner({ geo }: { geo: ReturnType<typeof useGeoLocation> }) {
   );
 }
 
-function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<typeof useGeoLocation> }) {
+function MobileLayout({ live }: { live: LiveWeek | null }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
