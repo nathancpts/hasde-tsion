@@ -848,26 +848,30 @@ function PlanningTV() {
 
   // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
   const shabbatZ = useShabbatZmanim(null);
-  const vTimesBase = chabad
+  const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
+  const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
+  const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
+  const vTimes = (chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
-    : week.vendredi.times;
-  const vTimes = [
-    ...vTimesBase,
-    ...(pickZman(shabbatZ.vendredi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema M\"A")! }] : []),
-    ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
-  ];
+    : week.vendredi.times
+  )
+    .filter((t) => t.label !== "Arvit")
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
+  const sShemaMA = pickZman(shabbatZ.samedi, "Limite Shema M\"A");
+  const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
+  const sShema = sShemaMA && sShemaGRA ? `${sShemaMA} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimesBase = (chabad
+  const sTimes = (chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
-  ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
-  const sTimes = [
-    ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
-    ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
-    ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
-  ];
+  ).map((t) => {
+    if (t.label === "Minha" && sMinha) return { ...t, value: sMinha };
+    if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
+    if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
+    return t;
+  });
+
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
