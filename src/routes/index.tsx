@@ -638,11 +638,10 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
 
 function PlanningTV() {
   const isTV = useIsTV();
-  const geo = useGeoLocation();
-  const live = useLiveWeek(geo.loc);
+  const live = useLiveWeek(null);
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} geo={geo} />;
+  if (!isTV) return <MobileLayout live={live} />;
 
 
   // Merge live data into static fallbacks
