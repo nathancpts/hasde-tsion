@@ -229,6 +229,9 @@ function useZmanim(loc: StoredLoc) {
     return () => { cancelled = true; clearInterval(id); };
   }, [loc]);
   return z;
+}
+
+
 
 function useIsTV() {
   const [isTV, setIsTV] = useState(false);
