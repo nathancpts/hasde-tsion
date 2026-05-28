@@ -42,7 +42,8 @@ export type LiveWeek = {
   fetchedAt: string;
 };
 
-const PARIS_GEONAME = 2988507;
+// Localisation : 50 Rue du Bois de Boulogne, 92200 Neuilly-sur-Seine
+const LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
 
 type HebcalItem = {
   title: string;
@@ -78,8 +79,8 @@ export async function fetchLiveWeek(now = new Date()): Promise<LiveWeek> {
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
 
-  // Hebcal calendar — Paris, candle lighting, parasha, omer, daf yomi
-  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&geonameid=${PARIS_GEONAME}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
+  // Hebcal calendar — Neuilly-sur-Seine (50 Rue du Bois de Boulogne)
+  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
   const calRes = await fetch(calUrl);
   if (!calRes.ok) throw new Error("Hebcal calendar fetch failed");
   const cal = (await calRes.json()) as HebcalResp;
