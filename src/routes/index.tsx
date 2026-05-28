@@ -446,45 +446,6 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 }
 
 // ============ MOBILE LAYOUT ============
-function GeoBanner({ geo }: { geo: ReturnType<typeof useGeoLocation> }) {
-  if (geo.loc) {
-    return (
-      <div className="rounded-xl border border-border bg-card/60 px-4 py-2 flex items-center justify-between gap-3">
-        <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
-          📍 Horaires Shabbat · ma position ({geo.loc.lat.toFixed(2)}, {geo.loc.lon.toFixed(2)})
-        </span>
-        <button onClick={geo.reset} className="text-[11px] underline text-muted-foreground hover:text-foreground">
-          Réinit.
-        </button>
-      </div>
-    );
-  }
-  if (geo.dismissed) return null;
-  return (
-    <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-3 flex items-center justify-between gap-3">
-      <div className="flex-1">
-        <p className="text-xs font-semibold text-accent">📍 Adapter à ma position</p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">
-          {geo.status === "error"
-            ? "Localisation refusée. Horaires basés sur Neuilly-sur-Seine."
-            : "Pour des horaires d'entrée/sortie Shabbat précis à votre adresse."}
-        </p>
-      </div>
-      <div className="flex flex-col gap-1 shrink-0">
-        <button
-          onClick={geo.request}
-          disabled={geo.status === "loading"}
-          className="rounded-md bg-accent text-accent-foreground px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
-        >
-          {geo.status === "loading" ? "…" : "Autoriser"}
-        </button>
-        <button onClick={geo.dismiss} className="text-[10px] text-muted-foreground hover:text-foreground">
-          Plus tard
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function MobileLayout({ live }: { live: LiveWeek | null }) {
   const now = useClock();
