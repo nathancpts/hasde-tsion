@@ -630,6 +630,32 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
           </article>
         )}
 
+        <article className="rounded-2xl border border-border bg-card p-5">
+          <h3 className="font-display text-lg font-bold text-foreground mb-3">Zmanim du jour</h3>
+          {zmanim?.birkatLevana && (
+            <div className="rounded-xl border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 py-2 mb-3 text-center">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-semibold">Bircat HaLevana</p>
+              <p className="font-display text-base font-bold text-primary mt-0.5">
+                {zmanim.birkatLevana.start} – {zmanim.birkatLevana.end}
+              </p>
+            </div>
+          )}
+          {zmanim ? (
+            <ul className="divide-y divide-border/50">
+              {zmanim.times.map((t) => (
+                <li key={t.label} className="flex items-center justify-between gap-2 py-1.5">
+                  <span className="text-xs text-muted-foreground">{t.label}</span>
+                  <span className="font-display font-semibold tabular-nums text-sm text-foreground">{t.value}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-muted-foreground italic">Chargement…</p>
+          )}
+        </article>
+
+
+
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
         </footer>
