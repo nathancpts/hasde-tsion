@@ -643,9 +643,10 @@ function PlanningTV() {
   const isTV = useIsTV();
   const live = useLiveWeek(null);
   const chabad = useChabad();
+  const zmanim = useZmanim(null);
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} chabad={chabad} />;
+  if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} />;
 
 
   // Merge live data into static fallbacks
