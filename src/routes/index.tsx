@@ -557,17 +557,29 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = chabad
+  const shabbatZ = useShabbatZmanim(null);
+  const vTimesBase = chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times;
+  const vTimes = [
+    ...vTimesBase,
+    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
+  ];
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = chabad
+  const sTimesBase = chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times;
+  const sTimes = [
+    ...sTimesBase,
+    ...(pickZman(shabbatZ.samedi, "Misheyakir / Tefilin") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Sheqyia") ? [{ label: "Sheqyia", value: pickZman(shabbatZ.samedi, "Sheqyia")! }] : []),
+  ];
 
   const liveEvents = live?.events ?? [];
   const events = liveEvents.length > 0 ? liveEvents : week.events;
