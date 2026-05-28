@@ -803,7 +803,7 @@ function PlanningTV() {
     : week.vendredi.times;
   const vTimes = [
     ...vTimesBase,
-    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
   ];
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
@@ -814,7 +814,7 @@ function PlanningTV() {
   ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
   const sTimes = [
     ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
     ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
   ];
