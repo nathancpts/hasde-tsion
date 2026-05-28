@@ -738,9 +738,9 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
 
         <MobileDay
           badge="Shabbat" badgeTone="gold"
+          title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
           shema={sShema} times={sTimes}
 
-          shema={week.samedi.shema} times={sTimes}
         />
 
         {upcoming.length > 0 && (
