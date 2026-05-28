@@ -231,6 +231,39 @@ function useZmanim(loc: StoredLoc) {
   return z;
 }
 
+function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } {
+  const d = new Date(now);
+  const diff = (5 - d.getDay() + 7) % 7;
+  const friday = new Date(d);
+  friday.setDate(d.getDate() + diff);
+  const saturday = new Date(friday);
+  saturday.setDate(friday.getDate() + 1);
+  return { friday, saturday };
+}
+
+function useShabbatZmanim(loc: StoredLoc) {
+  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>({ vendredi: null, samedi: null });
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const { friday, saturday } = nextFridaySaturday();
+      const geo = loc ? { lat: loc.lat, lon: loc.lon } : undefined;
+      try {
+        const [v, s] = await Promise.all([fetchZmanim(friday, geo), fetchZmanim(saturday, geo)]);
+        if (!cancelled) setData({ vendredi: v, samedi: s });
+      } catch (e) { console.warn("Shabbat zmanim fetch failed", e); }
+    };
+    load();
+    const id = setInterval(load, 60 * 60 * 1000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [loc]);
+  return data;
+}
+
+function pickZman(z: Zmanim | null, label: string): string | null {
+  return z?.times.find(t => t.label === label)?.value ?? null;
+}
+
 
 
 function useIsTV() {
@@ -524,17 +557,29 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const vDaf = live?.vendredi.daf ?? week.vendredi.daf;
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
-  const vTimes = chabad
+  const shabbatZ = useShabbatZmanim(null);
+  const vTimesBase = chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times;
+  const vTimes = [
+    ...vTimesBase,
+    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
+  ];
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sTimes = chabad
+  const sTimesBase = chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times;
+  const sTimes = [
+    ...sTimesBase,
+    ...(pickZman(shabbatZ.samedi, "Misheyakir / Tefilin") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Sheqyia") ? [{ label: "Sheqyia", value: pickZman(shabbatZ.samedi, "Sheqyia")! }] : []),
+  ];
 
   const liveEvents = live?.events ?? [];
   const events = liveEvents.length > 0 ? liveEvents : week.events;
@@ -549,7 +594,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
     // Mobile: only essential times
-    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit"]);
+    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit", "Début Tefilin", "Début Shema", "Limite Shema GR\"A", "Sheqyia"]);
     const shownTimes = times.filter(t => essentialLabels.has(t.label));
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
@@ -739,12 +784,24 @@ function PlanningTV() {
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
   // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
-  const vTimes = chabad
+  const shabbatZ = useShabbatZmanim(null);
+  const vTimesBase = chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times;
-  const sTimes = chabad
+  const vTimes = [
+    ...vTimesBase,
+    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
+  ];
+  const sTimesBase = chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times;
+  const sTimes = [
+    ...sTimesBase,
+    ...(pickZman(shabbatZ.samedi, "Misheyakir / Tefilin") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Sheqyia") ? [{ label: "Sheqyia", value: pickZman(shabbatZ.samedi, "Sheqyia")! }] : []),
+  ];
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
