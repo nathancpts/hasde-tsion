@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1"/>
+    <script src="jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="siddur.css"/>
+    <style>
+        collapsible {
+          height: unset;
+          overflow: unset;
+          border: unset;
+        }
+        headline {
+          display: none;
+        }
+    </style>
+</head>
+
+<body class="taamey">
+
+<div id="container" class="hidden">
+
+    <div id="menubar">
+        <ul></ul>
+    </div>
+
+    <div class="filler"></div>
+
+    <div class="page">
+
+    <h1>קַדִּישׁ עַל יִשְׂרָאֵל</h1>
+
+        <div data-load-file="include-alisrael-mizrach.html"></div>
+
+    </div>
+</div>
+
+<script src="native-bridge.js"></script>
+<script src="siddur.js"></script>
+</body>
+</html>

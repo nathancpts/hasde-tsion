@@ -1,0 +1,51 @@
+@font-face {
+    font-family: AdobeHebrew;
+    src: url(AdobeHebrew-Regular-Tetra.otf);
+font-weight: normal;
+}
+@font-face {
+    font-family: AdobeHebrew;
+    src: url(AdobeHebrew-Bold-Tetra.otf);
+font-weight: bold;
+}
+@font-face {
+    font-family: taamey;
+    src: url(TaameyFrankCLM-Medium-Tetra.otf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: taamey;
+    src: url(TaameyFrankCLM-Bold.ttf);
+    font-weight: bold;
+}
+
+body {
+    font-family: "AdobeHebrew";
+}
+
+.letter {
+  font-family: taamey;
+}
+
+        .dark-mode .ploni {
+          background-color: #147;
+        }
+        .dark-mode key {
+            background-color: #444;
+        }
+        .dark-mode .backspace {
+            background-color: #333;
+        }
+        .dark-mode .revvahh {
+            background-color: #444;
+        }
+        .dark-mode .returnkey {
+            background-color: #333;
+        }
+        .dark-mode .hashkaba-btn.selected {
+            background-color: #147;
+        }
+      body.dark-mode {
+          background-color: black;
+          color: white;
+      }

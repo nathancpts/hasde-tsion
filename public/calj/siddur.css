@@ -1,0 +1,433 @@
+
+@font-face {
+    font-family: sidur;
+    /* "Adobe Hebrew Regular" pour le corps de texte du sidour : https://sidour.torah-box.com/assets/AdobeHebrew-Regular.otf */
+    src: url(AdobeHebrew-Regular-Tetra.otf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: sidur-na;
+    /* "Adobe Hebrew Regular" pour le corps de texte du sidour : https://sidour.torah-box.com/assets/AdobeHebrew-Regular.otf */
+    src: url(AdobeHebrew-Regular-ShevaNa.otf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: sidur;
+    /* https://sidour.torah-box.com/assets/AdobeHebrew-Bold.otf */
+    src: url(AdobeHebrew-Bold-Tetra.otf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: sidur-na;
+    /* https://sidour.torah-box.com/assets/AdobeHebrew-Bold.otf */
+    src: url(AdobeHebrew-Bold-ShevaNa.otf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: taamey;
+    src: url(TaameyFrankCLM-Medium-Tetra.otf);
+    /* https://github.com/Sefaria/Sefaria-Project/blob/ff252133ad02c0e9e90c141d1976c4ad9b0d56d7/static/fonts/Taamey-Frank/TaameyFrankCLM-Medium.ttf */
+    font-weight: normal;
+}
+@font-face {
+    font-family: taamey-na;
+    src: url(TaameyFrankCLM-Medium-ShevaNa.otf);
+    font-weight: normal;
+}
+@font-face {
+    font-family: taamey;
+    src: url(TaameyFrankCLM-Bold.ttf);
+    /* https://github.com/Sefaria/Sefaria-Project/blob/ff252133ad02c0e9e90c141d1976c4ad9b0d56d7/static/fonts/Taamey-Frank/TaameyFrankCLM-Bold.ttf */
+    font-weight: bold;
+}
+@font-face {
+    /* https://www.ph4.org/fonts_fonts.php?fn=serif&l=hebrew&id=2 "Guttman Mantova Decor" pour les Matchil : https://sidour.torah-box.com/assets/MANTDEC.otf */
+    font-family: mantova-decor;
+    src: url(MantovaDecor.otf);
+}
+
+.no-android {
+    display: none;
+}
+
+load {
+    display: none;
+}
+
+body {
+    direction: rtl;
+    text-align: right;
+    font-size: 2em;
+    unicode-bidi: embed;
+    line-height: 130%;
+    font-family: "sidur";
+    padding: 0;
+    margin: 0;
+    background-color: white;
+}
+
+body.dark-mode {
+    background-color: black;
+    color: white;
+}
+
+body.taamey {
+    font-family: "taamey" !important;
+}
+taamey {
+    font-family: "taamey" !important;
+}
+
+section,.section {
+    margin-top: 40px;
+    padding-bottom: 40px;
+    font-family: "sidur";
+}
+
+body.taamey section, body.taamey .section {
+    font-family: "taamey" !important;
+}
+
+taamey,.taamey {
+    font-family: "taamey";
+}
+
+taamey matchil, taamey .matchil, .taamey .matchil, .taamey matchil {
+    font-family: "taamey";
+    top: 0.06lh;
+}
+
+matchil.important {
+    /* font-family: mantova-decor !important; */
+}
+
+fword {
+    font-weight: normal;
+    font-size: 110%;
+    margin-bottom: 0.2lh;
+    display: block;
+    position: relative;
+    top: 0.06lh;
+    float: right;
+    direction: rtl;
+    padding-inline-end: 0.3em;
+}
+matchil,.matchil {
+    z-index: 1;
+    /* font-family: mantova-decor; */
+    font-weight: normal;
+    font-size: 130%;
+    margin-bottom: 0.2lh;
+    display: block;
+    position: relative;
+    top: 0.00lh;
+    float: right;
+    direction: rtl;
+    padding-inline-end: 0.3em;
+}
+hatima,strong {
+    font-weight: bold;
+    font-size: 116%;
+}
+pasuk,passuk,.passuk {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    text-align: right;
+    text-align-last: right;
+}
+hint, .hint {
+    color: silver !important;
+    line-height: normal;
+    font-family: 'sidur';
+}
+.block {
+    display: block;
+}
+block {
+    display: block;
+    padding-block-end: 2em;
+}
+
+parag,.parag {
+    display: block;
+    margin-top: 25px;
+    padding-block-end: 1em;
+    text-align: justify;
+    text-align-last: center;
+}
+
+.section parag.first {
+    margin-top: -10px !important;
+}
+.justify {
+    text-align: justify;
+}
+smaller, .smaller {
+    font-size: 80%;
+}
+bigger, .bigger {
+    font-size: 120%;
+}
+#menubar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #6699cc;
+    font-family: "sidur";
+    z-index: 100;
+}
+body.debug #menubar {
+    background-color: #fc7703;
+}
+#menubar ul {
+    overflow-x: scroll;
+    margin-bottom: 0;
+    margin-top: 0;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+#menubar ul li {
+    display: inline;
+    padding-left: 30px;
+    padding-right: 10px;
+    white-space: nowrap;
+}
+li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+}
+li a.turned-on {
+    color: #69c;
+    background-color: white;
+    border-radius: 4px;
+}
+body.debug li a.turned-on {
+    color: #fc7703;
+}
+.filler {
+    margin-top: 35px;
+}
+.page {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 20px;
+    margin-left: 2mm;
+    margin-right: 2mm;
+    margin-top: 3em;
+}
+.hidden {
+    display: none;
+}
+body:not(.dark-mode) .sensitive {
+    background: linear-gradient(104deg, rgba(130, 255, 253,0) 0.9%, rgba(130, 255, 253,1.25) 2.4%, rgba(130, 255, 253,0.5) 5.8%, rgba(130, 255, 253,0.1) 93%, rgba(130, 255, 253,0.7) 96%, rgba(130, 255, 253,0.2) 98%), linear-gradient(183deg, rgba(130, 255, 253,0) 0%, rgba(130, 255, 253,0.3) 7.9%, rgba(130, 255, 253,0) 15%);
+    box-decoration-break: clone;
+    border-radius: 7.5px;
+}
+
+body.dark-mode .sensitive {
+    background: linear-gradient(104deg, rgb(152  136 0 / 0%) 0.9%, rgba(152, 136, 0, 1.25) 2.4%, rgb(152 136 0 / 43%) 5.8%, rgb(152 136 0 / 45%) 93%, rgba(152, 136, 0, 0.7) 96%, rgb(152 136 0 / 85%) 98%), linear-gradient(183deg, rgba(152, 136, 0, 0) 0%, rgba(152, 136, 0, 0.3) 7.9%, rgba(152, 136, 0, 0) 15%);
+    box-decoration-break: clone;
+    border-radius: 7.5px;
+    color: #d6edff;
+}
+
+h1 {
+    border-bottom: solid 2px silver;
+    margin: auto;
+    text-align: center;
+    font-size: 120%;
+    padding-top: 20px;
+}
+
+/***** Donate ****/
+.donate {
+    text-align: center;
+    direction: ltr;
+}
+.donate[data-language=iw] {
+    direction: rtl;
+}
+.donate {
+    font-family: sans-serif;
+    text-align: center;
+    display: block !important;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding-bottom: 40px;
+}
+
+.donate .language-dependent {
+    display: none;
+}
+
+.donate .language-dependent.show {
+    display: inherit;
+}
+
+.donate a {
+    text-decoration: none;
+}
+.donate-button-composite {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.donate-button-composite > div {
+    display: flex;
+    height: 94px;
+    justify-content: center;
+}
+
+.donate-button-composite > div > div {
+    background: url(https://www.calj.net/img/paypal-donate-button/paypal-donate-button-repeat.png) repeat-x;
+    font-family: sans-serif;
+    font-size: 35px;
+    color: #004479;
+    font-style: italic;
+    font-weight: bold;
+    padding-top: 24px;
+    padding-right: 6px;
+}
+
+collapsible {
+  display: block;
+  padding-inline: 0.3em;
+  border: dashed 1px;
+  transition: height 300ms ease-out;
+  height: 1.05lh;
+  overflow-y: hidden;
+}
+
+body.dark-mode .minyan {
+  background-color: #333344;
+  color: #bbb;
+}
+
+collapsible.expanded {
+  transition: height 300ms ease-in;
+}
+
+collapsible > headline::after {
+    content: "▼";
+    font-size: smaller;
+    float: left;
+}
+collapsible.expanded > headline::after {
+    transform: rotate(-90deg);
+}
+
+.collapsible-arrow {
+  font-size: .8em;
+  line-height: 130%;
+}
+
+nowrap {
+    white-space: nowrap;
+}
+
+.center {
+  text-align: center;
+}
+
+ref[data-before]::before {
+    content: attr(data-before);
+    color: silver;
+    font-size: 70%;
+    font-family: 'sidur';
+    padding-inline-end: 0.2em;
+}
+
+ref[data-after]::after {
+    content: attr(data-after);
+    color: silver;
+    font-size: 70%;
+    font-family: 'sidur';
+    padding-inline: 0.2em;
+}
+
+h2 {
+    font-size: 1.2em;
+    border-bottom: 1px solid silver;
+    margin-inline-end: 2em;
+}
+
+line {
+    display: block;
+    text-align-last: initial;
+}
+
+.large, large {
+    font-size: larger;
+}
+
+
+/** more specific for shaharit **/
+@font-face {
+    font-family: 'ShlomosemiStam';
+    src: url(ShlomoSemiStam.ttf);
+}
+
+parasha {
+    display: block;
+    font-family: 'ShlomosemiStam', serif;
+    padding-block-end: 40px;
+    font-size: 110%;
+}
+parasha::before {
+    content: attr(data-name);
+}
+parasharef {
+    font-size: 60%;
+    font-family: serif;
+    padding-inline-start: 1em;
+}
+alya {
+    display: block;
+    padding-block-end: 10px;
+    font-size: 70%;
+    text-align: justify;
+}
+alya::before {
+    font-family: serif;
+    border-radius: 10px;
+    padding-inline: 20px;
+    border-top: solid 1px;
+    border-left: solid 1px;
+    font-size: 70%;
+    margin-inline-end: 1em;
+}
+torah:not(.sefer-sheni) alya:nth-of-type(1)::before{
+    content: 'כהן';
+}
+alya:nth-of-type(2)::before{
+    content: 'לוי';
+}
+alya:nth-of-type(3)::before{
+    content: 'ישראל';
+}
+alya:nth-of-type(4)::before{
+    content: 'רביעי';
+}
+
+fletter {
+    display: inline;
+}
+group {
+  display: inline-block;
+}
+
+.indented passuk {
+  padding-inline-start: 1em;
+  text-indent: -1em;
+}
+
+shna {
+    font-family: 'sidur-na';
+}
+.taamey shna, taamey shna {
+    font-family: 'taamey-na';
+}

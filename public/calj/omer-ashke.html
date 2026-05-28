@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, user-scalable=no, width=device-width, viewport-fit=cover" />
+  <script src="jquery-3.7.1.min.js"></script>
+  <script src="adjust-font-size.js"></script>
+  <link rel="stylesheet" href="siddur.css"/>
+  <style>
+    .page {
+        padding: env(safe-area-inset-top) calc(1em + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(1em + env(safe-area-inset-left));
+        padding-bottom: 4em;
+    }
+  </style>
+</head>
+
+<body class="page">
+
+<h1>ספירת העומר</h1>
+
+<div class="hideWhenDay">
+  <section>
+      לְשֵם יִחוּד קֻדְשָׁא בְּרִיךְ הוּא וּשְׁכִינְתֵּיהּ
+      בִּדְחִילוּ וּרְחִימוּ, וּרְחִימוּ וּדְחִילוּ,
+      לְיַחֵד שֵׁם יוּ״ד הֵ״א בְּוָא״ו הֵ״א בְּיִחוּדָא שְׁלִים
+      בְּשֵׁם כָּל יִשְׂרָאֵל.
+  </section>
+
+  <section class="taamey">
+      הִנְנִי מוּכָן וּמְזוּמָן לְקַיֵים מִצְוַת עֲשֵׂה שֶׁל סְפִירַת הָעֽוֺמֶר,
+      כְּמוֺ שֶׁכָּתוּב בַתּוֺרָה:
+      וּסְפַרְתֶּ֤ם לָכֶם֙ מִמָּחֳרַ֣ת הַשַּׁבָּ֔ת
+      מִיּוֺם֙ הֲבִ֣יאֲכֶ֔ם אֶת־עֹ֖מֶר הַתְּנוּפָ֑ה
+      שֶׁ֥בַע שַׁבָּתֹ֖ות תְּמִימֹ֥ת תִּהְיֶֽינָה׃
+      עַ֣ד מִֽמָּחֳרַ֤ת הַשַּׁבָּת֙ הַשְּׁבִיעִ֔ת תִּסְפְּר֖וּ חֲמִשִּׁ֣ים יֹ֑ום וְהִקְרַבְתֶּ֛ם מִנְחָ֥ה חֲדָשָׁ֖ה לַיהוָֽה׃
+      
+      <br/>
+      <br/>
+      
+      וִיהִ֤י׀ נֹ֤עַם אֲדֹנָ֥י אֱלֹהֵ֗ינוּ עָ֫לֵ֥ינוּ
+      וּמַעֲשֵׂ֣ה יָ֭דֵינוּ כּוֹנְנָ֥ה עָלֵ֑ינוּ
+      וּֽמַעֲשֵׂ֥ה יָ֝דֵ֗ינוּ כּוֹנְנֵֽהוּ׃
+  </section>
+  </div>
+
+<section>
+  <div class="hideWhenDay bigger">
+        בָּרוּךְ אַתָּה יי, אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל סְפִירַת הָעֹמֶר
+  </div>
+  <br/>
+<div class="sensitive bigger">
+  (<span id="omernumber"></span>) <span id="omerwords"></span>
+</div>
+<br/>
+  <div class="hint smaller center">
+    (<span class="sefiraday"></span> שב<span class="sefiraweek"></span>)
+  </div>
+  <br/>
+
+<div class="bigger">
+    הָרַחֲמָן הוּא יַחֲזִיר לָנוּ עֲבוֹדַת בֵּית הַמִּקְדָּשׁ לִמְקוֹמָהּ בִּמְהֵרָה בְיָמֵינוּ, אָמֵן סֶלָה.
+</div>
+
+<section>
+<div id="lamnatseah" class="hideWhenDay">
+    לַמְנַצֵּחַ בִּנְגִינוֹת מִזְמוֹר שִׁיר:<br/>
+    אֱלֹהִים יְחׇנֵּנוּ וִיבָֽרְכֵנוּ, יָאֵר פָּנָיו אִתָּנוּ, סֶלָה:<br/>
+    לָדַעַת בָּאָרֶץ דַרְכֶּךָ, בְּכׇל גּוֹיִם יְשׁוּעָתֶךָ:<br/>
+    יוֹדוּךָ עַמִּים אֱלֹהִים, יוֹדוּךָ עַמִּים כֻּלָּם:<br/>
+    יִשְׂמְחוּ וִירַנְּנוּ לְאֻמִּים, כִּי תִשְׁפֹּט עַמִּים מִישֹׁר, וּלְאֻמִּים בָּאָרֶץ תַּנְחֵם סֶלָה:<br/>
+    יוֹדוּךָ עַמִּים אֱלֹהִים, יוֹדוּךָ עַמִּים כֻּלָּם:<br/>
+    אֶרֶץ נָֽתְנָה יְבוּלָהּ, יְבָֽרְכֵנוּ אֱלֹהִים אֱלֹהֵינוּ:<br/>
+    יְבָֽרְכֵנוּ אֱלֹהִים, וְיִירְאוּ אוֹתוֹ כׇּל אַפְסֵי אָרֶץ:<br/>
+</div>
+</section>
+
+  <section>
+    <div class="hideWhenDay">
+      <pasuk>
+        אָנָּא בְּכֹחַ, גְּדֻלַּת יְמִינֶךָ, תַּתִּיר צְרוּרָה. <span class="hint smaller">(אב״ג ית״ץ)</span></pasuk>
+      <pasuk>
+        קַבֵּל רִנַּת, עַמֶּךָ. שַׂגְּבֵנוּ, טַהֲרֵנוּ נוֹרָא. <span class="hint smaller">(קר״ע שט״ן)</span></pasuk>
+      <pasuk>
+        נָא גִבּוֹר, דּוֹרְשֵׁי יִחוּדֶךָ, כְּבָבַת שׇׁמְרֵם. <span class="hint smaller">(נג״ד יכ״ש)</span></pasuk>
+      <pasuk>
+        בָּֽרְכֵם טַהֲרֵם, רַחֲמֵי צִדְקָתֶךָ, תָּמִיד גׇּמְלֵם. <span class="hint smaller">(בט״ר צת״ג)</span></pasuk>
+      <pasuk>
+        חָסִין קָדוֹשׁ, בְּרֹב טוּבְךָ, נַהֵל עֲדָתֶךָ. <span class="hint smaller">(חק״ב טנ״ע)</span></pasuk>
+      <pasuk>
+        יָחִיד גֵּאֶה, לְעַמְּךָ פְּנֵה, זוֹכְרֵי קְדֻשָּׁתֶךָ. <span class="hint smaller">(יג״ל פז״ק)</span></pasuk>
+      <pasuk>
+        שַׁוְעָתֵנוּ קַבֵּל וּשְׁמַע צַעֲקָתֵנוּ יוֹדֵעַ תַּעֲלוּמוֹת. <span class="hint smaller">(שק״ו צי״ת)</span></pasuk>
+      <pasuk>
+        בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד:</pasuk>
+    </div>
+  </section>
+
+  <div data-load-file="donate.html"></div>
+
+  <script src="native-bridge.js"></script>
+  <script src="omer.js"></script>
+  <script src="siddur.js"></script>
+
+</body>
+</html>
