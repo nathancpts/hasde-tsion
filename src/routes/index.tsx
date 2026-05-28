@@ -357,7 +357,8 @@ function DayCard({
 }
 
 function EventsCard({ live }: { live: LiveWeek | null }) {
-  const events = live?.events ?? [];
+  const liveEvents = live?.events ?? [];
+  const events = liveEvents.length > 0 ? liveEvents : week.events;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
@@ -430,7 +431,8 @@ function MobileLayout({ live }: { live: LiveWeek | null }) {
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
   const sTimes = week.samedi.times;
 
-  const events = live?.events ?? [];
+  const liveEvents = live?.events ?? [];
+  const events = liveEvents.length > 0 ? liveEvents : week.events;
 
   const MobileDay = ({
     badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
