@@ -910,9 +910,9 @@ function PlanningTV() {
           title={sDate}
           subtitle={sHeb}
           hebrew={sDaf}
+          tehilim={sTeh}
           shema={sShema}
 
-          shema={week.samedi.shema}
           times={sTimes}
         >
           <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
