@@ -133,7 +133,7 @@ const week = {
     times: [
       { label: "Minha", value: "20:00" },
       { label: "Arvit", value: "20:45" },
-      { label: "Allumage des nérot", value: "20:04 – 20:24", tone: "gold" as const },
+      { label: "Allumage des nérot", value: "21:25", tone: "gold" as const },
     ],
   },
   samedi: {
@@ -146,7 +146,7 @@ const week = {
       { label: "Chaharit", value: "09:15" },
       { label: "Minha", value: "21:00" },
       { label: "Chekia", value: "21:42" },
-      { label: "Motsaé Chabbat", value: "22:46", tone: "red" as const },
+      { label: "Motsaé Chabbat", value: "22:47", tone: "red" as const },
     ],
     officiant: "Aharon Djian",
     cours: "Étude + Séouda chlichit",
@@ -154,10 +154,10 @@ const week = {
   events: [
     { date: "Ven. 29 mai", title: "Minha", time: "20:00" },
     { date: "Ven. 29 mai", title: "Arvit", time: "20:45" },
-    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "20:04 – 20:24", tone: "gold" as const },
+    { date: "Ven. 29 mai", title: "Allumage des nérot", time: "21:25", tone: "gold" as const },
     { date: "Sam. 30 mai", title: "Chaharit", time: "09:15" },
     { date: "Sam. 30 mai", title: "Minha + Étude + Séouda chlichit", time: "21:00" },
-    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:46", tone: "red" as const },
+    { date: "Sam. 30 mai", title: "Arvit & Motsaé Chabbat", time: "22:47", tone: "red" as const },
   ],
   yahrtzeit: ["Rabbi Yitshak Molko z.t.l", "Rabbi Éliyahou Danino z.t.l"],
 };
@@ -177,46 +177,6 @@ type StoredLoc = { lat: number; lon: number; label?: string } | null;
 const LOC_KEY = "ht.geoloc.v1";
 const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
 
-function useGeoLocation() {
-  const [loc, setLoc] = useState<StoredLoc>(() => {
-    if (typeof window === "undefined") return null;
-    try { const raw = localStorage.getItem(LOC_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
-  });
-  const [dismissed, setDismissed] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem(LOC_DISMISS_KEY) === "1";
-  });
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
-
-  const request = useCallback(() => {
-    if (!navigator.geolocation) { setStatus("error"); return; }
-    setStatus("loading");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const next = { lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4) };
-        localStorage.setItem(LOC_KEY, JSON.stringify(next));
-        setLoc(next);
-        setStatus("idle");
-      },
-      () => { setStatus("error"); },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 24 * 3600 * 1000 },
-    );
-  }, []);
-
-  const dismiss = useCallback(() => {
-    localStorage.setItem(LOC_DISMISS_KEY, "1");
-    setDismissed(true);
-  }, []);
-
-  const reset = useCallback(() => {
-    localStorage.removeItem(LOC_KEY);
-    localStorage.removeItem(LOC_DISMISS_KEY);
-    setLoc(null);
-    setDismissed(false);
-  }, []);
-
-  return { loc, status, dismissed, request, dismiss, reset };
-}
 
 function useLiveWeek(loc: StoredLoc) {
   const [live, setLive] = useState<LiveWeek | null>(null);
@@ -446,47 +406,8 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
 }
 
 // ============ MOBILE LAYOUT ============
-function GeoBanner({ geo }: { geo: ReturnType<typeof useGeoLocation> }) {
-  if (geo.loc) {
-    return (
-      <div className="rounded-xl border border-border bg-card/60 px-4 py-2 flex items-center justify-between gap-3">
-        <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
-          📍 Horaires Shabbat · ma position ({geo.loc.lat.toFixed(2)}, {geo.loc.lon.toFixed(2)})
-        </span>
-        <button onClick={geo.reset} className="text-[11px] underline text-muted-foreground hover:text-foreground">
-          Réinit.
-        </button>
-      </div>
-    );
-  }
-  if (geo.dismissed) return null;
-  return (
-    <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-3 flex items-center justify-between gap-3">
-      <div className="flex-1">
-        <p className="text-xs font-semibold text-accent">📍 Adapter à ma position</p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">
-          {geo.status === "error"
-            ? "Localisation refusée. Horaires basés sur Neuilly-sur-Seine."
-            : "Pour des horaires d'entrée/sortie Shabbat précis à votre adresse."}
-        </p>
-      </div>
-      <div className="flex flex-col gap-1 shrink-0">
-        <button
-          onClick={geo.request}
-          disabled={geo.status === "loading"}
-          className="rounded-md bg-accent text-accent-foreground px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
-        >
-          {geo.status === "loading" ? "…" : "Autoriser"}
-        </button>
-        <button onClick={geo.dismiss} className="text-[10px] text-muted-foreground hover:text-foreground">
-          Plus tard
-        </button>
-      </div>
-    </div>
-  );
-}
 
-function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<typeof useGeoLocation> }) {
+function MobileLayout({ live }: { live: LiveWeek | null }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
@@ -569,7 +490,7 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
           </div>
         </header>
 
-        <GeoBanner geo={geo} />
+        
 
 
 
@@ -638,11 +559,10 @@ function MobileLayout({ live, geo }: { live: LiveWeek | null; geo: ReturnType<ty
 
 function PlanningTV() {
   const isTV = useIsTV();
-  const geo = useGeoLocation();
-  const live = useLiveWeek(geo.loc);
+  const live = useLiveWeek(null);
   const kiosk = useKiosk();
 
-  if (!isTV) return <MobileLayout live={live} geo={geo} />;
+  if (!isTV) return <MobileLayout live={live} />;
 
 
   // Merge live data into static fallbacks
