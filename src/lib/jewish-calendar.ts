@@ -46,6 +46,68 @@ export type LiveWeek = {
 const DEFAULT_LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
 export type GeoLoc = { lat: number; lon: number; tzid?: string };
 
+export type Zman = { label: string; value: string };
+export type Zmanim = {
+  date: string;
+  heb: string;
+  times: Zman[];
+  birkatLevana: { start: string; end: string } | null;
+  fetchedAt: string;
+};
+
+function timeFR(iso: string | undefined): string {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+}
+
+export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmanim> {
+  const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
+  const date = ymd(now);
+
+  const [zRes, convRes] = await Promise.all([
+    fetch(`https://www.hebcal.com/zmanim?cfg=json&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&date=${date}`).then(r => r.json()),
+    fetch(`https://www.hebcal.com/converter?cfg=json&date=${date}&g2h=1&strict=1`).then(r => r.json()),
+  ]) as [{ times: Record<string, string> }, { hebrew: string; hy: number; hm: string }];
+
+  const t = zRes.times ?? {};
+  const times: Zman[] = [
+    { label: "Hatzot Laïla",        value: timeFR(t.chatzotNight) },
+    { label: "Alot haShahar",       value: timeFR(t.alotHaShachar) },
+    { label: "Misheyakir / Tefilin",value: timeFR(t.misheyakir) },
+    { label: "Hanetz haHama",       value: timeFR(t.sunrise) },
+    { label: "Limite Shema M\"A",   value: timeFR(t.sofZmanShmaMGA) },
+    { label: "Limite Shema GR\"A",  value: timeFR(t.sofZmanShma) },
+    { label: "Limite Tefila M\"A",  value: timeFR(t.sofZmanTfillaMGA) },
+    { label: "Limite Tefila GR\"A", value: timeFR(t.sofZmanTfilla) },
+    { label: "Hatzot",              value: timeFR(t.chatzot) },
+    { label: "Minha Guedola",       value: timeFR(t.minchaGedola) },
+    { label: "Minha Ketana",        value: timeFR(t.minchaKetana) },
+    { label: "Plag haMinha",        value: timeFR(t.plagHaMincha) },
+    { label: "Sheqyia",             value: timeFR(t.sunset) },
+    { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg) },
+    { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min) },
+  ];
+
+  // Bircat HaLevana — fenêtre approchée : du 7 au 15 du mois hébraïque
+  let birkatLevana: { start: string; end: string } | null = null;
+  try {
+    const h2g = (hd: number) =>
+      fetch(`https://www.hebcal.com/converter?cfg=json&hy=${convRes.hy}&hm=${encodeURIComponent(convRes.hm)}&hd=${hd}&h2g=1&strict=1`).then(r => r.json()) as Promise<{ gy: number; gm: number; gd: number }>;
+    const [s, e] = await Promise.all([h2g(7), h2g(15)]);
+    const fmt = (g: { gy: number; gm: number; gd: number }) =>
+      new Date(Date.UTC(g.gy, g.gm - 1, g.gd)).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+    birkatLevana = { start: fmt(s), end: fmt(e) };
+  } catch { /* ignore */ }
+
+  return {
+    date: frLong(now),
+    heb: convRes.hebrew,
+    times,
+    birkatLevana,
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
 type HebcalItem = {
   title: string;
   date: string;
