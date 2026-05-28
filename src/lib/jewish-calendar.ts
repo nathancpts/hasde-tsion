@@ -51,25 +51,49 @@ export type Zmanim = {
   date: string;
   heb: string;
   times: Zman[];
+  seasonalHours: { graMin: number; maMin: number } | null;
+  mishnaYomi: { fr: string; he: string } | null;
+  yerushalmiYomi: { fr: string; he: string } | null;
+  tahanun: { recited: boolean; reason: string };
   birkatLevana: { start: string; end: string } | null;
   fetchedAt: string;
 };
 
-function timeFR(iso: string | undefined): string {
+function timeFR(iso: string | undefined | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+}
+
+function diffMin(aIso?: string | null, bIso?: string | null): number | null {
+  if (!aIso || !bIso) return null;
+  return Math.round((new Date(bIso).getTime() - new Date(aIso).getTime()) / 60000);
+}
+
+function fmtHourMin(min: number): string {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h > 0 ? `${h}h ${String(m).padStart(2, "0")}min` : `${m}min`;
 }
 
 export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmanim> {
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const date = ymd(now);
 
-  const [zRes, convRes] = await Promise.all([
+  const [zRes, convRes, calRes] = await Promise.all([
     fetch(`https://www.hebcal.com/zmanim?cfg=json&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&date=${date}`).then(r => r.json()),
     fetch(`https://www.hebcal.com/converter?cfg=json&date=${date}&g2h=1&strict=1`).then(r => r.json()),
-  ]) as [{ times: Record<string, string> }, { hebrew: string; hy: number; hm: string }];
+    fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&mf=on&ss=on&myomi=on&yyomi=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&start=${date}&end=${date}`).then(r => r.json()),
+  ]) as [{ times: Record<string, string | null> }, { hebrew: string; hy: number; hm: string }, HebcalResp];
 
   const t = zRes.times ?? {};
+
+  // Heures saisonnières : 1/12 de la journée
+  const graSpan = diffMin(t.sunrise, t.sunset);
+  const maSpan = diffMin(t.alotHaShachar, t.tzeit72min);
+  const seasonalHours = graSpan && maSpan
+    ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
+    : null;
+
   const times: Zman[] = [
     { label: "Hatzot Laïla",        value: timeFR(t.chatzotNight) },
     { label: "Alot haShahar",       value: timeFR(t.alotHaShachar) },
@@ -87,6 +111,31 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg) },
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min) },
   ];
+  if (seasonalHours) {
+    times.push(
+      { label: "Heure saisonnière GR\"A", value: fmtHourMin(seasonalHours.graMin) },
+      { label: "Heure saisonnière M\"A",  value: fmtHourMin(seasonalHours.maMin) },
+    );
+  }
+
+  // Mishna Yomi & Yerushalmi Yomi du jour
+  const calItems = calRes.items ?? [];
+  const mItem = calItems.find(it => it.category === "mishnayomi" || it.category === "mishna_yomi");
+  const yItem = calItems.find(it => it.category === "yerushalmi" || it.category === "yerushalmi_yomi");
+  const mishnaYomi = mItem ? { fr: mItem.title, he: mItem.hebrew ?? "" } : null;
+  const yerushalmiYomi = yItem ? { fr: yItem.title, he: yItem.hebrew ?? "" } : null;
+
+  // Tahanun — pas récité si Shabbat, Rosh Hodesh ou fête (major/minor/modern)
+  const noTahanunItem = calItems.find(it =>
+    it.category === "roshchodesh" ||
+    (it.category === "holiday" && ["major", "minor", "modern"].includes(it.subcat ?? ""))
+  );
+  const isShabbat = now.getDay() === 6;
+  const tahanun = isShabbat
+    ? { recited: false, reason: "Shabbat — Tsidqatkha" }
+    : noTahanunItem
+      ? { recited: false, reason: noTahanunItem.title }
+      : { recited: true, reason: "Tahanounim récités" };
 
   // Bircat HaLevana — fenêtre approchée : du 7 au 15 du mois hébraïque
   let birkatLevana: { start: string; end: string } | null = null;
@@ -103,6 +152,10 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     date: frLong(now),
     heb: convRes.hebrew,
     times,
+    seasonalHours,
+    mishnaYomi,
+    yerushalmiYomi,
+    tahanun,
     birkatLevana,
     fetchedAt: new Date().toISOString(),
   };
