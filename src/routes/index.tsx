@@ -573,7 +573,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
     : week.vendredi.times;
   const vTimes = [
     ...vTimesBase,
-    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
   ];
 
@@ -589,7 +589,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
   const sTimes = [
     ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
     ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
   ];
@@ -607,7 +607,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   }) => {
     const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
     // Mobile: only essential times
-    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit", "Début Tefilin", "Début Shema", "Limite Shema GR\"A", "Sheqyia"]);
+    const essentialLabels = new Set(["Allumer les bougies", "Fin du Chabbat", "Chaharit", "Minha", "Arvit", "Limite Shema M\"A", "Limite Shema GR\"A", "Sheqyia"]);
     const shownTimes = times.filter(t => essentialLabels.has(t.label));
     return (
       <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
@@ -803,7 +803,7 @@ function PlanningTV() {
     : week.vendredi.times;
   const vTimes = [
     ...vTimesBase,
-    ...(pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin") ? [{ label: "Début Tefilin", value: pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin")! }] : []),
+    ...(pickZman(shabbatZ.vendredi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.vendredi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.vendredi, "Limite Shema GR\"A")! }] : []),
   ];
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
@@ -814,7 +814,7 @@ function PlanningTV() {
   ).map((t) => t.label === "Minha" && sMinha ? { ...t, value: sMinha } : t);
   const sTimes = [
     ...sTimesBase,
-    ...(pickZman(shabbatZ.samedi, "Hanetz haHama") ? [{ label: "Début Shema", value: pickZman(shabbatZ.samedi, "Hanetz haHama")! }] : []),
+    ...(pickZman(shabbatZ.samedi, "Limite Shema M\"A") ? [{ label: "Limite Shema M\"A", value: pickZman(shabbatZ.samedi, "Limite Shema M\"A")! }] : []),
     ...(pickZman(shabbatZ.samedi, "Limite Shema GR\"A") ? [{ label: "Limite Shema GR\"A", value: pickZman(shabbatZ.samedi, "Limite Shema GR\"A")! }] : []),
     ...(sSheqyia ? [{ label: "Sheqyia", value: sSheqyia }] : []),
   ];
