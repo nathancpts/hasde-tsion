@@ -744,12 +744,8 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
           shema={vShema} times={vTimes}
 
-          extra={vOmer != null && (
-            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-3 flex items-center justify-between">
-              <span className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Omer · ce soir</span>
-              <span className="font-display text-3xl font-bold text-accent leading-none">{vOmer}</span>
-            </div>
-          )}
+
+
         />
 
         <MobileDay
