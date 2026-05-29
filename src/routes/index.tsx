@@ -698,22 +698,27 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
         <header className="flex items-center justify-between gap-3">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
           <div className="text-right">
-            <div className="font-display text-3xl font-bold tabular-nums leading-none text-foreground">{time}</div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1 capitalize">{date}</p>
+            <div className="font-display text-3xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{time}</div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 mt-1 capitalize">{date}</p>
           </div>
         </header>
 
-        
-
-
-
-        <div className="rounded-2xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] p-5 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-2">Parashat Hashavoua</p>
-          <h2 className="font-display text-3xl font-bold text-foreground leading-tight">{parashaFr}</h2>
+        <div
+          className="relative rounded-2xl p-5 text-center overflow-hidden"
+          style={{
+            background: "linear-gradient(145deg, #C9A96E 0%, #8A6A1F 55%, #5C4515 100%)",
+            border: "1px solid rgba(255,220,150,0.5)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,240,200,0.6), inset 0 -2px 8px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.45), 0 2px 4px rgba(0,0,0,0.3)",
+          }}
+        >
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/95 font-semibold mb-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Parashat Hashavoua</p>
+          <h2 className="font-display text-3xl font-bold text-white leading-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)]">{parashaFr}</h2>
           {parashaHe && (
-            <p className="font-hebrew text-2xl text-primary leading-none mt-2" dir="rtl">{parashaHe}</p>
+            <p className="font-hebrew text-2xl text-white leading-none mt-2 drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)]" dir="rtl">{parashaHe}</p>
           )}
         </div>
+
 
         <Link
           to="/textes"
