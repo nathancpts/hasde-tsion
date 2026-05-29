@@ -703,9 +703,9 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const upcoming = events.slice(0, 3);
 
   return (
-    <main className="relative isolate min-h-screen w-full bg-transparent text-foreground overflow-x-hidden">
+    <main className="relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
       <DynamicBackground />
-      <div className="max-w-md mx-auto px-4 py-6 space-y-5">
+      <div className="max-w-md mx-auto px-4 pt-6 space-y-5" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)" }}>
         <header className="flex items-center justify-between gap-3">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
           <div className="text-right">
