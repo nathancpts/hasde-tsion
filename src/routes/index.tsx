@@ -905,16 +905,6 @@ function PlanningTV() {
           shema={vShema}
 
           times={vTimes}
-          highlight={
-            <div className="rounded-xl border border-accent/40 bg-[var(--blue-soft)] px-4 py-2 flex items-center justify-between">
-              <span className="text-[1.1vh] uppercase tracking-[0.2em] text-accent font-semibold">
-                Omer · ce soir
-              </span>
-              <span className="font-display text-[3.5vh] font-bold text-accent leading-none">
-                {vOmer ?? "—"}
-              </span>
-            </div>
-          }
         />
 
         <DayCard
