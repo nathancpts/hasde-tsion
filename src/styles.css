@@ -59,40 +59,54 @@
 
 @layer base {
   body {
-    background-color: #1a4a8a;
+    background-color: #061a55;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-size: 280px 280px;
+    background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     position: relative;
     overflow-x: hidden;
   }
+  /* Klein-blue luminous relief — base layer */
   body::before {
+    content: '';
+    position: fixed; inset: -30%; z-index: -3; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 25% 30%, rgba(220,232,245,0.55) 0%, rgba(220,232,245,0) 60%),
+      radial-gradient(ellipse 55% 45% at 78% 68%, rgba(180,210,235,0.45) 0%, rgba(180,210,235,0) 65%),
+      radial-gradient(ellipse 70% 60% at 60% 18%, rgba(60,120,200,0.55) 0%, rgba(60,120,200,0) 70%),
+      radial-gradient(ellipse 65% 55% at 12% 82%, rgba(8,24,80,0.7) 0%, rgba(8,24,80,0) 70%),
+      radial-gradient(ellipse 80% 70% at 88% 12%, rgba(40,90,180,0.5) 0%, rgba(40,90,180,0) 70%),
+      linear-gradient(135deg, #061a55 0%, #0d3a8a 45%, #1e5fb8 100%);
+    filter: blur(70px) saturate(1.15);
+    animation: klein-flow 28s ease-in-out infinite alternate;
+    will-change: transform, filter;
+  }
+  /* Second drifting layer for parallax depth */
+  body::after {
     content: '';
     position: fixed; inset: -20%; z-index: -2; pointer-events: none;
     background:
-      radial-gradient(circle at 20% 30%, #2a6fb8 0%, transparent 45%),
-      radial-gradient(circle at 75% 25%, #b8d4e8 0%, transparent 40%),
-      radial-gradient(circle at 60% 70%, #4a85c4 0%, transparent 50%),
-      radial-gradient(circle at 30% 85%, #0d2a55 0%, transparent 45%),
-      linear-gradient(135deg, #0f3d7a 0%, #2a6fb8 50%, #5a95cc 100%);
-    background-size: 200% 200%;
-    filter: blur(40px);
-    animation: bg-drift 22s ease-in-out infinite alternate;
-  }
-  body::after {
-    content: '';
-    position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
-    background-size: 220px 220px;
-    mix-blend-mode: overlay;
-    opacity: 0.55;
-    animation: grain-shift 8s steps(6) infinite;
+      radial-gradient(ellipse 50% 40% at 42% 58%, rgba(230,240,250,0.35) 0%, rgba(230,240,250,0) 70%),
+      radial-gradient(ellipse 55% 45% at 82% 38%, rgba(20,60,140,0.5) 0%, rgba(20,60,140,0) 70%),
+      radial-gradient(ellipse 45% 40% at 18% 22%, rgba(120,170,220,0.4) 0%, rgba(120,170,220,0) 70%);
+    filter: blur(90px);
+    mix-blend-mode: screen;
+    animation: klein-flow-2 36s ease-in-out infinite alternate;
+    will-change: transform;
   }
 }
 
-@keyframes bg-drift {
-  0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 100%, 0% 50%; transform: scale(1) rotate(0deg); }
-  50%  { background-position: 30% 20%, 70% 30%, 60% 70%, 20% 80%, 50% 50%; transform: scale(1.08) rotate(2deg); }
-  100% { background-position: 60% 40%, 40% 60%, 70% 50%, 40% 60%, 100% 50%; transform: scale(1.04) rotate(-2deg); }
+@keyframes klein-flow {
+  0%   { transform: translate3d(0,0,0) scale(1) rotate(0deg); filter: blur(70px) saturate(1.15); }
+  50%  { transform: translate3d(2%, -2%, 0) scale(1.08) rotate(1.2deg); filter: blur(85px) saturate(1.25); }
+  100% { transform: translate3d(-2%, 2%, 0) scale(1.04) rotate(-1.2deg); filter: blur(75px) saturate(1.2); }
+}
+@keyframes klein-flow-2 {
+  0%   { transform: translate3d(0,0,0) scale(1.05) rotate(0deg); }
+  50%  { transform: translate3d(-3%, 3%, 0) scale(1.12) rotate(-1.5deg); }
+  100% { transform: translate3d(3%, -3%, 0) scale(1.08) rotate(1.5deg); }
 }
 @keyframes grain-shift {
   0%   { background-position: 0 0; }
