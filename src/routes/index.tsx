@@ -830,6 +830,7 @@ function PlanningTV() {
   const chabad = useChabad();
   const zmanim = useZmanim(null);
   const kiosk = useKiosk();
+  const shabbatZ = useShabbatZmanim(null);
 
   if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} />;
 
@@ -847,7 +848,6 @@ function PlanningTV() {
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
   // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
-  const shabbatZ = useShabbatZmanim(null);
   const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
