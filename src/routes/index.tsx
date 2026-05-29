@@ -704,20 +704,20 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
         </header>
 
         <div
-          className="relative rounded-2xl p-5 text-center overflow-hidden"
+          className="relative rounded-2xl p-5 text-center backdrop-blur-sm"
           style={{
-            background: "linear-gradient(145deg, #C9A96E 0%, #8A6A1F 55%, #5C4515 100%)",
-            border: "1px solid rgba(255,220,150,0.5)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,240,200,0.6), inset 0 -2px 8px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.45), 0 2px 4px rgba(0,0,0,0.3)",
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(201,169,110,0.45)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.25)",
           }}
         >
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/95 font-semibold mb-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Parashat Hashavoua</p>
-          <h2 className="font-display text-3xl font-bold text-white leading-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)]">{parashaFr}</h2>
+          <p className="text-[10px] uppercase tracking-[0.3em] font-semibold mb-2" style={{ color: "#C9A96E" }}>Parashat Hashavoua</p>
+          <h2 className="font-display text-3xl font-bold text-white leading-tight">{parashaFr}</h2>
           {parashaHe && (
-            <p className="font-hebrew text-2xl text-white leading-none mt-2 drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)]" dir="rtl">{parashaHe}</p>
+            <p className="font-hebrew text-2xl leading-none mt-2" style={{ color: "#C9A96E" }} dir="rtl">{parashaHe}</p>
           )}
         </div>
+
 
 
         <Link
