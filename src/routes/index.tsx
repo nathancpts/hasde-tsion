@@ -336,7 +336,7 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
   return (
     <div className="px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
       <div>
-        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-[var(--gold-line)] font-semibold mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
+        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-white font-semibold mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
           Parashat Hashavoua
         </p>
         <h2 className="font-display text-[4.5vh] font-bold text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
