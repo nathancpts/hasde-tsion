@@ -101,6 +101,16 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
   );
 }
 
+function DynamicBackground() {
+  return (
+    <div aria-hidden="true" className="dynamic-klein-bg">
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--base" />
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--mid" />
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--sheen" />
+    </div>
+  );
+}
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -693,7 +703,8 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const upcoming = events.slice(0, 3);
 
   return (
-    <main className="min-h-screen w-full bg-transparent text-foreground overflow-x-hidden">
+    <main className="relative isolate min-h-screen w-full bg-transparent text-foreground overflow-x-hidden">
+      <DynamicBackground />
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">
         <header className="flex items-center justify-between gap-3">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
@@ -879,7 +890,8 @@ function PlanningTV() {
 
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+    <main className="relative isolate h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+      <DynamicBackground />
       <KioskControls {...kiosk} />
       <Header />
       <ParashaBanner live={live} />
