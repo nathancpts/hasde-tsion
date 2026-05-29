@@ -324,12 +324,12 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
   const fr = live?.parasha.fr ?? week.parasha.fr;
   const he = live?.parasha.he ?? week.parasha.he;
   return (
-    <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
+    <div className="rounded-xl border-2 border-[var(--gold-line)] bg-white/95 px-[2vw] py-[1.4vh] flex items-center justify-between gap-4 shadow-lg">
       <div>
         <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
           Parashat Hashavoua
         </p>
-        <h2 className="font-display text-[4.5vh] font-bold text-foreground leading-none">
+        <h2 className="font-display text-[4.5vh] font-bold text-[#0F3D7A] leading-none">
           {fr}
         </h2>
       </div>
@@ -337,7 +337,7 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
         <p className="font-hebrew text-[4vh] text-primary leading-none" dir="rtl">
           {he}
         </p>
-        <p className="mt-1 text-[1.1vh] text-muted-foreground uppercase tracking-wider">
+        <p className="mt-1 text-[1.1vh] text-[#0F3D7A]/70 uppercase tracking-wider font-semibold">
           {week.parasha.chap}
         </p>
 
