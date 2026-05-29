@@ -68,6 +68,10 @@
     position: relative;
     overflow-x: hidden;
   }
+  #root {
+    position: relative;
+    isolation: isolate;
+  }
   /* Klein-blue luminous relief — base layer */
   body::before {
     content: '';
@@ -96,6 +100,57 @@
     animation: klein-flow-2 36s ease-in-out infinite alternate;
     will-change: transform;
   }
+
+  .dynamic-klein-bg {
+    position: absolute;
+    inset: -16%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .dynamic-klein-bg__layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 40%;
+    transform-origin: 50% 50%;
+    will-change: transform, filter, opacity, background-position;
+  }
+
+  .dynamic-klein-bg__layer--base {
+    background:
+      radial-gradient(ellipse 52% 46% at 18% 28%, rgb(255 255 255 / 0.34) 0%, rgb(255 255 255 / 0) 58%),
+      radial-gradient(ellipse 48% 42% at 82% 32%, rgb(133 182 255 / 0.34) 0%, rgb(133 182 255 / 0) 62%),
+      radial-gradient(ellipse 62% 54% at 58% 72%, rgb(6 26 85 / 0.55) 0%, rgb(6 26 85 / 0) 70%),
+      radial-gradient(ellipse 72% 60% at 46% 46%, rgb(24 78 170 / 0.72) 0%, rgb(9 45 118 / 0.22) 58%, rgb(9 45 118 / 0) 78%),
+      linear-gradient(140deg, #041544 0%, #0a2f78 38%, #0f3d7a 62%, #1852a5 100%);
+    filter: blur(56px) saturate(1.18) contrast(1.06);
+    animation: klein-relief-drift 18s ease-in-out infinite alternate;
+  }
+
+  .dynamic-klein-bg__layer--mid {
+    inset: 6% 2% 0 4%;
+    background:
+      radial-gradient(ellipse 38% 34% at 30% 54%, rgb(255 255 255 / 0.24) 0%, rgb(255 255 255 / 0) 62%),
+      radial-gradient(ellipse 44% 40% at 72% 60%, rgb(197 169 110 / 0.12) 0%, rgb(197 169 110 / 0) 64%),
+      radial-gradient(ellipse 56% 44% at 52% 18%, rgb(80 140 230 / 0.22) 0%, rgb(80 140 230 / 0) 68%),
+      radial-gradient(ellipse 70% 62% at 48% 48%, rgb(7 31 96 / 0.6) 8%, rgb(7 31 96 / 0) 72%);
+    filter: blur(72px) saturate(1.24);
+    mix-blend-mode: screen;
+    opacity: 0.9;
+    animation: klein-relief-swell 13s ease-in-out infinite;
+  }
+
+  .dynamic-klein-bg__layer--sheen {
+    inset: -8%;
+    background:
+      radial-gradient(ellipse 22% 18% at 36% 42%, rgb(255 255 255 / 0.4) 0%, rgb(255 255 255 / 0) 70%),
+      radial-gradient(ellipse 26% 22% at 64% 56%, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 72%),
+      radial-gradient(ellipse 18% 16% at 56% 24%, rgb(197 169 110 / 0.16) 0%, rgb(197 169 110 / 0) 76%);
+    filter: blur(38px);
+    opacity: 0.92;
+    animation: klein-relief-sheen 10s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes klein-flow {
@@ -114,6 +169,63 @@
   50%  { background-position: 40px -60px; }
   75%  { background-position: -30px -40px; }
   100% { background-position: 60px 50px; }
+}
+
+@keyframes klein-relief-drift {
+  0% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1.02) rotate(0deg);
+    filter: blur(56px) saturate(1.18) contrast(1.06);
+  }
+  25% {
+    transform: translate3d(1.5%, -2.2%, 0) scale(1.07) rotate(0.6deg);
+    filter: blur(64px) saturate(1.22) contrast(1.08);
+  }
+  50% {
+    transform: translate3d(2%, 1.6%, 0) scale(1.11) rotate(-0.55deg);
+    filter: blur(74px) saturate(1.26) contrast(1.12);
+  }
+  75% {
+    transform: translate3d(-1.6%, 2.4%, 0) scale(1.06) rotate(0.5deg);
+    filter: blur(67px) saturate(1.21) contrast(1.09);
+  }
+  100% {
+    transform: translate3d(-2.4%, -1.8%, 0) scale(1.1) rotate(-0.7deg);
+    filter: blur(60px) saturate(1.2) contrast(1.08);
+  }
+}
+
+@keyframes klein-relief-swell {
+  0% {
+    transform: translate3d(0%, 0%, 0) scale(0.98) skewX(0deg);
+    opacity: 0.72;
+  }
+  33% {
+    transform: translate3d(-1.8%, 1.2%, 0) scale(1.05) skewX(0.4deg);
+    opacity: 0.96;
+  }
+  66% {
+    transform: translate3d(2.1%, -1.4%, 0) scale(1.1) skewX(-0.35deg);
+    opacity: 0.82;
+  }
+  100% {
+    transform: translate3d(-1.2%, 1.8%, 0) scale(1.04) skewX(0.2deg);
+    opacity: 0.92;
+  }
+}
+
+@keyframes klein-relief-sheen {
+  0% {
+    transform: translate3d(-2%, 0%, 0) scale(0.98);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(2.5%, -1.8%, 0) scale(1.08);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(-1.4%, 2.2%, 0) scale(1.02);
+    opacity: 0.62;
+  }
 }
 
 
