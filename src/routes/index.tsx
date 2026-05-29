@@ -308,11 +308,11 @@ function Header() {
       </div>
 
 
-      <div className="text-right">
-        <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-foreground">
+      <div className="text-right rounded-xl border border-[var(--gold-line)] bg-white/95 px-5 py-3 shadow-lg">
+        <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-[#0F3D7A]">
           {time}
         </div>
-        <p className="text-[1.2vh] uppercase tracking-[0.25em] text-muted-foreground mt-1 capitalize">
+        <p className="text-[1.2vh] uppercase tracking-[0.25em] text-primary mt-1 capitalize font-semibold">
           {date}
         </p>
       </div>
