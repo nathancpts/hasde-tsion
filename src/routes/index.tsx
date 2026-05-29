@@ -693,7 +693,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const upcoming = events.slice(0, 3);
 
   return (
-    <main className="min-h-screen w-full bg-background text-foreground overflow-x-hidden">
+    <main className="min-h-screen w-full bg-transparent text-foreground overflow-x-hidden">
       <div className="max-w-md mx-auto px-4 py-6 space-y-5">
         <header className="flex items-center justify-between gap-3">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
@@ -879,7 +879,7 @@ function PlanningTV() {
 
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-background text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+    <main className="h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <KioskControls {...kiosk} />
       <Header />
       <ParashaBanner live={live} />
