@@ -601,7 +601,9 @@ function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null
           </div>
         )}
         {times.length === 0 && (
-          <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
+          <p className="text-[1.3vh] text-muted-foreground italic text-center py-[2vh]">
+            {zmanim ? "Horaires non disponibles pour ce jour." : "Chargement…"}
+          </p>
         )}
       </div>
     </article>
@@ -828,6 +830,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </div>
           )}
           {zmanim ? (
+            zmanim.times.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic text-center py-4">
+                Horaires non disponibles pour ce jour.
+              </p>
+            ) : (
             <>
               <ul className="divide-y divide-border/50">
                 {zmanim.times.map((t) => (
@@ -854,6 +861,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
               )}
             </>
+            )
           ) : (
             <p className="text-xs text-muted-foreground italic">Chargement…</p>
           )}

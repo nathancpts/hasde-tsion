@@ -113,23 +113,8 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sheqyia",             value: ov.sheqyia },
     { label: "Sortie des étoiles",  value: ov.tzeit },
     { label: "Nuit de R. Tam",      value: ov.rTam },
-  ] : [
-    { label: "Hatzot Laïla",        value: timeFR(t.chatzotNight) },
-    { label: "Alot haShahar",       value: timeFR(t.alotHaShachar) },
-    { label: "Misheyakir / Tefilin",value: timeFR(t.misheyakir) },
-    { label: "Hanetz haHama",       value: timeFR(t.sunrise) },
-    { label: "Limite Shema M\"A",   value: timeFR(t.sofZmanShmaMGA) },
-    { label: "Limite Shema GR\"A",  value: timeFR(t.sofZmanShma) },
-    { label: "Limite Tefila M\"A",  value: timeFR(t.sofZmanTfillaMGA) },
-    { label: "Limite Tefila GR\"A", value: timeFR(t.sofZmanTfilla) },
-    { label: "Hatzot",              value: timeFR(t.chatzot) },
-    { label: "Minha Guedola",       value: timeFR(t.minchaGedola) },
-    { label: "Minha Ketana",        value: timeFR(t.minchaKetana) },
-    { label: "Plag haMinha",        value: timeFR(t.plagHaMincha) },
-    { label: "Sheqyia",             value: timeFR(t.sunset) },
-    { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg) },
-    { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min) },
-  ];
+  ] : [];
+  void t; // horaires API désactivés tant qu'aucune valeur manuelle n'est fournie
 
   // Mishna Yomi & Yerushalmi Yomi du jour
   const calItems = calRes.items ?? [];
