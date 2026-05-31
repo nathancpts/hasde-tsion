@@ -768,7 +768,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     );
   };
 
-  const upcoming = events.slice(0, 3);
 
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
