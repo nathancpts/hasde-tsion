@@ -225,19 +225,22 @@ function useChabad() {
   return current;
 }
 
-function useZmanim(loc: StoredLoc) {
+function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
   const [z, setZ] = useState<Zmanim | null>(null);
   useEffect(() => {
     let cancelled = false;
     const load = () => {
-      fetchZmanim(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
-        .then((d) => { if (!cancelled) setZ(d); })
+      const d = new Date();
+      d.setDate(d.getDate() + dayOffset);
+      setZ(null);
+      fetchZmanim(d, loc ? { lat: loc.lat, lon: loc.lon } : undefined)
+        .then((data) => { if (!cancelled) setZ(data); })
         .catch((e) => console.warn("Zmanim fetch failed", e));
     };
     load();
     const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
     return () => { cancelled = true; clearInterval(id); };
-  }, [loc]);
+  }, [loc, dayOffset]);
   return z;
 }
 
