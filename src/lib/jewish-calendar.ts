@@ -1,3 +1,5 @@
+import { getOverride } from "./zmanim-overrides";
+
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
 const TEHILIM_BY_DAY: Record<number, string> = {
   1: "1–9", 2: "10–17", 3: "18–22", 4: "23–28", 5: "29–34",
