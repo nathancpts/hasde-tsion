@@ -90,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "Hasdé Tsion" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "mobile-web-app-capable", content: "yes" },
-      { name: "theme-color", content: "#1a1a3a" },
+      { name: "theme-color", content: "#061a55" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
