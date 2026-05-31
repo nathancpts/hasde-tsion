@@ -522,45 +522,54 @@ function DonationsCard() {
 }
 
 function ParashaCard({ live }: { live: LiveWeek | null }) {
-  const parashaFr = live?.parasha.fr ?? "—";
-  const { resume, citation, question } = PARASHA_CONTENU;
+  const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center gap-2 mb-[0.8vh]">
-        <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
-        <h3 className="font-display text-[2.4vh] font-bold text-foreground truncate">
-          Parasha {parashaFr}
-        </h3>
+      <div className="flex items-center justify-between gap-2 mb-[0.6vh]">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
+          <h3 className="font-display text-[2.2vh] font-bold text-foreground truncate">
+            Parasha {parashaFr}
+          </h3>
+        </div>
+        {PARASHA_NOM_HE && (
+          <span className="font-hebrew text-[2vh] text-primary shrink-0" dir="rtl">{PARASHA_NOM_HE}</span>
+        )}
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1 gap-[1vh]">
-        <section>
-          <p className="text-[1vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-[0.4vh]">
-            Résumé
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1 gap-[0.9vh]">
+        {PARASHA_INTRO && (
+          <p className="font-display italic text-[1.3vh] text-muted-foreground leading-snug">
+            {PARASHA_INTRO}
           </p>
-          <p className="text-[1.4vh] text-foreground leading-snug">{resume}</p>
-        </section>
-
-        <section className="rounded-md border border-[var(--gold-line)] bg-[var(--gold-soft)] px-2 py-[0.8vh]">
-          <p className="text-[1vh] uppercase tracking-[0.25em] text-primary font-semibold mb-[0.4vh]">
-            Citation
-          </p>
-          <p className="font-display italic text-[1.45vh] text-foreground leading-snug">
-            « {citation.texte} »
-          </p>
-          <p className="text-[1.1vh] text-muted-foreground mt-[0.4vh]">— {citation.reference}</p>
-        </section>
-
-        <section>
-          <p className="text-[1vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-[0.4vh]">
-            Question
-          </p>
-          <p className="text-[1.4vh] text-foreground leading-snug">{question}</p>
-        </section>
+        )}
+        {PARASHA_BLOCS.map((bloc, i) => (
+          <section
+            key={i}
+            className="rounded-md border border-border/60 bg-muted/30 px-2 py-[0.7vh]"
+          >
+            <p className="text-[1.05vh] uppercase tracking-[0.2em] text-primary font-semibold mb-[0.4vh]">
+              {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+            </p>
+            {bloc.paragraphes?.map((p, j) => (
+              <p key={j} className="text-[1.3vh] text-foreground leading-snug mb-[0.3vh] last:mb-0">
+                {p}
+              </p>
+            ))}
+            {bloc.puces && (
+              <ul className="list-disc pl-[1.2vh] space-y-[0.3vh] mt-[0.3vh]">
+                {bloc.puces.map((p, j) => (
+                  <li key={j} className="text-[1.3vh] text-foreground leading-snug">{p}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
       </div>
     </article>
   );
 }
+
 
 
 function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
