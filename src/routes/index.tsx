@@ -574,14 +574,14 @@ function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null
         </div>
       )}
 
-      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1">
         {times.map((t) => (
           <div
             key={t.label}
-            className="flex items-center justify-between gap-2 py-[0.3vh] border-b border-border/40 last:border-0"
+            className="flex items-center justify-between gap-2 py-[0.2vh] border-b border-border/40 last:border-0"
           >
-            <span className="text-[1.1vh] text-muted-foreground tracking-wide">{t.label}</span>
-            <span className="font-display font-semibold tabular-nums text-[1.55vh] text-foreground">{t.value}</span>
+            <span className="text-[1.05vh] text-muted-foreground tracking-wide">{t.label}</span>
+            <span className="font-display font-semibold tabular-nums text-[1.4vh] text-foreground">{t.value}</span>
           </div>
         ))}
         {(zmanim?.mishnaYomi || zmanim?.yerushalmiYomi) && (
