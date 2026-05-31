@@ -816,101 +816,60 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
         />
 
-        {upcoming.length > 0 && (
-          <article className="rounded-2xl border border-border bg-card p-5">
-            <h3 className="font-display text-lg font-bold text-foreground mb-3">À venir</h3>
-            <ul className="divide-y divide-border/60">
-              {upcoming.map((e) => {
-                const valueColor = e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
-                return (
-                  <li key={e.date + e.title} className="flex items-center gap-3 py-2.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground w-16 shrink-0">{e.date}</span>
-                    <span className="text-sm font-medium text-foreground flex-1 truncate">{e.title}</span>
-                    {e.time && (
-                      <span className={`font-display font-bold tabular-nums text-base ${valueColor}`}>{e.time}</span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </article>
-        )}
+        <article className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
+            {PARASHA_NOM_HE && (
+              <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
+            )}
+          </div>
+          {PARASHA_INTRO && (
+            <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
+              {PARASHA_INTRO}
+            </p>
+          )}
+          <div className="space-y-3">
+            {PARASHA_BLOCS.map((bloc, i) => (
+              <section key={i} className="rounded-xl border border-border/60 bg-muted/30 px-3 py-2.5">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
+                  {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+                </p>
+                {bloc.paragraphes?.map((p, j) => (
+                  <p key={j} className="text-sm text-foreground leading-snug mb-1.5 last:mb-0">{p}</p>
+                ))}
+                {bloc.puces && (
+                  <ul className="list-disc pl-4 space-y-1 mt-1">
+                    {bloc.puces.map((p, j) => (
+                      <li key={j} className="text-sm text-foreground leading-snug">{p}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+        </article>
 
         <article className="rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <h3 className="font-display text-lg font-bold text-foreground">
-              {dayOffset === 0 ? "Zmanim du jour" : dayOffset === 1 ? "Zmanim demain" : dayOffset === -1 ? "Zmanim hier" : `Zmanim (J${dayOffset > 0 ? "+" : ""}${dayOffset})`}
-            </h3>
-            <div className="flex items-center gap-1">
-              <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              {dayOffset !== 0 && (
-                <button onClick={() => setDayOffset(0)} className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-md border border-border hover:bg-muted/60 transition">
-                  Aujourd'hui
-                </button>
-              )}
-              <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-          {zmanim?.date && (
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-semibold mb-3 capitalize">{zmanim.date}</p>
-          )}
-          {zmanim?.tahanun && (
-            <div className={`rounded-xl border px-3 py-2 mb-3 text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
-              <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">Liturgie du jour</p>
-              <p className={`font-display text-sm font-bold mt-0.5 ${zmanim.tahanun.recited ? "text-foreground" : "text-primary"}`}>
-                {zmanim.tahanun.reason}
-              </p>
-            </div>
-          )}
-          {zmanim?.birkatLevana && (
-            <div className="rounded-xl border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 py-2 mb-3 text-center">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-semibold">Bircat HaLevana</p>
-              <p className="font-display text-base font-bold text-primary mt-0.5">
-                {zmanim.birkatLevana.start} – {zmanim.birkatLevana.end}
-              </p>
-            </div>
-          )}
-          {zmanim ? (
-            zmanim.times.length === 0 ? (
-              <p className="text-sm text-muted-foreground italic text-center py-4">
-                Horaires non disponibles pour ce jour.
-              </p>
-            ) : (
-            <>
-              <ul className="divide-y divide-border/50">
-                {zmanim.times.map((t) => (
-                  <li key={t.label} className="flex items-center justify-between gap-2 py-1.5">
-                    <span className="text-xs text-muted-foreground">{t.label}</span>
-                    <span className="font-display font-semibold tabular-nums text-sm text-foreground">{t.value}</span>
-                  </li>
-                ))}
-              </ul>
-              {(zmanim.mishnaYomi || zmanim.yerushalmiYomi) && (
-                <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-                  {zmanim.mishnaYomi && (
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs text-muted-foreground">Mishna Yomi</span>
-                      <span className="font-display font-semibold text-sm text-foreground">{zmanim.mishnaYomi.fr}</span>
-                    </div>
-                  )}
-                  {zmanim.yerushalmiYomi && (
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs text-muted-foreground">Yerushalmi Yomi</span>
-                      <span className="font-display font-semibold text-sm text-foreground">{zmanim.yerushalmiYomi.fr}</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </>
-            )
+          <h3 className="font-display text-xl font-bold text-foreground mb-3">Donations du repas</h3>
+          {DONATIONS_REPAS.length === 0 ? (
+            <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
           ) : (
-            <p className="text-xs text-muted-foreground italic">Chargement…</p>
+            <ul className="divide-y divide-border/60">
+              {DONATIONS_REPAS.map((d, i) => (
+                <li key={i} className="py-2.5">
+                  <p className="font-display font-bold text-base text-foreground leading-tight">{d.donateur}</p>
+                  {d.occasion && (
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-primary font-semibold mt-0.5">{d.occasion}</p>
+                  )}
+                  {d.dedicace && (
+                    <p className="font-display italic text-sm text-muted-foreground leading-tight mt-0.5">{d.dedicace}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
           )}
         </article>
+
 
 
 
