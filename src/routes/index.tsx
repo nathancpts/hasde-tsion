@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
@@ -225,19 +225,22 @@ function useChabad() {
   return current;
 }
 
-function useZmanim(loc: StoredLoc) {
+function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
   const [z, setZ] = useState<Zmanim | null>(null);
   useEffect(() => {
     let cancelled = false;
     const load = () => {
-      fetchZmanim(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
-        .then((d) => { if (!cancelled) setZ(d); })
+      const d = new Date();
+      d.setDate(d.getDate() + dayOffset);
+      setZ(null);
+      fetchZmanim(d, loc ? { lat: loc.lat, lon: loc.lon } : undefined)
+        .then((data) => { if (!cancelled) setZ(data); })
         .catch((e) => console.warn("Zmanim fetch failed", e));
     };
     load();
     const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
     return () => { cancelled = true; clearInterval(id); };
-  }, [loc]);
+  }, [loc, dayOffset]);
   return z;
 }
 
@@ -524,14 +527,34 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
   );
 }
 
-function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
+function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const times = zmanim?.times ?? [];
+  const titleLabel = dayOffset === 0 ? "Zmanim du jour" : dayOffset === 1 ? "Zmanim demain" : dayOffset === -1 ? "Zmanim hier" : `Zmanim (J${dayOffset > 0 ? "+" : ""}${dayOffset})`;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center gap-2 mb-[0.8vh]">
-        <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full" />
-        <h3 className="font-display text-[2.4vh] font-bold text-foreground">Zmanim du jour</h3>
+      <div className="flex items-center justify-between gap-2 mb-[0.4vh]">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
+          <h3 className="font-display text-[2.4vh] font-bold text-foreground truncate">{titleLabel}</h3>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+            <ChevronLeft className="w-[1.8vh] h-[1.8vh]" />
+          </button>
+          {dayOffset !== 0 && (
+            <button onClick={() => setDayOffset(0)} className="text-[1vh] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-md border border-border hover:bg-muted/60 transition">
+              Aujourd'hui
+            </button>
+          )}
+          <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+            <ChevronRight className="w-[1.8vh] h-[1.8vh]" />
+          </button>
+        </div>
       </div>
+      {zmanim?.date && (
+        <p className="text-[1.05vh] uppercase tracking-[0.18em] text-muted-foreground font-semibold mb-[0.8vh] capitalize">{zmanim.date}</p>
+      )}
+
 
       {zmanim?.tahanun && (
         <div className={`rounded-md border px-2 py-[0.5vh] mb-[0.6vh] text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
@@ -588,7 +611,7 @@ function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
 
 // ============ MOBILE LAYOUT ============
 
-function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null }) {
+function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
   const date = now
@@ -767,7 +790,27 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
         )}
 
         <article className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="font-display text-lg font-bold text-foreground mb-3">Zmanim du jour</h3>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <h3 className="font-display text-lg font-bold text-foreground">
+              {dayOffset === 0 ? "Zmanim du jour" : dayOffset === 1 ? "Zmanim demain" : dayOffset === -1 ? "Zmanim hier" : `Zmanim (J${dayOffset > 0 ? "+" : ""}${dayOffset})`}
+            </h3>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              {dayOffset !== 0 && (
+                <button onClick={() => setDayOffset(0)} className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-md border border-border hover:bg-muted/60 transition">
+                  Aujourd'hui
+                </button>
+              )}
+              <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          {zmanim?.date && (
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-semibold mb-3 capitalize">{zmanim.date}</p>
+          )}
           {zmanim?.tahanun && (
             <div className={`rounded-xl border px-3 py-2 mb-3 text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
               <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">Liturgie du jour</p>
@@ -831,11 +874,12 @@ function PlanningTV() {
   const isTV = useIsTV();
   const live = useLiveWeek(null);
   const chabad = useChabad();
-  const zmanim = useZmanim(null);
+  const [dayOffset, setDayOffset] = useState(0);
+  const zmanim = useZmanim(null, dayOffset);
   const kiosk = useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
-  if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} />;
+  if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
   // Merge live data into static fallbacks
@@ -884,7 +928,7 @@ function PlanningTV() {
       <ParashaBanner live={live} />
 
       <section className="grid grid-cols-4 gap-[1vw] min-h-0">
-        <ZmanimCard zmanim={zmanim} />
+        <ZmanimCard zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />
 
         <DayCard
           badge="Vendredi"
