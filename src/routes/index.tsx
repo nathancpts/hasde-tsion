@@ -790,7 +790,27 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
         )}
 
         <article className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="font-display text-lg font-bold text-foreground mb-3">Zmanim du jour</h3>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <h3 className="font-display text-lg font-bold text-foreground">
+              {dayOffset === 0 ? "Zmanim du jour" : dayOffset === 1 ? "Zmanim demain" : dayOffset === -1 ? "Zmanim hier" : `Zmanim (J${dayOffset > 0 ? "+" : ""}${dayOffset})`}
+            </h3>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              {dayOffset !== 0 && (
+                <button onClick={() => setDayOffset(0)} className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-md border border-border hover:bg-muted/60 transition">
+                  Aujourd'hui
+                </button>
+              )}
+              <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1.5 rounded-md border border-border hover:bg-muted/60 transition">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          {zmanim?.date && (
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-semibold mb-3 capitalize">{zmanim.date}</p>
+          )}
           {zmanim?.tahanun && (
             <div className={`rounded-xl border px-3 py-2 mb-3 text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
               <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">Liturgie du jour</p>
