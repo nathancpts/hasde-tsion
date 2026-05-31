@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Maximize2, Minimize2, BookOpen } from "lucide-react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
@@ -729,15 +729,6 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
           )}
         </div>
 
-
-
-        <Link
-          to="/textes"
-          className="flex items-center justify-center gap-2 rounded-2xl border-2 border-primary bg-primary text-primary-foreground px-5 py-4 font-display text-lg font-bold shadow hover:opacity-90 transition"
-        >
-          <BookOpen className="h-5 w-5" />
-          Textes & Prières
-        </Link>
 
         <MobileDay
           badge="Vendredi" badgeTone="blue"
