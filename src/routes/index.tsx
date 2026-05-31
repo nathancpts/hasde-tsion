@@ -527,14 +527,34 @@ function EventsCard({ live }: { live: LiveWeek | null }) {
   );
 }
 
-function ZmanimCard({ zmanim }: { zmanim: Zmanim | null }) {
+function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const times = zmanim?.times ?? [];
+  const titleLabel = dayOffset === 0 ? "Zmanim du jour" : dayOffset === 1 ? "Zmanim demain" : dayOffset === -1 ? "Zmanim hier" : `Zmanim (J${dayOffset > 0 ? "+" : ""}${dayOffset})`;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center gap-2 mb-[0.8vh]">
-        <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full" />
-        <h3 className="font-display text-[2.4vh] font-bold text-foreground">Zmanim du jour</h3>
+      <div className="flex items-center justify-between gap-2 mb-[0.4vh]">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
+          <h3 className="font-display text-[2.4vh] font-bold text-foreground truncate">{titleLabel}</h3>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+            <ChevronLeft className="w-[1.8vh] h-[1.8vh]" />
+          </button>
+          {dayOffset !== 0 && (
+            <button onClick={() => setDayOffset(0)} className="text-[1vh] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-md border border-border hover:bg-muted/60 transition">
+              Aujourd'hui
+            </button>
+          )}
+          <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+            <ChevronRight className="w-[1.8vh] h-[1.8vh]" />
+          </button>
+        </div>
       </div>
+      {zmanim?.date && (
+        <p className="text-[1.05vh] uppercase tracking-[0.18em] text-muted-foreground font-semibold mb-[0.8vh] capitalize">{zmanim.date}</p>
+      )}
+
 
       {zmanim?.tahanun && (
         <div className={`rounded-md border px-2 py-[0.5vh] mb-[0.6vh] text-center ${zmanim.tahanun.recited ? "border-border bg-muted/40" : "border-[var(--gold-line)] bg-[var(--gold-soft)]"}`}>
