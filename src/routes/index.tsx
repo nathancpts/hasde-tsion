@@ -887,6 +887,12 @@ function PlanningTV() {
   const kiosk = useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
+  // Auto-reload toutes les 15 min pour récupérer les mises à jour publiées
+  useEffect(() => {
+    const id = setInterval(() => window.location.reload(), 15 * 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+
   if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
