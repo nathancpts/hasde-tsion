@@ -478,55 +478,90 @@ function DayCard({
   );
 }
 
-function EventsCard({ live }: { live: LiveWeek | null }) {
-  const liveEvents = live?.events ?? [];
-  const events = liveEvents.length > 0 ? liveEvents : week.events;
+function DonationsCard() {
+  const donations = DONATIONS_REPAS;
   return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
         <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
         <h3 className="font-display text-[2.6vh] font-bold text-foreground">
-          Événements à venir
+          Donations du repas
         </h3>
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0">
-        {events.map((e) => {
-
-          const valueColor =
-            e.tone === "gold" ? "text-primary" : e.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
-          return (
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1">
+        {donations.length === 0 ? (
+          <p className="text-[1.4vh] text-muted-foreground italic text-center py-[2vh]">
+            Aucune donation pour le moment.
+          </p>
+        ) : (
+          donations.map((d, i) => (
             <div
-              key={e.date + e.title}
-              className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-[0.7vh] border-b border-border/60 last:border-0"
+              key={i}
+              className="py-[0.9vh] border-b border-border/60 last:border-0"
             >
-              <span className="text-[1.2vh] font-semibold uppercase tracking-wider text-muted-foreground min-w-[7vw]">
-                {e.date}
-              </span>
-              <span className="text-[1.5vh] font-medium text-foreground">{e.title}</span>
-              <span className={`font-display font-bold tabular-nums text-[2.8vh] ${valueColor}`}>
-                {e.time}
-              </span>
+              <p className="font-display font-bold text-[1.7vh] text-foreground leading-tight">
+                {d.donateur}
+              </p>
+              {d.occasion && (
+                <p className="text-[1.2vh] uppercase tracking-[0.18em] text-primary font-semibold mt-0.5">
+                  {d.occasion}
+                </p>
+              )}
+              {d.dedicace && (
+                <p className="font-display italic text-[1.35vh] text-muted-foreground leading-tight mt-0.5">
+                  {d.dedicace}
+                </p>
+              )}
             </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-[1vh] pt-[1vh] border-t border-border">
-        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-1">
-          🕯 Yahrtzeit · 28 Iyar
-        </p>
-        <ul className="space-y-0.5">
-          {week.yahrtzeit.map((n) => (
-            <li key={n} className="font-display italic text-[1.4vh] text-muted-foreground leading-tight">
-              {n}
-            </li>
-          ))}
-        </ul>
+          ))
+        )}
       </div>
     </article>
   );
 }
+
+function ParashaCard({ live }: { live: LiveWeek | null }) {
+  const parashaFr = live?.parasha.fr ?? "—";
+  const { resume, citation, question } = PARASHA_CONTENU;
+  return (
+    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
+      <div className="flex items-center gap-2 mb-[0.8vh]">
+        <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
+        <h3 className="font-display text-[2.4vh] font-bold text-foreground truncate">
+          Parasha {parashaFr}
+        </h3>
+      </div>
+
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1 gap-[1vh]">
+        <section>
+          <p className="text-[1vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-[0.4vh]">
+            Résumé
+          </p>
+          <p className="text-[1.4vh] text-foreground leading-snug">{resume}</p>
+        </section>
+
+        <section className="rounded-md border border-[var(--gold-line)] bg-[var(--gold-soft)] px-2 py-[0.8vh]">
+          <p className="text-[1vh] uppercase tracking-[0.25em] text-primary font-semibold mb-[0.4vh]">
+            Citation
+          </p>
+          <p className="font-display italic text-[1.45vh] text-foreground leading-snug">
+            « {citation.texte} »
+          </p>
+          <p className="text-[1.1vh] text-muted-foreground mt-[0.4vh]">— {citation.reference}</p>
+        </section>
+
+        <section>
+          <p className="text-[1vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-[0.4vh]">
+            Question
+          </p>
+          <p className="text-[1.4vh] text-foreground leading-snug">{question}</p>
+        </section>
+      </div>
+    </article>
+  );
+}
+
 
 function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const times = zmanim?.times ?? [];
