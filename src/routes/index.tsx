@@ -830,6 +830,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </div>
           )}
           {zmanim ? (
+            zmanim.times.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic text-center py-4">
+                Horaires non disponibles pour ce jour.
+              </p>
+            ) : (
             <>
               <ul className="divide-y divide-border/50">
                 {zmanim.times.map((t) => (
@@ -856,6 +861,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
               )}
             </>
+            )
           ) : (
             <p className="text-xs text-muted-foreground italic">Chargement…</p>
           )}
