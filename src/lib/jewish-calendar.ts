@@ -59,9 +59,9 @@ export type Zmanim = {
   fetchedAt: string;
 };
 
-function timeFR(iso: string | undefined | null): string {
+function timeFR(iso: string | undefined | null, tz: string = DEFAULT_LOC.tzid): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: tz });
 }
 
 function diffMin(aIso?: string | null, bIso?: string | null): number | null {
