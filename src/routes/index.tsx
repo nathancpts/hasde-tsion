@@ -703,7 +703,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
   const upcoming = events.slice(0, 3);
 
   return (
-    <main className="relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
+    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
       <DynamicBackground />
       <div className="max-w-md mx-auto px-4 pt-6 space-y-5" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)" }}>
         <header className="flex items-center justify-between gap-3">
@@ -715,7 +715,7 @@ function MobileLayout({ live, chabad, zmanim }: { live: LiveWeek | null; chabad:
         </header>
 
         <div
-          className="relative rounded-2xl p-5 text-center backdrop-blur-sm"
+          className="relative rounded-2xl p-5 text-center"
           style={{
             background: "rgba(255,255,255,0.06)",
             border: "1px solid rgba(201,169,110,0.45)",
