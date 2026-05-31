@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { Maximize2, Minimize2, BookOpen } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
