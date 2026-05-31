@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Maximize2, Minimize2, BookOpen } from "lucide-react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
