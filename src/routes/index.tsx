@@ -704,8 +704,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   });
 
 
-  const liveEvents = live?.events ?? [];
-  const events = liveEvents.length > 0 ? liveEvents : week.events;
 
   const MobileDay = ({
     badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
