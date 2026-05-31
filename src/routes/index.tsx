@@ -1015,7 +1015,7 @@ function PlanningTV() {
           </div>
         </DayCard>
 
-        <EventsCard live={live} />
+        <DonationsCard />
       </section>
 
 
