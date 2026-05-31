@@ -601,7 +601,9 @@ function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null
           </div>
         )}
         {times.length === 0 && (
-          <p className="text-[1.2vh] text-muted-foreground italic">Chargement…</p>
+          <p className="text-[1.3vh] text-muted-foreground italic text-center py-[2vh]">
+            {zmanim ? "Horaires non disponibles pour ce jour." : "Chargement…"}
+          </p>
         )}
       </div>
     </article>
