@@ -1,3 +1,5 @@
+import { getOverride } from "./zmanim-overrides";
+
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
 const TEHILIM_BY_DAY: Record<number, string> = {
   1: "1–9", 2: "10–17", 3: "18–22", 4: "23–28", 5: "29–34",
@@ -94,7 +96,24 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
     : null;
 
-  const times: Zman[] = [
+  const ov = getOverride(date);
+  const times: Zman[] = ov ? [
+    { label: "Hatzot Laïla",        value: ov.hatzotLaila },
+    { label: "Alot haShahar",       value: ov.alotHaShahar },
+    { label: "Misheyakir / Tefilin",value: ov.misheyakir },
+    { label: "Hanetz haHama",       value: ov.hanetz },
+    { label: "Limite Shema M\"A",   value: ov.shemaMA },
+    { label: "Limite Shema GR\"A",  value: ov.shemaGRA },
+    { label: "Limite Tefila M\"A",  value: ov.tefilaMA },
+    { label: "Limite Tefila GR\"A", value: ov.tefilaGRA },
+    { label: "Hatzot",              value: ov.hatzot },
+    { label: "Minha Guedola",       value: ov.minhaGedola },
+    { label: "Minha Ketana",        value: ov.minhaKetana },
+    { label: "Plag haMinha",        value: ov.plagHaMinha },
+    { label: "Sheqyia",             value: ov.sheqyia },
+    { label: "Sortie des étoiles",  value: ov.tzeit },
+    { label: "Nuit de R. Tam",      value: ov.rTam },
+  ] : [
     { label: "Hatzot Laïla",        value: timeFR(t.chatzotNight) },
     { label: "Alot haShahar",       value: timeFR(t.alotHaShachar) },
     { label: "Misheyakir / Tefilin",value: timeFR(t.misheyakir) },
@@ -257,14 +276,14 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafFri ? `Daf Yomi · ${dafFri.hebrew ?? dafFri.title}` : "—",
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
-      candleLighting: candle ? timeOnly(candle.date) : null,
+      candleLighting: getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
     },
     samedi: {
       date: frLong(saturday),
       heb: convSat.hebrew,
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
-      havdalah: havdal ? timeOnly(havdal.date) : null,
+      havdalah: getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
     },
     events,
     fetchedAt: new Date().toISOString(),
