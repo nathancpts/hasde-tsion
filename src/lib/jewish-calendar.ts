@@ -130,12 +130,6 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg) },
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min) },
   ];
-  if (seasonalHours) {
-    times.push(
-      { label: "Heure saisonnière GR\"A", value: fmtHourMin(seasonalHours.graMin) },
-      { label: "Heure saisonnière M\"A",  value: fmtHourMin(seasonalHours.maMin) },
-    );
-  }
 
   // Mishna Yomi & Yerushalmi Yomi du jour
   const calItems = calRes.items ?? [];
