@@ -978,7 +978,7 @@ function PlanningTV() {
       <ParashaBanner live={live} />
 
       <section className="grid grid-cols-4 gap-[1vw] min-h-0">
-        <ZmanimCard zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />
+        <ParashaCard live={live} />
 
         <DayCard
           badge="Vendredi"
