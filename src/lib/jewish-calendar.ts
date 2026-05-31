@@ -59,9 +59,9 @@ export type Zmanim = {
   fetchedAt: string;
 };
 
-function timeFR(iso: string | undefined | null): string {
+function timeFR(iso: string | undefined | null, tz: string = DEFAULT_LOC.tzid): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: tz });
 }
 
 function diffMin(aIso?: string | null, bIso?: string | null): number | null {
@@ -180,9 +180,9 @@ function nextDow(from: Date, dow: number): Date {
   return d;
 }
 
-function timeOnly(iso: string): string {
+function timeOnly(iso: string, tz: string = DEFAULT_LOC.tzid): string {
   const d = new Date(iso);
-  return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: tz });
 }
 
 export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<LiveWeek> {
