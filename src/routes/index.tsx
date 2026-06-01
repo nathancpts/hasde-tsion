@@ -589,44 +589,46 @@ function ParashaCard({ live }: { live: LiveWeek | null }) {
       <div className="flex items-center justify-between gap-2 mb-[0.6vh]">
         <div className="flex items-center gap-2 min-w-0">
           <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
-          <h3 className="font-display text-[2.2vh] font-bold text-foreground truncate">
+          <h3 className="font-display text-[2.6vh] font-bold text-foreground truncate">
             Parasha {parashaFr}
           </h3>
         </div>
         {PARASHA_NOM_HE && (
-          <span className="font-hebrew text-[2vh] text-primary shrink-0" dir="rtl">{PARASHA_NOM_HE}</span>
+          <span className="font-hebrew text-[2.4vh] text-primary shrink-0" dir="rtl">{PARASHA_NOM_HE}</span>
         )}
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1 gap-[0.9vh]">
-        {PARASHA_INTRO && (
-          <p className="font-display italic text-[1.3vh] text-muted-foreground leading-snug">
-            {PARASHA_INTRO}
-          </p>
-        )}
-        {PARASHA_BLOCS.map((bloc, i) => (
-          <section
-            key={i}
-            className="rounded-md border border-border/60 bg-muted/30 px-2 py-[0.7vh]"
-          >
-            <p className="text-[1.05vh] uppercase tracking-[0.2em] text-primary font-semibold mb-[0.4vh]">
-              {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+      <AutoScrollVertical className="flex-1 min-h-0 pr-1">
+        <div className="flex flex-col gap-[1.1vh]">
+          {PARASHA_INTRO && (
+            <p className="font-display italic text-[1.8vh] text-muted-foreground leading-snug">
+              {PARASHA_INTRO}
             </p>
-            {bloc.paragraphes?.map((p, j) => (
-              <p key={j} className="text-[1.3vh] text-foreground leading-snug mb-[0.3vh] last:mb-0">
-                {p}
+          )}
+          {PARASHA_BLOCS.map((bloc, i) => (
+            <section
+              key={i}
+              className="rounded-md border border-border/60 bg-muted/30 px-[0.9vw] py-[1vh]"
+            >
+              <p className="text-[1.4vh] uppercase tracking-[0.2em] text-primary font-semibold mb-[0.5vh]">
+                {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
               </p>
-            ))}
-            {bloc.puces && (
-              <ul className="list-disc pl-[1.2vh] space-y-[0.3vh] mt-[0.3vh]">
-                {bloc.puces.map((p, j) => (
-                  <li key={j} className="text-[1.3vh] text-foreground leading-snug">{p}</li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
-      </div>
+              {bloc.paragraphes?.map((p, j) => (
+                <p key={j} className="text-[1.85vh] text-foreground leading-snug mb-[0.4vh] last:mb-0">
+                  {p}
+                </p>
+              ))}
+              {bloc.puces && (
+                <ul className="list-disc pl-[1.6vh] space-y-[0.4vh] mt-[0.4vh]">
+                  {bloc.puces.map((p, j) => (
+                    <li key={j} className="text-[1.8vh] text-foreground leading-snug">{p}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ))}
+        </div>
+      </AutoScrollVertical>
     </article>
   );
 }
