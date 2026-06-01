@@ -910,7 +910,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
         </article>
 
         <article className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="font-display text-xl font-bold text-foreground mb-3">Donations du repas</h3>
+          <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
           {DONATIONS_REPAS.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
           ) : (
