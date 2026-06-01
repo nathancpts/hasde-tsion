@@ -182,6 +182,22 @@
       overscroll-behavior-y: contain;
     }
   }
+
+  /* Fix Android: overflow-x: hidden on main creates a scroll container that
+     can swallow vertical touch scroll. Use `clip` so vertical scroll bubbles
+     up to body. */
+  .mobile-scroll-root {
+    overflow-x: clip;
+  }
+
+  /* Hide scrollbar but keep scrollable */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes klein-flow {
