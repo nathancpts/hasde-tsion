@@ -179,10 +179,71 @@ function useClock() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
     setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      const delay = 1000 - (Date.now() % 1000);
+      timeoutId = setTimeout(() => {
+        setNow(new Date());
+        schedule();
+      }, delay);
+    };
+    schedule();
+    return () => clearTimeout(timeoutId);
   }, []);
   return now;
+}
+
+/**
+ * AutoScrollVertical — fait défiler lentement son contenu de haut en bas,
+ * marque une pause, puis revient au début. Idéal pour affichage TV.
+ */
+function AutoScrollVertical({
+  children,
+  speed = 28,
+  pause = 2500,
+  className = "",
+}: {
+  children: React.ReactNode;
+  speed?: number;
+  pause?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    let dir = 1;
+    let pos = 0;
+    let pauseUntil = 0;
+    let last = performance.now();
+    const tick = (t: number) => {
+      const dt = t - last;
+      last = t;
+      const max = el.scrollHeight - el.clientHeight;
+      if (max > 0 && t >= pauseUntil) {
+        pos += dir * speed * (dt / 1000);
+        if (pos >= max) {
+          pos = max;
+          pauseUntil = t + pause;
+          dir = -1;
+        } else if (pos <= 0) {
+          pos = 0;
+          pauseUntil = t + pause;
+          dir = 1;
+        }
+        el.scrollTop = pos;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return (
+    <div ref={ref} className={`no-scrollbar overflow-y-auto ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 type StoredLoc = { lat: number; lon: number; label?: string } | null;
