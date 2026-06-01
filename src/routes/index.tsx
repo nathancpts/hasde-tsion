@@ -546,7 +546,7 @@ function DonationsCard() {
       <div className="flex items-center gap-2 mb-[1vh]">
         <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
         <h3 className="font-display text-[2.6vh] font-bold text-foreground">
-          Donations du repas
+          La Séouda est offerte par :
         </h3>
       </div>
 
