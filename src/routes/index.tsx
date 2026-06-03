@@ -562,6 +562,7 @@ function DayCard({
 function DonationsCard() {
   const donations = DONATIONS_REPAS;
   return (
+
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
         <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
@@ -570,47 +571,48 @@ function DonationsCard() {
         </h3>
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pr-1">
+      <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
         {donations.length === 0 ? (
-          <p className="text-[1.4vh] text-muted-foreground italic text-center py-[2vh]">
+          <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
             Aucune donation pour le moment.
           </p>
         ) : (
           donations.map((d, i) => (
             <div
               key={i}
-              className="py-[0.9vh] border-b border-border/60 last:border-0"
+              className="py-[1vh] border-b border-border/60 last:border-0"
             >
-              <p className="font-display font-bold text-[1.7vh] text-foreground leading-tight">
+              <p className="font-display font-bold text-[2.1vh] text-foreground leading-snug">
                 {d.donateur}
               </p>
               {d.occasion && (
-                <p className="text-[1.2vh] uppercase tracking-[0.18em] text-primary font-semibold mt-0.5">
+                <p className="text-[1.5vh] uppercase tracking-[0.18em] text-primary font-semibold mt-1">
                   {d.occasion}
                 </p>
               )}
               {d.dedicace && (
-                <p className="font-display italic text-[1.35vh] text-muted-foreground leading-tight mt-0.5">
+                <p className="font-display italic text-[1.85vh] text-foreground leading-snug mt-1">
                   {d.dedicace}
                 </p>
               )}
               {d.dedicaceHe && (
-                <p className="font-hebrew text-[1.45vh] text-primary leading-tight mt-1" dir="rtl">
+                <p className="font-hebrew text-[2vh] text-primary leading-tight mt-1.5" dir="rtl">
                   {d.dedicaceHe}
                 </p>
               )}
               {d.details?.map((line, index) => (
-                <p key={index} className="text-[1.22vh] text-foreground/80 leading-snug mt-1.5">
+                <p key={index} className="text-[1.7vh] text-foreground leading-snug mt-2">
                   {line}
                 </p>
               ))}
             </div>
           ))
         )}
-      </div>
+      </AutoScrollVertical>
     </article>
   );
 }
+
 
 function ParashaCard({ live }: { live: LiveWeek | null }) {
   const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
