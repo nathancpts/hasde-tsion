@@ -382,6 +382,25 @@ function Header() {
         />
       </div>
 
+      <div className="flex-1 flex justify-center px-4">
+        <div
+          className="max-w-[60vw] rounded-2xl px-[2vw] py-[1.4vh] text-center"
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(201,169,110,0.5)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 18px rgba(0,0,0,0.25)",
+          }}
+        >
+          <p className="text-[1.1vh] uppercase tracking-[0.3em] font-semibold mb-[0.6vh]" style={{ color: "#C9A96E" }}>
+            ✨ Invité d'honneur · Chabbat
+          </p>
+          <p className="font-display text-[2.3vh] font-semibold text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+            C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
+            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Yachpi Niselevitch</span>{" "}
+            parmi nous pour ce Chabbat.
+          </p>
+        </div>
+      </div>
 
       <div className="text-right">
         <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
@@ -394,6 +413,7 @@ function Header() {
     </header>
   );
 }
+
 
 function ParashaBanner({ live }: { live: LiveWeek | null }) {
   const fr = live?.parasha.fr ?? week.parasha.fr;
