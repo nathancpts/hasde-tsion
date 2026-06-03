@@ -563,7 +563,6 @@ function DonationsCard() {
   const donations = DONATIONS_REPAS;
   return (
 
-  return (
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center gap-2 mb-[1vh]">
         <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
