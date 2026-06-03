@@ -574,6 +574,16 @@ function DonationsCard() {
                   {d.dedicace}
                 </p>
               )}
+              {d.dedicaceHe && (
+                <p className="font-hebrew text-[1.45vh] text-primary leading-tight mt-1" dir="rtl">
+                  {d.dedicaceHe}
+                </p>
+              )}
+              {d.details?.map((line, index) => (
+                <p key={index} className="text-[1.22vh] text-foreground/80 leading-snug mt-1.5">
+                  {line}
+                </p>
+              ))}
             </div>
           ))
         )}
@@ -876,7 +886,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
         />
 
-        <article className="rounded-2xl border border-border bg-card p-5">
+        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <div className="flex items-center justify-between gap-2 mb-3">
             <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
             {PARASHA_NOM_HE && (
@@ -909,7 +919,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </div>
         </article>
 
-        <article className="rounded-2xl border border-border bg-card p-5">
+        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
           {DONATIONS_REPAS.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
@@ -924,6 +934,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   {d.dedicace && (
                     <p className="font-display italic text-sm text-muted-foreground leading-tight mt-0.5">{d.dedicace}</p>
                   )}
+                  {d.dedicaceHe && (
+                    <p className="font-hebrew text-base text-primary leading-tight mt-2" dir="rtl">{d.dedicaceHe}</p>
+                  )}
+                  {d.details?.map((line, index) => (
+                    <p key={index} className="text-sm text-foreground/80 leading-relaxed mt-2">{line}</p>
+                  ))}
                 </li>
               ))}
             </ul>

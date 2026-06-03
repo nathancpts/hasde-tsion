@@ -11,6 +11,8 @@ export type Donation = {
   donateur: string;
   occasion?: string;
   dedicace?: string;
+  dedicaceHe?: string;
+  details?: string[];
 };
 
 export const PARASHA_NOM = "Beha'alotcha";
@@ -54,6 +56,16 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
 ];
 
 export const DONATIONS_REPAS: Donation[] = [
-  // À remplir chaque semaine — exemple :
-  // { donateur: "Famille Cohen", occasion: "Yahrzeit", dedicace: "à la mémoire de Rav Yossef z.t.l" },
+  {
+    donateur: "Le Farbrengen sera généreusement offert par la Famille Setti Rudy",
+    occasion: "À l’élévation de l’âme de sa très chère Maman",
+    dedicace: "LEILOU NICHMAT · DANIELLE THAMAR ATOU · BAT FORTUNE",
+    dedicaceHe: "דניאל תמר אטו · בת פורטונה",
+    details: [
+      "Que cette belle initiative soit une source de mérite pour l’élévation de son âme, et que sa mémoire continue d’être une bénédiction pour sa famille.",
+      "Que le Saint Béni Soit-Il accorde à la Famille Setti Rudy ainsi qu’à tous leurs proches santé, réussite, joie et abondantes bénédictions.",
+      "Nous vous attendons nombreux pour partager ensemble ce moment de Torah, de chaleur et d’élévation spirituelle.",
+      "Chabbat Chalom et bienvenue au Rav ! ✨",
+    ],
+  },
 ];
