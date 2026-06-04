@@ -23,34 +23,46 @@ export const PARASHA_INTRO =
 
 export const PARASHA_BLOCS: ParashaBloc[] = [
   {
-    titre: "Le résumé",
+    titre: "Le résumé, selon nos Sages",
     icone: "📜",
     paragraphes: [
-      "Allumage du Menora, service des Lévites, pureté du camp, lois du nazir et de la sotah, et bénédiction des Cohanim à l'inauguration du Michkan.",
+      "La paracha Beha'alotcha nous enseigne l'allumage des chandeliers du Menora par Aharon, l'organisation du service des Lévites dans le Michkan, la pureté requise dans le camp, le chemin de réparation après la faute, l'histoire de la femme soupçonnée (sotah), les lois du nazir, et la magnifique bénédiction des Cohanim que les chefs de tribus ont prononcée à l'inauguration du Michkan.",
     ],
   },
   {
-    titre: "L'essentiel",
+    titre: "Les enseignements essentiels",
     icone: "✨",
     puces: [
-      "Chaque tribu a sa mission dans l'unité d'Israël.",
-      "La pureté permet à la Présence divine de demeurer parmi nous.",
-      "La teshouva est toujours possible, même après la faute.",
-      "La bénédiction des Cohanim : paix, lumière et grâce divines.",
+      "Chaque tribu a sa mission particulière, dans l'unité d'Israël et le respect de sa singularité.",
+      "La pureté du camp est fondamentale, afin que la Présence Divine puisse demeurer parmi nous.",
+      "La réparation (teshouva) est toujours possible, même après la faute.",
+      "Le nazir nous enseigne la maîtrise de soi : voir la chute d'autrui doit nous élever, non nous abaisser.",
+      "La bénédiction des Cohanim est le cœur de la paracha : que Dieu nous bénisse et nous garde, fasse briller Sa lumière sur nous, nous soit gracieux, nous tourne Sa face, et nous donne la paix.",
     ],
   },
   {
-    titre: "L'idée à retenir",
+    titre: "L'idée fondamentale à retenir",
     icone: "🕯️",
     paragraphes: [
-      "La communauté tient par la responsabilité de chacun. Notre fragilité peut devenir bénédiction : on peut toujours être relevé.",
+      "La communauté ne tient pas seulement par ses structures extérieures, mais par la responsabilité de chacun, la purification du cœur, et la capacité de transformer notre fragilité en bénédiction.",
+      "Beha'alotcha nous dit clairement : on peut toujours être relevé, réparé, béni.",
+    ],
+  },
+  {
+    titre: "Rachi, le Rabbi de Lubavitch et Emmanuel Levinas",
+    icone: "💬",
+    puces: [
+      "Rachi met en lien le nazir et la sotah : voir la chute morale d'autrui doit éveiller notre conscience et nous pousser à nous élever, pas à nous juger.",
+      "Le Rabbi insiste : la vraie bénédiction est de faire descendre la lumière divine dans la vie quotidienne — dans la maison, le travail, les relations, chaque instant.",
+      "Levinas rappelle que la Torah est avant tout éthique : elle nous appelle à répondre à l'autre avec responsabilité, humanité et justice.",
     ],
   },
   {
     titre: "Message d'espoir",
     icone: "🕊️",
     paragraphes: [
-      "Après la faute ou la distance, un chemin de relèvement existe toujours. Shabbat Shalom à toute la communauté du 50.",
+      "Même après la faute, la distance ou la fragilité, il y a toujours un chemin vers le relèvement. La Torah nous promet : tu peux être relevé, restauré, béni. C'est le message de Shabbat, le jour de la paix parfaite et de la foi.",
+      "Que ce Shabbat nous remplisse de paix véritable, de joie du commandement, de lumière divine et de bénédiction abondante. Shabbat Shalom à toute la communauté du 50. 🕊️🕯️✨",
     ],
   },
 ];
