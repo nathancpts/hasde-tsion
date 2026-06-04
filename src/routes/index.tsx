@@ -530,10 +530,12 @@ function DayCard({
         if (shemaParts.length >= 2) {
           return (
             <div className="rounded-lg border border-border bg-muted/30 py-[0.8vh] px-3 text-center">
-              <p className="text-[1vh] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-0.5">Limite Shema</p>
               <div className="grid grid-cols-2 gap-2">
                 {shemaParts.map((v, i) => (
-                  <span key={i} className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{v}</span>
+                  <div key={i} className="flex flex-col items-center">
+                    <p className="text-[0.95vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-0.5">{i === 0 ? "Tefilin" : "Shema GR\"A"}</p>
+                    <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{v}</span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -769,9 +771,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const vTeh = live?.vendredi.tehilim ?? week.vendredi.tehilim;
   const vOmer = live?.vendredi.omer ?? week.vendredi.omer;
   const shabbatZ = useShabbatZmanim(null);
-  const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
+  const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
-  const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
+  const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
   const vTimes = (chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
@@ -783,9 +785,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
   const sDaf = live?.samedi.daf ?? week.samedi.daf;
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
-  const sShemaMA = pickZman(shabbatZ.samedi, "Limite Shema M\"A");
+  const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
-  const sShema = sShemaMA && sShemaGRA ? `${sShemaMA} | ${sShemaGRA}` : week.samedi.shema;
+  const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
   const sTimes = (chabad
@@ -837,10 +839,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
         {shemaParts.length >= 2 && (
           <div className="rounded-lg border border-border bg-muted/30 py-2 px-3 text-center">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">Limite Shema</p>
             <div className="grid grid-cols-2 gap-3">
               {shemaParts.map((v, i) => (
-                <span key={i} className="font-display font-semibold text-foreground tabular-nums text-lg">{v}</span>
+                <div key={i} className="flex flex-col items-center">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">{i === 0 ? "Tefilin" : "Shema GR\"A"}</p>
+                  <span className="font-display font-semibold text-foreground tabular-nums text-lg">{v}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -1011,18 +1015,18 @@ function PlanningTV() {
   const sTeh = live?.samedi.tehilim ?? week.samedi.tehilim;
 
   // Horaires Shabbat — surcharge depuis Chabad.org Neuilly si dispo
-  const vShemaMA = pickZman(shabbatZ.vendredi, "Limite Shema M\"A");
+  const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
-  const vShema = vShemaMA && vShemaGRA ? `${vShemaMA} | ${vShemaGRA}` : week.vendredi.shema;
+  const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
   const vTimes = (chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
     .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
-  const sShemaMA = pickZman(shabbatZ.samedi, "Limite Shema M\"A");
+  const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
-  const sShema = sShemaMA && sShemaGRA ? `${sShemaMA} | ${sShemaGRA}` : week.samedi.shema;
+  const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
   const sTimes = (chabad
