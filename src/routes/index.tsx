@@ -391,12 +391,12 @@ function Header() {
             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 18px rgba(0,0,0,0.25)",
           }}
         >
-          <p className="text-[1.3vh] uppercase tracking-[0.3em] font-semibold mb-[0.6vh] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+          <p className="text-[1.1vh] uppercase tracking-[0.3em] font-semibold mb-[0.6vh]" style={{ color: "#C9A96E" }}>
             ✨ Invité d'honneur · Chabbat
           </p>
-          <p className="font-display text-[2.6vh] font-semibold text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+          <p className="font-display text-[2.3vh] font-semibold text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
             C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
-            <span className="font-bold text-white underline decoration-white/40 underline-offset-4">Rav Yachpi Niselevitch</span>{" "}
+            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Yachpi Niselevitch</span>{" "}
             parmi nous pour ce Chabbat.
           </p>
         </div>
