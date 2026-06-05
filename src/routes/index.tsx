@@ -156,7 +156,7 @@ const week = {
     shema: "08:35 / 09:45",
     times: [
       { label: "Chaharit", value: "09:15" },
-      { label: "Minha", value: "21:00" },
+      { label: "Minha · Suivi Seouda chlichit & cours", value: "21:10" },
       { label: "Chekia", value: "21:42" },
       { label: "Fin du Chabbat", value: "22:47", tone: "red" as const },
     ],
