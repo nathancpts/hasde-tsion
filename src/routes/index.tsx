@@ -842,7 +842,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             <div className="grid grid-cols-2 gap-3">
               {shemaParts.map((v, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">{i === 0 ? "Tefilin" : "Shema GR\"A"}</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">{i === 0 ? (badgeTone === "gold" ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
                   <span className="font-display font-semibold text-foreground tabular-nums text-lg">{v}</span>
                 </div>
               ))}
