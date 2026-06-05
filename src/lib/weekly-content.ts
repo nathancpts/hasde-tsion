@@ -23,49 +23,50 @@ export const PARASHA_INTRO =
 
 export const PARASHA_BLOCS: ParashaBloc[] = [
   {
-    titre: "Le résumé, selon nos Sages",
+    titre: "Le résumé",
     icone: "📜",
     paragraphes: [
-      "La paracha Beha'alotcha nous enseigne l'allumage des chandeliers du Menora par Aharon, l'organisation du service des Lévites dans le Michkan, la pureté requise dans le camp, le chemin de réparation après la faute, l'histoire de la femme soupçonnée (sotah), les lois du nazir, et la magnifique bénédiction des Cohanim que les chefs de tribus ont prononcée à l'inauguration du Michkan.",
+      "La paracha Beha'alotcha nous enseigne l'allumage de la Ménora par Aharon, la consécration des Léviim, l'organisation du service dans le Michkan, la pureté du camp, les lois du nazir, l'épisode de la sotah, ainsi que la bénédiction des Cohanim.",
     ],
   },
   {
-    titre: "Les enseignements essentiels",
+    titre: "Enseignements essentiels",
     icone: "✨",
     puces: [
-      "Chaque tribu a sa mission particulière, dans l'unité d'Israël et le respect de sa singularité.",
-      "La pureté du camp est fondamentale, afin que la Présence Divine puisse demeurer parmi nous.",
-      "La réparation (teshouva) est toujours possible, même après la faute.",
-      "Le nazir nous enseigne la maîtrise de soi : voir la chute d'autrui doit nous élever, non nous abaisser.",
-      "La bénédiction des Cohanim est le cœur de la paracha : que Dieu nous bénisse et nous garde, fasse briller Sa lumière sur nous, nous soit gracieux, nous tourne Sa face, et nous donne la paix.",
+      "Chaque tribu possède sa mission propre, dans l'unité du peuple d'Israël.",
+      "La pureté du camp est la condition de la présence de la Chekhina au milieu de nous.",
+      "La téchouva demeure toujours ouverte, même après la faute.",
+      "Le nazir nous rappelle l'exigence de maîtrise de soi et d'élévation intérieure.",
+      "La bénédiction des Cohanim exprime le désir divin de bénédiction, de protection, de lumière, de grâce et de paix.",
     ],
   },
   {
-    titre: "L'idée fondamentale à retenir",
+    titre: "Message central",
     icone: "🕯️",
     paragraphes: [
-      "La communauté ne tient pas seulement par ses structures extérieures, mais par la responsabilité de chacun, la purification du cœur, et la capacité de transformer notre fragilité en bénédiction.",
-      "Beha'alotcha nous dit clairement : on peut toujours être relevé, réparé, béni.",
+      "La communauté ne repose pas seulement sur ses structures visibles, mais sur la responsabilité de chacun, la pureté du cœur et la capacité de transformer la fragilité en source de bénédiction.",
+      "Beha'alotcha nous enseigne qu'il est toujours possible d'être relevé, réparé et béni.",
     ],
   },
   {
-    titre: "Rachi, le Rabbi de Lubavitch et Emmanuel Levinas",
+    titre: "Dans l'esprit de nos sages",
     icone: "💬",
     puces: [
-      "Rachi met en lien le nazir et la sotah : voir la chute morale d'autrui doit éveiller notre conscience et nous pousser à nous élever, pas à nous juger.",
-      "Le Rabbi insiste : la vraie bénédiction est de faire descendre la lumière divine dans la vie quotidienne — dans la maison, le travail, les relations, chaque instant.",
-      "Levinas rappelle que la Torah est avant tout éthique : elle nous appelle à répondre à l'autre avec responsabilité, humanité et justice.",
+      "Rachi relie la sotah et le nazir pour nous inviter à ne pas nous laisser abaisser par la faute d'autrui, mais à nous élever.",
+      "Le Rabbi de Loubavitch rappelle que la lumière divine doit se révéler dans le quotidien, dans la maison, le travail et les relations humaines.",
+      "Emmanuel Levinas nous rappelle que la Torah est avant tout un appel à la responsabilité, à l'humanité et à la justice.",
     ],
   },
   {
     titre: "Message d'espoir",
     icone: "🕊️",
     paragraphes: [
-      "Même après la faute, la distance ou la fragilité, il y a toujours un chemin vers le relèvement. La Torah nous promet : tu peux être relevé, restauré, béni. C'est le message de Shabbat, le jour de la paix parfaite et de la foi.",
-      "Que ce Shabbat nous remplisse de paix véritable, de joie du commandement, de lumière divine et de bénédiction abondante. Shabbat Shalom à toute la communauté du 50. 🕊️🕯️✨",
+      "Même après la faute, la distance ou la fragilité, le chemin du relèvement demeure ouvert.",
+      "Que ce Shabbat soit pour tous une source de paix, de lumière, de joie et de bénédiction. Shabbat Shalom à toute la communauté du 50. ✨",
     ],
   },
 ];
+
 
 export const DONATIONS_REPAS: Donation[] = [
   {
