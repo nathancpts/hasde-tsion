@@ -15,8 +15,8 @@ export type Donation = {
   details?: string[];
 };
 
-export const PARASHA_NOM = "Beha'alotcha";
-export const PARASHA_NOM_HE = "בהעלותך";
+export const PARASHA_NOM = "Chela'h Lekha";
+export const PARASHA_NOM_HE = "שלח לך";
 
 export const PARASHA_INTRO =
   "Chers frères et sœurs, en ce saint jour de Shabbat, que la paix divine repose sur vous, voici quelques mots de la paracha de la semaine.";
@@ -26,48 +26,46 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
     titre: "Le résumé",
     icone: "📜",
     paragraphes: [
-      "Béha'alotkha (Nombres 8,1 à 12,16) : Aaron allume — ou plutôt « fait monter » — les lumières de la Ménorah. Les Léviim débutent leur service, et les lois du second Pessa'h offrent un rattrapage à ceux qui étaient empêchés.",
-      "Le peuple se déplace au rythme de la nuée et des trompettes d'argent. Après les récriminations pour la viande, D.ieu partage l'esprit prophétique de Moïse avec 70 anciens. La paracha se conclut par l'épisode de Myriam, et la confiance réaffirmée en Moïse, « l'homme le plus humble de toute la terre ».",
+      "Moché envoie douze explorateurs reconnaître la terre de Canaan. Dix d'entre eux reviennent effrayés et découragent tout le peuple ; seuls Yehochoua et Calev gardent confiance en Hachem.",
+      "À cause de ce manque de foi, la génération du désert ne pourra pas entrer en Terre promise et devra errer quarante ans. La paracha se conclut par la mitsva des tsitsit, ces franges qui nous rappellent en permanence les commandements.",
     ],
   },
   {
-    titre: "La force du cri",
-    icone: "🕯️",
-    paragraphes: [
-      "Pour guérir Myriam, Moïse pousse un cri bref et bouleversant : « Ô Seigneur, guéris-la je T'en prie ! » Le Zohar enseigne que le cri — silencieux ou sonore — est la forme la plus authentique de la prière, celle qui n'a pas besoin de mots.",
-      "Le Or HaHaïm rappelle qu'en Égypte, les enfants d'Israël ont simplement hurlé de douleur, sans même s'adresser à D.ieu. Et pourtant ce cri a suffi à éveiller Sa miséricorde et à enclencher la délivrance.",
-      "Comme un père accourt vers son enfant tombé, D.ieu répond au cri vrai. David le dit (Ps. 118,5) : « Du sein de la détresse j'ai invoqué D.ieu ; Il m'a répondu avec générosité. »",
+    titre: "Points à retenir",
+    icone: "✨",
+    puces: [
+      "La peur déforme le regard : les explorateurs ont vu la même terre, mais leur cœur a transformé une bénédiction en menace.",
+      "Calev et Yehochoua nous enseignent qu'une voix juste, même minoritaire, vaut plus que la clameur de la foule.",
+      "Les tsitsit nous rappellent que le souvenir quotidien des mitsvot protège des égarements du cœur et des yeux.",
     ],
   },
   {
     titre: "Dans l'esprit de nos sages",
     icone: "💬",
     puces: [
-      "Rachi : « faire monter » la flamme, c'est la tenir jusqu'à ce qu'elle brûle d'elle-même — aider l'autre à devenir autonome.",
-      "Le Rabbi de Loubavitch : chaque âme porte une lumière qui ne demande qu'à être révélée ; ajouter de la lumière est la meilleure réponse à l'obscurité.",
-      "Emmanuel Levinas : la Ménorah symbolise la responsabilité envers autrui ; le vrai leader, comme Moïse, se distingue par son humilité.",
+      "Rachi : Hachem n'a pas ordonné d'envoyer les explorateurs, mais l'a permis « selon ton propre jugement » — la faute n'était pas dans la mission, mais dans la peur qui a parlé à la place de la confiance.",
+      "Le Rabbi de Loubavitch : l'erreur des explorateurs fut de vouloir fuir le monde matériel ; notre mission est de l'éclairer et de le sanctifier, car c'est dans la descente vers la matière que se révèle la plus grande lumière.",
+      "Emmanuel Levinas : dire engage. Un mot peut relever ou abattre tout un peuple ; la responsabilité commence par la manière dont je parle de l'autre et du monde.",
+    ],
+  },
+  {
+    titre: "Message d'espoir",
+    icone: "🕯️",
+    paragraphes: [
+      "Regarder la réalité avec les yeux de la confiance plutôt qu'avec ceux de la peur. Même après la chute, la Torah place les tsitsit comme un fil de lumière : chaque jour, il est possible de renouer le lien et de recommencer.",
     ],
   },
   {
     titre: "Chabbat Chalom",
     icone: "🕊️",
     paragraphes: [
-      "Chabbat Chalom à toute la communauté du 50. ✨",
+      "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles. Chabbat Chalom à tous ! ✨",
     ],
   },
 ];
 
+export const DONATIONS_REPAS: Donation[] = [];
 
-export const DONATIONS_REPAS: Donation[] = [
-  {
-    donateur: "Hazak à la Famille Setti Rudy, qui prend sur Elle la Parachat Beha'alotcha !",
-    occasion: "LEILOU NICHMAT",
-    dedicace: "DANIELLE THAMAR ATOU · BAT FORTUNE",
-    dedicaceHe: "דניאל תמר אטו · בת פורטונה",
-    details: [
-      "Que le Saint Béni Soit-Il accorde à la Famille Setti Rudy ainsi qu'à tous leurs proches santé, réussite, joie et abondantes bénédictions.",
-    ],
-  },
-];
+
 
 
