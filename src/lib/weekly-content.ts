@@ -64,5 +64,8 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
   },
 ];
 
+export const DONATIONS_REPAS: Donation[] = [];
+
+
 
 
