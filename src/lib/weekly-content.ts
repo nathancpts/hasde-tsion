@@ -64,7 +64,12 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
   },
 ];
 
-export const DONATIONS_REPAS: Donation[] = [];
+export const DONATIONS_REPAS: Donation[] = [
+  {
+    donateur: "Libre",
+  },
+];
+
 
 
 
