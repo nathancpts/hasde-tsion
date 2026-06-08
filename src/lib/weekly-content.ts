@@ -67,8 +67,14 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
 export const DONATIONS_REPAS: Donation[] = [
   {
     donateur: "Libre",
+    details: [
+      "C'est avec beaucoup de bonheur que nous vous annonçons la venue du Rav Arié Niselevitch parmi nous pour ce Chabbat.",
+      "Officiant : Aharon Djian",
+      "Cours : Chaharit & Séouda Chlichit",
+    ],
   },
 ];
+
 
 
 
