@@ -161,7 +161,7 @@ const week = {
       { label: "Fin du Chabbat", value: "22:47", tone: "red" as const },
     ],
     officiant: "Aharon Djian",
-    cours: "Étude + Séouda chlichit",
+    cours: "Chaharit & Séouda Chlichit",
   },
   events: [
     { date: "Ven. 29 mai", title: "Minha", time: "20:00" },
@@ -396,7 +396,7 @@ function Header() {
           </p>
           <p className="font-display text-[2.3vh] font-semibold text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
             C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
-            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Yachpi Niselevitch</span>{" "}
+            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Arié Niselevitch</span>{" "}
             parmi nous pour ce Chabbat.
           </p>
         </div>
