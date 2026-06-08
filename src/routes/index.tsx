@@ -399,6 +399,16 @@ function Header() {
             <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Arié Niselevitch</span>{" "}
             parmi nous pour ce Chabbat.
           </p>
+          <div className="mt-[1vh] flex justify-center gap-[2vw] text-[1.4vh]">
+            <div className="flex items-center gap-2">
+              <span className="uppercase tracking-wider text-white/70">Officiant</span>
+              <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="uppercase tracking-wider text-white/70">Cours</span>
+              <span className="font-semibold" style={{ color: "#E8C98A" }}>Chaharit & Séouda Chlichit</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1060,7 +1070,19 @@ function PlanningTV() {
           shema={vShema}
 
           times={vTimes}
-        />
+        >
+          <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
+            <div className="text-[1.2vh] uppercase tracking-wider text-muted-foreground text-center mb-1">
+              27 Sivan · Yahrtzeit
+            </div>
+            <div className="text-[1.3vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+              <div>Rabbi 'Hanina ben Tradyon</div>
+              <div>HaRav Morde'haï Sevitzky</div>
+              <div>HaRav Meir Eisenstadt</div>
+              <div>HaRav Ye'hi ben Yossef Kara</div>
+            </div>
+          </div>
+        </DayCard>
 
         <DayCard
           badge="Shabbat"
@@ -1074,13 +1096,13 @@ function PlanningTV() {
           times={sTimes}
         >
           <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
-            <div className="flex justify-between items-center text-[1.4vh]">
-              <span className="uppercase tracking-wider text-muted-foreground">Officiant</span>
-              <span className="font-semibold text-accent">{week.samedi.officiant}</span>
+            <div className="text-[1.2vh] uppercase tracking-wider text-muted-foreground text-center mb-1">
+              28 Sivan · Yahrtzeit
             </div>
-            <div className="flex justify-between items-center text-[1.4vh]">
-              <span className="uppercase tracking-wider text-muted-foreground">Cours</span>
-              <span className="font-semibold text-accent">{week.samedi.cours}</span>
+            <div className="text-[1.3vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+              <div>HaRav Israel Ze'ev Gustman</div>
+              <div>HaRav Avraham Adadi</div>
+              <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
             </div>
           </div>
         </DayCard>
