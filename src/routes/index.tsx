@@ -638,6 +638,27 @@ function DonationsCard() {
 }
 
 
+function SidourLink({ className = "" }: { className?: string }) {
+  const [label, setLabel] = useState("Lecture du jour");
+  useEffect(() => {
+    const h = new Date().getHours();
+    if (h >= 4 && h < 12) setLabel("Lire Cha'harit");
+    else if (h >= 12 && h < 18) setLabel("Lire Min'ha");
+    else setLabel("Lire Arvit");
+  }, []);
+  return (
+    <a
+      href="https://sidour.torah-box.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 text-primary font-display font-semibold uppercase tracking-[0.15em] active:scale-[0.98] transition-transform w-full ${className}`}
+    >
+      <span aria-hidden>📖</span>
+      <span>{label}</span>
+    </a>
+  );
+}
+
 function ParashaCard({ live }: { live: LiveWeek | null }) {
   const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
   return (
