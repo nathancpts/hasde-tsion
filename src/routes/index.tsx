@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
+import shabbatMevarchimAsset from "@/assets/shabbat-mevarchim.png.asset.json";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
@@ -438,14 +439,16 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
           {fr}
         </h2>
       </div>
-      <div className="text-right">
+      <div className="text-right flex flex-col items-end gap-1">
         <p className="font-hebrew text-[4vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" dir="rtl">
           {he}
         </p>
-        <p className="mt-1 text-[1.1vh] text-white/80 uppercase tracking-wider font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
-          {week.parasha.chap}
-        </p>
-
+        <img
+          src={shabbatMevarchimAsset.url}
+          alt="שבת מברכים"
+          className="h-[2.6vh] w-auto object-contain mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
       </div>
     </div>
   );
@@ -903,6 +906,14 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           {parashaHe && (
             <p className="font-hebrew text-2xl leading-none mt-2" style={{ color: "#C9A96E" }} dir="rtl">{parashaHe}</p>
           )}
+          <div className="mt-3 flex justify-center">
+            <img
+              src={shabbatMevarchimAsset.url}
+              alt="שבת מברכים"
+              className="h-6 w-auto max-w-full object-contain"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
+          </div>
         </div>
 
         <div
@@ -1033,11 +1044,84 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
 
+        <PdfDownloadButton />
+
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
         </footer>
       </div>
     </main>
+  );
+}
+
+function PdfDownloadButton() {
+  const [loading, setLoading] = useState(false);
+
+  const generate = async () => {
+    if (loading) return;
+    setLoading(true);
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.left = "-10000px";
+    iframe.style.top = "0";
+    iframe.style.width = "1920px";
+    iframe.style.height = "1080px";
+    iframe.style.border = "0";
+    iframe.src = "/?pdf=1";
+    document.body.appendChild(iframe);
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const t = setTimeout(() => reject(new Error("timeout")), 20000);
+        iframe.onload = () => { clearTimeout(t); resolve(); };
+      });
+      // Let fonts + data settle
+      await new Promise((r) => setTimeout(r, 2500));
+      try {
+        const doc = iframe.contentDocument;
+        if (doc?.fonts && doc.fonts.ready) await doc.fonts.ready;
+      } catch { /* ignore */ }
+
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+
+      const target = iframe.contentDocument!.body;
+      const canvas = await html2canvas(target, {
+        width: 1920,
+        height: 1080,
+        windowWidth: 1920,
+        windowHeight: 1080,
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#0a0a0a",
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, "JPEG", 0, 0, pageW, pageH, undefined, "FAST");
+      pdf.save("planning-hasde-tsion.pdf");
+    } catch (e) {
+      console.error("PDF generation failed", e);
+      alert("La génération du PDF a échoué. Veuillez réessayer.");
+    } finally {
+      document.body.removeChild(iframe);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={generate}
+      disabled={loading}
+      className="w-full flex items-center justify-center gap-2 rounded-2xl px-5 py-4 font-display font-bold text-base uppercase tracking-[0.15em] text-primary-foreground bg-primary hover:bg-primary/90 transition shadow-[0_4px_20px_rgba(201,169,110,0.35)] disabled:opacity-70"
+    >
+      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+      {loading ? "Génération en cours…" : "Télécharger le planning PDF"}
+    </button>
   );
 }
 
@@ -1051,13 +1135,16 @@ function PlanningTV() {
   const kiosk = useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
+  const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
+
   // Auto-reload toutes les 15 min pour récupérer les mises à jour publiées
   useEffect(() => {
+    if (isPdfMode) return;
     const id = setInterval(() => window.location.reload(), 15 * 60 * 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [isPdfMode]);
 
-  if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
+  if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
   // Merge live data into static fallbacks
@@ -1101,7 +1188,7 @@ function PlanningTV() {
   return (
     <main className="relative isolate h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <DynamicBackground />
-      <KioskControls {...kiosk} />
+      {!isPdfMode && <KioskControls {...kiosk} />}
       <Header />
       <ParashaBanner live={live} />
 
