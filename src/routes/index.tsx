@@ -1017,6 +1017,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </section>
             ))}
           </div>
+          <SidourLink className="mt-3 text-sm py-2.5" />
         </article>
 
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
