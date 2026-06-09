@@ -1135,8 +1135,11 @@ function PlanningTV() {
   const kiosk = useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
+  const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
+
   // Auto-reload toutes les 15 min pour récupérer les mises à jour publiées
   useEffect(() => {
+    if (isPdfMode) return;
     const id = setInterval(() => window.location.reload(), 15 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
