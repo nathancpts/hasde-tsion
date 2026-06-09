@@ -1064,7 +1064,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.15em] text-primary shadow-sm active:scale-[0.98] transition-transform text-center leading-tight"
+            className="flex min-h-[56px] items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-[#1a3a8f] shadow-lg ring-1 ring-black/5 active:scale-[0.98] transition-transform text-center leading-tight"
           >
             Faire un don
           </a>
@@ -1072,7 +1072,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center rounded-xl border-2 border-primary bg-primary px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.15em] text-primary-foreground shadow-sm active:scale-[0.98] transition-transform text-center leading-tight"
+            className="flex min-h-[56px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-white shadow-lg active:scale-[0.98] transition-transform text-center leading-tight"
+            style={{ background: "linear-gradient(135deg, #c9a14a 0%, #a8822f 100%)" }}
           >
             Participer à la séouda
           </a>
