@@ -1064,28 +1064,30 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative flex min-h-[58px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-[#1a3a8f] active:translate-y-[2px] active:shadow-[0_2px_0_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.6)] transition-all text-center leading-tight"
-            style={{
-              background: "linear-gradient(180deg, #ffffff 0%, #e8ecf5 100%)",
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -2px 4px rgba(26,58,143,0.12), 0 4px 0 rgba(10,25,70,0.35), 0 8px 16px rgba(0,0,0,0.35)",
-            }}
+            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-white/95 backdrop-blur px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-[#0f2a6b] ring-1 ring-white/40 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.5)] active:scale-[0.97] transition-all text-center leading-tight"
           >
-            Faire un don
+            <span className="text-base">♡</span>
+            <span>Faire un don</span>
           </a>
           <a
             href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative flex min-h-[58px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-white active:translate-y-[2px] active:shadow-[0_2px_0_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] transition-all text-center leading-tight"
+            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-white ring-1 ring-white/30 shadow-[0_10px_30px_-10px_rgba(184,138,48,0.7)] active:scale-[0.97] transition-all text-center leading-tight"
             style={{
-              background: "linear-gradient(180deg, #e2b75a 0%, #b88a30 55%, #8c6620 100%)",
-              boxShadow:
-                "inset 0 1px 0 rgba(255,236,180,0.7), inset 0 -2px 4px rgba(60,40,0,0.35), 0 4px 0 rgba(70,48,10,0.55), 0 8px 16px rgba(0,0,0,0.4)",
-              textShadow: "0 1px 1px rgba(0,0,0,0.35)",
+              background:
+                "linear-gradient(135deg, #d4a84a 0%, #b88a30 50%, #9a6f22 100%)",
             }}
           >
-            Participer à la séouda
+            <span className="relative z-10">Participer à la séouda</span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-60"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%)",
+              }}
+            />
           </a>
         </div>
 
