@@ -905,21 +905,69 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           )}
         </div>
 
+        <div
+          className="relative rounded-2xl p-5 text-center"
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(201,169,110,0.5)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.25)",
+          }}
+        >
+          <p className="text-[10px] uppercase tracking-[0.3em] font-semibold mb-2" style={{ color: "#C9A96E" }}>
+            ✨ Invité d'honneur · Chabbat
+          </p>
+          <p className="font-display text-base font-semibold text-white leading-snug">
+            C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
+            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Arié Niselevitch</span>{" "}
+            parmi nous pour ce Chabbat.
+          </p>
+          <div className="mt-3 flex flex-col gap-1 text-xs">
+            <div className="flex items-center justify-center gap-2">
+              <span className="uppercase tracking-wider text-white/70">Officiant</span>
+              <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="uppercase tracking-wider text-white/70">Cours</span>
+              <span className="font-semibold" style={{ color: "#E8C98A" }}>Chaharit & Séouda Chlichit</span>
+            </div>
+          </div>
+        </div>
 
         <MobileDay
           badge="Vendredi" badgeTone="blue"
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
           shema={vShema} times={vTimes}
-
-
-
+          extra={
+            <div className="rounded-xl border border-border bg-secondary/50 p-3">
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-1.5">
+                27 Sivan · Yahrtzeit
+              </div>
+              <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
+                <div>Rabbi 'Hanina ben Tradyon</div>
+                <div>HaRav Morde'haï Sevitzky</div>
+                <div>HaRav Meir Eisenstadt</div>
+                <div>HaRav Ye'hi ben Yossef Kara</div>
+              </div>
+            </div>
+          }
         />
 
         <MobileDay
           badge="Shabbat" badgeTone="gold"
           title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
           shema={sShema} times={sTimes}
-
+          extra={
+            <div className="rounded-xl border border-border bg-secondary/50 p-3">
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-1.5">
+                28 Sivan · Yahrtzeit
+              </div>
+              <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
+                <div>HaRav Israel Ze'ev Gustman</div>
+                <div>HaRav Avraham Adadi</div>
+                <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
+              </div>
+            </div>
+          }
         />
 
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
