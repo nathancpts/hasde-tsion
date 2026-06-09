@@ -443,12 +443,9 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
         <p className="font-hebrew text-[4vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" dir="rtl">
           {he}
         </p>
-        <img
-          src={shabbatMevarchimAsset.url}
-          alt="שבת מברכים"
-          className="h-[2.6vh] w-auto object-contain mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
-          style={{ filter: "brightness(0) invert(1)" }}
-        />
+        <p className="font-hebrew text-[2.4vh] text-white leading-none mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]" dir="rtl">
+          שבת מברכים
+        </p>
       </div>
     </div>
   );
