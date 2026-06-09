@@ -1044,11 +1044,84 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
 
+        <PdfDownloadButton />
+
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
         </footer>
       </div>
     </main>
+  );
+}
+
+function PdfDownloadButton() {
+  const [loading, setLoading] = useState(false);
+
+  const generate = async () => {
+    if (loading) return;
+    setLoading(true);
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.left = "-10000px";
+    iframe.style.top = "0";
+    iframe.style.width = "1920px";
+    iframe.style.height = "1080px";
+    iframe.style.border = "0";
+    iframe.src = "/?pdf=1";
+    document.body.appendChild(iframe);
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const t = setTimeout(() => reject(new Error("timeout")), 20000);
+        iframe.onload = () => { clearTimeout(t); resolve(); };
+      });
+      // Let fonts + data settle
+      await new Promise((r) => setTimeout(r, 2500));
+      try {
+        const doc = iframe.contentDocument;
+        if (doc?.fonts && doc.fonts.ready) await doc.fonts.ready;
+      } catch { /* ignore */ }
+
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+
+      const target = iframe.contentDocument!.body;
+      const canvas = await html2canvas(target, {
+        width: 1920,
+        height: 1080,
+        windowWidth: 1920,
+        windowHeight: 1080,
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#0a0a0a",
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, "JPEG", 0, 0, pageW, pageH, undefined, "FAST");
+      pdf.save("planning-hasde-tsion.pdf");
+    } catch (e) {
+      console.error("PDF generation failed", e);
+      alert("La génération du PDF a échoué. Veuillez réessayer.");
+    } finally {
+      document.body.removeChild(iframe);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={generate}
+      disabled={loading}
+      className="w-full flex items-center justify-center gap-2 rounded-2xl px-5 py-4 font-display font-bold text-base uppercase tracking-[0.15em] text-primary-foreground bg-primary hover:bg-primary/90 transition shadow-[0_4px_20px_rgba(201,169,110,0.35)] disabled:opacity-70"
+    >
+      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+      {loading ? "Génération en cours…" : "Télécharger le planning PDF"}
+    </button>
   );
 }
 
