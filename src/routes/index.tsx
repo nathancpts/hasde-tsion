@@ -685,6 +685,7 @@ function ParashaCard({ live }: { live: LiveWeek | null }) {
           ))}
         </div>
       </AutoScrollVertical>
+      <SidourLink className="mt-[1vh] text-[1.5vh] py-[0.8vh]" />
     </article>
   );
 }
