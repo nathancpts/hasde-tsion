@@ -906,6 +906,14 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           {parashaHe && (
             <p className="font-hebrew text-2xl leading-none mt-2" style={{ color: "#C9A96E" }} dir="rtl">{parashaHe}</p>
           )}
+          <div className="mt-3 flex justify-center">
+            <img
+              src={shabbatMevarchimAsset.url}
+              alt="שבת מברכים"
+              className="h-6 w-auto max-w-full object-contain"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
+          </div>
         </div>
 
         <div
