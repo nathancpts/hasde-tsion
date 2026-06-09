@@ -620,6 +620,25 @@ function DonationsCard() {
           ))
         )}
       </AutoScrollVertical>
+
+      <div
+        className="mt-[1vh] rounded-xl p-[1.2vh_1vw] text-center"
+        style={{
+          background: "rgba(56, 132, 255, 0.08)",
+          border: "1.5px dashed rgba(56, 132, 255, 0.55)",
+        }}
+      >
+        <p className="text-[1.4vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+          Prochain Rosh Ḥodesh
+        </p>
+        <p className="font-display font-bold text-[2.2vh] text-foreground mt-0.5">Tamouz</p>
+        <p className="text-[1.55vh] text-muted-foreground leading-snug mt-1">
+          dim. 14 soir,<br />lun. 15 - mar. 16 juin
+        </p>
+        <p className="text-[1.45vh] text-foreground/80 mt-1" dir="rtl">
+          מולד : lun., ש 90 ד 46 ח 16
+        </p>
+      </div>
     </article>
   );
 }
@@ -1030,6 +1049,25 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               ))}
             </ul>
           )}
+
+          <div
+            className="mt-4 rounded-xl p-4 text-center"
+            style={{
+              background: "rgba(56, 132, 255, 0.08)",
+              border: "1.5px dashed rgba(56, 132, 255, 0.55)",
+            }}
+          >
+            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+              Prochain Rosh Ḥodesh
+            </p>
+            <p className="font-display font-bold text-lg text-foreground mt-0.5">Tamouz</p>
+            <p className="text-sm text-muted-foreground leading-snug mt-1">
+              dim. 14 soir,<br />lun. 15 - mar. 16 juin
+            </p>
+            <p className="text-xs text-foreground/80 mt-1" dir="rtl">
+              מולד : lun., ש 90 ד 46 ח 16
+            </p>
+          </div>
         </article>
 
 
