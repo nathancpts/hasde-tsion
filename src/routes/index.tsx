@@ -1064,7 +1064,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex min-h-[56px] items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-[#1a3a8f] shadow-lg ring-1 ring-black/5 active:scale-[0.98] transition-transform text-center leading-tight"
+            className="relative flex min-h-[58px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-[#1a3a8f] active:translate-y-[2px] active:shadow-[0_2px_0_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.6)] transition-all text-center leading-tight"
+            style={{
+              background: "linear-gradient(180deg, #ffffff 0%, #e8ecf5 100%)",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -2px 4px rgba(26,58,143,0.12), 0 4px 0 rgba(10,25,70,0.35), 0 8px 16px rgba(0,0,0,0.35)",
+            }}
           >
             Faire un don
           </a>
@@ -1072,8 +1077,13 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex min-h-[56px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-white shadow-lg active:scale-[0.98] transition-transform text-center leading-tight"
-            style={{ background: "linear-gradient(135deg, #c9a14a 0%, #a8822f 100%)" }}
+            className="relative flex min-h-[58px] items-center justify-center rounded-xl px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.12em] text-white active:translate-y-[2px] active:shadow-[0_2px_0_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] transition-all text-center leading-tight"
+            style={{
+              background: "linear-gradient(180deg, #e2b75a 0%, #b88a30 55%, #8c6620 100%)",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,236,180,0.7), inset 0 -2px 4px rgba(60,40,0,0.35), 0 4px 0 rgba(70,48,10,0.55), 0 8px 16px rgba(0,0,0,0.4)",
+              textShadow: "0 1px 1px rgba(0,0,0,0.35)",
+            }}
           >
             Participer à la séouda
           </a>
