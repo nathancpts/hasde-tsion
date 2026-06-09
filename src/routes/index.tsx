@@ -639,25 +639,60 @@ function DonationsCard() {
 
 
 function SidourLink({ className = "" }: { className?: string }) {
-  const [label, setLabel] = useState("Lecture du jour");
+  const [open, setOpen] = useState(false);
+  const [info, setInfo] = useState({ label: "Lecture du jour", url: "https://sidour.torah-box.com/" });
+
   useEffect(() => {
     const h = new Date().getHours();
-    if (h >= 4 && h < 12) setLabel("Lire Cha'harit");
-    else if (h >= 12 && h < 18) setLabel("Lire Min'ha");
-    else setLabel("Lire Arvit");
+    if (h >= 4 && h < 12) setInfo({ label: "Cha'harit (matin)", url: "https://sidour.torah-box.com/?priere=priere_matin" });
+    else if (h >= 12 && h < 18) setInfo({ label: "Min'ha (après-midi)", url: "https://sidour.torah-box.com/?priere=priere_apres_midi" });
+    else setInfo({ label: "Arvit (soir)", url: "https://sidour.torah-box.com/?priere=priere_soir" });
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
   return (
-    <a
-      href="https://sidour.torah-box.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 text-primary font-display font-semibold uppercase tracking-[0.15em] active:scale-[0.98] transition-transform w-full ${className}`}
-    >
-      <span aria-hidden>📖</span>
-      <span>{label}</span>
-    </a>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 text-primary font-display font-semibold uppercase tracking-[0.15em] active:scale-[0.98] transition-transform w-full ${className}`}
+      >
+        <span aria-hidden>📖</span>
+        <span>Lire {info.label}</span>
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex flex-col" role="dialog" aria-modal="true">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 bg-card border-b border-border">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-primary font-semibold">Sidour Torah-Box</p>
+              <p className="font-display font-bold text-foreground truncate">{info.label}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="shrink-0 rounded-full bg-secondary text-secondary-foreground px-4 py-2 text-sm font-semibold active:scale-95 transition-transform"
+            >
+              Fermer
+            </button>
+          </div>
+          <iframe
+            src={info.url}
+            title={`Sidour Torah-Box — ${info.label}`}
+            className="flex-1 w-full bg-white"
+          />
+        </div>
+      )}
+    </>
   );
 }
+
 
 function ParashaCard({ live }: { live: LiveWeek | null }) {
   const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
