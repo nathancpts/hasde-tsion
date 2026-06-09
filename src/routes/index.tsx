@@ -1059,6 +1059,24 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
         </article>
 
 
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <a
+            href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.15em] text-primary shadow-sm active:scale-[0.98] transition-transform text-center leading-tight"
+          >
+            Faire un don
+          </a>
+          <a
+            href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center rounded-xl border-2 border-primary bg-primary px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.15em] text-primary-foreground shadow-sm active:scale-[0.98] transition-transform text-center leading-tight"
+          >
+            Participer à la séouda
+          </a>
+        </div>
 
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
