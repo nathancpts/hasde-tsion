@@ -621,21 +621,15 @@ function DonationsCard() {
         )}
       </AutoScrollVertical>
 
-      <div
-        className="mt-[1vh] rounded-xl p-[1.2vh_1vw] text-center"
-        style={{
-          background: "rgba(56, 132, 255, 0.08)",
-          border: "1.5px dashed rgba(56, 132, 255, 0.55)",
-        }}
-      >
-        <p className="text-[1.4vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+      <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
+        <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
           Prochain Rosh Ḥodesh
         </p>
-        <p className="font-display font-bold text-[2.2vh] text-foreground mt-0.5">Tamouz</p>
-        <p className="text-[1.55vh] text-muted-foreground leading-snug mt-1">
-          dim. 14 soir,<br />lun. 15 - mar. 16 juin
+        <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">Tamouz</p>
+        <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
+          dim. 14 soir · lun. 15 – mar. 16 juin
         </p>
-        <p className="text-[1.45vh] text-foreground/80 mt-1" dir="rtl">
+        <p className="font-hebrew text-[1.45vh] text-foreground/80 mt-1" dir="rtl">
           מולד : lun., ש 90 ד 46 ח 16
         </p>
       </div>
@@ -854,8 +848,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
         </div>
 
-        {extra}
-
         <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-4 px-4 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim du jour</p>
           <div className={`grid ${tehilimDisplay.length === 2 ? "grid-cols-2 gap-3" : "grid-cols-1"}`}>
@@ -890,6 +882,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             );
           })}
         </div>
+
+        {extra}
 
       </article>
     );
@@ -959,8 +953,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
           shema={vShema} times={vTimes}
           extra={
-            <div className="rounded-xl border border-border bg-secondary/50 p-3">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-1.5">
+            <div className="rounded-lg border border-border bg-muted/40 p-3">
+              <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
                 27 Sivan · Yahrtzeit
               </div>
               <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
@@ -978,8 +972,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
           shema={sShema} times={sTimes}
           extra={
-            <div className="rounded-xl border border-border bg-secondary/50 p-3">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground text-center mb-1.5">
+            <div className="rounded-lg border border-border bg-muted/40 p-3">
+              <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
                 28 Sivan · Yahrtzeit
               </div>
               <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
@@ -1050,21 +1044,15 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </ul>
           )}
 
-          <div
-            className="mt-4 rounded-xl p-4 text-center"
-            style={{
-              background: "rgba(56, 132, 255, 0.08)",
-              border: "1.5px dashed rgba(56, 132, 255, 0.55)",
-            }}
-          >
-            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+          <div className="mt-4 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 text-center">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
               Prochain Rosh Ḥodesh
             </p>
-            <p className="font-display font-bold text-lg text-foreground mt-0.5">Tamouz</p>
-            <p className="text-sm text-muted-foreground leading-snug mt-1">
-              dim. 14 soir,<br />lun. 15 - mar. 16 juin
+            <p className="font-display font-bold text-xl text-foreground mt-1 leading-none">Tamouz</p>
+            <p className="text-sm text-muted-foreground leading-snug mt-1.5">
+              dim. 14 soir · lun. 15 – mar. 16 juin
             </p>
-            <p className="text-xs text-foreground/80 mt-1" dir="rtl">
+            <p className="font-hebrew text-xs text-foreground/80 mt-1" dir="rtl">
               מולד : lun., ש 90 ד 46 ח 16
             </p>
           </div>
@@ -1164,11 +1152,11 @@ function PlanningTV() {
 
           times={vTimes}
         >
-          <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
-            <div className="text-[1.2vh] uppercase tracking-wider text-muted-foreground text-center mb-1">
+          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
               27 Sivan · Yahrtzeit
             </div>
-            <div className="text-[1.3vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
               <div>Rabbi 'Hanina ben Tradyon</div>
               <div>HaRav Morde'haï Sevitzky</div>
               <div>HaRav Meir Eisenstadt</div>
@@ -1188,11 +1176,11 @@ function PlanningTV() {
 
           times={sTimes}
         >
-          <div className="rounded-xl border border-border bg-secondary/50 p-2 space-y-1">
-            <div className="text-[1.2vh] uppercase tracking-wider text-muted-foreground text-center mb-1">
+          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
               28 Sivan · Yahrtzeit
             </div>
-            <div className="text-[1.3vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
               <div>HaRav Israel Ze'ev Gustman</div>
               <div>HaRav Avraham Adadi</div>
               <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
