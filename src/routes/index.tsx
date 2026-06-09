@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
+import shabbatMevarchimAsset from "@/assets/shabbat-mevarchim.png.asset.json";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
