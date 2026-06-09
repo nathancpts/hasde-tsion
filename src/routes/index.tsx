@@ -439,14 +439,16 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
           {fr}
         </h2>
       </div>
-      <div className="text-right">
+      <div className="text-right flex flex-col items-end gap-1">
         <p className="font-hebrew text-[4vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" dir="rtl">
           {he}
         </p>
-        <p className="mt-1 text-[1.1vh] text-white/80 uppercase tracking-wider font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
-          {week.parasha.chap}
-        </p>
-
+        <img
+          src={shabbatMevarchimAsset.url}
+          alt="שבת מברכים"
+          className="h-[2.6vh] w-auto object-contain mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
       </div>
     </div>
   );
