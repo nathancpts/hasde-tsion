@@ -1188,7 +1188,7 @@ function PlanningTV() {
   return (
     <main className="relative isolate h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <DynamicBackground />
-      <KioskControls {...kiosk} />
+      {!isPdfMode && <KioskControls {...kiosk} />}
       <Header />
       <ParashaBanner live={live} />
 
