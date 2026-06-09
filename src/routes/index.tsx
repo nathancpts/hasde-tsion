@@ -1142,9 +1142,9 @@ function PlanningTV() {
     if (isPdfMode) return;
     const id = setInterval(() => window.location.reload(), 15 * 60 * 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [isPdfMode]);
 
-  if (!isTV) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
+  if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
   // Merge live data into static fallbacks
