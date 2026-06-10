@@ -1120,7 +1120,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           extra={
             <div className="rounded-lg border border-border bg-muted/40 p-3">
               <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
-                27 Sivan · Yahrtzeit
+                27 Sivan 5786 · Yahrtzeit
               </div>
               <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
                 <div>Rabbi 'Hanina ben Tradyon</div>
@@ -1139,7 +1139,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           extra={
             <div className="rounded-lg border border-border bg-muted/40 p-3">
               <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
-                28 Sivan · Yahrtzeit
+                28 Sivan 5786 · Yahrtzeit
               </div>
               <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
                 <div>HaRav Israel Ze'ev Gustman</div>
@@ -1346,7 +1346,7 @@ function PlanningTV() {
         >
           <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
             <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              27 Sivan · Yahrtzeit
+              27 Sivan 5786 · Yahrtzeit
             </div>
             <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
               <div>Rabbi 'Hanina ben Tradyon</div>
@@ -1370,7 +1370,7 @@ function PlanningTV() {
         >
           <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
             <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              28 Sivan · Yahrtzeit
+              28 Sivan 5786 · Yahrtzeit
             </div>
             <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
               <div>HaRav Israel Ze'ev Gustman</div>
