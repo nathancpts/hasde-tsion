@@ -103,7 +103,6 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
   );
 }
 
-import kleinBgVideo from "@/assets/klein-bg.mp4.asset.json";
 
 function DynamicBackground() {
   return (
