@@ -1087,6 +1087,19 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           <SidourLink className="mt-3 text-sm py-2.5" />
         </article>
 
+        <div className="rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 text-center">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
+            Prochain Rosh Ḥodesh
+          </p>
+          <p className="font-display font-bold text-xl text-foreground mt-1 leading-none">Tamouz</p>
+          <p className="text-sm text-muted-foreground leading-snug mt-1.5">
+            dim. 14 soir · lun. 15 – mar. 16 juin
+          </p>
+          <p className="font-hebrew text-xs text-foreground/80 mt-1" dir="rtl">
+            מולד : lun., ש 90 ד 46 ח 16
+          </p>
+        </div>
+
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
           {DONATIONS_REPAS.length === 0 ? (
@@ -1112,20 +1125,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               ))}
             </ul>
           )}
-
-          <div className="mt-4 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 text-center">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
-              Prochain Rosh Ḥodesh
-            </p>
-            <p className="font-display font-bold text-xl text-foreground mt-1 leading-none">Tamouz</p>
-            <p className="text-sm text-muted-foreground leading-snug mt-1.5">
-              dim. 14 soir · lun. 15 – mar. 16 juin
-            </p>
-            <p className="font-hebrew text-xs text-foreground/80 mt-1" dir="rtl">
-              מולד : lun., ש 90 ד 46 ח 16
-            </p>
-          </div>
         </article>
+
 
 
         <div className="grid grid-cols-2 gap-3 pt-2">
