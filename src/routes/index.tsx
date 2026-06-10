@@ -106,15 +106,10 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
 
 function DynamicBackground() {
   return (
-    <div aria-hidden="true" className="video-bg">
-      <iframe
-        className="video-bg__iframe"
-        src="https://www.youtube-nocookie.com/embed/XzTCntGgNJU?autoplay=1&mute=1&loop=1&playlist=XzTCntGgNJU&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&disablekb=1"
-        title="Background"
-        allow="autoplay; encrypted-media"
-        frameBorder={0}
-      />
-      <div className="video-bg__overlay" />
+    <div aria-hidden="true" className="dynamic-klein-bg">
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--base" />
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--mid" />
+      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--sheen" />
     </div>
   );
 }
