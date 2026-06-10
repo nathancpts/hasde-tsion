@@ -847,6 +847,85 @@ function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null
 
 // ============ MOBILE LAYOUT ============
 
+function MobileGlassNav() {
+  const items = [
+    { id: "accueil", label: "Accueil", icon: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-3a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+    )},
+    { id: "shabbat", label: "Chabbat", icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+    )},
+    { id: "etude", label: "Étude", icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.25v13M12 6.25C10.83 5.48 9.25 5 7.5 5S4.17 5.48 3 6.25v13C4.17 18.48 5.75 18 7.5 18s3.33.48 4.5 1.25M12 6.25C13.17 5.48 14.75 5 16.5 5s3.33.48 4.5 1.25v13C19.83 18.48 18.25 18 16.5 18s-3.33.48-4.5 1.25"/></svg>
+    )},
+    { id: "siddur", label: "eSiddur", icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20v-5"/></svg>
+    )},
+  ];
+  const [active, setActive] = useState<string>("accueil");
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+    items.forEach((it) => {
+      const el = document.getElementById(it.id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const go = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  return (
+    <nav
+      aria-label="Navigation rapide"
+      className="fixed left-1/2 -translate-x-1/2 z-50 px-4 w-full max-w-md"
+      style={{ bottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
+    >
+      <div className="relative">
+        <div aria-hidden className="absolute -inset-3 rounded-full bg-cyan-400/20 blur-2xl opacity-70 pointer-events-none" />
+        <div
+          className="relative flex items-center justify-between gap-1 p-1.5 rounded-full border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.45)]"
+          style={{
+            background: "rgba(255,255,255,0.06)",
+            backdropFilter: "blur(24px) saturate(1.4)",
+            WebkitBackdropFilter: "blur(24px) saturate(1.4)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18), 0 20px 50px rgba(0,0,0,0.45)",
+          }}
+        >
+          {items.map((it) => {
+            const isActive = active === it.id;
+            return (
+              <button
+                key={it.id}
+                type="button"
+                onClick={() => go(it.id)}
+                aria-label={it.label}
+                aria-current={isActive ? "true" : undefined}
+                className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 px-2 rounded-full transition-all active:scale-95 ${
+                  isActive
+                    ? "bg-white/15 text-white ring-1 ring-white/30 shadow-inner"
+                    : "text-white/55 hover:text-white"
+                }`}
+              >
+                {it.icon}
+                <span className="text-[9px] font-bold tracking-[0.12em] uppercase">{it.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+
 function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
@@ -963,8 +1042,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
       <DynamicBackground />
-      <div className="max-w-md mx-auto px-4 space-y-5" style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)", paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)" }}>
-        <header className="flex items-center justify-between gap-3">
+      <div className="max-w-md mx-auto px-4 space-y-5" style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)", paddingBottom: "calc(env(safe-area-inset-bottom) + 6.5rem)" }}>
+        <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
           <div className="text-right">
             <div className="font-display text-3xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{time}</div>
@@ -1031,6 +1110,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </p>
         </article>
 
+        <div id="shabbat" className="scroll-mt-24 space-y-5">
         <MobileDay
           badge="Vendredi" badgeTone="blue"
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
@@ -1067,6 +1147,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </div>
           }
         />
+        </div>
 
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
@@ -1127,7 +1208,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </a>
         </div>
 
-        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
+        <article id="etude" className="rounded-2xl border border-border bg-card p-5 android-scroll-fix scroll-mt-24">
           <div className="flex items-center justify-between gap-2 mb-3">
             <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
             {PARASHA_NOM_HE && (
@@ -1160,7 +1241,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </div>
         </article>
 
-        <SidourLink className="text-sm py-3" />
+        <div id="siddur" className="scroll-mt-24">
+          <SidourLink className="text-sm py-3" />
+        </div>
+
+        <MobileGlassNav />
 
 
 
