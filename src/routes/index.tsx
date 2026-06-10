@@ -1087,18 +1087,19 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           <SidourLink className="mt-3 text-sm py-2.5" />
         </article>
 
-        <div className="rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-4 text-center">
+        <article className="rounded-2xl border border-border bg-card p-5 text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
             Prochain Rosh Ḥodesh
           </p>
-          <p className="font-display font-bold text-xl text-foreground mt-1 leading-none">Tamouz</p>
-          <p className="text-sm text-muted-foreground leading-snug mt-1.5">
+          <p className="font-display font-bold text-2xl text-foreground mt-1.5 leading-none">Tamouz</p>
+          <p className="text-sm text-muted-foreground leading-snug mt-2">
             dim. 14 soir · lun. 15 – mar. 16 juin
           </p>
-          <p className="font-hebrew text-xs text-foreground/80 mt-1" dir="rtl">
+          <p className="font-hebrew text-sm text-foreground/80 mt-1.5" dir="rtl">
             מולד : lun., ש 90 ד 46 ח 16
           </p>
-        </div>
+        </article>
+
 
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
