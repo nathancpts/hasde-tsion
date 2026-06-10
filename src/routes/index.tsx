@@ -1031,6 +1031,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </p>
         </article>
 
+        <div id="shabbat" className="scroll-mt-24 space-y-5">
         <MobileDay
           badge="Vendredi" badgeTone="blue"
           title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
@@ -1067,6 +1068,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </div>
           }
         />
+        </div>
 
         <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
           <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
