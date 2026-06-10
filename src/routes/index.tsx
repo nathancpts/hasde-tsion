@@ -1162,7 +1162,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </div>
         </article>
 
-        <SidourLink className="text-sm py-3" />
+        <div id="siddur" className="scroll-mt-24">
+          <SidourLink className="text-sm py-3" />
+        </div>
+
+        <MobileGlassNav />
 
 
 
