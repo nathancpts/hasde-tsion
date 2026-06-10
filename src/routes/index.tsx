@@ -963,8 +963,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
       <DynamicBackground />
-      <div className="max-w-md mx-auto px-4 space-y-5" style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)", paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)" }}>
-        <header className="flex items-center justify-between gap-3">
+      <div className="max-w-md mx-auto px-4 space-y-5" style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)", paddingBottom: "calc(env(safe-area-inset-bottom) + 6.5rem)" }}>
+        <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
           <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
           <div className="text-right">
             <div className="font-display text-3xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{time}</div>
