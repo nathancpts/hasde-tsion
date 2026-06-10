@@ -5,6 +5,7 @@ import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
+import kleinBgVideo from "@/assets/klein-bg.mp4.asset.json";
 
 
 function useKiosk() {
@@ -102,16 +103,18 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
   );
 }
 
+
 function DynamicBackground() {
   return (
     <div aria-hidden="true" className="video-bg">
-      <iframe
+      <video
         className="video-bg__iframe"
-        src="https://www.youtube-nocookie.com/embed/XzTCntGgNJU?autoplay=1&mute=1&loop=1&playlist=XzTCntGgNJU&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1"
-        title="Background"
-        frameBorder={0}
-        allow="autoplay; encrypted-media"
-        allowFullScreen={false}
+        src={kleinBgVideo.url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
       />
       <div className="video-bg__overlay" />
     </div>
