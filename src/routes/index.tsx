@@ -675,7 +675,7 @@ function SidourLink({ className = "" }: { className?: string }) {
         className={`inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] px-3 text-primary font-display font-semibold uppercase tracking-[0.15em] active:scale-[0.98] transition-transform w-full ${className}`}
       >
         <span aria-hidden>📖</span>
-        <span>Lire {info.label}</span>
+        <span>eSiddur · {info.label}</span>
       </button>
 
       {open && (
@@ -1156,8 +1156,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </section>
             ))}
           </div>
-          <SidourLink className="mt-3 text-sm py-2.5" />
         </article>
+
+        <SidourLink className="text-sm py-3" />
 
 
 
