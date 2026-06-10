@@ -1103,68 +1103,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
 
-
-        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
-          <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
-          {DONATIONS_REPAS.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
-          ) : (
-            <ul className="divide-y divide-border/60">
-              {DONATIONS_REPAS.map((d, i) => (
-                <li key={i} className="py-2.5">
-                  <p className="font-display font-bold text-base text-foreground leading-tight">{d.donateur}</p>
-                  {d.occasion && (
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-primary font-semibold mt-0.5">{d.occasion}</p>
-                  )}
-                  {d.dedicace && (
-                    <p className="font-display italic text-sm text-muted-foreground leading-tight mt-0.5">{d.dedicace}</p>
-                  )}
-                  {d.dedicaceHe && (
-                    <p className="font-hebrew text-base text-primary leading-tight mt-2" dir="rtl">{d.dedicaceHe}</p>
-                  )}
-                  {d.details?.map((line, index) => (
-                    <p key={index} className="text-sm text-foreground/80 leading-relaxed mt-2">{line}</p>
-                  ))}
-                </li>
-              ))}
-            </ul>
-          )}
-        </article>
-
-
-
-        <div className="grid grid-cols-2 gap-3 pt-2">
-          <a
-            href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-white/95 backdrop-blur px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-[#0f2a6b] ring-1 ring-white/40 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.5)] active:scale-[0.97] transition-all text-center leading-tight"
-          >
-            <span className="text-base">♡</span>
-            <span>Faire un don</span>
-          </a>
-          <a
-            href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-white ring-1 ring-white/30 shadow-[0_10px_30px_-10px_rgba(184,138,48,0.7)] active:scale-[0.97] transition-all text-center leading-tight"
-            style={{
-              background:
-                "linear-gradient(135deg, #d4a84a 0%, #b88a30 50%, #9a6f22 100%)",
-            }}
-          >
-            <span className="relative z-10">Participer à la séouda</span>
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-60"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%)",
-              }}
-            />
-          </a>
-        </div>
-
         <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
           בס״ד · Hasdé Tsion
         </footer>
