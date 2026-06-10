@@ -107,6 +107,31 @@
     will-change: transform;
   }
 
+  .video-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .video-bg__iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 */
+    min-height: 100vh;
+    min-width: 177.78vh; /* 16:9 */
+    transform: translate(-50%, -50%);
+    border: 0;
+    pointer-events: none;
+  }
+  .video-bg__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(2,6,31,0.35) 0%, rgba(2,6,31,0.55) 100%);
+  }
+
   .dynamic-klein-bg {
     position: absolute;
     inset: -16%;
