@@ -104,10 +104,16 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
 
 function DynamicBackground() {
   return (
-    <div aria-hidden="true" className="dynamic-klein-bg">
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--base" />
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--mid" />
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--sheen" />
+    <div aria-hidden="true" className="video-bg">
+      <iframe
+        className="video-bg__iframe"
+        src="https://www.youtube-nocookie.com/embed/XzTCntGgNJU?autoplay=1&mute=1&loop=1&playlist=XzTCntGgNJU&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1"
+        title="Background"
+        frameBorder={0}
+        allow="autoplay; encrypted-media"
+        allowFullScreen={false}
+      />
+      <div className="video-bg__overlay" />
     </div>
   );
 }
@@ -1245,7 +1251,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           <SidourLink className="text-sm py-3" />
         </div>
 
-        <MobileGlassNav />
+        
 
 
 
