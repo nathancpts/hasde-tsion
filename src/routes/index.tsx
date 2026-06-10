@@ -1129,7 +1129,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </a>
         </div>
 
-        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
+        <article id="etude" className="rounded-2xl border border-border bg-card p-5 android-scroll-fix scroll-mt-24">
           <div className="flex items-center justify-between gap-2 mb-3">
             <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
             {PARASHA_NOM_HE && (
