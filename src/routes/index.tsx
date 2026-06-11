@@ -136,7 +136,7 @@ export const Route = createFileRoute("/")({
 
 // ============ DATA ============
 const week = {
-  parasha: { fr: "Nasso", he: "נשא", chap: "Pirkei Avot · Ch. 1" },
+  parasha: { fr: "Sh’lach", he: "שלח", chap: "Pirkei Avot · Ch. 3" },
   vendredi: {
     date: "Vendredi 29 mai 2026",
     heb: "13 Sivan 5786",
