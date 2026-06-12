@@ -1431,6 +1431,24 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
 
 
+function SplashOverlay() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+    const t = setTimeout(() => setShowSplash(false), 1000);
+    return () => clearTimeout(t);
+  }, []);
+  if (!mounted) return null;
+  return (
+    <div
+      aria-hidden
+      className="btn-blue-animated fixed inset-0 z-[9999] pointer-events-none transition-opacity duration-700 ease-out"
+      style={{ opacity: showSplash ? 1 : 0 }}
+    />
+  );
+}
+
 function PlanningTV() {
   const isTV = useIsTV();
   const live = useLiveWeek(null);
@@ -1442,7 +1460,7 @@ function PlanningTV() {
 
   const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
 
-  if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
+  if (!isTV && !isPdfMode) return (<><MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} /><SplashOverlay /></>);
 
 
   // Merge live data into static fallbacks
@@ -1486,6 +1504,7 @@ function PlanningTV() {
   return (
     <main className="relative isolate h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
       <DynamicBackground />
+      <SplashOverlay />
       {!isPdfMode && <KioskControls {...kiosk} />}
       <Header />
       <ParashaBanner live={live} />
