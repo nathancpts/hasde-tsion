@@ -1025,7 +1025,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
       <div
         className="btn-blue-animated relative w-full overflow-hidden"
         style={{
-          paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
+          paddingTop: "calc(env(safe-area-inset-top) + 0.25rem)",
         }}
       >
         {/* Fondu doux depuis la couleur solide de la status bar vers le dégradé animé */}
