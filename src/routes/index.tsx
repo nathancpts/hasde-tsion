@@ -106,13 +106,17 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
 
 function DynamicBackground() {
   return (
-    <div aria-hidden="true" className="dynamic-klein-bg">
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--base" />
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--mid" />
-      <div className="dynamic-klein-bg__layer dynamic-klein-bg__layer--sheen" />
-    </div>
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 -z-10 pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(180deg, #1f4ea8 0%, rgba(31,78,168,0.6) 55%, rgba(31,78,168,0) 100%), #F2F4F8",
+      }}
+    />
   );
 }
+
 
 
 export const Route = createFileRoute("/")({
