@@ -341,25 +341,33 @@
 .animate-fade-up { animation: fade-up 0.6s ease both; }
 
 @keyframes blue-shift {
-  0%   { background-position:   0%   0%; }
-  20%  { background-position:  60%  30%; }
-  40%  { background-position: 100%  70%; }
-  60%  { background-position:  40% 100%; }
-  80%  { background-position:  20%  40%; }
-  100% { background-position:   0%   0%; }
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%, 100% 100%;
+  }
+  25% {
+    background-position: 30% 40%, 70% 20%, 40% 80%, 20% 30%, 80% 70%;
+  }
+  50% {
+    background-position: 60% 70%, 30% 60%, 70% 30%, 50% 80%, 40% 40%;
+  }
+  75% {
+    background-position: 80% 30%, 20% 80%, 30% 50%, 70% 20%, 20% 60%;
+  }
+  100% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%, 100% 100%;
+  }
 }
 .btn-blue-animated {
-  background-image: linear-gradient(
-    120deg,
-    #0a2a6b 0%,
-    #1f4ea8 18%,
-    #3a7bd5 36%,
-    #1852a5 54%,
-    #0F3D7A 72%,
-    #2C5FA8 88%,
-    #0a2a6b 100%
-  );
-  background-size: 400% 400%;
-  animation: blue-shift 14s ease-in-out infinite;
+  background-color: #1f4ea8;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 20% 30%, rgba(58, 123, 213, 0.85), transparent 60%),
+    radial-gradient(ellipse 60% 70% at 80% 20%, rgba(10, 42, 107, 0.75), transparent 65%),
+    radial-gradient(ellipse 80% 60% at 50% 90%, rgba(15, 61, 122, 0.8), transparent 60%),
+    radial-gradient(ellipse 55% 65% at 10% 70%, rgba(44, 95, 168, 0.7), transparent 60%),
+    radial-gradient(ellipse 65% 55% at 90% 80%, rgba(24, 82, 165, 0.75), transparent 65%);
+  background-size: 180% 180%, 200% 200%, 220% 200%, 180% 220%, 200% 180%;
+  background-repeat: no-repeat;
+  animation: blue-shift 22s ease-in-out infinite;
 }
+
 
