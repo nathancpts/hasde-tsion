@@ -1271,7 +1271,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
               <article
                 className="rounded-2xl p-5 text-center"
                 style={{
-                  background: "linear-gradient(135deg, #8A6A1F 0%, #b88a30 100%)",
+                  background: "linear-gradient(135deg, #C9A96E 0%, #E5C56E 100%)",
                   boxShadow: "0 8px 20px rgba(138,106,31,0.25)",
                 }}
               >
