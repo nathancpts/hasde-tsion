@@ -52,6 +52,14 @@ export function useVersionCheck(intervalMs = 5 * 60 * 1000) {
         return;
       }
       if (sig !== initialSignature) {
+        // Ne pas recharger si l'utilisateur est en mode plein écran (TV) :
+        // cela ferait sortir de fullscreen et casserait l'affichage TV.
+        // On garde la nouvelle signature en mémoire et on rechargera dès
+        // que l'utilisateur sortira du plein écran.
+        if (document.fullscreenElement) {
+          console.info("[version-check] new version detected, reload deferred (fullscreen active)");
+          return;
+        }
         console.info("[version-check] new version detected, reloading…");
         try {
           if ("caches" in window) {
