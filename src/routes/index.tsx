@@ -1029,6 +1029,15 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
         }}
       >
+        {/* Voile sombre derrière la status bar pour aligner avec theme-color */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0"
+          style={{
+            height: "calc(env(safe-area-inset-top) + 24px)",
+            background: "linear-gradient(180deg, #0F3D7A 0%, #0F3D7A 60%, rgba(15,61,122,0) 100%)",
+          }}
+        />
         <div className="max-w-md mx-auto px-5 pb-8">
           {/* Header */}
           <header id="accueil" className="flex items-center justify-end gap-3 scroll-mt-24">
