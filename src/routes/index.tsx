@@ -675,7 +675,7 @@ function SidourLink({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Ouvrir eSiddur — ${info.label}`}
-        className={`inline-flex items-center justify-center gap-3 rounded-xl border-2 border-primary bg-primary px-5 py-4 text-primary-foreground font-display font-bold uppercase tracking-[0.25em] text-lg shadow-lg active:scale-[0.97] transition-transform w-full ${className}`}
+        className={`inline-flex items-center justify-center gap-3 rounded-xl border-2 border-[#0F3D7A] bg-gradient-to-br from-[#2C5FA8] via-[#1f4787] to-[#0F3D7A] px-5 py-4 text-white font-display font-bold uppercase tracking-[0.25em] text-lg shadow-lg active:scale-[0.97] transition-transform w-full ${className}`}
       >
         <span aria-hidden>📖</span>
         <span>ESIDDUR</span>
