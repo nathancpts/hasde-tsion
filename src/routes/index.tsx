@@ -1036,25 +1036,23 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
   useEffect(() => {
     const now = new Date();
     const dow = now.getDay();
-    const candle = chabad?.candle ?? week?.vendredi?.candleLighting ?? null;
-    const havdal = chabad?.havdalah ?? week?.samedi?.havdalah ?? null;
+    const candle = chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? null;
+    const havdal = chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? null;
     const toMin = (hm: string) => {
       const [h, m] = hm.split(":").map(Number);
       return h * 60 + m;
     };
     const nowMin = now.getHours() * 60 + now.getMinutes();
     if (dow === 6) {
-      // Samedi : shabbat jusqu'à havdalah, ensuite vendredi (prochain)
       if (havdal && nowMin >= toMin(havdal)) setSelectedDay("vendredi");
       else setSelectedDay("shabbat");
     } else if (dow === 5) {
-      // Vendredi : shabbat dès l'allumage
       if (candle && nowMin >= toMin(candle)) setSelectedDay("shabbat");
       else setSelectedDay("vendredi");
     } else {
       setSelectedDay("vendredi");
     }
-  }, [chabad?.candle, chabad?.havdalah, week?.vendredi?.candleLighting, week?.samedi?.havdalah]);
+  }, [chabad?.candle, chabad?.havdalah, vTimes, sTimes]);
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
