@@ -254,17 +254,19 @@ const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
 
 
 function useLiveWeek(loc: StoredLoc) {
-  const [live, setLive] = useState<LiveWeek | null>(null);
+  const cacheKey = `ht.liveWeek.v1.${loc ? `${loc.lat.toFixed(2)},${loc.lon.toFixed(2)}` : "default"}`;
+  const [live, setLive] = useState<LiveWeek | null>(() => readCache<LiveWeek>(cacheKey, 6 * 3600 * 1000));
   useEffect(() => {
     let cancelled = false;
     const load = () => {
       fetchLiveWeek(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
-        .then((d) => { if (!cancelled) setLive(d); })
+        .then((d) => { if (!cancelled) { setLive(d); writeCache(cacheKey, d); } })
         .catch((e) => console.warn("Hebcal fetch failed", e));
     };
     load();
     const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
     return () => { cancelled = true; clearInterval(id); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loc]);
   return live;
 }
