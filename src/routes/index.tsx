@@ -1021,14 +1021,22 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-hidden" style={{ background: "#F2F4F8" }}>
-      {/* Blue gradient hero zone — animated */}
+      {/* Blue gradient hero zone — animated en vague */}
       <div
         className="btn-blue-animated relative w-full overflow-hidden"
         style={{
           paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
         }}
       >
-        {/* (le body partage le même dégradé animé : aucun voile nécessaire) */}
+        {/* Fondu doux depuis la couleur solide de la status bar vers le dégradé animé */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0"
+          style={{
+            height: "calc(env(safe-area-inset-top) + 80px)",
+            background: "linear-gradient(180deg, #1f4ea8 0%, rgba(31,78,168,0.6) 55%, rgba(31,78,168,0) 100%)",
+          }}
+        />
         {/* Fondu vers le bas pour raccord avec la zone claire */}
         <div
           aria-hidden
