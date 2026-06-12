@@ -341,11 +341,11 @@ function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } 
 
 function useShabbatZmanim(loc: StoredLoc) {
   const cacheKey = "ht.shabbatZ.v1";
-  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(
-    () => readCache<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(cacheKey, 24 * 3600 * 1000) ?? { vendredi: null, samedi: null }
-  );
+  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>({ vendredi: null, samedi: null });
   useEffect(() => {
     let cancelled = false;
+    const cached = readCache<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(cacheKey, 24 * 3600 * 1000);
+    if (cached) setData(cached);
     const load = async () => {
       const { friday, saturday } = nextFridaySaturday();
       const geo = loc ? { lat: loc.lat, lon: loc.lon } : undefined;
