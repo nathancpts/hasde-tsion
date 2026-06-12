@@ -396,6 +396,43 @@ function useIsTV() {
 
 // ============ COMPONENTS ============
 
+function HeroCountdown({ targetTime, selectedDay }: { targetTime: string; selectedDay: "vendredi" | "shabbat" }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const today = new Date(now);
+  const dow = today.getDay(); // 0 Sun .. 5 Fri, 6 Sat
+  const show = (selectedDay === "vendredi" && dow === 5) || (selectedDay === "shabbat" && dow === 6);
+  if (!show) return null;
+
+  const m = targetTime.match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) return null;
+  const target = new Date(today);
+  target.setHours(Number(m[1]), Number(m[2]), 0, 0);
+  const diff = target.getTime() - now;
+  if (diff <= 0) return null;
+
+  const h = Math.floor(diff / 3600000);
+  const min = Math.floor((diff % 3600000) / 60000);
+  const sec = Math.floor((diff % 60000) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const label = selectedDay === "vendredi" ? "Avant allumage" : "Avant sortie";
+
+  return (
+    <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 px-4 py-1.5">
+      <span className="text-[10px] uppercase tracking-[0.2em] text-white/80">{label}</span>
+      <span className="font-display text-sm font-bold text-white tabular-nums">
+        {pad(h)}:{pad(min)}:{pad(sec)}
+      </span>
+    </div>
+  );
+}
+
+
+
 function Header() {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
