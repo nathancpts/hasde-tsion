@@ -38,8 +38,8 @@
   --foreground: #0F1115;
   --card: #FFFFFF;
   --card-foreground: #0F1115;
-  --primary: #8A6A1F;
-  --primary-foreground: #FFFFFF;
+  --primary: #C9A96E;
+  --primary-foreground: #0F1115;
   --secondary: rgba(15,17,21,0.04);
   --secondary-foreground: #0F1115;
   --muted: rgba(15,17,21,0.03);
@@ -47,9 +47,9 @@
   --accent: #2C5FA8;
   --accent-foreground: #FFFFFF;
   --highlight: #A4382E;
-  --gold: #8A6A1F;
+  --gold: #C9A96E;
   --gold-soft: rgba(201,169,110,0.18);
-  --gold-line: rgba(138,106,31,0.45);
+  --gold-line: rgba(201,169,110,0.55);
   --blue-soft: rgba(44,95,168,0.08);
   --red-soft: rgba(164,56,46,0.08);
   --green-live: #2F8A5E;
