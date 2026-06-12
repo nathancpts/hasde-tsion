@@ -1309,10 +1309,9 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             <div className="space-y-3">
               {/* Invité d'honneur */}
               <article
-                className="rounded-2xl p-5 text-center"
+                className="btn-blue-animated rounded-2xl p-5 text-center"
                 style={{
-                  background: "linear-gradient(135deg, #C9A96E 0%, #E5C56E 100%)",
-                  boxShadow: "0 8px 20px rgba(138,106,31,0.25)",
+                  boxShadow: "0 8px 20px rgba(10,42,107,0.3)",
                 }}
               >
                 <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/85 mb-2">
