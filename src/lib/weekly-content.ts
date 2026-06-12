@@ -83,7 +83,7 @@ export const DONATIONS_REPAS: Donation[] = [
     donateur: "Hazak aux Familles",
     occasion: "Qui prennent sur elles la Parachat Chela'h Lekha ✨",
     details: [
-      "Meimoun Mike, Sfedj Michael, Ghrenassia Philipe, Mimouni Bryan, Niddam Raphael, Zarhi Rudy, Niddam Avram",
+      "Meimoun Mike, Sfedj Michael, Ghrenassia Philipe, Mimouni Bryan, Niddam Raphael, Zarhi Rudy, Danan Marvin, Niddam Avram",
     ],
   },
 ];
