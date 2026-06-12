@@ -1107,7 +1107,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           </div>
 
           {/* 3 stat widgets */}
-          <div className="mt-7 grid grid-cols-3 gap-2.5">
+          <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
             <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
               <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
               <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
