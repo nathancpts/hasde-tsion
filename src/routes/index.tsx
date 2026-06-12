@@ -397,11 +397,13 @@ function useIsTV() {
 // ============ COMPONENTS ============
 
 function HeroCountdown({ targetTime, selectedDay }: { targetTime: string; selectedDay: "vendredi" | "shabbat" }) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+  if (now === null) return null;
 
   const today = new Date(now);
   const dow = today.getDay(); // 0 Sun .. 5 Fri, 6 Sat
