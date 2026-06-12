@@ -80,17 +80,7 @@ export const PARASHA_BLOCS: ParashaBloc[] = [
 
 export const DONATIONS_REPAS: Donation[] = [
   {
-    donateur: "Hazak aux Familles",
-    occasion: "Qui prennent sur elles la Parachat Chela'h Lekha ✨",
-    details: [
-      "Meimoun Mike",
-      "Sfedj Michael",
-      "Ghrenassia Philipe",
-      "Mimouni Bryan",
-      "Niddam Raphael",
-      "Niddam Avram",
-    ],
-    dedicace: "Que D.. vous bénisse, vous comble et vous garde en bonne santé !",
+    donateur: "Libre",
   },
 ];
 
