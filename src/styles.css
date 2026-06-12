@@ -58,6 +58,12 @@
 }
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
   body {
     background-color: #02061f;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
@@ -67,6 +73,8 @@
     font-family: var(--font-sans);
     position: relative;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html,
   body {
@@ -74,6 +82,7 @@
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: auto;
   }
+  button, a { -webkit-tap-highlight-color: transparent; }
   #root {
     position: relative;
     isolation: isolate;

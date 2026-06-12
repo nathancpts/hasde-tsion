@@ -254,28 +254,46 @@ const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
 
 
 function useLiveWeek(loc: StoredLoc) {
-  const [live, setLive] = useState<LiveWeek | null>(null);
+  const cacheKey = `ht.liveWeek.v1.${loc ? `${loc.lat.toFixed(2)},${loc.lon.toFixed(2)}` : "default"}`;
+  const [live, setLive] = useState<LiveWeek | null>(() => readCache<LiveWeek>(cacheKey, 6 * 3600 * 1000));
   useEffect(() => {
     let cancelled = false;
     const load = () => {
       fetchLiveWeek(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
-        .then((d) => { if (!cancelled) setLive(d); })
+        .then((d) => { if (!cancelled) { setLive(d); writeCache(cacheKey, d); } })
         .catch((e) => console.warn("Hebcal fetch failed", e));
     };
     load();
     const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
     return () => { cancelled = true; clearInterval(id); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loc]);
   return live;
 }
 
+// --- Cache léger pour rendu instantané au boot ---
+function readCache<T>(key: string, maxAgeMs: number): T | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw) as { ts: number; data: T };
+    if (Date.now() - ts > maxAgeMs) return null;
+    return data;
+  } catch { return null; }
+}
+function writeCache<T>(key: string, data: T) {
+  if (typeof window === "undefined") return;
+  try { window.localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); } catch { /* quota */ }
+}
+
 function useChabad() {
-  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
+  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(() => readCache<ChabadWeek[]>("ht.chabad.v1", 7 * 24 * 3600 * 1000));
   useEffect(() => {
     let cancelled = false;
     const load = () => {
       fetchChabadShabbat()
-        .then((d) => { if (!cancelled) setWeeks(d); })
+        .then((d) => { if (!cancelled) { setWeeks(d); writeCache("ht.chabad.v1", d); } })
         .catch((e) => console.warn("Chabad fetch failed", e));
     };
     load();
@@ -319,7 +337,10 @@ function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } 
 }
 
 function useShabbatZmanim(loc: StoredLoc) {
-  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>({ vendredi: null, samedi: null });
+  const cacheKey = "ht.shabbatZ.v1";
+  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(
+    () => readCache<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(cacheKey, 24 * 3600 * 1000) ?? { vendredi: null, samedi: null }
+  );
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
@@ -327,7 +348,11 @@ function useShabbatZmanim(loc: StoredLoc) {
       const geo = loc ? { lat: loc.lat, lon: loc.lon } : undefined;
       try {
         const [v, s] = await Promise.all([fetchZmanim(friday, geo), fetchZmanim(saturday, geo)]);
-        if (!cancelled) setData({ vendredi: v, samedi: s });
+        if (!cancelled) {
+          const next = { vendredi: v, samedi: s };
+          setData(next);
+          writeCache(cacheKey, next);
+        }
       } catch (e) { console.warn("Shabbat zmanim fetch failed", e); }
     };
     load();
@@ -336,6 +361,7 @@ function useShabbatZmanim(loc: StoredLoc) {
   }, [loc]);
   return data;
 }
+
 
 function pickZman(z: Zmanim | null, label: string): string | null {
   return z?.times.find(t => t.label === label)?.value ?? null;
