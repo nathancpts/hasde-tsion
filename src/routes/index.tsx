@@ -691,15 +691,6 @@ function DonationsCard() {
         )}
       </AutoScrollVertical>
 
-      <div className="mt-[1vh] rounded-lg overflow-hidden border border-[var(--gold-line)] bg-black aspect-video">
-        <iframe
-          src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0"
-          title="Live YouTube"
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
 
 
       <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
