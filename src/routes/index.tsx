@@ -397,11 +397,13 @@ function useIsTV() {
 // ============ COMPONENTS ============
 
 function HeroCountdown({ targetTime, selectedDay }: { targetTime: string; selectedDay: "vendredi" | "shabbat" }) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+  if (now === null) return null;
 
   const today = new Date(now);
   const dow = today.getDay(); // 0 Sun .. 5 Fri, 6 Sat
@@ -1038,6 +1040,11 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
   // Day selector (Vendredi / Shabbat) drives the hero widget
   const [selectedDay, setSelectedDay] = useState<"vendredi" | "shabbat">("vendredi");
+  useEffect(() => {
+    const dow = new Date().getDay();
+    if (dow === 6) setSelectedDay("shabbat");
+    else setSelectedDay("vendredi");
+  }, []);
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
