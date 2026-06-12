@@ -1338,9 +1338,9 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                   href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(184,138,48,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
+                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
                   style={{
-                    background: "linear-gradient(135deg, #d4a84a 0%, #b88a30 50%, #9a6f22 100%)",
+                    background: "linear-gradient(135deg, #2C5FA8 0%, #1f4787 50%, #0F3D7A 100%)",
                   }}
                 >
                   Participer à la séouda
