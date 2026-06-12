@@ -1052,7 +1052,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           </header>
 
           {/* Day strip */}
-          <div className="mt-6 flex items-end justify-center gap-6 text-white/70">
+          <div className="mt-2 flex items-end justify-center gap-6 text-white/70">
             <button
               onClick={() => setSelectedDay("vendredi")}
               className={`flex flex-col items-center transition-all ${selectedDay === "vendredi" ? "text-white scale-110" : "text-white/50"}`}
