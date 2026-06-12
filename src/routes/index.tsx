@@ -1096,9 +1096,11 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
               {heroTime}
             </div>
+            <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />
             <p className="mt-1 text-[13px] text-white/90 font-medium">{heroLabel}</p>
             <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
           </div>
+
 
           {/* 3 stat widgets */}
           <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
