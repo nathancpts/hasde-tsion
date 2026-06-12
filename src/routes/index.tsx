@@ -704,7 +704,7 @@ function SidourLink({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Ouvrir eSiddur — ${info.label}`}
-        className={`inline-flex items-center justify-center gap-3 rounded-xl border-2 border-[#0F3D7A] bg-gradient-to-br from-[#2C5FA8] via-[#1f4787] to-[#0F3D7A] px-5 py-4 text-white font-display font-bold uppercase tracking-[0.25em] text-lg shadow-lg active:scale-[0.97] transition-transform w-full ${className}`}
+        className={`btn-blue-animated inline-flex items-center justify-center gap-3 rounded-xl border-2 border-[#0F3D7A] px-5 py-4 text-white font-display font-bold uppercase tracking-[0.25em] text-lg shadow-lg active:scale-[0.97] transition-transform w-full ${className}`}
       >
         <span aria-hidden>📖</span>
         <span>ESIDDUR</span>
@@ -1372,10 +1372,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                   href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
-                  style={{
-                    background: "linear-gradient(135deg, #2C5FA8 0%, #1f4787 50%, #0F3D7A 100%)",
-                  }}
+                  className="btn-blue-animated flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
                 >
                   Participer à la séouda
                 </a>
