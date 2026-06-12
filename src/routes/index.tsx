@@ -106,12 +106,13 @@ function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof us
 
 function DynamicBackground() {
   return (
-    <div aria-hidden="true" className="app-gradient-bg">
-      <div className="app-gradient-bg__layer app-gradient-bg__layer--base" />
-      <div className="app-gradient-bg__layer app-gradient-bg__layer--glow" />
-    </div>
+    <div
+      aria-hidden="true"
+      className="btn-blue-animated absolute inset-0 -z-10 pointer-events-none"
+    />
   );
 }
+
 
 
 
