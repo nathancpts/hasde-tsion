@@ -361,17 +361,18 @@
   }
 }
 .btn-blue-animated {
-  background-color: #1f4ea8;
+  background-color: #1a4690;
   background-image:
-    radial-gradient(ellipse 70% 60% at 20% 30%, rgba(58, 123, 213, 0.9), transparent 60%),
-    radial-gradient(ellipse 60% 70% at 80% 20%, rgba(10, 42, 107, 0.8), transparent 65%),
-    radial-gradient(ellipse 80% 60% at 50% 90%, rgba(15, 61, 122, 0.85), transparent 60%),
-    radial-gradient(ellipse 55% 65% at 10% 70%, rgba(44, 95, 168, 0.8), transparent 60%),
-    radial-gradient(ellipse 65% 55% at 90% 80%, rgba(24, 82, 165, 0.8), transparent 65%);
+    radial-gradient(ellipse 65% 55% at 20% 30%, rgba(96, 165, 250, 1), transparent 55%),
+    radial-gradient(ellipse 55% 65% at 80% 20%, rgba(5, 25, 75, 1), transparent 55%),
+    radial-gradient(ellipse 75% 55% at 50% 90%, rgba(10, 40, 100, 1), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 10% 70%, rgba(74, 144, 226, 0.95), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(20, 70, 150, 1), transparent 55%);
   background-size: 220% 220%, 240% 240%, 260% 240%, 220% 260%, 240% 220%;
   background-repeat: no-repeat;
   animation: blue-shift 10s ease-in-out infinite;
 }
+
 
 
 
