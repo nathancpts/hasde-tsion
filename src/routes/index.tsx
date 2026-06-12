@@ -928,12 +928,9 @@ function MobileGlassNav() {
 }
 
 
-function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
+function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, setDayOffset: _setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
-  const date = now
-    ? now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
-    : "";
 
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
@@ -973,288 +970,389 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     return t;
   });
 
+  // Day selector (Vendredi / Shabbat) drives the hero widget
+  const [selectedDay, setSelectedDay] = useState<"vendredi" | "shabbat">("vendredi");
+  // Section tab in white surface
+  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
+  const heroTime = selectedDay === "vendredi"
+    ? (chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "--:--")
+    : (chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "--:--");
+  const heroLabel = selectedDay === "vendredi" ? "Allumage des bougies" : "Sortie du Chabbat";
+  const heroDate = selectedDay === "vendredi" ? vDate : sDate;
+  const heroHeb = selectedDay === "vendredi" ? vHeb : sHeb;
+  const heroDaf = selectedDay === "vendredi" ? vDaf : sDaf;
+  const heroTeh = selectedDay === "vendredi" ? vTeh : sTeh;
+  const heroTimes = selectedDay === "vendredi" ? vTimes : sTimes;
+  const heroShema = selectedDay === "vendredi" ? vShema : sShema;
 
-  const MobileDay = ({
-    badge, badgeTone, title, subtitle, daf, tehilim, shema, times, extra,
-  }: {
-    badge: string; badgeTone: "blue" | "gold"; title: string; subtitle: string;
-    daf: string; tehilim: string; shema: string;
-    times: { label: string; value: string; tone?: "gold" | "red" }[];
-    extra?: React.ReactNode;
-  }) => {
-    const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
-    // Mobile: only essential times
-    const shownTimes = times;
-    const tehilimParts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
-    const tehilimDisplay = tehilimParts.length >= 2 ? [tehilimParts[0], tehilimParts[tehilimParts.length - 1]] : tehilimParts;
-    const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
-    return (
-      <article className="rounded-2xl border border-border bg-card p-5 space-y-4">
-        <div>
-          <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] ${badgeBg}`}>
-            {badge}
-          </span>
-          <h3 className="font-display text-2xl font-bold text-foreground mt-2 leading-tight">{title}</h3>
-          <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{subtitle}</p>
-        </div>
-
-        <div className="rounded-xl border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-4 px-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold mb-1">📖 Tehilim du jour</p>
-          <div className={`grid ${tehilimDisplay.length === 2 ? "grid-cols-2 gap-3" : "grid-cols-1"}`}>
-            {tehilimDisplay.map((v, i) => (
-              <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-4xl">{v}</p>
-            ))}
-          </div>
-        </div>
-
-        {shemaParts.length >= 2 && (
-          <div className="rounded-lg border border-border bg-muted/30 py-2 px-3 text-center">
-            <div className="grid grid-cols-2 gap-3">
-              {shemaParts.map((v, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-1">{i === 0 ? (badgeTone === "gold" ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
-                  <span className="font-display font-semibold text-foreground tabular-nums text-lg">{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="space-y-2">
-          {shownTimes.map((t) => {
-            const valueColor = t.tone === "gold" ? "text-primary" : t.tone === "red" ? "text-[var(--highlight)]" : "text-foreground";
-            const rowBg = t.tone === "gold" ? "bg-[var(--gold-soft)]" : t.tone === "red" ? "bg-[var(--red-soft)]" : "";
-            return (
-              <div key={t.label} className={`flex items-center justify-between gap-3 py-2 px-3 rounded-lg ${rowBg}`}>
-                <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium">{t.label}</span>
-                <span className={`font-display font-bold tabular-nums text-2xl ${valueColor}`}>{t.value}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        {extra}
-
-      </article>
-    );
-  };
-
+  // Tehilim split for stat display
+  const tehParts = heroTeh.split(/[·\-\/–]/).map((s) => s.trim()).filter(Boolean);
+  const tehShort = tehParts.length >= 2 ? `${tehParts[0]}–${tehParts[tehParts.length - 1]}` : heroTeh;
 
   return (
-    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full bg-transparent text-foreground overflow-x-hidden">
-      <DynamicBackground />
-      <div className="max-w-md mx-auto px-4 space-y-5" style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)", paddingBottom: "calc(env(safe-area-inset-bottom) + 6.5rem)" }}>
-        <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
-          <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto" />
-          <div className="text-right">
-            <div className="font-display text-3xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{time}</div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 mt-1 capitalize">{date}</p>
+    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-hidden" style={{ background: "#F2F4F8" }}>
+      {/* Blue gradient hero zone */}
+      <div
+        className="relative w-full"
+        style={{
+          background: "linear-gradient(180deg, #1f4ea8 0%, #2d6fc4 35%, #6ba3e0 75%, #cfe2f5 100%)",
+          paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
+        }}
+      >
+        <div className="max-w-md mx-auto px-5 pb-8">
+          {/* Header */}
+          <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
+            <img src={logo} alt="Hasdé Tsion" className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]" />
+            <div className="text-right">
+              <div className="font-display text-2xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{time}</div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/80 mt-1">בס״ד</p>
+            </div>
+          </header>
+
+          {/* Day strip */}
+          <div className="mt-6 flex items-end justify-center gap-6 text-white/70">
+            <button
+              onClick={() => setSelectedDay("vendredi")}
+              className={`flex flex-col items-center transition-all ${selectedDay === "vendredi" ? "text-white scale-110" : "text-white/50"}`}
+            >
+              <span className="text-[11px] uppercase tracking-[0.2em]">Ven</span>
+              <span className={`font-display ${selectedDay === "vendredi" ? "text-2xl font-bold" : "text-lg"}`}>
+                {vDate.match(/\d+/)?.[0] ?? ""}
+              </span>
+            </button>
+            <button
+              onClick={() => setSelectedDay("shabbat")}
+              className={`flex flex-col items-center transition-all ${selectedDay === "shabbat" ? "text-white scale-110" : "text-white/50"}`}
+            >
+              <span className="text-[11px] uppercase tracking-[0.2em]">Sam</span>
+              <span className={`font-display ${selectedDay === "shabbat" ? "text-2xl font-bold" : "text-lg"}`}>
+                {sDate.match(/\d+/)?.[0] ?? ""}
+              </span>
+            </button>
           </div>
-        </header>
 
-        <div
-          className="relative rounded-2xl p-5 text-center"
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(201,169,110,0.45)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.25)",
-          }}
-        >
-          <p className="text-[10px] uppercase tracking-[0.3em] font-semibold mb-2" style={{ color: "#C9A96E" }}>Parashat Hashavoua</p>
-          <h2 className="font-display text-3xl font-bold text-white leading-tight">{parashaFr}</h2>
-          {parashaHe && (
-            <p className="font-hebrew text-2xl leading-none mt-2" style={{ color: "#C9A96E" }} dir="rtl">{parashaHe}</p>
-          )}
-          <p className="font-hebrew text-xl text-white leading-none mt-3" dir="rtl">
-            שבת מברכים
-          </p>
-        </div>
+          {/* Pill tabs */}
+          <div className="mt-5 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setSelectedDay("vendredi")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                selectedDay === "vendredi"
+                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+                  : "text-white/80"
+              }`}
+            >
+              Vendredi
+            </button>
+            <button
+              onClick={() => setSelectedDay("shabbat")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                selectedDay === "shabbat"
+                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+                  : "text-white/80"
+              }`}
+            >
+              Chabbat
+            </button>
+          </div>
 
-        <div
-          className="relative rounded-2xl p-5 text-center"
-          style={{
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(201,169,110,0.5)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.25)",
-          }}
-        >
-          <p className="text-[10px] uppercase tracking-[0.3em] font-semibold mb-2" style={{ color: "#C9A96E" }}>
-            ✨ Invité d'honneur · Chabbat
-          </p>
-          <p className="font-display text-base font-semibold text-white leading-snug">
-            C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
-            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Arié Niselevitch</span>{" "}
-            parmi nous pour ce Chabbat.
-          </p>
-          <div className="mt-3 flex flex-col gap-1 text-xs">
-            <div className="flex items-center justify-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Officiant</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
+          {/* Hero number */}
+          <div className="mt-8 text-center">
+            <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+              {heroTime}
             </div>
-            <div className="flex items-center justify-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Cours</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Chaharit & Séouda Chlichit</span>
+            <p className="mt-1 text-[13px] text-white/90 font-medium">{heroLabel}</p>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+          </div>
+
+          {/* 3 stat widgets */}
+          <div className="mt-7 grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+              <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
+              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                {chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+              <p className="text-[10px] text-white/80 font-medium leading-tight">Sortie</p>
+              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                {chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+              <p className="text-[10px] text-white/80 font-medium leading-tight">Tehilim</p>
+              <p className="font-display text-base font-bold text-white tabular-nums mt-1 leading-tight">{tehShort}</p>
             </div>
           </div>
         </div>
+      </div>
 
-        <article className="rounded-2xl border border-border bg-card p-5 text-center">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-semibold">
-            Prochain Rosh Ḥodesh
-          </p>
-          <p className="font-display font-bold text-2xl text-foreground mt-1.5 leading-none">Tamouz</p>
-          <p className="text-sm text-muted-foreground leading-snug mt-2">
-            dim. 14 soir · lun. 15 – mar. 16 juin
-          </p>
-          <p className="font-hebrew text-sm text-foreground/80 mt-1.5" dir="rtl">
-            מולד : lun., ש 90 ד 46 ח 16
-          </p>
-        </article>
-
-        <div id="shabbat" className="scroll-mt-24 space-y-5">
-        <MobileDay
-          badge="Vendredi" badgeTone="blue"
-          title={vDate} subtitle={vHeb} daf={vDaf} tehilim={vTeh}
-          shema={vShema} times={vTimes}
-          extra={
-            <div className="rounded-lg border border-border bg-muted/40 p-3">
-              <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
-                27 Sivan 5786 · Yahrtzeit
-              </div>
-              <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
-                <div>Rabbi 'Hanina ben Tradyon</div>
-                <div>HaRav Morde'haï Sevitzky</div>
-                <div>HaRav Meir Eisenstadt</div>
-                <div>HaRav Ye'hi ben Yossef Kara</div>
-              </div>
-            </div>
-          }
-        />
-
-        <MobileDay
-          badge="Shabbat" badgeTone="gold"
-          title={sDate} subtitle={sHeb} daf={sDaf} tehilim={sTeh}
-          shema={sShema} times={sTimes}
-          extra={
-            <div className="rounded-lg border border-border bg-muted/40 p-3">
-              <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-1.5">
-                28 Sivan 5786 · Yahrtzeit
-              </div>
-              <div className="text-xs text-accent font-semibold leading-snug text-center space-y-0.5">
-                <div>HaRav Israel Ze'ev Gustman</div>
-                <div>HaRav Avraham Adadi</div>
-                <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
-              </div>
-            </div>
-          }
-        />
-        </div>
-
-        <article className="rounded-2xl border border-border bg-card p-5 android-scroll-fix">
-          <h3 className="font-display text-xl font-bold text-foreground mb-3">La Séouda est offerte par :</h3>
-          {DONATIONS_REPAS.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
-          ) : (
-            <ul className="divide-y divide-border/60">
-              {DONATIONS_REPAS.map((d, i) => (
-                <li key={i} className="py-2.5">
-                  <p className="font-display font-bold text-base text-foreground leading-tight">{d.donateur}</p>
-                  {d.occasion && (
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-primary font-semibold mt-0.5">{d.occasion}</p>
-                  )}
-                  {d.dedicace && (
-                    <p className="font-display italic text-sm text-muted-foreground leading-tight mt-0.5">{d.dedicace}</p>
-                  )}
-                  {d.dedicaceHe && (
-                    <p className="font-hebrew text-base text-primary leading-tight mt-2" dir="rtl">{d.dedicaceHe}</p>
-                  )}
-                  {d.details?.map((line, index) => (
-                    <p key={index} className="text-sm text-foreground/80 leading-relaxed mt-2">{line}</p>
-                  ))}
-                </li>
-              ))}
-            </ul>
-          )}
-        </article>
-
-        <div className="grid grid-cols-2 gap-3">
-          <a
-            href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl bg-white/95 backdrop-blur px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-[#0f2a6b] ring-1 ring-white/40 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.5)] active:scale-[0.97] transition-all text-center leading-tight"
-          >
-            <span className="text-base">♡</span>
-            <span>Faire un don</span>
-          </a>
-          <a
-            href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex min-h-[60px] items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold tracking-[0.08em] text-white ring-1 ring-white/30 shadow-[0_10px_30px_-10px_rgba(184,138,48,0.7)] active:scale-[0.97] transition-all text-center leading-tight"
-            style={{
-              background:
-                "linear-gradient(135deg, #d4a84a 0%, #b88a30 50%, #9a6f22 100%)",
-            }}
-          >
-            <span className="relative z-10">Participer à la séouda</span>
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-60"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%)",
-              }}
-            />
-          </a>
-        </div>
-
-        <article id="etude" className="rounded-2xl border border-border bg-card p-5 android-scroll-fix scroll-mt-24">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
-            {PARASHA_NOM_HE && (
-              <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
-            )}
+      {/* White surface */}
+      <div
+        className="relative -mt-6 rounded-t-[28px] bg-[#F2F4F8] pt-6 pb-32 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 7rem)" }}
+      >
+        <div className="max-w-md mx-auto px-4 space-y-4">
+          {/* Section heading + tabs */}
+          <div className="flex items-center justify-between px-1">
+            <h2 className="font-display text-2xl font-bold text-foreground">Cette semaine</h2>
           </div>
-          {PARASHA_INTRO && (
-            <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
-              {PARASHA_INTRO}
-            </p>
+
+          <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+            {([
+              { id: "horaires", label: "Horaires" },
+              { id: "etude", label: "Étude" },
+              { id: "communaute", label: "Communauté" },
+            ] as const).map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setSectionTab(t.id)}
+                className={`flex-1 py-2 rounded-full text-[12px] font-semibold transition-all ${
+                  sectionTab === t.id
+                    ? "bg-[#1f4ea8] text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
+                    : "text-foreground/60"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {sectionTab === "horaires" && (
+            <div className="space-y-3">
+              {/* Parasha widget — full width */}
+              <article
+                className="rounded-3xl p-5 text-center"
+                style={{
+                  background: "linear-gradient(135deg, #1f4ea8 0%, #2d6fc4 100%)",
+                  boxShadow: "0 8px 24px rgba(31,78,168,0.25)",
+                }}
+              >
+                <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 mb-1">Parashat Hashavoua</p>
+                <h3 className="font-display text-2xl font-bold text-white leading-tight">{parashaFr}</h3>
+                {parashaHe && (
+                  <p className="font-hebrew text-xl leading-none mt-2 text-white/90" dir="rtl">{parashaHe}</p>
+                )}
+                <p className="font-hebrew text-base text-white/80 mt-2" dir="rtl">שבת מברכים</p>
+              </article>
+
+              {/* 2-col: Daf | Tehilim */}
+              <div className="grid grid-cols-2 gap-3">
+                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">📚 Daf</p>
+                  <p className="font-display text-base font-bold text-foreground mt-1.5 leading-tight">{heroDaf}</p>
+                </article>
+                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">📖 Tehilim</p>
+                  <p className="font-display text-2xl font-bold text-primary tabular-nums mt-1.5">{tehShort}</p>
+                  {vOmer != null && selectedDay === "vendredi" && (
+                    <p className="text-[10px] text-muted-foreground mt-1">Omer · {vOmer}</p>
+                  )}
+                </article>
+              </div>
+
+              {/* Shema / Tefilin widget */}
+              {heroShema.includes("|") && (
+                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-foreground/60 mb-2">Limites du matin</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {heroShema.split("|").map((v, i) => (
+                      <div key={i} className="text-center">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                          {i === 0 ? "Tefilin" : "Shema GR\"A"}
+                        </p>
+                        <p className="font-display text-xl font-bold text-foreground tabular-nums mt-1">{v.trim()}</p>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              )}
+
+              {/* Full prayer times list */}
+              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-display text-base font-bold text-foreground">
+                    Horaires · {selectedDay === "vendredi" ? "Vendredi" : "Chabbat"}
+                  </h3>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{heroDate.split(" ").slice(1, 3).join(" ")}</span>
+                </div>
+                <div className="space-y-1.5">
+                  {heroTimes.map((t) => {
+                    const isGold = t.tone === "gold";
+                    const isRed = t.tone === "red";
+                    return (
+                      <div
+                        key={t.label}
+                        className={`flex items-center justify-between gap-3 py-2 px-3 rounded-xl ${
+                          isGold ? "bg-[var(--gold-soft)]" : isRed ? "bg-[var(--red-soft)]" : "bg-[#F8FAFC]"
+                        }`}
+                      >
+                        <span className="text-[12px] uppercase tracking-[0.12em] text-foreground/70 font-medium">{t.label}</span>
+                        <span className={`font-display font-bold tabular-nums text-xl ${
+                          isGold ? "text-primary" : isRed ? "text-[var(--highlight)]" : "text-foreground"
+                        }`}>
+                          {t.value}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </article>
+
+              {/* 2-col: Rosh Hodesh | Yahrtzeit */}
+              <div className="grid grid-cols-2 gap-3">
+                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
+                  <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">Tamouz</p>
+                  <p className="text-[11px] text-muted-foreground mt-1 leading-snug">dim. 14 soir · lun. 15 – mar. 16 juin</p>
+                </article>
+                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
+                  {selectedDay === "vendredi" ? (
+                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
+                      <div>R. 'Hanina ben Tradyon</div>
+                      <div>H. Morde'haï Sevitzky</div>
+                      <div>H. Meir Eisenstadt</div>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
+                      <div>H. Israel Ze'ev Gustman</div>
+                      <div>H. Avraham Adadi</div>
+                      <div>H. Chimchon A. Polansky</div>
+                    </div>
+                  )}
+                </article>
+              </div>
+            </div>
           )}
-          <div className="space-y-3">
-            {PARASHA_BLOCS.map((bloc, i) => (
-              <section key={i} className="rounded-xl border border-border/60 bg-muted/30 px-3 py-2.5">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
-                  {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+
+          {sectionTab === "etude" && (
+            <article id="etude" className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] scroll-mt-24">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
+                {PARASHA_NOM_HE && (
+                  <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
+                )}
+              </div>
+              {PARASHA_INTRO && (
+                <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
+                  {PARASHA_INTRO}
                 </p>
-                {bloc.paragraphes?.map((p, j) => (
-                  <p key={j} className="text-sm text-foreground leading-snug mb-1.5 last:mb-0">{p}</p>
+              )}
+              <div className="space-y-3">
+                {PARASHA_BLOCS.map((bloc, i) => (
+                  <section key={i} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
+                      {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+                    </p>
+                    {bloc.paragraphes?.map((p, j) => (
+                      <p key={j} className="text-sm text-foreground leading-snug mb-1.5 last:mb-0">{p}</p>
+                    ))}
+                    {bloc.puces && (
+                      <ul className="list-disc pl-4 space-y-1 mt-1">
+                        {bloc.puces.map((p, j) => (
+                          <li key={j} className="text-sm text-foreground leading-snug">{p}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
                 ))}
-                {bloc.puces && (
-                  <ul className="list-disc pl-4 space-y-1 mt-1">
-                    {bloc.puces.map((p, j) => (
-                      <li key={j} className="text-sm text-foreground leading-snug">{p}</li>
+              </div>
+
+              <div id="siddur" className="mt-4 scroll-mt-24">
+                <SidourLink className="text-sm py-3" />
+              </div>
+            </article>
+          )}
+
+          {sectionTab === "communaute" && (
+            <div className="space-y-3">
+              {/* Invité d'honneur */}
+              <article
+                className="rounded-2xl p-5 text-center"
+                style={{
+                  background: "linear-gradient(135deg, #8A6A1F 0%, #b88a30 100%)",
+                  boxShadow: "0 8px 20px rgba(138,106,31,0.25)",
+                }}
+              >
+                <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/85 mb-2">
+                  ✨ Invité d'honneur
+                </p>
+                <p className="font-display text-base font-semibold text-white leading-snug">
+                  Bienvenue au{" "}
+                  <span className="font-bold text-[#fff3d6]">Rav Arié Niselevitch</span>{" "}
+                  pour ce Chabbat.
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+                  <div className="rounded-lg bg-white/15 px-2 py-1.5">
+                    <p className="text-white/70 uppercase tracking-wider text-[9px]">Officiant</p>
+                    <p className="font-semibold text-white">Aharon Djian</p>
+                  </div>
+                  <div className="rounded-lg bg-white/15 px-2 py-1.5">
+                    <p className="text-white/70 uppercase tracking-wider text-[9px]">Cours</p>
+                    <p className="font-semibold text-white leading-tight">Chaharit & Séouda Chlichit</p>
+                  </div>
+                </div>
+              </article>
+
+              {/* Séouda donateurs */}
+              <article className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] android-scroll-fix">
+                <h3 className="font-display text-lg font-bold text-foreground mb-3">La Séouda est offerte par</h3>
+                {DONATIONS_REPAS.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {DONATIONS_REPAS.map((d, i) => (
+                      <li key={i} className="rounded-xl bg-[#F8FAFC] p-3">
+                        <p className="font-display font-bold text-base text-foreground leading-tight">{d.donateur}</p>
+                        {d.occasion && (
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-primary font-semibold mt-1">{d.occasion}</p>
+                        )}
+                        {d.dedicace && (
+                          <p className="font-display italic text-sm text-muted-foreground leading-tight mt-1">{d.dedicace}</p>
+                        )}
+                        {d.dedicaceHe && (
+                          <p className="font-hebrew text-base text-primary leading-tight mt-2" dir="rtl">{d.dedicaceHe}</p>
+                        )}
+                        {d.details?.map((line, index) => (
+                          <p key={index} className="text-sm text-foreground/80 leading-relaxed mt-2">{line}</p>
+                        ))}
+                      </li>
                     ))}
                   </ul>
                 )}
-              </section>
-            ))}
-          </div>
-        </article>
+              </article>
 
-        <div id="siddur" className="scroll-mt-24">
-          <SidourLink className="text-sm py-3" />
+              {/* Donation CTAs */}
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3.5 text-[13px] font-display font-semibold text-[#1f4ea8] ring-1 ring-[#1f4ea8]/20 shadow-[0_4px_12px_rgba(31,78,168,0.1)] active:scale-[0.97] transition-all"
+                >
+                  <span className="text-base">♡</span>
+                  <span>Faire un don</span>
+                </a>
+                <a
+                  href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(184,138,48,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
+                  style={{
+                    background: "linear-gradient(135deg, #d4a84a 0%, #b88a30 50%, #9a6f22 100%)",
+                  }}
+                >
+                  Participer à la séouda
+                </a>
+              </div>
+            </div>
+          )}
+
+          <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4">
+            בס״ד · Hasdé Tsion
+          </footer>
         </div>
-
-        
-
-
-
-
-        <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-2 pb-4">
-          בס״ד · Hasdé Tsion
-        </footer>
       </div>
     </main>
   );
