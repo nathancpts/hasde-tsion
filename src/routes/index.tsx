@@ -1034,10 +1034,25 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
   // Day selector (Vendredi / Shabbat) drives the hero widget
   const [selectedDay, setSelectedDay] = useState<"vendredi" | "shabbat">("vendredi");
   useEffect(() => {
-    const dow = new Date().getDay();
-    if (dow === 6) setSelectedDay("shabbat");
-    else setSelectedDay("vendredi");
-  }, []);
+    const now = new Date();
+    const dow = now.getDay();
+    const candle = chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? null;
+    const havdal = chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? null;
+    const toMin = (hm: string) => {
+      const [h, m] = hm.split(":").map(Number);
+      return h * 60 + m;
+    };
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    if (dow === 6) {
+      if (havdal && nowMin >= toMin(havdal)) setSelectedDay("vendredi");
+      else setSelectedDay("shabbat");
+    } else if (dow === 5) {
+      if (candle && nowMin >= toMin(candle)) setSelectedDay("shabbat");
+      else setSelectedDay("vendredi");
+    } else {
+      setSelectedDay("vendredi");
+    }
+  }, [chabad?.candle, chabad?.havdalah, vTimes, sTimes]);
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
