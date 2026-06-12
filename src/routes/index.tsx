@@ -1025,7 +1025,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
       <div
         className="btn-blue-animated relative w-full overflow-hidden"
         style={{
-          paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
+          paddingTop: "calc(env(safe-area-inset-top) + 0.25rem)",
         }}
       >
         {/* Fondu doux depuis la couleur solide de la status bar vers le dégradé animé */}
@@ -1052,7 +1052,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           </header>
 
           {/* Day strip */}
-          <div className="mt-6 flex items-end justify-center gap-6 text-white/70">
+          <div className="mt-2 flex items-end justify-center gap-6 text-white/70">
             <button
               onClick={() => setSelectedDay("vendredi")}
               className={`flex flex-col items-center transition-all ${selectedDay === "vendredi" ? "text-white scale-110" : "text-white/50"}`}
