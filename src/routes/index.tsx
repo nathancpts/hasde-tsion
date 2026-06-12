@@ -1028,15 +1028,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
         }}
       >
-        {/* Fondu doux derrière la status bar, parfaitement raccordé au hero */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0"
-          style={{
-            height: "calc(env(safe-area-inset-top) + 8px)",
-            background: "#1f4ea8",
-          }}
-        />
+        {/* (le body partage le même dégradé animé : aucun voile nécessaire) */}
         {/* Fondu vers le bas pour raccord avec la zone claire */}
         <div
           aria-hidden
