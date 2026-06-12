@@ -1156,9 +1156,8 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             <div className="space-y-3">
               {/* Parasha widget — full width */}
               <article
-                className="rounded-3xl p-5 text-center"
+                className="btn-blue-animated rounded-3xl p-5 text-center"
                 style={{
-                  background: "linear-gradient(135deg, #1f4ea8 0%, #2d6fc4 100%)",
                   boxShadow: "0 8px 24px rgba(31,78,168,0.25)",
                 }}
               >
