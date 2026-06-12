@@ -81,19 +81,13 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const date = ymd(now);
 
-  const isNeuilly = Math.abs(LOC.lat - DEFAULT_LOC.lat) < 0.01 && Math.abs(LOC.lon - DEFAULT_LOC.lon) < 0.01;
-  const locParams = isNeuilly
-    ? `geonameid=2990919`
-    : `latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}`;
-
   const [zRes, convRes, calRes] = await Promise.all([
-    fetch(`https://www.hebcal.com/zmanim?cfg=json&${locParams}&sec=1&date=${date}`).then(r => r.json()),
+    fetch(`https://www.hebcal.com/zmanim?cfg=json&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&date=${date}`).then(r => r.json()),
     fetch(`https://www.hebcal.com/converter?cfg=json&date=${date}&g2h=1&strict=1`).then(r => r.json()),
-    fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&mf=on&ss=on&myomi=on&yyomi=on&F=on&${locParams}&start=${date}&end=${date}`).then(r => r.json()),
+    fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&mf=on&ss=on&myomi=on&yyomi=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&start=${date}&end=${date}`).then(r => r.json()),
   ]) as [{ times: Record<string, string | null> }, { hebrew: string; hy: number; hm: string }, HebcalResp];
 
   const t = zRes.times ?? {};
-  const fmt = (iso?: string | null) => iso ? timeFR(iso, LOC.tzid) : "—";
 
   // Heures saisonnières : 1/12 de la journée
   const graSpan = diffMin(t.sunrise, t.sunset);
@@ -119,22 +113,8 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sheqyia",             value: ov.sheqyia },
     { label: "Sortie des étoiles",  value: ov.tzeit },
     { label: "Nuit de R. Tam",      value: ov.rTam },
-  ] : [
-    { label: "Alot haShahar",       value: fmt(t.alotHaShachar) },
-    { label: now.getDay() === 6 ? "Misheyakir" : "Misheyakir / Tefilin", value: fmt(t.misheyakir) },
-    { label: "Hanetz haHama",       value: fmt(t.sunrise) },
-    { label: "Limite Shema M\"A",   value: fmt(t.sofZmanShmaMGA) },
-    { label: "Limite Shema GR\"A",  value: fmt(t.sofZmanShma) },
-    { label: "Limite Tefila M\"A",  value: fmt(t.sofZmanTfillaMGA) },
-    { label: "Limite Tefila GR\"A", value: fmt(t.sofZmanTfilla) },
-    { label: "Hatzot",              value: fmt(t.chatzot) },
-    { label: "Minha Guedola",       value: fmt(t.minchaGedola) },
-    { label: "Minha Ketana",        value: fmt(t.minchaKetana) },
-    { label: "Plag haMinha",        value: fmt(t.plagHaMincha) },
-    { label: "Sheqyia",             value: fmt(t.sunset) },
-    { label: "Sortie des étoiles",  value: fmt(t.tzeit7083deg ?? t.tzeit42min) },
-    { label: "Nuit de R. Tam",      value: fmt(t.tzeit72min) },
-  ];
+  ] : [];
+  void t; // horaires API désactivés tant qu'aucune valeur manuelle n'est fournie
 
   // Mishna Yomi & Yerushalmi Yomi du jour
   const calItems = calRes.items ?? [];
@@ -214,12 +194,8 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
 
-  // Hebcal calendar — Neuilly-sur-Seine (geonameid=2990919), allumage 18 min avant coucher, Rabbenou Tam (M=on)
-  const isNeuilly = Math.abs(LOC.lat - DEFAULT_LOC.lat) < 0.01 && Math.abs(LOC.lon - DEFAULT_LOC.lon) < 0.01;
-  const locParams = isNeuilly
-    ? `geonameid=2990919`
-    : `latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}`;
-  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&${locParams}&b=18&M=on&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
+  // Hebcal calendar — localisation dynamique (par défaut : 50 Rue du Bois de Boulogne, Neuilly)
+  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
   const calRes = await fetch(calUrl);
   if (!calRes.ok) throw new Error("Hebcal calendar fetch failed");
   const cal = (await calRes.json()) as HebcalResp;
