@@ -290,20 +290,21 @@ function writeCache<T>(key: string, data: T) {
 }
 
 function useChabad() {
-  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(() => readCache<ChabadWeek[]>("ht.chabad.v1", 7 * 24 * 3600 * 1000));
+  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
   useEffect(() => {
     let cancelled = false;
+    const cached = readCache<ChabadWeek[]>("ht.chabad.v1", 7 * 24 * 3600 * 1000);
+    if (cached) setWeeks(cached);
     const load = () => {
       fetchChabadShabbat()
         .then((d) => { if (!cancelled) { setWeeks(d); writeCache("ht.chabad.v1", d); } })
         .catch((e) => console.warn("Chabad fetch failed", e));
     };
     load();
-    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    const id = setInterval(load, 60 * 60 * 1000);
     return () => { cancelled = true; clearInterval(id); };
   }, []);
 
-  // Pick the upcoming (or current) Shabbat
   const today = new Date().toISOString().slice(0, 10);
   const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
   return current;
