@@ -1224,10 +1224,12 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 </article>
               </div>
 
-              {/* Shema / Tefilin widget — masqué le vendredi */}
-              {heroShema.includes("|") && selectedDay !== "vendredi" && (
+              {/* Shema / Tefilin widget */}
+              {heroShema.includes("|") && (
                 <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-foreground/60 mb-2">Limites du matin</p>
+                  {selectedDay !== "vendredi" && (
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-foreground/60 mb-2">Limites du matin</p>
+                  )}
                   <div className="grid grid-cols-2 gap-3">
                     {heroShema.split("|").map((v, i) => (
                       <div key={i} className="text-center">
