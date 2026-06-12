@@ -255,16 +255,18 @@ const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
 
 function useLiveWeek(loc: StoredLoc) {
   const cacheKey = `ht.liveWeek.v1.${loc ? `${loc.lat.toFixed(2)},${loc.lon.toFixed(2)}` : "default"}`;
-  const [live, setLive] = useState<LiveWeek | null>(() => readCache<LiveWeek>(cacheKey, 6 * 3600 * 1000));
+  const [live, setLive] = useState<LiveWeek | null>(null);
   useEffect(() => {
     let cancelled = false;
+    const cached = readCache<LiveWeek>(cacheKey, 6 * 3600 * 1000);
+    if (cached) setLive(cached);
     const load = () => {
       fetchLiveWeek(new Date(), loc ? { lat: loc.lat, lon: loc.lon } : undefined)
         .then((d) => { if (!cancelled) { setLive(d); writeCache(cacheKey, d); } })
         .catch((e) => console.warn("Hebcal fetch failed", e));
     };
     load();
-    const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
+    const id = setInterval(load, 15 * 60 * 1000);
     return () => { cancelled = true; clearInterval(id); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loc]);
@@ -288,20 +290,21 @@ function writeCache<T>(key: string, data: T) {
 }
 
 function useChabad() {
-  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(() => readCache<ChabadWeek[]>("ht.chabad.v1", 7 * 24 * 3600 * 1000));
+  const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
   useEffect(() => {
     let cancelled = false;
+    const cached = readCache<ChabadWeek[]>("ht.chabad.v1", 7 * 24 * 3600 * 1000);
+    if (cached) setWeeks(cached);
     const load = () => {
       fetchChabadShabbat()
         .then((d) => { if (!cancelled) { setWeeks(d); writeCache("ht.chabad.v1", d); } })
         .catch((e) => console.warn("Chabad fetch failed", e));
     };
     load();
-    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    const id = setInterval(load, 60 * 60 * 1000);
     return () => { cancelled = true; clearInterval(id); };
   }, []);
 
-  // Pick the upcoming (or current) Shabbat
   const today = new Date().toISOString().slice(0, 10);
   const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
   return current;
@@ -338,11 +341,11 @@ function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } 
 
 function useShabbatZmanim(loc: StoredLoc) {
   const cacheKey = "ht.shabbatZ.v1";
-  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(
-    () => readCache<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(cacheKey, 24 * 3600 * 1000) ?? { vendredi: null, samedi: null }
-  );
+  const [data, setData] = useState<{ vendredi: Zmanim | null; samedi: Zmanim | null }>({ vendredi: null, samedi: null });
   useEffect(() => {
     let cancelled = false;
+    const cached = readCache<{ vendredi: Zmanim | null; samedi: Zmanim | null }>(cacheKey, 24 * 3600 * 1000);
+    if (cached) setData(cached);
     const load = async () => {
       const { friday, saturday } = nextFridaySaturday();
       const geo = loc ? { lat: loc.lat, lon: loc.lon } : undefined;
