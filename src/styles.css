@@ -27,9 +27,9 @@
   --color-red-soft: var(--red-soft);
   --color-green-live: var(--green-live);
   --color-border: var(--border);
-  --font-display: "Cormorant", serif;
+  --font-display: "Gotham", "Montserrat", sans-serif;
   --font-hebrew: "Noto Serif Hebrew", serif;
-  --font-sans: "Outfit", sans-serif;
+  --font-sans: "Gotham", "Montserrat", sans-serif;
 }
 
 :root {
