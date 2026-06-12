@@ -1021,11 +1021,10 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-hidden" style={{ background: "#F2F4F8" }}>
-      {/* Blue gradient hero zone */}
+      {/* Blue gradient hero zone — animated */}
       <div
-        className="relative w-full"
+        className="btn-blue-animated relative w-full overflow-hidden"
         style={{
-          background: "linear-gradient(180deg, #1f4ea8 0%, #2d6fc4 35%, #6ba3e0 75%, #cfe2f5 100%)",
           paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
         }}
       >
@@ -1036,6 +1035,14 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
           style={{
             height: "calc(env(safe-area-inset-top) + 8px)",
             background: "#1f4ea8",
+          }}
+        />
+        {/* Fondu vers le bas pour raccord avec la zone claire */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
+          style={{
+            background: "linear-gradient(180deg, rgba(207,226,245,0) 0%, rgba(207,226,245,0.55) 60%, rgba(242,244,248,0.95) 100%)",
           }}
         />
         <div className="max-w-md mx-auto px-5 pb-8">
