@@ -1038,6 +1038,11 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
   // Day selector (Vendredi / Shabbat) drives the hero widget
   const [selectedDay, setSelectedDay] = useState<"vendredi" | "shabbat">("vendredi");
+  useEffect(() => {
+    const dow = new Date().getDay();
+    if (dow === 6) setSelectedDay("shabbat");
+    else setSelectedDay("vendredi");
+  }, []);
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
