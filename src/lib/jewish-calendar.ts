@@ -194,8 +194,12 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
 
-  // Hebcal calendar — localisation dynamique (par défaut : 50 Rue du Bois de Boulogne, Neuilly)
-  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
+  // Hebcal calendar — Neuilly-sur-Seine (geonameid=2990919), allumage 18 min avant coucher, Rabbenou Tam (M=on)
+  const isNeuilly = Math.abs(LOC.lat - DEFAULT_LOC.lat) < 0.01 && Math.abs(LOC.lon - DEFAULT_LOC.lon) < 0.01;
+  const locParams = isNeuilly
+    ? `geonameid=2990919`
+    : `latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}`;
+  const calUrl = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&c=on&${locParams}&b=18&M=on&m=50&F=on&o=on&i=off&start=${start}&end=${end}`;
   const calRes = await fetch(calUrl);
   if (!calRes.ok) throw new Error("Hebcal calendar fetch failed");
   const cal = (await calRes.json()) as HebcalResp;
