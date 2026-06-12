@@ -1143,7 +1143,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 onClick={() => setSectionTab(t.id)}
                 className={`flex-1 py-2 rounded-full text-[12px] font-semibold transition-all ${
                   sectionTab === t.id
-                    ? "bg-[#1f4ea8] text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
+                    ? "btn-blue-animated text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
                     : "text-foreground/60"
                 }`}
               >
@@ -1156,9 +1156,8 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             <div className="space-y-3">
               {/* Parasha widget — full width */}
               <article
-                className="rounded-3xl p-5 text-center"
+                className="btn-blue-animated rounded-3xl p-5 text-center"
                 style={{
-                  background: "linear-gradient(135deg, #1f4ea8 0%, #2d6fc4 100%)",
                   boxShadow: "0 8px 24px rgba(31,78,168,0.25)",
                 }}
               >
