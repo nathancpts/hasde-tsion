@@ -1002,12 +1002,8 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
       >
         <div className="max-w-md mx-auto px-5 pb-8">
           {/* Header */}
-          <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
-            <img src={logo} alt="Hasdé Tsion" className="h-20 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]" />
-            <div className="text-right">
-              <div className="font-display text-2xl font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{time}</div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/80 mt-1">בס״ד</p>
-            </div>
+          <header id="accueil" className="flex items-center justify-end gap-3 scroll-mt-24">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
           {/* Day strip */}
