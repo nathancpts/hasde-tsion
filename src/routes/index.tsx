@@ -1297,28 +1297,31 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
               {/* 2-col: Rosh Hodesh | Yahrtzeit */}
               <div className="grid grid-cols-2 gap-3">
-                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
-                  <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">Tamouz</p>
-                  <p className="text-[11px] text-muted-foreground mt-1 leading-snug">dim. 14 soir · lun. 15 – mar. 16 juin</p>
-                </article>
-                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
-                  {selectedDay === "vendredi" ? (
-                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
-                      <div>R. 'Hanina ben Tradyon</div>
-                      <div>H. Morde'haï Sevitzky</div>
-                      <div>H. Meir Eisenstadt</div>
-                    </div>
-                  ) : (
-                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
-                      <div>H. Israel Ze'ev Gustman</div>
-                      <div>H. Avraham Adadi</div>
-                      <div>H. Chimchon A. Polansky</div>
-                    </div>
-                  )}
-                </article>
+                {live?.roshHodesh ? (
+                  <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
+                    <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">{live.roshHodesh.nom}</p>
+                    <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{live.roshHodesh.dateLabel}</p>
+                  </article>
+                ) : <div />}
+                {(() => {
+                  const dayData = selectedDay === "vendredi" ? live?.vendredi : live?.samedi;
+                  const names = dayData?.yahrtzeits ?? [];
+                  if (names.length === 0) return <div />;
+                  return (
+                    <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                      <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
+                      <p className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
+                        {dayData!.hd} {frenchHebMonth(dayData!.hm)}
+                      </p>
+                      <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
+                        {names.map((n, i) => <div key={i}>{n}</div>)}
+                      </div>
+                    </article>
+                  );
+                })()}
               </div>
+
             </div>
           )}
 
