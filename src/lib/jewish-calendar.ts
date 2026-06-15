@@ -257,6 +257,32 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       };
     });
 
+  // ===== Rosh Ḥodesh à venir =====
+  const todayDateStr = ymd(now);
+  const rhItems = items
+    .filter(it => it.category === "roshchodesh" && it.date >= todayDateStr)
+    .slice(0, 2);
+  let roshHodesh: LiveWeek["roshHodesh"] = null;
+  if (rhItems.length > 0) {
+    // ex. "Rosh Chodesh Tamuz"
+    const nameRaw = rhItems[0].title.replace(/^Rosh Chodesh\s+/i, "").trim();
+    const nom = frenchHebMonth(nameRaw);
+    const firstDate = new Date(rhItems[0].date + "T00:00:00");
+    const lastDate = new Date(rhItems[rhItems.length - 1].date + "T00:00:00");
+    const evening = new Date(firstDate);
+    evening.setDate(evening.getDate() - 1);
+    const fmtDayMonth = (d: Date) =>
+      d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }).replace(/\.$/, "");
+    const fmtDay = (d: Date) =>
+      d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" });
+    const dateLabel = rhItems.length === 2
+      ? `${fmtDay(evening)} soir · ${fmtDay(firstDate)} – ${fmtDayMonth(lastDate)}`
+      : `${fmtDay(evening)} soir · ${fmtDayMonth(firstDate)}`;
+    const moladItem = items.find(it => it.category === "molad");
+    const moladHe = moladItem?.title ? `Molad : ${moladItem.title.replace(/^Molad\s+\S+:\s*/i, "")}` : undefined;
+    roshHodesh = { nom, dateLabel, moladHe };
+  }
+
   return {
     parasha: { fr: parashaFr, he: parashaHe },
     vendredi: {
@@ -266,6 +292,9 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
       candleLighting: getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
+      hd: convFri.hd,
+      hm: convFri.hm,
+      yahrtzeits: getYahrtzeits(convFri.hd, convFri.hm),
     },
     samedi: {
       date: frLong(saturday),
@@ -273,9 +302,14 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
       havdalah: getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
+      hd: convSat.hd,
+      hm: convSat.hm,
+      yahrtzeits: getYahrtzeits(convSat.hd, convSat.hm),
     },
+    roshHodesh,
     events,
     fetchedAt: new Date().toISOString(),
   };
 }
+
 
