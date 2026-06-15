@@ -642,8 +642,10 @@ function DayCard({
   );
 }
 
-function DonationsCard() {
+function DonationsCard({ live }: { live?: LiveWeek | null }) {
   const donations = DONATIONS_REPAS;
+  const rh = live?.roshHodesh ?? null;
+
   return (
 
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
