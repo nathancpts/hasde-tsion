@@ -29,15 +29,33 @@ export const PARASHA_INTRO = "";
 export const PARASHA_BLOCS: ParashaBloc[] = _current.blocs;
 
 
-export const DONATIONS_REPAS: Donation[] = [
+// Date (lundi) de la semaine pour laquelle ces donateurs sont valables.
+// Format YYYY-MM-DD. Dès le lundi suivant, la liste se vide automatiquement.
+const DONATIONS_WEEK_MONDAY = "2026-06-15";
+
+const _DONATIONS_RAW: Donation[] = [
   {
     donateur: "Hazak aux Familles",
-    occasion: "Qui prennent sur elles la Parachat Chela'h Lekha ✨",
+    occasion: `Qui prennent sur elles la Parachat ${_current.nom} ✨`,
     details: [
       "Meimoun Mike, Sfedj Michael, Ghrenassia Philipe, Mimouni Bryan, Niddam Raphael, Zarhi Rudy, Danan Marvin, Elgrably Jacob, Niddam Avram",
     ],
   },
 ];
+
+function currentMondayISO(now = new Date()): string {
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const day = d.getDay(); // 0 dim … 6 sam
+  const diff = (day + 6) % 7; // jours depuis lundi
+  d.setDate(d.getDate() - diff);
+  return d.toISOString().slice(0, 10);
+}
+
+// Vide la liste chaque lundi : si la semaine en cours est postérieure
+// à DONATIONS_WEEK_MONDAY, on renvoie un tableau vide.
+export const DONATIONS_REPAS: Donation[] =
+  currentMondayISO() > DONATIONS_WEEK_MONDAY ? [] : _DONATIONS_RAW;
+
 
 
 
