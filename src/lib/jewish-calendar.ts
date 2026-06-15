@@ -35,14 +35,22 @@ export type LiveWeek = {
   vendredi: {
     date: string; heb: string; daf: string; omer: number | null;
     tehilim: string; candleLighting: string | null;
+    hd: number; hm: string; yahrtzeits: string[];
   };
   samedi: {
     date: string; heb: string; daf: string; tehilim: string;
     havdalah: string | null;
+    hd: number; hm: string; yahrtzeits: string[];
   };
+  roshHodesh: {
+    nom: string;            // ex: "Tamouz"
+    dateLabel: string;      // ex: "dim. 14 soir · lun. 15 – mar. 16 juin"
+    moladHe?: string;       // ex: "מולד : lun., ש 90 ד 46 ח 16"
+  } | null;
   events: { date: string; title: string; time?: string; tone?: "gold" | "red" }[];
   fetchedAt: string;
 };
+
 
 // Localisation : 50 Rue du Bois de Boulogne, 92200 Neuilly-sur-Seine
 const DEFAULT_LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
