@@ -100,7 +100,7 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   const times: Zman[] = ov ? [
     { label: "Hatzot Laïla",        value: ov.hatzotLaila },
     { label: "Alot haShahar",       value: ov.alotHaShahar },
-    { label: now.getDay() === 6 ? "Misheyakir" : "Misheyakir / Tefilin", value: ov.misheyakir },
+    { label: "Misheyakir / Tefilin", value: ov.misheyakir },
     { label: "Hanetz haHama",       value: ov.hanetz },
     { label: "Limite Shema M\"A",   value: ov.shemaMA },
     { label: "Limite Shema GR\"A",  value: ov.shemaGRA },
