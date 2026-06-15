@@ -1196,7 +1196,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
           <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
             {([
-              { id: "horaires", label: "Horaires" },
+              { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
@@ -1323,50 +1323,6 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 })()}
               </div>
 
-            </div>
-          )}
-
-          {sectionTab === "etude" && (
-            <article id="etude" className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] scroll-mt-24">
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
-                {PARASHA_NOM_HE && (
-                  <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
-                )}
-              </div>
-              {PARASHA_INTRO && (
-                <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
-                  {PARASHA_INTRO}
-                </p>
-              )}
-              <div className="space-y-3">
-                {PARASHA_BLOCS.map((bloc, i) => (
-                  <section key={i} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
-                      {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
-                    </p>
-                    {bloc.paragraphes?.map((p, j) => (
-                      <p key={j} className="text-sm text-foreground leading-snug mb-1.5 last:mb-0">{p}</p>
-                    ))}
-                    {bloc.puces && (
-                      <ul className="list-disc pl-4 space-y-1 mt-1">
-                        {bloc.puces.map((p, j) => (
-                          <li key={j} className="text-sm text-foreground leading-snug">{p}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </section>
-                ))}
-              </div>
-
-              <div id="siddur" className="mt-4 scroll-mt-24">
-                <SidourLink className="text-sm py-3" />
-              </div>
-            </article>
-          )}
-
-          {sectionTab === "communaute" && (
-            <div className="space-y-3">
               {/* Invité d'honneur */}
               <article
                 className="btn-blue-animated rounded-2xl p-5 text-center"
@@ -1421,6 +1377,51 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                   </ul>
                 )}
               </article>
+
+            </div>
+          )}
+
+          {sectionTab === "etude" && (
+            <article id="etude" className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] scroll-mt-24">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
+                {PARASHA_NOM_HE && (
+                  <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
+                )}
+              </div>
+              {PARASHA_INTRO && (
+                <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
+                  {PARASHA_INTRO}
+                </p>
+              )}
+              <div className="space-y-3">
+                {PARASHA_BLOCS.map((bloc, i) => (
+                  <section key={i} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
+                      {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+                    </p>
+                    {bloc.paragraphes?.map((p, j) => (
+                      <p key={j} className="text-sm text-foreground leading-snug mb-1.5 last:mb-0">{p}</p>
+                    ))}
+                    {bloc.puces && (
+                      <ul className="list-disc pl-4 space-y-1 mt-1">
+                        {bloc.puces.map((p, j) => (
+                          <li key={j} className="text-sm text-foreground leading-snug">{p}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                ))}
+              </div>
+
+              <div id="siddur" className="mt-4 scroll-mt-24">
+                <SidourLink className="text-sm py-3" />
+              </div>
+            </article>
+          )}
+
+          {sectionTab === "communaute" && (
+            <div className="space-y-3">
 
               {/* Donation CTAs */}
               <div className="grid grid-cols-2 gap-3">
