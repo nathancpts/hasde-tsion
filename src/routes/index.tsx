@@ -1525,17 +1525,16 @@ function PlanningTV() {
 
           times={vTimes}
         >
-          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              27 Sivan 5786 · Yahrtzeit
+          {(live?.vendredi.yahrtzeits.length ?? 0) > 0 && (
+            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
+                {live!.vendredi.hd} {frenchHebMonth(live!.vendredi.hm)} 5786 · Yahrtzeit
+              </div>
+              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+                {live!.vendredi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
+              </div>
             </div>
-            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-              <div>Rabbi 'Hanina ben Tradyon</div>
-              <div>HaRav Morde'haï Sevitzky</div>
-              <div>HaRav Meir Eisenstadt</div>
-              <div>HaRav Ye'hi ben Yossef Kara</div>
-            </div>
-          </div>
+          )}
         </DayCard>
 
         <DayCard
@@ -1549,17 +1548,18 @@ function PlanningTV() {
 
           times={sTimes}
         >
-          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              28 Sivan 5786 · Yahrtzeit
+          {(live?.samedi.yahrtzeits.length ?? 0) > 0 && (
+            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
+                {live!.samedi.hd} {frenchHebMonth(live!.samedi.hm)} 5786 · Yahrtzeit
+              </div>
+              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+                {live!.samedi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
+              </div>
             </div>
-            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-              <div>HaRav Israel Ze'ev Gustman</div>
-              <div>HaRav Avraham Adadi</div>
-              <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
-            </div>
-          </div>
+          )}
         </DayCard>
+
 
         <DonationsCard live={live} />
       </section>
