@@ -1,4 +1,6 @@
 import { getOverride } from "./zmanim-overrides";
+import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
+
 
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
 const TEHILIM_BY_DAY: Record<number, string> = {
