@@ -697,21 +697,24 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
 
 
 
-      <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
-        <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
-          Prochain Rosh Ḥodesh
-        </p>
-        <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">Tamouz</p>
-        <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
-          dim. 14 soir · lun. 15 – mar. 16 juin
-        </p>
-        <p className="font-hebrew text-[1.45vh] text-foreground/80 mt-1" dir="rtl">
-          מולד : lun., ש 90 ד 46 ח 16
-        </p>
-      </div>
+      {rh && (
+        <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
+          <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
+            Prochain Rosh Ḥodesh
+          </p>
+          <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
+          <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
+            {rh.dateLabel}
+          </p>
+          {rh.moladHe && (
+            <p className="text-[1.35vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+          )}
+        </div>
+      )}
     </article>
   );
 }
+
 
 
 function SidourLink({ className = "" }: { className?: string }) {
