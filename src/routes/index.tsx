@@ -1447,6 +1447,12 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             </article>
           )}
 
+          {sectionTab === "communaute" && (
+            <CommunitySection />
+          )}
+
+
+
 
           <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4">
             בס״ד · Hasdé Tsion
