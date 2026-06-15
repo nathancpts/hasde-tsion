@@ -1384,6 +1384,27 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 )}
               </article>
 
+              {/* Donation CTAs */}
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3.5 text-[13px] font-display font-semibold text-[#1f4ea8] ring-1 ring-[#1f4ea8]/20 shadow-[0_4px_12px_rgba(31,78,168,0.1)] active:scale-[0.97] transition-all"
+                >
+                  <span className="text-base">♡</span>
+                  <span>Faire un don</span>
+                </a>
+                <a
+                  href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-blue-animated flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
+                >
+                  Participer à la séouda
+                </a>
+              </div>
+
             </div>
           )}
 
