@@ -1039,8 +1039,14 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
   });
 
   // Day selector (Vendredi / Shabbat) drives the hero widget
-  const [selectedDay, setSelectedDay] = useState<"vendredi" | "shabbat">("vendredi");
+  const [selectedDay, setSelectedDayState] = useState<"vendredi" | "shabbat">("vendredi");
+  const userTouchedDayRef = useRef(false);
+  const setSelectedDay = useCallback((d: "vendredi" | "shabbat") => {
+    userTouchedDayRef.current = true;
+    setSelectedDayState(d);
+  }, []);
   useEffect(() => {
+    if (userTouchedDayRef.current) return;
     const now = new Date();
     const dow = now.getDay();
     const candle = chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? null;
@@ -1051,13 +1057,13 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
     };
     const nowMin = now.getHours() * 60 + now.getMinutes();
     if (dow === 6) {
-      if (havdal && nowMin >= toMin(havdal)) setSelectedDay("vendredi");
-      else setSelectedDay("shabbat");
+      if (havdal && nowMin >= toMin(havdal)) setSelectedDayState("vendredi");
+      else setSelectedDayState("shabbat");
     } else if (dow === 5) {
-      if (candle && nowMin >= toMin(candle)) setSelectedDay("shabbat");
-      else setSelectedDay("vendredi");
+      if (candle && nowMin >= toMin(candle)) setSelectedDayState("shabbat");
+      else setSelectedDayState("vendredi");
     } else {
-      setSelectedDay("vendredi");
+      setSelectedDayState("vendredi");
     }
   }, [chabad?.candle, chabad?.havdalah, vTimes, sTimes]);
   // Section tab in white surface
