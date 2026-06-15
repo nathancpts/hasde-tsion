@@ -1323,6 +1323,61 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 })()}
               </div>
 
+              {/* Invité d'honneur */}
+              <article
+                className="btn-blue-animated rounded-2xl p-5 text-center"
+                style={{
+                  boxShadow: "0 8px 20px rgba(10,42,107,0.3)",
+                }}
+              >
+                <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/85 mb-2">
+                  ✨ Invité d'honneur
+                </p>
+                <p className="font-display text-base font-semibold text-white leading-snug">
+                  Bienvenue au{" "}
+                  <span className="font-bold text-[#fff3d6]">Rav Arié Niselevitch</span>{" "}
+                  pour ce Chabbat.
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+                  <div className="rounded-lg bg-white/15 px-2 py-1.5">
+                    <p className="text-white/70 uppercase tracking-wider text-[9px]">Officiant</p>
+                    <p className="font-semibold text-white">Aharon Djian</p>
+                  </div>
+                  <div className="rounded-lg bg-white/15 px-2 py-1.5">
+                    <p className="text-white/70 uppercase tracking-wider text-[9px]">Cours</p>
+                    <p className="font-semibold text-white leading-tight">Chaharit & Séouda Chlichit</p>
+                  </div>
+                </div>
+              </article>
+
+              {/* Séouda donateurs */}
+              <article className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] android-scroll-fix">
+                <h3 className="font-display text-lg font-bold text-foreground mb-3">La Séouda est offerte par</h3>
+                {DONATIONS_REPAS.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">Aucune donation pour le moment.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {DONATIONS_REPAS.map((d, i) => (
+                      <li key={i} className="rounded-xl bg-[#F8FAFC] p-3">
+                        <p className="font-display font-bold text-base text-foreground leading-tight">{d.donateur}</p>
+                        {d.occasion && (
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-primary font-semibold mt-1">{d.occasion}</p>
+                        )}
+                        {d.dedicace && (
+                          <p className="font-display italic text-sm text-muted-foreground leading-tight mt-1">{d.dedicace}</p>
+                        )}
+                        {d.dedicaceHe && (
+                          <p className="font-hebrew text-base text-primary leading-tight mt-2" dir="rtl">{d.dedicaceHe}</p>
+                        )}
+                        {d.details?.map((line, index) => (
+                          <p key={index} className="text-sm text-foreground/80 leading-relaxed mt-2">{line}</p>
+                        ))}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+
             </div>
           )}
 
