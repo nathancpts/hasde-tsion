@@ -1306,6 +1306,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 ) : <div />}
                 {(() => {
                   const dayData = selectedDay === "vendredi" ? live?.vendredi : live?.samedi;
+
                   const names = dayData?.yahrtzeits ?? [];
                   if (names.length === 0) return <div />;
                   return (
