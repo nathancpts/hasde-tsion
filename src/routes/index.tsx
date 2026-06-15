@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
+import { frenchHebMonth } from "@/lib/yahrtzeits";
+
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
 
@@ -642,8 +644,10 @@ function DayCard({
   );
 }
 
-function DonationsCard() {
+function DonationsCard({ live }: { live?: LiveWeek | null }) {
   const donations = DONATIONS_REPAS;
+  const rh = live?.roshHodesh ?? null;
+
   return (
 
     <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
@@ -695,21 +699,24 @@ function DonationsCard() {
 
 
 
-      <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
-        <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
-          Prochain Rosh Ḥodesh
-        </p>
-        <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">Tamouz</p>
-        <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
-          dim. 14 soir · lun. 15 – mar. 16 juin
-        </p>
-        <p className="font-hebrew text-[1.45vh] text-foreground/80 mt-1" dir="rtl">
-          מולד : lun., ש 90 ד 46 ח 16
-        </p>
-      </div>
+      {rh && (
+        <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
+          <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
+            Prochain Rosh Ḥodesh
+          </p>
+          <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
+          <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
+            {rh.dateLabel}
+          </p>
+          {rh.moladHe && (
+            <p className="text-[1.35vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+          )}
+        </div>
+      )}
     </article>
   );
 }
+
 
 
 function SidourLink({ className = "" }: { className?: string }) {
@@ -1290,28 +1297,32 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
               {/* 2-col: Rosh Hodesh | Yahrtzeit */}
               <div className="grid grid-cols-2 gap-3">
-                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
-                  <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">Tamouz</p>
-                  <p className="text-[11px] text-muted-foreground mt-1 leading-snug">dim. 14 soir · lun. 15 – mar. 16 juin</p>
-                </article>
-                <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
-                  {selectedDay === "vendredi" ? (
-                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
-                      <div>R. 'Hanina ben Tradyon</div>
-                      <div>H. Morde'haï Sevitzky</div>
-                      <div>H. Meir Eisenstadt</div>
-                    </div>
-                  ) : (
-                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
-                      <div>H. Israel Ze'ev Gustman</div>
-                      <div>H. Avraham Adadi</div>
-                      <div>H. Chimchon A. Polansky</div>
-                    </div>
-                  )}
-                </article>
+                {live?.roshHodesh ? (
+                  <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
+                    <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">{live.roshHodesh.nom}</p>
+                    <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{live.roshHodesh.dateLabel}</p>
+                  </article>
+                ) : <div />}
+                {(() => {
+                  const dayData = selectedDay === "vendredi" ? live?.vendredi : live?.samedi;
+
+                  const names = dayData?.yahrtzeits ?? [];
+                  if (names.length === 0) return <div />;
+                  return (
+                    <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                      <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
+                      <p className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
+                        {dayData!.hd} {frenchHebMonth(dayData!.hm)}
+                      </p>
+                      <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
+                        {names.map((n, i) => <div key={i}>{n}</div>)}
+                      </div>
+                    </article>
+                  );
+                })()}
               </div>
+
             </div>
           )}
 
@@ -1520,17 +1531,16 @@ function PlanningTV() {
 
           times={vTimes}
         >
-          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              27 Sivan 5786 · Yahrtzeit
+          {(live?.vendredi.yahrtzeits.length ?? 0) > 0 && (
+            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
+                {live!.vendredi.hd} {frenchHebMonth(live!.vendredi.hm)} 5786 · Yahrtzeit
+              </div>
+              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+                {live!.vendredi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
+              </div>
             </div>
-            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-              <div>Rabbi 'Hanina ben Tradyon</div>
-              <div>HaRav Morde'haï Sevitzky</div>
-              <div>HaRav Meir Eisenstadt</div>
-              <div>HaRav Ye'hi ben Yossef Kara</div>
-            </div>
-          </div>
+          )}
         </DayCard>
 
         <DayCard
@@ -1544,19 +1554,20 @@ function PlanningTV() {
 
           times={sTimes}
         >
-          <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-            <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-              28 Sivan 5786 · Yahrtzeit
+          {(live?.samedi.yahrtzeits.length ?? 0) > 0 && (
+            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
+              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
+                {live!.samedi.hd} {frenchHebMonth(live!.samedi.hm)} 5786 · Yahrtzeit
+              </div>
+              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
+                {live!.samedi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
+              </div>
             </div>
-            <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-              <div>HaRav Israel Ze'ev Gustman</div>
-              <div>HaRav Avraham Adadi</div>
-              <div>HaRav Chimchon Aaron Polansky, le Teplik Rav</div>
-            </div>
-          </div>
+          )}
         </DayCard>
 
-        <DonationsCard />
+
+        <DonationsCard live={live} />
       </section>
 
 

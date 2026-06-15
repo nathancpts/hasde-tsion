@@ -1,4 +1,6 @@
 import { getOverride } from "./zmanim-overrides";
+import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
+
 
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
 const TEHILIM_BY_DAY: Record<number, string> = {
@@ -35,14 +37,22 @@ export type LiveWeek = {
   vendredi: {
     date: string; heb: string; daf: string; omer: number | null;
     tehilim: string; candleLighting: string | null;
+    hd: number; hm: string; yahrtzeits: string[];
   };
   samedi: {
     date: string; heb: string; daf: string; tehilim: string;
     havdalah: string | null;
+    hd: number; hm: string; yahrtzeits: string[];
   };
+  roshHodesh: {
+    nom: string;            // ex: "Tamouz"
+    dateLabel: string;      // ex: "dim. 14 soir · lun. 15 – mar. 16 juin"
+    moladHe?: string;       // ex: "מולד : lun., ש 90 ד 46 ח 16"
+  } | null;
   events: { date: string; title: string; time?: string; tone?: "gold" | "red" }[];
   fetchedAt: string;
 };
+
 
 // Localisation : 50 Rue du Bois de Boulogne, 92200 Neuilly-sur-Seine
 const DEFAULT_LOC = { lat: 48.8835, lon: 2.2738, tzid: "Europe/Paris" };
@@ -247,6 +257,32 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       };
     });
 
+  // ===== Rosh Ḥodesh à venir =====
+  const todayDateStr = ymd(now);
+  const rhItems = items
+    .filter(it => it.category === "roshchodesh" && it.date >= todayDateStr)
+    .slice(0, 2);
+  let roshHodesh: LiveWeek["roshHodesh"] = null;
+  if (rhItems.length > 0) {
+    // ex. "Rosh Chodesh Tamuz"
+    const nameRaw = rhItems[0].title.replace(/^Rosh Chodesh\s+/i, "").trim();
+    const nom = frenchHebMonth(nameRaw);
+    const firstDate = new Date(rhItems[0].date + "T00:00:00");
+    const lastDate = new Date(rhItems[rhItems.length - 1].date + "T00:00:00");
+    const evening = new Date(firstDate);
+    evening.setDate(evening.getDate() - 1);
+    const fmtDayMonth = (d: Date) =>
+      d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }).replace(/\.$/, "");
+    const fmtDay = (d: Date) =>
+      d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" });
+    const dateLabel = rhItems.length === 2
+      ? `${fmtDay(evening)} soir · ${fmtDay(firstDate)} – ${fmtDayMonth(lastDate)}`
+      : `${fmtDay(evening)} soir · ${fmtDayMonth(firstDate)}`;
+    const moladItem = items.find(it => it.category === "molad");
+    const moladHe = moladItem?.title ? `Molad : ${moladItem.title.replace(/^Molad\s+\S+:\s*/i, "")}` : undefined;
+    roshHodesh = { nom, dateLabel, moladHe };
+  }
+
   return {
     parasha: { fr: parashaFr, he: parashaHe },
     vendredi: {
@@ -256,6 +292,9 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
       candleLighting: getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
+      hd: convFri.hd,
+      hm: convFri.hm,
+      yahrtzeits: getYahrtzeits(convFri.hd, convFri.hm),
     },
     samedi: {
       date: frLong(saturday),
@@ -263,9 +302,14 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
       havdalah: getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
+      hd: convSat.hd,
+      hm: convSat.hm,
+      yahrtzeits: getYahrtzeits(convSat.hd, convSat.hm),
     },
+    roshHodesh,
     events,
     fetchedAt: new Date().toISOString(),
   };
 }
+
 
