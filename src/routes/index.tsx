@@ -1448,9 +1448,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
             </article>
           )}
 
-          {sectionTab === "communaute" && (
-            <CommunitySection />
-          )}
+          {sectionTab === "communaute" && null}
 
 
 
