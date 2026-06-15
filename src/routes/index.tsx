@@ -1196,7 +1196,7 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
 
           <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
             {([
-              { id: "horaires", label: "Horaires" },
+              { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
