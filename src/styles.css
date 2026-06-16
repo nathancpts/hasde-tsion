@@ -445,7 +445,6 @@
 
 /* Siri-style glassy orb */
 .hillel-orb {
-  position: relative;
   border-radius: 9999px;
   border: none;
   cursor: pointer;
