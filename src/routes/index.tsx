@@ -1039,34 +1039,25 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     return t;
   });
 
-  // Day selector (Vendredi / Shabbat) drives the hero widget
-  const [selectedDay, setSelectedDayState] = useState<"vendredi" | "shabbat">("vendredi");
-  const userTouchedDayRef = useRef(false);
-  const setSelectedDay = useCallback((d: "vendredi" | "shabbat") => {
-    userTouchedDayRef.current = true;
-    setSelectedDayState(d);
-  }, []);
-  useEffect(() => {
-    if (userTouchedDayRef.current) return;
-    const now = new Date();
-    const dow = now.getDay();
-    const candle = chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? null;
-    const havdal = chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? null;
-    const toMin = (hm: string) => {
-      const [h, m] = hm.split(":").map(Number);
-      return h * 60 + m;
-    };
-    const nowMin = now.getHours() * 60 + now.getMinutes();
-    if (dow === 6) {
-      if (havdal && nowMin >= toMin(havdal)) setSelectedDayState("vendredi");
-      else setSelectedDayState("shabbat");
-    } else if (dow === 5) {
-      if (candle && nowMin >= toMin(candle)) setSelectedDayState("shabbat");
-      else setSelectedDayState("vendredi");
-    } else {
-      setSelectedDayState("vendredi");
-    }
-  }, [chabad?.candle, chabad?.havdalah, vTimes, sTimes]);
+  // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
+  const today = new Date();
+  const selectedDate = new Date(today);
+  selectedDate.setDate(today.getDate() + dayOffset);
+  const selectedDow = selectedDate.getDay(); // 0=Dim..6=Sam
+  const isFri = selectedDow === 5;
+  const isSat = selectedDow === 6;
+  const isShabbatDay = isFri || isSat;
+  const selectedDay: "vendredi" | "shabbat" = isSat ? "shabbat" : "vendredi";
+
+  const DAY_FULL = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+  const DAY_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    return { offset: i, dow: d.getDay(), num: d.getDate() };
+  });
+
+
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
