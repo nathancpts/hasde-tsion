@@ -84,8 +84,8 @@ export function HillelChat() {
           {(messages.length > 0 || loading) && (
             <div
               ref={scrollRef}
-              className="mx-auto mb-2 w-full max-w-md space-y-2 overflow-y-auto rounded-2xl border border-white/10 bg-black/85 p-3 text-white shadow-2xl backdrop-blur-xl"
-              style={{ maxHeight: "55vh" }}
+              className="hillel-gradient-border mx-auto mb-2 w-full max-w-md space-y-2 overflow-y-auto p-3 text-slate-900 shadow-2xl"
+              style={{ maxHeight: "55vh", borderRadius: "20px" }}
             >
               {messages.map((m, i) => (
                 <div
@@ -95,8 +95,8 @@ export function HillelChat() {
                   <div
                     className={`max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-relaxed ${
                       m.role === "user"
-                        ? "bg-white text-slate-900"
-                        : "bg-white/10 text-white"
+                        ? "bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
+                        : "bg-slate-100 text-slate-900"
                     }`}
                   >
                     {m.content}
@@ -105,7 +105,7 @@ export function HillelChat() {
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white/80">
+                  <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-600">
                     <Loader2 className="inline h-4 w-4 animate-spin" /> Hillel réfléchit...
                   </div>
                 </div>
@@ -114,7 +114,7 @@ export function HillelChat() {
           )}
 
           {/* Search bar */}
-          <div className="mx-auto flex w-full max-w-md items-center gap-2 rounded-2xl border border-white/10 bg-black/90 py-2 pl-4 pr-2 shadow-2xl backdrop-blur-xl">
+          <div className="hillel-gradient-border mx-auto flex w-full max-w-md items-center gap-2 py-2 pl-4 pr-2 shadow-2xl">
             <input
               ref={inputRef}
               type="text"
@@ -122,12 +122,12 @@ export function HillelChat() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
               placeholder="Posez votre question..."
-              className="flex-1 bg-transparent py-2 text-base text-white placeholder:text-white/50 outline-none"
+              className="flex-1 bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none"
             />
             <button
               onClick={close}
               aria-label="Fermer"
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-white/60 hover:bg-white/10 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -135,10 +135,7 @@ export function HillelChat() {
               onClick={send}
               disabled={loading || !input.trim()}
               aria-label="Envoyer"
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white transition hover:bg-white/20 disabled:opacity-40"
-              style={{
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)",
-              }}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white transition hover:opacity-90 disabled:opacity-40"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -147,6 +144,7 @@ export function HillelChat() {
               )}
             </button>
           </div>
+
         </div>
       )}
     </>
