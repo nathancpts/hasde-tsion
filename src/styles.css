@@ -416,3 +416,29 @@
 
 
 
+
+/* Hillel floating bubble aura */
+.hillel-aura {
+  position: absolute;
+  inset: -14px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, #ff6b9d, #c084fc, #60a5fa, #34d399, #fbbf24, #ff6b9d);
+  filter: blur(14px);
+  opacity: 0.75;
+  animation: hillel-spin 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.hillel-aura--alt {
+  inset: -8px;
+  filter: blur(8px);
+  opacity: 0.55;
+  animation: hillel-spin 6s linear infinite reverse, hillel-pulse 2.4s ease-in-out infinite;
+}
+@keyframes hillel-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes hillel-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
