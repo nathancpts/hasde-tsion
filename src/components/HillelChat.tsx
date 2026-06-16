@@ -74,7 +74,7 @@ export function HillelChat() {
             src={hillelOrb.url}
             alt=""
             className="h-full w-full"
-            style={{ filter: "hue-rotate(-25deg) saturate(1.15) brightness(0.95)" }}
+            style={{ filter: "hue-rotate(210deg) saturate(1.3) brightness(0.95)" }}
           />
         </button>
       )}
