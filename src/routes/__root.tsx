@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { useVersionCheck } from "@/lib/use-version-check";
+import { HillelChat } from "@/components/HillelChat";
 
 function NotFoundComponent() {
   return (
