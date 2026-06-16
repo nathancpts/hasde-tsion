@@ -1039,34 +1039,25 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     return t;
   });
 
-  // Day selector (Vendredi / Shabbat) drives the hero widget
-  const [selectedDay, setSelectedDayState] = useState<"vendredi" | "shabbat">("vendredi");
-  const userTouchedDayRef = useRef(false);
-  const setSelectedDay = useCallback((d: "vendredi" | "shabbat") => {
-    userTouchedDayRef.current = true;
-    setSelectedDayState(d);
-  }, []);
-  useEffect(() => {
-    if (userTouchedDayRef.current) return;
-    const now = new Date();
-    const dow = now.getDay();
-    const candle = chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? null;
-    const havdal = chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? null;
-    const toMin = (hm: string) => {
-      const [h, m] = hm.split(":").map(Number);
-      return h * 60 + m;
-    };
-    const nowMin = now.getHours() * 60 + now.getMinutes();
-    if (dow === 6) {
-      if (havdal && nowMin >= toMin(havdal)) setSelectedDayState("vendredi");
-      else setSelectedDayState("shabbat");
-    } else if (dow === 5) {
-      if (candle && nowMin >= toMin(candle)) setSelectedDayState("shabbat");
-      else setSelectedDayState("vendredi");
-    } else {
-      setSelectedDayState("vendredi");
-    }
-  }, [chabad?.candle, chabad?.havdalah, vTimes, sTimes]);
+  // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
+  const today = new Date();
+  const selectedDate = new Date(today);
+  selectedDate.setDate(today.getDate() + dayOffset);
+  const selectedDow = selectedDate.getDay(); // 0=Dim..6=Sam
+  const isFri = selectedDow === 5;
+  const isSat = selectedDow === 6;
+  const isShabbatDay = isFri || isSat;
+  const selectedDay: "vendredi" | "shabbat" = isSat ? "shabbat" : "vendredi";
+
+  const DAY_FULL = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+  const DAY_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    return { offset: i, dow: d.getDay(), num: d.getDate() };
+  });
+
+
   // Section tab in white surface
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
@@ -1111,82 +1102,64 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
-          {/* Day strip */}
-          <div className="mt-2 flex items-end justify-center gap-6 text-white/70">
-            <button
-              onClick={() => setSelectedDay("vendredi")}
-              className={`flex flex-col items-center transition-all ${selectedDay === "vendredi" ? "text-white scale-110" : "text-white/50"}`}
-            >
-              <span className="text-[11px] uppercase tracking-[0.2em]">Ven</span>
-              <span className={`font-display ${selectedDay === "vendredi" ? "text-2xl font-bold" : "text-lg"}`}>
-                {vDate.match(/\d+/)?.[0] ?? ""}
-              </span>
-            </button>
-            <button
-              onClick={() => setSelectedDay("shabbat")}
-              className={`flex flex-col items-center transition-all ${selectedDay === "shabbat" ? "text-white scale-110" : "text-white/50"}`}
-            >
-              <span className="text-[11px] uppercase tracking-[0.2em]">Sam</span>
-              <span className={`font-display ${selectedDay === "shabbat" ? "text-2xl font-bold" : "text-lg"}`}>
-                {sDate.match(/\d+/)?.[0] ?? ""}
-              </span>
-            </button>
-          </div>
-
-          {/* Pill tabs */}
-          <div className="mt-5 flex items-center justify-center gap-2">
-            <button
-              onClick={() => setSelectedDay("vendredi")}
-              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
-                selectedDay === "vendredi"
-                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                  : "text-white/80"
-              }`}
-            >
-              Vendredi
-            </button>
-            <button
-              onClick={() => setSelectedDay("shabbat")}
-              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
-                selectedDay === "shabbat"
-                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                  : "text-white/80"
-              }`}
-            >
-              Chabbat
-            </button>
+          {/* 7-day strip — today + 6 next days */}
+          <div className="mt-2 grid grid-cols-7 gap-1">
+            {weekDays.map((d) => {
+              const active = dayOffset === d.offset;
+              return (
+                <button
+                  key={d.offset}
+                  onClick={() => setDayOffset(d.offset)}
+                  className={`flex flex-col items-center py-1.5 rounded-xl transition-all ${
+                    active ? "bg-white/20 text-white" : "text-white/55"
+                  }`}
+                >
+                  <span className="text-[9px] uppercase tracking-wider">{DAY_SHORT[d.dow]}</span>
+                  <span className={`font-display tabular-nums mt-0.5 ${active ? "text-xl font-bold" : "text-base"}`}>
+                    {d.num}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Hero number */}
           <div className="mt-8 text-center">
             <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-              {heroTime}
+              {isShabbatDay ? heroTime : time}
             </div>
-            <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />
-            <p className="mt-1 text-[13px] text-white/90 font-medium">{heroLabel}</p>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+            {isShabbatDay && <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />}
+            <p className="mt-1 text-[13px] text-white/90 font-medium">
+              {isShabbatDay ? heroLabel : DAY_FULL[selectedDow]}
+            </p>
+            {isShabbatDay && (
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+            )}
           </div>
 
 
-          {/* 3 stat widgets */}
-          <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
-              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
-                {chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "—"}
-              </p>
+          {/* 3 stat widgets — Vendredi/Chabbat seulement */}
+          {isShabbatDay && (
+            <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
+                <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                  {chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Sortie</p>
+                <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                  {chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Tehilim</p>
+                <p className="font-display text-base font-bold text-white tabular-nums mt-1 leading-tight">{tehShort}</p>
+              </div>
             </div>
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Sortie</p>
-              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
-                {chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "—"}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Tehilim</p>
-              <p className="font-display text-base font-bold text-white tabular-nums mt-1 leading-tight">{tehShort}</p>
-            </div>
-          </div>
+          )}
+
         </div>
       </div>
 
@@ -1221,7 +1194,36 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             ))}
           </div>
 
-          {sectionTab === "horaires" && (
+          {sectionTab === "horaires" && !isShabbatDay && (
+            <div className="space-y-3">
+              {/* Daily Zmanim (jours hors Vendredi/Chabbat) */}
+              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                <div className="text-center mb-3">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">
+                    {dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : DAY_FULL[selectedDow]}
+                  </p>
+                  <p className="font-display text-base font-bold text-foreground capitalize mt-0.5">
+                    {zmanim?.date ?? selectedDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  {(zmanim?.times ?? []).map((t) => (
+                    <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
+                      <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
+                      <span className="font-display font-bold tabular-nums text-lg text-foreground">{t.value}</span>
+                    </div>
+                  ))}
+                  {(!zmanim || zmanim.times.length === 0) && (
+                    <p className="text-[12px] text-muted-foreground italic text-center py-6">
+                      {zmanim ? "Horaires non disponibles." : "Chargement…"}
+                    </p>
+                  )}
+                </div>
+              </article>
+            </div>
+          )}
+
+          {sectionTab === "horaires" && isShabbatDay && (
             <div className="space-y-3">
               {/* Parasha widget — full width */}
               <article
@@ -1236,57 +1238,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   <p className="font-hebrew text-xl leading-none mt-2 text-white/90" dir="rtl">{parashaHe}</p>
                 )}
                 <p className="font-hebrew text-base text-white/80 mt-2" dir="rtl">שבת מברכים</p>
-              </article>
-
-              {/* Daily Zmanim — auto today, navigable */}
-              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                <div className="flex items-center justify-between mb-2">
-                  <button
-                    onClick={() => setDayOffset(dayOffset - 1)}
-                    aria-label="Jour précédent"
-                    className="p-2 rounded-full bg-[#F1F5F9] active:scale-95 transition"
-                  >
-                    <ChevronLeft className="w-4 h-4 text-[#1f4ea8]" />
-                  </button>
-                  <div className="text-center min-w-0 flex-1 px-2">
-                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">
-                      {dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : dayOffset === -1 ? "Hier" : `J${dayOffset > 0 ? "+" : ""}${dayOffset}`}
-                    </p>
-                    <p className="font-display text-sm font-bold text-foreground capitalize truncate mt-0.5">
-                      {zmanim?.date ?? "—"}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setDayOffset(dayOffset + 1)}
-                    aria-label="Jour suivant"
-                    className="p-2 rounded-full bg-[#F1F5F9] active:scale-95 transition"
-                  >
-                    <ChevronRight className="w-4 h-4 text-[#1f4ea8]" />
-                  </button>
-                </div>
-                {dayOffset !== 0 && (
-                  <div className="flex justify-center mb-2">
-                    <button
-                      onClick={() => setDayOffset(0)}
-                      className="text-[10px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full bg-[#1f4ea8] text-white active:scale-95 transition"
-                    >
-                      Aujourd'hui
-                    </button>
-                  </div>
-                )}
-                <div className="space-y-1">
-                  {(zmanim?.times ?? []).map((t) => (
-                    <div key={t.label} className="flex items-center justify-between gap-3 py-1.5 px-2 border-b border-border/40 last:border-0">
-                      <span className="text-[12px] text-foreground/70">{t.label}</span>
-                      <span className="font-display font-semibold tabular-nums text-[14px] text-foreground">{t.value}</span>
-                    </div>
-                  ))}
-                  {(!zmanim || zmanim.times.length === 0) && (
-                    <p className="text-[12px] text-muted-foreground italic text-center py-3">
-                      {zmanim ? "Horaires non disponibles." : "Chargement…"}
-                    </p>
-                  )}
-                </div>
               </article>
 
 
