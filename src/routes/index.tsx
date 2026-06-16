@@ -997,7 +997,7 @@ function MobileGlassNav() {
 }
 
 
-function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, setDayOffset: _setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
+function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
 
@@ -1237,6 +1237,58 @@ function MobileLayout({ live, chabad, zmanim: _zmanim, dayOffset: _dayOffset, se
                 )}
                 <p className="font-hebrew text-base text-white/80 mt-2" dir="rtl">שבת מברכים</p>
               </article>
+
+              {/* Daily Zmanim — auto today, navigable */}
+              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    onClick={() => setDayOffset(dayOffset - 1)}
+                    aria-label="Jour précédent"
+                    className="p-2 rounded-full bg-[#F1F5F9] active:scale-95 transition"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-[#1f4ea8]" />
+                  </button>
+                  <div className="text-center min-w-0 flex-1 px-2">
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">
+                      {dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : dayOffset === -1 ? "Hier" : `J${dayOffset > 0 ? "+" : ""}${dayOffset}`}
+                    </p>
+                    <p className="font-display text-sm font-bold text-foreground capitalize truncate mt-0.5">
+                      {zmanim?.date ?? "—"}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setDayOffset(dayOffset + 1)}
+                    aria-label="Jour suivant"
+                    className="p-2 rounded-full bg-[#F1F5F9] active:scale-95 transition"
+                  >
+                    <ChevronRight className="w-4 h-4 text-[#1f4ea8]" />
+                  </button>
+                </div>
+                {dayOffset !== 0 && (
+                  <div className="flex justify-center mb-2">
+                    <button
+                      onClick={() => setDayOffset(0)}
+                      className="text-[10px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full bg-[#1f4ea8] text-white active:scale-95 transition"
+                    >
+                      Aujourd'hui
+                    </button>
+                  </div>
+                )}
+                <div className="space-y-1">
+                  {(zmanim?.times ?? []).map((t) => (
+                    <div key={t.label} className="flex items-center justify-between gap-3 py-1.5 px-2 border-b border-border/40 last:border-0">
+                      <span className="text-[12px] text-foreground/70">{t.label}</span>
+                      <span className="font-display font-semibold tabular-nums text-[14px] text-foreground">{t.value}</span>
+                    </div>
+                  ))}
+                  {(!zmanim || zmanim.times.length === 0) && (
+                    <p className="text-[12px] text-muted-foreground italic text-center py-3">
+                      {zmanim ? "Horaires non disponibles." : "Chargement…"}
+                    </p>
+                  )}
+                </div>
+              </article>
+
 
               {/* 2-col: Daf | Tehilim */}
               <div className="grid grid-cols-2 gap-3">
