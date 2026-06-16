@@ -63,23 +63,12 @@ export function HillelChat() {
   return (
     <>
       {!open && (
-        <div
-          className="fixed bottom-5 right-5 z-50"
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Ouvrir le chat Hillel"
+          className="hillel-orb fixed bottom-5 right-5 z-50 h-16 w-16 rounded-full transition active:scale-95"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          <div className="relative h-14 w-14">
-            <span aria-hidden className="hillel-aura" />
-            <span aria-hidden className="hillel-aura hillel-aura--alt" />
-            <button
-              onClick={() => setOpen(true)}
-              aria-label="Ouvrir le chat Hillel"
-              className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-[#1f4ea8] text-white shadow-2xl shadow-[#1f4ea8]/40 transition hover:scale-105 hover:bg-[#1a4291] active:scale-95"
-            >
-              <MessageCircle className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-white" />
-            </button>
-          </div>
-        </div>
+        />
       )}
 
       {open && (

@@ -442,3 +442,20 @@
   0%, 100% { opacity: 0.45; }
   50% { opacity: 0.85; }
 }
+
+.hillel-orb {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 22%, rgba(255,255,255,0) 45%),
+    conic-gradient(from 0deg, #ff6b9d, #c084fc, #60a5fa, #34d399, #fbbf24, #ff6b9d);
+  filter: blur(2px) saturate(1.2);
+  box-shadow:
+    0 0 30px 6px rgba(192,132,252,0.55),
+    0 0 60px 12px rgba(96,165,250,0.4);
+  animation: hillel-spin 5s linear infinite, hillel-breathe 2.6s ease-in-out infinite;
+  border: none;
+  cursor: pointer;
+}
+@keyframes hillel-breathe {
+  0%, 100% { transform: scale(1); filter: blur(2px) saturate(1.2); }
+  50% { transform: scale(1.08); filter: blur(3px) saturate(1.4); }
+}
