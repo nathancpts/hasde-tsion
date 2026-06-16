@@ -139,7 +139,7 @@ export function HillelChat() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
               placeholder="Posez votre question..."
-              className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none"
+              className="min-w-0 flex-1 bg-transparent py-1.5 text-[16px] text-slate-900 placeholder:text-slate-400 outline-none"
             />
             <button
               onClick={close}
