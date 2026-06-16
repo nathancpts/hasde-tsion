@@ -1153,7 +1153,37 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {isShabbatDay && (
               <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
             )}
+            {!isShabbatDay && (() => {
+              const times = zmanim?.times ?? [];
+              if (times.length === 0) return null;
+              const toMin = (hm: string) => {
+                const m = hm.match(/^(\d{1,2}):(\d{2})/);
+                if (!m) return null;
+                return Number(m[1]) * 60 + Number(m[2]);
+              };
+              const nowMin = now ? now.getHours() * 60 + now.getMinutes() : 0;
+              const isToday = dayOffset === 0;
+              const upcoming = times
+                .map((t) => ({ ...t, min: toMin(t.value) }))
+                .filter((t) => t.min != null && (!isToday || t.min! > nowMin));
+              const next = upcoming[0] ?? times.map((t) => ({ ...t, min: toMin(t.value) }))[0];
+              if (!next || next.min == null) return null;
+              const diff = next.min - (isToday ? nowMin : 0);
+              const h = Math.floor(diff / 60);
+              const m = diff % 60;
+              const remaining = isToday
+                ? `dans ${h > 0 ? `${h}h` : ""}${m.toString().padStart(h > 0 ? 2 : 1, "0")}${h > 0 ? "" : " min"}`
+                : `à ${next.value}`;
+              return (
+                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/70">Prochain</span>
+                  <span className="text-[12px] font-semibold text-white">{next.label}</span>
+                  <span className="text-[11px] text-white/85 tabular-nums">· {remaining}</span>
+                </div>
+              );
+            })()}
           </div>
+
 
 
           {/* 3 stat widgets — Vendredi/Chabbat seulement */}
