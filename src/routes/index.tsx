@@ -1102,82 +1102,64 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
-          {/* Day strip */}
-          <div className="mt-2 flex items-end justify-center gap-6 text-white/70">
-            <button
-              onClick={() => setSelectedDay("vendredi")}
-              className={`flex flex-col items-center transition-all ${selectedDay === "vendredi" ? "text-white scale-110" : "text-white/50"}`}
-            >
-              <span className="text-[11px] uppercase tracking-[0.2em]">Ven</span>
-              <span className={`font-display ${selectedDay === "vendredi" ? "text-2xl font-bold" : "text-lg"}`}>
-                {vDate.match(/\d+/)?.[0] ?? ""}
-              </span>
-            </button>
-            <button
-              onClick={() => setSelectedDay("shabbat")}
-              className={`flex flex-col items-center transition-all ${selectedDay === "shabbat" ? "text-white scale-110" : "text-white/50"}`}
-            >
-              <span className="text-[11px] uppercase tracking-[0.2em]">Sam</span>
-              <span className={`font-display ${selectedDay === "shabbat" ? "text-2xl font-bold" : "text-lg"}`}>
-                {sDate.match(/\d+/)?.[0] ?? ""}
-              </span>
-            </button>
-          </div>
-
-          {/* Pill tabs */}
-          <div className="mt-5 flex items-center justify-center gap-2">
-            <button
-              onClick={() => setSelectedDay("vendredi")}
-              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
-                selectedDay === "vendredi"
-                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                  : "text-white/80"
-              }`}
-            >
-              Vendredi
-            </button>
-            <button
-              onClick={() => setSelectedDay("shabbat")}
-              className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
-                selectedDay === "shabbat"
-                  ? "bg-white/95 text-[#1f4ea8] shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                  : "text-white/80"
-              }`}
-            >
-              Chabbat
-            </button>
+          {/* 7-day strip — today + 6 next days */}
+          <div className="mt-2 grid grid-cols-7 gap-1">
+            {weekDays.map((d) => {
+              const active = dayOffset === d.offset;
+              return (
+                <button
+                  key={d.offset}
+                  onClick={() => setDayOffset(d.offset)}
+                  className={`flex flex-col items-center py-1.5 rounded-xl transition-all ${
+                    active ? "bg-white/20 text-white" : "text-white/55"
+                  }`}
+                >
+                  <span className="text-[9px] uppercase tracking-wider">{DAY_SHORT[d.dow]}</span>
+                  <span className={`font-display tabular-nums mt-0.5 ${active ? "text-xl font-bold" : "text-base"}`}>
+                    {d.num}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Hero number */}
           <div className="mt-8 text-center">
             <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-              {heroTime}
+              {isShabbatDay ? heroTime : time}
             </div>
-            <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />
-            <p className="mt-1 text-[13px] text-white/90 font-medium">{heroLabel}</p>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+            {isShabbatDay && <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />}
+            <p className="mt-1 text-[13px] text-white/90 font-medium">
+              {isShabbatDay ? heroLabel : DAY_FULL[selectedDow]}
+            </p>
+            {isShabbatDay && (
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+            )}
           </div>
 
 
-          {/* 3 stat widgets */}
-          <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
-              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
-                {chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "—"}
-              </p>
+          {/* 3 stat widgets — Vendredi/Chabbat seulement */}
+          {isShabbatDay && (
+            <div className="mt-7 mb-8 grid grid-cols-3 gap-2.5">
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Entrée</p>
+                <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                  {chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Sortie</p>
+                <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
+                  {chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
+                <p className="text-[10px] text-white/80 font-medium leading-tight">Tehilim</p>
+                <p className="font-display text-base font-bold text-white tabular-nums mt-1 leading-tight">{tehShort}</p>
+              </div>
             </div>
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Sortie</p>
-              <p className="font-display text-lg font-bold text-white tabular-nums mt-1">
-                {chabad?.havdalah ?? sTimes.find((t) => t.label === "Sortie")?.value ?? "—"}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-3 text-center">
-              <p className="text-[10px] text-white/80 font-medium leading-tight">Tehilim</p>
-              <p className="font-display text-base font-bold text-white tabular-nums mt-1 leading-tight">{tehShort}</p>
-            </div>
-          </div>
+          )}
+
         </div>
       </div>
 
