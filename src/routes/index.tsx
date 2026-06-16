@@ -1142,7 +1142,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </div>
 
           {/* Hero number */}
-          <div className="mt-8 text-center">
+          <div key={dayOffset} className="mt-8 text-center animate-fade-in">
             <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
               {isShabbatDay ? heroTime : time}
             </div>
