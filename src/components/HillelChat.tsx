@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { X, Send, Loader2 } from "lucide-react";
 import { askHillel } from "@/lib/hillel.functions";
-import hillelOrb from "@/assets/hillel-orb.svg";
+import hillelOrb from "@/assets/hillel-orb.svg.asset.json";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
