@@ -100,16 +100,23 @@ export function HillelChat() {
                     className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                      className={`max-w-[85%] overflow-hidden break-words rounded-xl px-3 py-2 text-sm leading-relaxed ${
                         m.role === "user"
-                          ? "bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
+                          ? "whitespace-pre-wrap bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
                           : "bg-slate-100 text-slate-900"
                       }`}
                     >
-                      {m.content}
+                      {m.role === "assistant" ? (
+                        <div className="prose prose-sm prose-slate max-w-none break-words [&_a]:break-all [&_a]:text-[#1f4ea8] [&_p]:my-1 [&_ol]:my-1 [&_ul]:my-1 [&_li]:my-0.5">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.content
+                      )}
                     </div>
                   </div>
                 ))}
+
                 {loading && (
                   <div className="flex justify-start">
                     <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-600">
