@@ -83,35 +83,42 @@ export function HillelChat() {
           {/* Answer card (only when there are messages) */}
           {(messages.length > 0 || loading) && (
             <div
-              ref={scrollRef}
-              className="hillel-gradient-border mx-auto mb-2 w-full max-w-md space-y-2 overflow-y-auto p-3 text-slate-900 shadow-2xl"
-              style={{ maxHeight: "55vh", borderRadius: "20px" }}
+              className="hillel-gradient-border mx-auto mb-2 w-full max-w-md overflow-hidden bg-white shadow-2xl"
+              style={{ borderRadius: "20px" }}
             >
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                >
+              <div
+                ref={scrollRef}
+                className="space-y-2 overflow-y-auto p-3 text-slate-900"
+                style={{ maxHeight: "55vh" }}
+              >
+                {messages.map((m, i) => (
                   <div
-                    className={`max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-relaxed ${
-                      m.role === "user"
-                        ? "bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
-                        : "bg-slate-100 text-slate-900"
-                    }`}
+                    key={i}
+                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    {m.content}
+                    <div
+                      className={`max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                        m.role === "user"
+                          ? "bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
+                          : "bg-slate-100 text-slate-900"
+                      }`}
+                    >
+                      {m.content}
+                    </div>
                   </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-600">
-                    <Loader2 className="inline h-4 w-4 animate-spin" /> Hillel réfléchit...
+                ))}
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-600">
+                      <Loader2 className="inline h-4 w-4 animate-spin" /> Hillel réfléchit...
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
+
+
 
           {/* Search bar */}
           <div className="hillel-gradient-border mx-auto flex w-full max-w-md items-center gap-2 py-2 pl-4 pr-2 shadow-2xl">
