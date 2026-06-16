@@ -1194,7 +1194,36 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             ))}
           </div>
 
-          {sectionTab === "horaires" && (
+          {sectionTab === "horaires" && !isShabbatDay && (
+            <div className="space-y-3">
+              {/* Daily Zmanim (jours hors Vendredi/Chabbat) */}
+              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                <div className="text-center mb-3">
+                  <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">
+                    {dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : DAY_FULL[selectedDow]}
+                  </p>
+                  <p className="font-display text-base font-bold text-foreground capitalize mt-0.5">
+                    {zmanim?.date ?? selectedDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  {(zmanim?.times ?? []).map((t) => (
+                    <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
+                      <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
+                      <span className="font-display font-bold tabular-nums text-lg text-foreground">{t.value}</span>
+                    </div>
+                  ))}
+                  {(!zmanim || zmanim.times.length === 0) && (
+                    <p className="text-[12px] text-muted-foreground italic text-center py-6">
+                      {zmanim ? "Horaires non disponibles." : "Chargement…"}
+                    </p>
+                  )}
+                </div>
+              </article>
+            </div>
+          )}
+
+          {sectionTab === "horaires" && isShabbatDay && (
             <div className="space-y-3">
               {/* Parasha widget — full width */}
               <article
