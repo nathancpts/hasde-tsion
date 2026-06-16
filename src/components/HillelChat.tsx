@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 import { useServerFn } from "@tanstack/react-start";
 import { Search, Loader2, X } from "lucide-react";
 import { askHillel } from "@/lib/hillel.functions";
@@ -97,16 +100,23 @@ export function HillelChat() {
                     className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                      className={`max-w-[85%] overflow-hidden break-words rounded-xl px-3 py-2 text-sm leading-relaxed ${
                         m.role === "user"
-                          ? "bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
+                          ? "whitespace-pre-wrap bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white"
                           : "bg-slate-100 text-slate-900"
                       }`}
                     >
-                      {m.content}
+                      {m.role === "assistant" ? (
+                        <div className="prose prose-sm prose-slate max-w-none break-words [&_a]:break-all [&_a]:text-[#1f4ea8] [&_p]:my-1 [&_ol]:my-1 [&_ul]:my-1 [&_li]:my-0.5">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.content
+                      )}
                     </div>
                   </div>
                 ))}
+
                 {loading && (
                   <div className="flex justify-start">
                     <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-600">
@@ -121,7 +131,7 @@ export function HillelChat() {
 
 
           {/* Search bar */}
-          <div className="hillel-gradient-border mx-auto flex w-full max-w-md items-center gap-2 py-2 pl-4 pr-2 shadow-2xl">
+          <div className="hillel-gradient-border mx-auto flex w-full max-w-sm items-center gap-1 py-1.5 pl-4 pr-1.5 shadow-2xl">
             <input
               ref={inputRef}
               type="text"
@@ -129,12 +139,12 @@ export function HillelChat() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
               placeholder="Posez votre question..."
-              className="flex-1 bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 outline-none"
+              className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none"
             />
             <button
               onClick={close}
               aria-label="Fermer"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -142,15 +152,17 @@ export function HillelChat() {
               onClick={send}
               disabled={loading || !input.trim()}
               aria-label="Envoyer"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white transition hover:opacity-90 disabled:opacity-40"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white transition hover:opacity-90 disabled:opacity-40"
             >
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
-                <Search className="h-4 w-4" />
+                <Search className="h-3.5 w-3.5" />
               )}
             </button>
           </div>
+
+
 
         </div>
       )}
