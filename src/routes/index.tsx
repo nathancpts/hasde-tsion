@@ -1114,7 +1114,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
         />
         {/* Fondu bas supprimé */}
 
-        <div className="max-w-md mx-auto px-5 pb-8">
+        <div className="max-w-md mx-auto px-5 pb-24">
           {/* Header */}
           <header id="accueil" className="flex items-center justify-end gap-3 scroll-mt-24">
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
