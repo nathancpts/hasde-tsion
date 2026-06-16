@@ -70,7 +70,12 @@ export function HillelChat() {
           className="fixed bottom-5 right-5 z-50 h-16 w-16 rounded-full overflow-hidden transition active:scale-95 hover:scale-105 border-none p-0 bg-transparent cursor-pointer"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <img src={hillelOrb.url} alt="" className="h-full w-full" />
+          <img
+            src={hillelOrb.url}
+            alt=""
+            className="h-full w-full"
+            style={{ filter: "hue-rotate(-25deg) saturate(1.15) brightness(0.95)" }}
+          />
         </button>
       )}
 
