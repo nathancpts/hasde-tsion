@@ -1080,9 +1080,27 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-hidden" style={{ background: "#F2F4F8" }}>
       {/* Blue gradient hero zone — animated en vague */}
       <div
-        className="btn-blue-animated relative w-full overflow-hidden"
+        className="btn-blue-animated relative w-full overflow-hidden select-none"
         style={{
           paddingTop: "calc(env(safe-area-inset-top) + 0.25rem)",
+          touchAction: "pan-y",
+        }}
+        onTouchStart={(e) => {
+          const t = e.touches[0];
+          (e.currentTarget as any)._sx = t.clientX;
+          (e.currentTarget as any)._sy = t.clientY;
+        }}
+        onTouchEnd={(e) => {
+          const sx = (e.currentTarget as any)._sx as number | undefined;
+          const sy = (e.currentTarget as any)._sy as number | undefined;
+          if (sx == null || sy == null) return;
+          const t = e.changedTouches[0];
+          const dx = t.clientX - sx;
+          const dy = t.clientY - sy;
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0 && dayOffset < 6) setDayOffset(dayOffset + 1);
+            else if (dx > 0 && dayOffset > 0) setDayOffset(dayOffset - 1);
+          }
         }}
       >
         {/* Fondu doux depuis la couleur solide de la status bar vers le dégradé animé */}
