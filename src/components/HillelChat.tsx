@@ -66,9 +66,11 @@ export function HillelChat() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Ouvrir le chat Hillel"
-          className="hillel-orb fixed bottom-5 right-5 z-50 h-16 w-16 rounded-full transition active:scale-95"
+          className="fixed bottom-5 right-5 z-50 h-16 w-16 rounded-full overflow-hidden transition active:scale-95 hover:scale-105 border-none p-0 bg-transparent cursor-pointer"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        />
+        >
+          <img src="/src/assets/hillel-orb.svg" alt="" className="h-full w-full" />
+        </button>
       )}
 
       {open && (
