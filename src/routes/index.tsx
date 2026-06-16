@@ -1153,7 +1153,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {isShabbatDay && (
               <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
             )}
-            {!isShabbatDay && (() => {
+            {!isShabbatDay && dayOffset === 0 && (() => {
               const times = zmanim?.times ?? [];
               if (times.length === 0) return null;
               const toMin = (hm: string) => {
@@ -1162,26 +1162,26 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 return Number(m[1]) * 60 + Number(m[2]);
               };
               const nowMin = now ? now.getHours() * 60 + now.getMinutes() : 0;
-              const isToday = dayOffset === 0;
               const upcoming = times
                 .map((t) => ({ ...t, min: toMin(t.value) }))
-                .filter((t) => t.min != null && (!isToday || t.min! > nowMin));
-              const next = upcoming[0] ?? times.map((t) => ({ ...t, min: toMin(t.value) }))[0];
+                .filter((t) => t.min != null && t.min! > nowMin);
+              const next = upcoming[0];
               if (!next || next.min == null) return null;
-              const diff = next.min - (isToday ? nowMin : 0);
+              const diff = next.min - nowMin;
               const h = Math.floor(diff / 60);
               const m = diff % 60;
-              const remaining = isToday
-                ? `dans ${h > 0 ? `${h}h` : ""}${m.toString().padStart(h > 0 ? 2 : 1, "0")}${h > 0 ? "" : " min"}`
-                : `à ${next.value}`;
+              const remaining = h > 0
+                ? `dans ${h}h${m.toString().padStart(2, "0")}`
+                : `dans ${m} min`;
               return (
-                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/70">Prochain</span>
-                  <span className="text-[12px] font-semibold text-white">{next.label}</span>
-                  <span className="text-[11px] text-white/85 tabular-nums">· {remaining}</span>
+                <div className="mt-5 inline-flex items-center gap-4 px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-md border-2 border-white/60">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-white/80">Prochain</span>
+                  <span className="text-[13px] font-semibold text-white">{next.label}</span>
+                  <span className="text-[12px] text-white/90 tabular-nums">· {remaining}</span>
                 </div>
               );
             })()}
+
           </div>
 
 
