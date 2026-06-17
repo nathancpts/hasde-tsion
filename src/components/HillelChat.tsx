@@ -131,7 +131,10 @@ export function HillelChat() {
 
 
           {/* Search bar */}
-          <div className="hillel-gradient-border mx-auto flex w-full max-w-sm items-center gap-1 py-1.5 pl-4 pr-1.5 shadow-2xl">
+          <div
+            className="hillel-gradient-border mx-auto flex w-full max-w-sm items-center gap-1 py-1.5 pl-4 pr-1.5 shadow-2xl"
+            style={{ maxWidth: "calc(100vw - 24px)" }}
+          >
             <input
               ref={inputRef}
               type="text"
