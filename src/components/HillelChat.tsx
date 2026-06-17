@@ -81,13 +81,13 @@ export function HillelChat() {
       {open && (
         <div
           className="fixed inset-x-0 bottom-0 z-50 flex flex-col items-stretch px-3"
-          style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 12px)" }}
+          style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)" }}
         >
           {/* Answer card (only when there are messages) */}
           {(messages.length > 0 || loading) && (
             <div
-              className="hillel-gradient-border mx-auto mb-2 w-full max-w-md overflow-hidden bg-white shadow-2xl"
-              style={{ borderRadius: "20px" }}
+              className="hillel-gradient-border mx-auto mb-2 w-full max-w-sm overflow-hidden bg-white shadow-2xl"
+              style={{ borderRadius: "20px", maxWidth: "calc(100vw - 24px)" }}
             >
               <div
                 ref={scrollRef}
@@ -131,7 +131,10 @@ export function HillelChat() {
 
 
           {/* Search bar */}
-          <div className="hillel-gradient-border mx-auto flex w-full max-w-sm items-center gap-1 py-1.5 pl-4 pr-1.5 shadow-2xl">
+          <div
+            className="hillel-gradient-border mx-auto flex w-full max-w-sm items-center gap-1 py-1.5 pl-4 pr-1.5 shadow-2xl"
+            style={{ maxWidth: "calc(100vw - 24px)" }}
+          >
             <input
               ref={inputRef}
               type="text"
