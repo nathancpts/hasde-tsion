@@ -1418,8 +1418,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
               </article>
 
-              {/* Invité d'honneur */}
-
+              {/* Invités d'honneur — Hatan & Kala */}
               <article
                 className="btn-blue-animated rounded-2xl p-5 text-center"
                 style={{
@@ -1427,12 +1426,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 }}
               >
                 <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/85 mb-2">
-                  ✨ Invité d'honneur
+                  ✨ Invités d'honneur · Hatan &amp; Kala 💍
                 </p>
-                <p className="font-display text-base font-semibold text-white leading-snug">
-                  Bienvenue au{" "}
-                  <span className="font-bold text-[#fff3d6]">Rav Arié Niselevitch</span>{" "}
-                  pour ce Chabbat.
+                <p className="font-display text-[20px] font-bold text-[#fff3d6] leading-tight">
+                  Levanah &amp; Ethan
+                  <br />
+                  <span className="text-[17px] tracking-wide">Sellam</span>
                 </p>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
                   <div className="rounded-lg bg-white/15 px-2 py-1.5">
@@ -1441,7 +1440,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   </div>
                   <div className="rounded-lg bg-white/15 px-2 py-1.5">
                     <p className="text-white/70 uppercase tracking-wider text-[9px]">Cours</p>
-                    <p className="font-semibold text-white leading-tight">Chaharit & Séouda Chlichit</p>
+                    <p className="font-semibold text-white leading-tight">Chaharit &amp; Séouda Chlichit</p>
                   </div>
                 </div>
               </article>
