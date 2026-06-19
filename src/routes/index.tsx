@@ -1285,7 +1285,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 {parashaHe && (
                   <p className="font-hebrew text-xl leading-none mt-2 text-white/90" dir="rtl">{parashaHe}</p>
                 )}
-                <p className="font-hebrew text-base text-white/80 mt-2" dir="rtl">שבת מברכים</p>
+                
               </article>
 
 
