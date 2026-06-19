@@ -134,7 +134,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <HillelChat />
+      {/* <HillelChat /> désactivé temporairement */}
     </QueryClientProvider>
   );
 }
