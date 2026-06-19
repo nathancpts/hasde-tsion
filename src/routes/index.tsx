@@ -1288,6 +1288,18 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 
               </article>
 
+              {/* Cours exceptionnel — aujourd'hui uniquement */}
+              {dayOffset === 0 && (
+                <article className="rounded-2xl bg-gradient-to-br from-[#fff7e0] to-[#fde6c4] p-4 shadow-[0_4px_14px_rgba(212,160,60,0.18)] border border-[#e8c477]/40 text-center">
+                  <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-[#a8761a] mb-1">
+                    📖 Cours sur texte · Aujourd'hui
+                  </p>
+                  <p className="font-display text-2xl font-bold text-foreground tabular-nums">19h45</p>
+                </article>
+              )}
+
+
+
 
               {/* 2-col: Daf | Tehilim */}
               <div className="grid grid-cols-2 gap-3">
