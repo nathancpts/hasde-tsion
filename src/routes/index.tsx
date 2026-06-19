@@ -150,6 +150,7 @@ const week = {
     tehilim: "69 · 70 · 71",
     shema: "—",
     times: [
+      { label: "Cours sur texte", value: "19:45" },
       { label: "Minha", value: "20:00" },
       { label: "Arvit", value: "20:45" },
       { label: "Allumer les bougies", value: "21:25", tone: "gold" as const },
