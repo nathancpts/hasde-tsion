@@ -1353,33 +1353,40 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
               </article>
 
-              {/* 2-col: Rosh Hodesh | Yahrtzeit */}
-              <div className="grid grid-cols-2 gap-3">
-                {live?.roshHodesh ? (
+              {/* Rosh Hodesh | Yahrtzeit — auto layout */}
+              {(() => {
+                const dayData = selectedDay === "vendredi" ? live?.vendredi : live?.samedi;
+                const names = dayData?.yahrtzeits ?? [];
+                const hasRosh = !!live?.roshHodesh;
+                const hasYahr = names.length > 0;
+                if (!hasRosh && !hasYahr) return null;
+
+                const roshEl = hasRosh ? (
                   <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
                     <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-primary">🌙 Rosh Ḥodesh</p>
-                    <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">{live.roshHodesh.nom}</p>
-                    <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{live.roshHodesh.dateLabel}</p>
+                    <p className="font-display text-lg font-bold text-foreground mt-1 leading-tight">{live!.roshHodesh!.nom}</p>
+                    <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{live!.roshHodesh!.dateLabel}</p>
                   </article>
-                ) : <div />}
-                {(() => {
-                  const dayData = selectedDay === "vendredi" ? live?.vendredi : live?.samedi;
+                ) : null;
 
-                  const names = dayData?.yahrtzeits ?? [];
-                  if (names.length === 0) return <div />;
-                  return (
-                    <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                      <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
-                      <p className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
-                        {dayData!.hd} {frenchHebMonth(dayData!.hm)}
-                      </p>
-                      <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
-                        {names.map((n, i) => <div key={i}>{n}</div>)}
-                      </div>
-                    </article>
-                  );
-                })()}
-              </div>
+                const yahrEl = hasYahr ? (
+                  <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">🕯️ Yahrtzeit</p>
+                    <p className="text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">
+                      {dayData!.hd} {frenchHebMonth(dayData!.hm)}
+                    </p>
+                    <div className="text-[11px] text-foreground/80 mt-1 leading-snug space-y-0.5">
+                      {names.map((n, i) => <div key={i}>{n}</div>)}
+                    </div>
+                  </article>
+                ) : null;
+
+                if (hasRosh && hasYahr) {
+                  return <div className="grid grid-cols-2 gap-3">{roshEl}{yahrEl}</div>;
+                }
+                return roshEl ?? yahrEl;
+              })()}
+
 
               {/* Invité d'honneur */}
               <article
