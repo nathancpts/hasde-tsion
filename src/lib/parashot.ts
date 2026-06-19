@@ -124,19 +124,14 @@ export const PARASHOT: ParashaEntry[] = [
         ],
       },
       {
-        titre: "Message d'espoir",
-        icone: "🕯️",
-        paragraphes: [
-          "Là où la jalousie divise, la Torah nous invite à faire fleurir nos dons comme le bâton d'Aharon, et à transformer la rivalité en service paisible.",
-        ],
-      },
-      {
         titre: "Chabbat Chalom à tous !",
         icone: "🕊️",
         paragraphes: [
+          "Là où la jalousie divise, la Torah nous invite à faire fleurir nos dons comme le bâton d'Aharon, et à transformer la rivalité en service paisible.",
           "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
         ],
       },
+
     ],
   },
   {
