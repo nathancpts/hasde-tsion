@@ -1400,11 +1400,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                     <em className="text-[#a8761a] font-semibold">Hatan</em> et une{" "}
                     <em className="text-[#a8761a] font-semibold">Kala</em>.
                   </p>
-                  <p className="text-center font-display text-[18px] leading-tight text-[#a8761a] font-semibold py-1">
-                    Levanah &amp; Ethan
-                    <br />
-                    <span className="text-[15px] tracking-wide">Sellam</span>
-                  </p>
                   <p>
                     C'est avec beaucoup de joie que nous partageons avec la communauté ce moment de sim'ha, de bénédiction et de lumière.
                   </p>
