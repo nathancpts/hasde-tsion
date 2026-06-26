@@ -1401,35 +1401,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               })()}
 
 
-              {/* Hatan & Kala — annonce exceptionnelle */}
-              <article className="rounded-2xl bg-gradient-to-br from-[#fff7e0] to-[#fde6c4] p-5 shadow-[0_4px_14px_rgba(212,160,60,0.18)] border border-[#e8c477]/40">
-                <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-[#a8761a] text-center mb-3">
-                  💍 Mazal Tov · Hatan & Kala
-                </p>
-                <div className="text-[13px] text-foreground/85 leading-relaxed space-y-2.5">
-                  <p className="font-semibold text-foreground">Chabbat Chalom à tous,</p>
-                  <p>
-                    Ce Chabbat, nous aurons le grand honneur d'accueillir parmi nous un{" "}
-                    <em className="text-[#a8761a] font-semibold">Hatan</em> et une{" "}
-                    <em className="text-[#a8761a] font-semibold">Kala</em>.
-                  </p>
-                  <p>
-                    C'est avec beaucoup de joie que nous partageons avec la communauté ce moment de sim'ha, de bénédiction et de lumière.
-                  </p>
-                  <p>
-                    Que cette présence apporte à tous joie, inspiration et bonnes nouvelles, et que Hachem accompagne ce couple dans la construction d'un foyer chaleureux, solide et rempli de Torah, de paix et de bénédiction.
-                  </p>
-                  <p className="italic text-[#a8761a]">
-                    Que ce Chabbat soit une source de joie pour toute la communauté.
-                  </p>
-                  <p className="text-center font-semibold text-foreground pt-1">Chabbat Chalom ✨</p>
-                </div>
-              </article>
 
               {/* Invités d'honneur — Hatan & Kala (reset auto. tous les dimanches à 00:01) */}
               {(() => {
                 // Date à laquelle les invités ont été ajoutés. Mettre à jour à chaque nouvel ajout.
-                const INVITES_SET_AT = new Date("2026-06-26T00:00:00+02:00");
+                const INVITES_SET_AT = new Date("2026-06-19T00:00:00+02:00");
                 // Calcule le dernier dimanche 00:01 (heure locale)
                 const ref = now ?? new Date();
                 const lastReset = new Date(ref);
