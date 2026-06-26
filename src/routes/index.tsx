@@ -472,10 +472,6 @@ function Header() {
               <span className="uppercase tracking-wider text-white/70">Officiant</span>
               <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Séouda offerte par</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Avram Niddam</span>
-            </div>
           </div>
         </div>
       </div>
