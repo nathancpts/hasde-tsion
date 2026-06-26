@@ -467,22 +467,14 @@ function Header() {
             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 18px rgba(0,0,0,0.25)",
           }}
         >
-          <p className="text-[1.1vh] uppercase tracking-[0.3em] font-semibold mb-[0.6vh]" style={{ color: "#C9A96E" }}>
-            ✨ Invité d'honneur · Chabbat
-          </p>
-          <p className="font-display text-[2.3vh] font-semibold text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
-            C'est avec beaucoup de bonheur que nous vous annonçons la venue du{" "}
-            <span className="font-bold" style={{ color: "#E8C98A" }}>Rav Arié Niselevitch</span>{" "}
-            parmi nous pour ce Chabbat.
-          </p>
-          <div className="mt-[1vh] flex justify-center gap-[2vw] text-[1.4vh]">
+          <div className="flex justify-center gap-[2vw] text-[1.6vh]">
             <div className="flex items-center gap-2">
               <span className="uppercase tracking-wider text-white/70">Officiant</span>
               <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Cours</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Chaharit & Séouda Chlichit</span>
+              <span className="uppercase tracking-wider text-white/70">Séouda offerte par</span>
+              <span className="font-semibold" style={{ color: "#E8C98A" }}>Avram Niddam</span>
             </div>
           </div>
         </div>
