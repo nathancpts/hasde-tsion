@@ -1424,7 +1424,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                     }}
                   >
                     <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/85 mb-2">
-                      ✨ Invités d'honneur · Hatan &amp; Kala 💍
+                      ✨ Invités d'honneur
                     </p>
                     {expired ? (
                       <p className="font-display text-[15px] italic text-white/80 py-3">
