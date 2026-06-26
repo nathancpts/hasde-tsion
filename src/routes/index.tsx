@@ -1429,7 +1429,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               {/* Invités d'honneur — Hatan & Kala (reset auto. tous les dimanches à 00:01) */}
               {(() => {
                 // Date à laquelle les invités ont été ajoutés. Mettre à jour à chaque nouvel ajout.
-                const INVITES_SET_AT = new Date("2026-06-26T00:00:00+02:00");
+                const INVITES_SET_AT = new Date("2026-06-19T00:00:00+02:00");
                 // Calcule le dernier dimanche 00:01 (heure locale)
                 const ref = now ?? new Date();
                 const lastReset = new Date(ref);
