@@ -35,10 +35,7 @@ const DONATIONS_WEEK_MONDAY = "2026-06-15";
 
 const _DONATIONS_RAW: Donation[] = [
   {
-    donateur: "Famille Sellam Ethan",
-    occasion: "Hazak · prend sur elle la Parachat Korach ✨",
-    dedicace:
-      "Qu'Hachem accompagne ce couple dans la construction d'un foyer chaleureux, solide et rempli de Torah, de paix et de bénédiction.",
+    donateur: "Avram Niddam",
   },
 ];
 
