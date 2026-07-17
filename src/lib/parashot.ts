@@ -1176,9 +1176,9 @@ export const PARASHOT: ParashaEntry[] = [
   },
 ];
 
-// Shabbat de référence (samedi 20 juin 2026) → index 1 = Kora'h.
-// Chela'h Lekha (index 0) correspond au Shabbat précédent (13 juin 2026).
-const BASE_SHABBAT_ISO = "2026-06-20"; // Kora'h
+// Shabbat de référence (samedi 18 juillet 2026) → index 7 = Devarim.
+const BASE_SHABBAT_ISO = "2026-07-18"; // Devarim
+const BASE_INDEX = 7;
 
 function upcomingShabbat(d: Date): Date {
   const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -1192,7 +1192,6 @@ export function getCurrentParasha(now: Date = new Date()): ParashaEntry {
   const target = upcomingShabbat(now);
   const base = new Date(BASE_SHABBAT_ISO + "T00:00:00");
   const weeks = Math.round((target.getTime() - base.getTime()) / (7 * 24 * 3600 * 1000));
-  // Kora'h est à l'index 1 dans PARASHOT
-  const idx = ((1 + weeks) % PARASHOT.length + PARASHOT.length) % PARASHOT.length;
+  const idx = ((BASE_INDEX + weeks) % PARASHOT.length + PARASHOT.length) % PARASHOT.length;
   return PARASHOT[idx];
 }
