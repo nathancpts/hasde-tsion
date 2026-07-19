@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
@@ -82,30 +82,6 @@ function useKiosk() {
   return { isFs, toggle, hint, dismissHint: () => setHint(false) };
 }
 
-function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof useKiosk>) {
-  return (
-    <>
-      <button
-        onClick={toggle}
-        aria-label={isFs ? "Quitter plein écran" : "Mode kiosque plein écran"}
-        className="fixed bottom-4 right-4 z-50 p-2.5 rounded-full bg-card/80 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition opacity-30 hover:opacity-100 backdrop-blur-sm"
-      >
-        {isFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-      </button>
-
-      {hint && !isFs && (
-        <button
-          onClick={() => { toggle(); dismissHint(); }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-primary text-primary-foreground text-xs md:text-sm font-semibold uppercase tracking-wider shadow-[0_0_30px_rgba(201,169,110,0.4)] hover:scale-105 transition flex items-center gap-2"
-        >
-          <Maximize2 className="w-4 h-4" />
-          Lancer mode TV plein écran
-          <span className="opacity-60 hidden md:inline">· touche F</span>
-        </button>
-      )}
-    </>
-  );
-}
 
 
 function DynamicBackground() {
@@ -1639,7 +1615,7 @@ function PlanningTV() {
   const chabad = useChabad();
   const [dayOffset, setDayOffset] = useState(0);
   const zmanim = useZmanim(null, dayOffset);
-  const kiosk = useKiosk();
+  useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
   const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
@@ -2011,13 +1987,13 @@ function PlanningTV() {
                 return (
                   <div
                     key={`${t.label}-${t.value}`}
-                    className="flex items-baseline justify-between gap-[1vw] py-[1vh] transition-colors"
-                    style={isNext ? { background: "rgba(212,175,55,0.06)", borderRadius: "10px", padding: "1vh 1vw" } : undefined}
+                    className="flex items-baseline justify-between gap-[1vw] py-[1.9vh] transition-colors"
+                    style={isNext ? { background: "rgba(212,175,55,0.07)", borderRadius: "12px", padding: "1.9vh 1.2vw" } : undefined}
                   >
                     <span
                       className="uppercase"
                       style={{
-                        fontSize: "1.8vh",
+                        fontSize: "2.5vh",
                         letterSpacing: "0.16em",
                         fontWeight: isNext || isKey ? 700 : 500,
                         color: labelColor,
@@ -2028,7 +2004,7 @@ function PlanningTV() {
                     <span
                       className="tabular-nums leading-none"
                       style={{
-                        fontSize: isNext ? "4vh" : "3.2vh",
+                        fontSize: isNext ? "5.8vh" : "4.6vh",
                         fontWeight: isKey || isNext ? 700 : 600,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
@@ -2066,11 +2042,12 @@ function PlanningTV() {
         </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh]">
+        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
           {/* Séouda card */}
           <article
-            className="flex-1 min-h-0 flex flex-col p-[2vh]"
+            className="flex flex-col p-[2vh] shrink-0"
             style={{
+              flexBasis: "38%",
               background: "#FFFFFF",
               borderRadius: "20px",
               boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
@@ -2112,9 +2089,8 @@ function PlanningTV() {
 
           {/* Live Kotel — or Shabbat static */}
           <div
-            className="relative w-full overflow-hidden"
+            className="relative w-full overflow-hidden flex-1 min-h-0"
             style={{
-              aspectRatio: "16 / 9",
               borderRadius: "20px",
               boxShadow: "0 12px 32px -14px rgba(15,61,122,0.35), 0 0 0 1px rgba(15,61,122,0.06)",
             }}
