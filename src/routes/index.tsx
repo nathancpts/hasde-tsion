@@ -2231,13 +2231,22 @@ function PlanningTV() {
               </>
             ) : (
               <>
-                <iframe
-                  src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                  title="Live Hasdé Tsion"
-                  allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full border-0"
-                />
+                <div className="absolute inset-0" style={{ overflow: "hidden", borderRadius: "16px" }}>
+                  <iframe
+                    src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
+                    title="Live Hasdé Tsion"
+                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                    allowFullScreen
+                    className="absolute top-1/2 left-1/2 border-0"
+                    style={{
+                      width: "177.78vh",
+                      height: "56.25vw",
+                      minWidth: "100%",
+                      minHeight: "100%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  />
+                </div>
 
                 <div
                   className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
