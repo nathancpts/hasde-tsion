@@ -1631,9 +1631,9 @@ function PlanningTV() {
         </div>
         <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
           <iframe
-            src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0"
+            src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
             title="Live Hasdé Tsion"
-            allow="autoplay; encrypted-media; picture-in-picture"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
             allowFullScreen
             className="absolute inset-0 w-full h-full border-0"
           />
