@@ -2066,7 +2066,7 @@ function PlanningTV() {
         </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh]">
+        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
           {/* Séouda card */}
           <article
             className="flex-1 min-h-0 flex flex-col p-[2vh]"
