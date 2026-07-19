@@ -1684,97 +1684,265 @@ function PlanningTV() {
   });
 
 
+  const now = new Date();
+  const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
+  const parashaHe = live?.parasha.he ?? week.parasha.he;
+
+  const GOLD = "#C9A96E";
+  const NAVY_DEEP = "#050B18";
+  const NAVY_PANEL = "#0A1428";
+  const NAVY_PANEL_2 = "#0E1B36";
+
   return (
-    <main className="relative isolate h-screen w-screen overflow-hidden bg-transparent text-foreground grid grid-rows-[auto_auto_1fr_auto] gap-[1.2vh] p-[1.5vh_1.5vw]">
+    <main
+      className="relative isolate h-screen w-screen overflow-hidden text-white grid grid-rows-[auto_1fr_auto]"
+      style={{ background: NAVY_DEEP, fontFamily: "'Inter', system-ui, sans-serif" }}
+    >
       <DynamicBackground />
       {!isPdfMode && <KioskControls {...kiosk} />}
-      <Header />
-      <ParashaBanner live={live} />
 
-      {/* Live YouTube — flottant coin bas-droite */}
-      <div
-        className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-2xl overflow-hidden"
-        style={{
-          background: "#000",
-          border: "1.5px solid rgba(201,169,110,0.5)",
-          boxShadow: "0 20px 60px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(31,78,168,0.4), 0 0 40px -10px rgba(74,123,209,0.55)",
-        }}
+      {/* ─── HEADER ─── */}
+      <header
+        className="relative flex items-center justify-between px-[2.2vw] py-[2vh] border-b"
+        style={{ borderColor: "rgba(201,169,110,0.22)", background: "linear-gradient(180deg, rgba(14,27,54,0.7), rgba(5,11,24,0.4))" }}
       >
-        <div className="flex items-center gap-2 px-3 py-1.5" style={{ background: "linear-gradient(90deg, #0F3D7A 0%, #1f4ea8 55%, #0a2c6b 100%)" }}>
-          <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[1.1vh] uppercase tracking-[0.25em] text-white font-semibold">Live · Hasdé Tsion</span>
+        <div className="flex items-center gap-[1.2vw]">
+          <img src={logo} alt="Hasdé Tsion" className="h-[10vh] w-auto opacity-95" />
         </div>
-        <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-          <iframe
-            src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
-            title="Live Hasdé Tsion"
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full border-0"
-          />
+
+        <div className="text-center">
+          <p className="text-[1.05vh] uppercase font-bold tracking-[0.42em] mb-[0.9vh]" style={{ color: GOLD }}>
+            ✦ Parachat Hashavoua ✦
+          </p>
+          <div className="flex items-baseline gap-[1.5vw] justify-center">
+            <h1 className="font-display text-[5.4vh] font-bold text-white leading-none tracking-tight">
+              {parashaFr}
+            </h1>
+            <span className="font-hebrew text-[4.2vh] leading-none" style={{ color: GOLD }} dir="rtl">
+              {parashaHe}
+            </span>
+          </div>
         </div>
-      </div>
 
+        <div className="text-right flex flex-col items-end">
+          <div className="font-display text-[6.2vh] font-extrabold tabular-nums leading-none text-white tracking-tighter">
+            {clock}
+          </div>
+          <p className="text-[1.05vh] uppercase tracking-[0.32em] text-white/60 mt-[0.9vh] capitalize font-semibold">
+            {dateStr}
+          </p>
+          <div className="flex items-center gap-2 mt-[1vh]">
+            <span className="w-1 h-[1.4vh] rounded-full" style={{ background: GOLD }} />
+            <span className="text-[1.05vh] uppercase tracking-[0.28em] text-white/50 font-semibold">Officiant</span>
+            <span className="text-[1.4vh] font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
+          </div>
+        </div>
+      </header>
 
-
-
-      <section className="grid grid-cols-4 gap-[1vw] min-h-0">
-        <ParashaCard live={live} />
-
-        <DayCard
-          badge="Vendredi"
-          badgeTone="blue"
-          title={vDate}
-          subtitle={vHeb}
-          hebrew={vDaf}
+      {/* ─── MAIN GRID: 3 COLUMNS ─── */}
+      <section className="grid grid-cols-12 min-h-0" style={{ background: NAVY_DEEP }}>
+        {/* VENDREDI */}
+        <TvScheduleColumn
+          eyebrow="Vendredi"
+          hebrewSub={vDaf}
+          dateLabel={vDate}
           tehilim={vTeh}
           shema={vShema}
-
           times={vTimes}
-        >
-          {(live?.vendredi.yahrtzeits.length ?? 0) > 0 && (
-            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-                {live!.vendredi.hd} {frenchHebMonth(live!.vendredi.hm)} 5786 · Yahrtzeit
-              </div>
-              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-                {live!.vendredi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
-              </div>
-            </div>
-          )}
-        </DayCard>
+          highlightLabel="Entrée"
+          gold={GOLD}
+          panel={NAVY_PANEL}
+        />
 
-        <DayCard
-          badge="Shabbat"
-          badgeTone="gold"
-          title={sDate}
-          subtitle={sHeb}
-          hebrew={sDaf}
+        {/* CHABBAT — center, slightly emphasized */}
+        <TvScheduleColumn
+          eyebrow="Chabbat"
+          hebrewSub={sDaf}
+          dateLabel={sDate}
           tehilim={sTeh}
           shema={sShema}
-
           times={sTimes}
+          highlightLabel="Sortie"
+          gold={GOLD}
+          panel={NAVY_PANEL_2}
+          emphasized
+        />
+
+        {/* RIGHT RAIL */}
+        <aside
+          className="col-span-4 border-l flex flex-col min-h-0"
+          style={{ borderColor: "rgba(201,169,110,0.18)", background: NAVY_PANEL }}
         >
-          {(live?.samedi.yahrtzeits.length ?? 0) > 0 && (
-            <div className="rounded-lg border border-border bg-muted/40 p-[1vh_0.8vw]">
-              <div className="text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground text-center font-semibold mb-[0.6vh]">
-                {live!.samedi.hd} {frenchHebMonth(live!.samedi.hm)} 5786 · Yahrtzeit
+          {/* Séouda */}
+          <div className="px-[1.6vw] py-[2vh] border-b" style={{ borderColor: "rgba(201,169,110,0.14)" }}>
+            <div className="flex items-center gap-2 mb-[1vh]">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
+              <p className="text-[1.05vh] uppercase tracking-[0.32em] font-bold" style={{ color: GOLD }}>
+                Séouda offerte par
+              </p>
+            </div>
+            <div className="max-h-[26vh] overflow-hidden">
+              <AutoScrollVertical className="max-h-[26vh]" speed={22} pause={2600}>
+                {DONATIONS_REPAS.length === 0 ? (
+                  <p className="text-[1.5vh] text-white/40 italic">Aucune donation pour le moment.</p>
+                ) : (
+                  DONATIONS_REPAS.map((d, i) => (
+                    <div key={i} className="py-[1vh] border-b last:border-0" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                      <p className="font-display font-semibold text-[1.9vh] text-white leading-snug">{d.donateur}</p>
+                      {d.occasion && (
+                        <p className="text-[1.15vh] uppercase tracking-[0.2em] font-semibold mt-1" style={{ color: GOLD }}>{d.occasion}</p>
+                      )}
+                      {d.dedicace && (
+                        <p className="font-display italic text-[1.55vh] text-white/70 mt-1">{d.dedicace}</p>
+                      )}
+                    </div>
+                  ))
+                )}
+              </AutoScrollVertical>
+            </div>
+          </div>
+
+          {/* Yahrtzeits */}
+          {((live?.vendredi.yahrtzeits.length ?? 0) > 0 || (live?.samedi.yahrtzeits.length ?? 0) > 0) && (
+            <div className="px-[1.6vw] py-[1.6vh] border-b" style={{ borderColor: "rgba(201,169,110,0.14)" }}>
+              <div className="flex items-center gap-2 mb-[0.8vh]">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
+                <p className="text-[1.05vh] uppercase tracking-[0.32em] font-bold" style={{ color: GOLD }}>Yahrtzeit</p>
               </div>
-              <div className="text-[1.35vh] text-accent font-semibold leading-snug text-center space-y-0.5">
-                {live!.samedi.yahrtzeits.map((n, i) => <div key={i}>{n}</div>)}
+              <div className="space-y-[0.4vh]">
+                {live?.vendredi.yahrtzeits.map((n, i) => (
+                  <p key={`v${i}`} className="text-[1.45vh] text-white/85 leading-snug">{n}</p>
+                ))}
+                {live?.samedi.yahrtzeits.map((n, i) => (
+                  <p key={`s${i}`} className="text-[1.45vh] text-white/85 leading-snug">{n}</p>
+                ))}
               </div>
             </div>
           )}
-        </DayCard>
 
+          {/* Rosh Hodesh */}
+          {live?.roshHodesh && (
+            <div className="px-[1.6vw] py-[1.6vh] border-b" style={{ borderColor: "rgba(201,169,110,0.14)" }}>
+              <div className="flex items-center gap-2 mb-[0.8vh]">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: GOLD }} />
+                <p className="text-[1.05vh] uppercase tracking-[0.32em] font-bold" style={{ color: GOLD }}>Prochain Rosh Ḥodesh</p>
+              </div>
+              <p className="font-display font-bold text-[2vh] text-white leading-none">{live.roshHodesh.nom}</p>
+              <p className="text-[1.3vh] text-white/60 mt-1">{live.roshHodesh.dateLabel}</p>
+            </div>
+          )}
 
-        <DonationsCard live={live} />
+          {/* Live video — inline, no floating */}
+          <div className="mt-auto px-[1.6vw] py-[1.6vh]">
+            <div className="flex items-center gap-2 mb-[0.8vh]">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              <p className="text-[1.05vh] uppercase tracking-[0.32em] font-bold text-white/70">Live · Hasdé Tsion</p>
+            </div>
+            <div className="relative w-full rounded-md overflow-hidden border" style={{ aspectRatio: "16 / 9", borderColor: "rgba(201,169,110,0.25)" }}>
+              <iframe
+                src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
+                title="Live Hasdé Tsion"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
+            </div>
+          </div>
+        </aside>
       </section>
 
-
-      <footer className="text-center text-[1.1vh] uppercase tracking-[0.3em] text-muted-foreground">
+      {/* ─── FOOTER ─── */}
+      <footer
+        className="text-center text-[1vh] uppercase tracking-[0.4em] py-[1.2vh] border-t"
+        style={{ borderColor: "rgba(201,169,110,0.18)", color: "rgba(255,255,255,0.4)", background: NAVY_DEEP }}
+      >
         בס״ד · Hasdé Tsion · Planning de la semaine
       </footer>
     </main>
+  );
+}
+
+function TvScheduleColumn({
+  eyebrow,
+  hebrewSub,
+  dateLabel,
+  tehilim,
+  shema,
+  times,
+  highlightLabel,
+  gold,
+  panel,
+  emphasized = false,
+}: {
+  eyebrow: string;
+  hebrewSub: string;
+  dateLabel: string;
+  tehilim: string;
+  shema: string;
+  times: { label: string; value: string }[];
+  highlightLabel: string;
+  gold: string;
+  panel: string;
+  emphasized?: boolean;
+}) {
+  return (
+    <div
+      className="col-span-4 flex flex-col min-h-0 border-r"
+      style={{ borderColor: "rgba(201,169,110,0.18)", background: panel }}
+    >
+      {/* Column header */}
+      <div className="px-[1.8vw] pt-[2.2vh] pb-[1.6vh] border-b" style={{ borderColor: "rgba(201,169,110,0.18)" }}>
+        <div className="flex items-baseline justify-between">
+          <p className="text-[1.15vh] uppercase tracking-[0.42em] font-bold" style={{ color: gold }}>
+            {eyebrow}
+          </p>
+          <p className="font-hebrew text-[1.6vh] text-white/50" dir="rtl">{hebrewSub}</p>
+        </div>
+        <h2 className={`font-display font-bold text-white leading-tight mt-[0.6vh] ${emphasized ? "text-[3vh]" : "text-[2.6vh]"}`}>
+          {dateLabel}
+        </h2>
+        <div className="mt-[1vh] flex items-center gap-[1vw]">
+          <div className="flex items-baseline gap-2">
+            <span className="text-[1vh] uppercase tracking-[0.28em] text-white/45 font-semibold">Tehilim</span>
+            <span className="font-display font-bold text-[1.9vh]" style={{ color: gold }}>{tehilim}</span>
+          </div>
+          <span className="w-px h-[1.6vh] bg-white/15" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-[1vh] uppercase tracking-[0.28em] text-white/45 font-semibold">Chema</span>
+            <span className="font-display font-bold text-[1.7vh] text-white/85 tabular-nums">{shema}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Schedule rows — the hero */}
+      <div className="flex-1 flex flex-col justify-center px-[1.8vw] py-[1.5vh] min-h-0">
+        <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+          {times.filter((t) => t.label !== highlightLabel).map((t) => (
+            <li key={t.label} className="flex items-baseline justify-between py-[1.1vh] border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+              <span className="text-[1.5vh] uppercase tracking-[0.16em] text-white/60 font-medium">
+                {t.label}
+              </span>
+              <span className={`font-display font-light tabular-nums leading-none tracking-tighter text-white ${emphasized ? "text-[4.4vh]" : "text-[4vh]"}`}>
+                {t.value}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Highlight row (Entrée / Sortie) */}
+        {times.filter((t) => t.label === highlightLabel).map((t) => (
+          <div key={t.label} className="mt-[2vh] flex items-center justify-between pt-[1.6vh] border-t-2" style={{ borderColor: gold }}>
+            <span className="text-[1.45vh] uppercase tracking-[0.28em] font-bold" style={{ color: gold }}>
+              {t.label}
+            </span>
+            <span className="font-display font-extrabold tabular-nums leading-none tracking-tighter text-white text-[6.4vh]">
+              {t.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
