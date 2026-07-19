@@ -1926,7 +1926,7 @@ function PlanningTV() {
         </div>
 
         {/* 3-column grid */}
-        <div className="grid grid-cols-12 gap-[1.6vw] flex-1 min-h-0">
+        <div className="relative z-10 grid grid-cols-12 gap-[1.6vw] flex-1 min-h-0 isolate">
 
         {/* COLUMN 1 — PARASHA (marquee) */}
         <article
@@ -2008,17 +2008,24 @@ function PlanningTV() {
 
         {/* COLUMN 2 — ZMANIM */}
         <article
-          className="col-span-5 flex flex-col min-h-0 relative"
+          className="col-span-5 flex flex-col min-h-0 relative overflow-hidden"
           style={{
             background: "#FFFFFF",
             borderRadius: "16px",
             padding: "24px",
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-            zIndex: 2,
+            zIndex: 40,
             isolation: "isolate",
+            contain: "layout paint style",
+            transform: "translateZ(0)",
           }}
         >
-          <div className="flex items-baseline justify-between mb-[1.6vh]">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "#FFFFFF", borderRadius: "16px", zIndex: 0 }}
+          />
+          <div className="relative z-10 flex items-baseline justify-between mb-[1.6vh]">
             <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#1E293B", fontWeight: 700 }}>
               Horaires
             </p>
@@ -2027,7 +2034,7 @@ function PlanningTV() {
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-hidden relative tv-fade-mask">
+          <div className="relative z-10 flex-1 min-h-0 overflow-hidden tv-fade-mask">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
@@ -2126,7 +2133,7 @@ function PlanningTV() {
 
 
           {isWeekend && (entryTime || exitTime) && (
-            <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
+            <div className="relative z-10 mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
               <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
                 <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
                   Entrée
@@ -2149,7 +2156,10 @@ function PlanningTV() {
         </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
+        <div
+          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full overflow-hidden isolate"
+          style={{ contain: "layout paint style" }}
+        >
           {/* Séouda card */}
           <article
             className="flex flex-col shrink-0"
@@ -2198,15 +2208,16 @@ function PlanningTV() {
 
           {/* Live Kotel — or Shabbat static */}
           <div
-            className="relative w-full overflow-hidden flex-1 min-h-0"
+            className="relative z-0 w-full overflow-hidden flex-1 min-h-0"
             style={{
               borderRadius: "16px",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               background: "#FFFFFF",
-              zIndex: 1,
+              zIndex: 0,
               isolation: "isolate",
-              contain: "paint",
+              contain: "strict",
               transform: "translateZ(0)",
+              clipPath: "inset(0 round 16px)",
             }}
           >
 
@@ -2256,19 +2267,25 @@ function PlanningTV() {
               </>
             ) : (
               <>
-                <div className="absolute inset-0" style={{ overflow: "hidden", borderRadius: "16px" }}>
+                <div
+                  className="absolute inset-0"
+                  style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0 }}
+                >
                   <iframe
                     src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
                     title="Live Hasdé Tsion"
                     allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                     allowFullScreen
-                    className="absolute top-1/2 left-1/2 border-0"
+                    className="absolute top-1/2 left-1/2 border-0 pointer-events-none"
                     style={{
-                      width: "177.78vh",
-                      height: "56.25vw",
-                      minWidth: "100%",
-                      minHeight: "100%",
-                      transform: "translate(-50%, -50%)",
+                      width: "190%",
+                      height: "112%",
+                      maxWidth: "none",
+                      minWidth: "190%",
+                      minHeight: "112%",
+                      display: "block",
+                      background: "#FFFFFF",
+                      transform: "translate3d(-50%, -50%, 0)",
                     }}
                   />
                 </div>
