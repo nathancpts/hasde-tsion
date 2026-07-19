@@ -2096,7 +2096,7 @@ function PlanningTV() {
 
               };
               if (!shouldScroll) {
-                const justify = upcomingTimes.length === 1 ? "justify-center" : "justify-start gap-[2.5vh] pt-[2vh]";
+                const justify = "justify-start gap-[2.5vh] pt-[2vh]";
                 return (
                   <div className={`h-full flex flex-col ${justify}`}>
                     {upcomingTimes.map((t) => renderRow(t, "s"))}
