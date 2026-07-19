@@ -222,6 +222,19 @@
     }
   }
 
+  /* TV mode: kill heavy full-screen animated blurs — GPU/CPU can't sustain
+     them at 1080p+ 24/7. Keep visuals static so the sheet + marquee stay 60fps. */
+  .tv-mode body::before,
+  body:has(.tv-mode)::before,
+  body:has(.tv-mode)::after {
+    animation: none !important;
+    will-change: auto !important;
+  }
+  .tv-mode .btn-blue-animated {
+    animation: none !important;
+  }
+
+
   /* Fix Android: overflow-x: hidden on main creates a scroll container that
      can swallow vertical touch scroll. Use `clip` so vertical scroll bubbles
      up to body. */
