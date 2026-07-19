@@ -2015,17 +2015,41 @@ function PlanningTV() {
   );
 }
 
-function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?: string }) {
+function ZmanimRowTV({
+  label,
+  value,
+  isPast,
+  isNext,
+  gold,
+}: {
+  label: string;
+  value: string;
+  isPast: boolean;
+  isNext: boolean;
+  gold: string;
+}) {
   const HEADING_FONT = "'Playfair Display', Georgia, serif";
+  const labelColor = isNext ? gold : isPast ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.85)";
+  const valueColor = isNext ? gold : isPast ? "rgba(255,255,255,0.4)" : "#FFFFFF";
   return (
-    <div className="flex items-baseline justify-between gap-[1vw] px-[0.5vw]">
+    <div
+      className="flex items-baseline justify-between gap-[1vw] px-[1vw] py-[0.4vh] rounded-lg transition-colors"
+      style={
+        isNext
+          ? {
+              background: "rgba(197,160,89,0.06)",
+              boxShadow: `inset 0 0 0 0.5px ${gold}55`,
+            }
+          : undefined
+      }
+    >
       <span
         className="uppercase"
         style={{
-          fontSize: "1.95vh",
-          color: gold ? gold : "rgba(255,255,255,0.75)",
-          letterSpacing: "0.16em",
-          fontWeight: gold ? 600 : 400,
+          fontSize: "1.75vh",
+          color: labelColor,
+          letterSpacing: "0.18em",
+          fontWeight: isNext ? 600 : 500,
         }}
       >
         {label}
@@ -2033,12 +2057,12 @@ function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?
       <span
         className="tabular-nums leading-none"
         style={{
-          fontSize: gold ? "5.4vh" : "4vh",
-          fontWeight: gold ? 700 : 400,
-          color: gold ? gold : "#FFFFFF",
+          fontSize: isNext ? "4.4vh" : "3.4vh",
+          fontWeight: isNext ? 700 : 400,
+          color: valueColor,
           fontFamily: HEADING_FONT,
           letterSpacing: "-0.01em",
-          textShadow: gold ? `0 2px 20px ${gold}33` : "none",
+          textShadow: isNext ? `0 2px 20px ${gold}44` : "none",
         }}
       >
         {value}
@@ -2046,3 +2070,4 @@ function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?
     </div>
   );
 }
+
