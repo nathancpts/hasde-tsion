@@ -2037,21 +2037,30 @@ function PlanningTV() {
                 const isPast = min != null && min <= nowMin;
                 const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
                 const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                const labelColor = isPast ? "#B0B7C7" : "#1E293B";
-                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
+                const labelColor = isNext ? "#0A1128" : isPast ? "#94A3B8" : "#000000";
+                const valueColor = isNext ? "#0A1128" : isPast ? "#94A3B8" : "#000000";
                 return (
                   <div
                     key={`${t.label}-${t.value}-${keySuffix}`}
                     className="flex items-baseline gap-[1vw]"
-                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "0.9vh 1.2vw" } : { padding: "0.9vh 0" }}
+                    style={
+                      isNext
+                        ? {
+                            background: `linear-gradient(135deg, ${GOLD_LOCAL} 0%, #E8C566 100%)`,
+                            borderRadius: "14px",
+                            padding: "1.1vh 1.4vw",
+                            boxShadow: "0 6px 20px rgba(212,175,55,0.35)",
+                          }
+                        : { padding: "0.9vh 0" }
+                    }
                   >
                     <span
                       className="uppercase shrink-0"
                       style={{
                         fontSize: "2.2vh",
                         letterSpacing: "0.10em",
-                        fontWeight: 600,
-                        color: isPast ? "#B0B7C7" : "#000000",
+                        fontWeight: isNext ? 800 : 700,
+                        color: labelColor,
                         fontFamily: HEADING_FONT_LOCAL,
                       }}
                     >
@@ -2061,16 +2070,16 @@ function PlanningTV() {
                       aria-hidden
                       className="flex-1 self-center"
                       style={{
-                        borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                        borderBottom: isNext ? "2px dotted rgba(10,17,40,0.35)" : "2px dotted rgba(0,0,0,0.25)",
                         marginBottom: "0.6vh",
                       }}
                     />
                     <span
                       className="tabular-nums leading-none shrink-0"
                       style={{
-                        fontSize: isNext ? "4vh" : "3.6vh",
-                        fontWeight: 700,
-                        color: isPast ? "#B0B7C7" : "#000000",
+                        fontSize: isNext ? "4.2vh" : "3.6vh",
+                        fontWeight: isNext ? 900 : 800,
+                        color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
                         letterSpacing: "-0.01em",
                       }}
@@ -2079,6 +2088,7 @@ function PlanningTV() {
                     </span>
                   </div>
                 );
+
               };
               if (!shouldScroll) {
                 return (
