@@ -1690,67 +1690,77 @@ function PlanningTV() {
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
-  // Brand palette
-  const NAVY = "#172E7C";
-  const NAVY_DEEP = "#0F1F5A";
-  const GOLD = "#D4AF37";
-  const GOLD_SOFT = "rgba(212,175,55,0.35)";
+  // Luxury palette
+  const BG_DEEP = "#0A1128";
+  const BG_MID = "#0D1B2A";
+  const GOLD = "#C5A059";
+  const GOLD_BRIGHT = "#D4AF37";
+  const GOLD_HAIR = "rgba(197,160,89,0.22)";
+  const CARD_BG = "rgba(255,255,255,0.035)";
+  const CARD_BORDER = "rgba(197,160,89,0.14)";
+  const CARD_SHADOW = "0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 60px -20px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(197,160,89,0.18)";
+
+  const HEADING_FONT = "'Playfair Display', Georgia, serif";
+  const BODY_FONT = "'Inter', system-ui, sans-serif";
 
   // Column 1 — key takeaways (max 4 bullets)
   const pointsBloc = PARASHA_BLOCS.find((b) => /point/i.test(b.titre));
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — combined VENDREDI / SHABBAT list
-  const vRows = vTimes.map((t) => ({ ...t, section: "vendredi" as const, isHighlight: t.label === "Entrée" }));
-  const sRows = sTimes.map((t) => ({ ...t, section: "shabbat" as const, isHighlight: t.label === "Sortie" }));
+  const vRows = vTimes.map((t) => ({ ...t, isHighlight: t.label === "Entrée" }));
+  const sRows = sTimes.map((t) => ({ ...t, isHighlight: t.label === "Sortie" }));
 
   return (
     <main
       className="relative isolate h-screen w-screen overflow-hidden text-white grid grid-rows-[auto_auto_1fr_auto]"
-      style={{ background: NAVY, fontFamily: "'Inter', system-ui, sans-serif" }}
+      style={{
+        background: `radial-gradient(ellipse 90% 70% at 50% -10%, #14274A 0%, ${BG_MID} 45%, ${BG_DEEP} 100%)`,
+        fontFamily: BODY_FONT,
+      }}
     >
-      {/* Subtle linen/stone texture overlay */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.35) 0 1px, transparent 1px 4px)",
-        }}
-      />
+      {/* Ambient depth: soft gold glow + subtle noise */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.05) 0%, transparent 60%)",
+            "radial-gradient(ellipse 55% 40% at 15% 15%, rgba(197,160,89,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 85% 85%, rgba(31,78,168,0.10) 0%, transparent 60%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.035] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(45deg, rgba(255,255,255,0.6) 0 1px, transparent 1px 3px)",
         }}
       />
 
       {/* ─── TOP BAR ─── */}
-      <header className="relative flex items-center justify-between px-[3vw] pt-[3vh] pb-[2vh]">
+      <header className="relative flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[2vh]">
         <div className="flex items-center">
           <img
             src={logo}
             alt="Hasdé Tsion"
-            className="h-[11vh] w-auto"
+            className="h-[10vh] w-auto"
             style={{
               filter:
-                "brightness(0) saturate(100%) invert(72%) sepia(45%) saturate(546%) hue-rotate(4deg) brightness(96%) contrast(88%)",
+                "brightness(0) saturate(100%) invert(72%) sepia(45%) saturate(546%) hue-rotate(4deg) brightness(96%) contrast(88%) drop-shadow(0 2px 12px rgba(197,160,89,0.25))",
             }}
           />
         </div>
 
         <div className="text-right">
           <div
-            className="font-display font-extrabold tabular-nums leading-none text-white tracking-tighter"
-            style={{ fontSize: "8vh" }}
+            className="tabular-nums leading-none text-white tracking-tight"
+            style={{ fontSize: "7.8vh", fontFamily: HEADING_FONT, fontWeight: 600, textShadow: "0 2px 24px rgba(255,255,255,0.06)" }}
           >
             {clock}
           </div>
           <p
-            className="uppercase tracking-[0.32em] text-white/75 mt-[1.2vh] capitalize font-semibold"
-            style={{ fontSize: "1.6vh" }}
+            className="uppercase tracking-[0.42em] text-white/60 mt-[1.4vh] capitalize"
+            style={{ fontSize: "1.35vh", fontWeight: 500, letterSpacing: "0.42em" }}
           >
             {dateStr}
           </p>
@@ -1758,29 +1768,23 @@ function PlanningTV() {
       </header>
 
       {/* ─── SECOND BAR — PARASHA ─── */}
-      <div className="relative px-[3vw] pb-[2.5vh]">
+      <div className="relative px-[3.5vw] pb-[2.4vh]">
         <div
-          className="flex items-baseline justify-between gap-[2vw] pb-[1.6vh] border-b"
-          style={{ borderColor: GOLD_SOFT }}
+          className="flex items-baseline justify-between gap-[2vw] pb-[1.8vh]"
+          style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}
         >
           <h1
-            className="font-display font-bold text-white leading-none tracking-tight"
-            style={{ fontSize: "6vh" }}
+            className="text-white leading-none"
+            style={{ fontSize: "5.4vh", fontFamily: HEADING_FONT, fontWeight: 600, letterSpacing: "-0.01em" }}
           >
             {parashaFr}
           </h1>
-          <div className="flex items-baseline gap-[1vw]" dir="rtl">
-            <span
-              className="font-hebrew leading-none text-white"
-              style={{ fontSize: "5vh" }}
-            >
+          <div className="flex items-baseline gap-[1.2vw]" dir="rtl">
+            <span className="font-hebrew leading-none text-white/95" style={{ fontSize: "4.4vh", fontWeight: 500 }}>
               {parashaHe}
             </span>
-            <span className="text-white/40" style={{ fontSize: "3vh" }}>|</span>
-            <span
-              className="font-hebrew leading-none"
-              style={{ fontSize: "3.6vh", color: GOLD }}
-            >
+            <span className="text-white/25" style={{ fontSize: "2.6vh" }}>|</span>
+            <span className="font-hebrew leading-none" style={{ fontSize: "3.2vh", color: GOLD, fontWeight: 500 }}>
               שבת מברכים
             </span>
           </div>
@@ -1788,25 +1792,39 @@ function PlanningTV() {
       </div>
 
       {/* ─── MAIN 3-COLUMN GRID ─── */}
-      <section className="relative grid grid-cols-12 gap-[2.4vw] px-[3vw] pb-[2.5vh] min-h-0">
+      <section className="relative grid grid-cols-12 gap-[2vw] px-[3.5vw] pb-[2.5vh] min-h-0">
         {/* COLUMN 1 — PARASHA */}
-        <div className="col-span-4 flex flex-col min-h-0">
-          <div className="pb-[1.4vh] mb-[2.4vh] border-b" style={{ borderColor: GOLD_SOFT }}>
-            <p className="uppercase tracking-[0.4em] font-bold" style={{ fontSize: "1.4vh", color: GOLD }}>
+        <div
+          className="col-span-4 flex flex-col min-h-0 p-[3vh]"
+          style={{
+            background: CARD_BG,
+            backdropFilter: "blur(20px) saturate(140%)",
+            border: `1px solid ${CARD_BORDER}`,
+            borderRadius: "16px",
+            boxShadow: CARD_SHADOW,
+          }}
+        >
+          <div className="text-center pb-[2vh] mb-[2.4vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
+            <p className="uppercase" style={{ fontSize: "1.25vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
               Parasha
             </p>
-            <h2 className="font-display font-bold text-white leading-tight mt-[0.8vh]" style={{ fontSize: "4.2vh" }}>
+            <h2 className="text-white leading-tight mt-[1vh]" style={{ fontSize: "4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
               {parashaFr}
             </h2>
           </div>
-          <ul className="flex-1 flex flex-col justify-start space-y-[2vh] min-h-0 overflow-hidden">
+          <ul className="flex-1 flex flex-col justify-start space-y-[2.2vh] min-h-0 overflow-hidden">
             {bullets.map((b, i) => (
-              <li key={i} className="flex gap-[1vw] items-start">
+              <li key={i} className="flex gap-[1.2vw] items-start">
                 <span
-                  className="shrink-0 mt-[1.2vh] rounded-full"
-                  style={{ width: "0.9vh", height: "0.9vh", background: GOLD }}
+                  className="shrink-0 mt-[1.3vh] rounded-full"
+                  style={{
+                    width: "0.55vh",
+                    height: "0.55vh",
+                    background: GOLD_BRIGHT,
+                    boxShadow: `0 0 8px ${GOLD}`,
+                  }}
                 />
-                <p className="text-white leading-snug font-light" style={{ fontSize: "2.15vh" }}>
+                <p className="text-white/88 leading-relaxed" style={{ fontSize: "2vh", fontWeight: 300, letterSpacing: "0.005em" }}>
                   {b}
                 </p>
               </li>
@@ -1815,62 +1833,83 @@ function PlanningTV() {
         </div>
 
         {/* COLUMN 2 — ZMANIM (combined) */}
-        <div className="col-span-5 flex flex-col min-h-0 px-[1.5vw]" style={{ borderLeft: `1px solid ${GOLD_SOFT}`, borderRight: `1px solid ${GOLD_SOFT}` }}>
-          <div className="pb-[1.4vh] mb-[1.8vh] border-b" style={{ borderColor: GOLD_SOFT }}>
-            <p className="uppercase tracking-[0.4em] font-bold text-center" style={{ fontSize: "1.4vh", color: GOLD }}>
-              Zmanim de la semaine
+        <div
+          className="col-span-5 flex flex-col min-h-0 p-[3vh]"
+          style={{
+            background: CARD_BG,
+            backdropFilter: "blur(20px) saturate(140%)",
+            border: `1px solid ${CARD_BORDER}`,
+            borderRadius: "16px",
+            boxShadow: CARD_SHADOW,
+          }}
+        >
+          <div className="text-center pb-[2vh] mb-[2.2vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
+            <p className="uppercase" style={{ fontSize: "1.25vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
+              Horaires
             </p>
+            <h2 className="text-white leading-tight mt-[1vh]" style={{ fontSize: "4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
+              Zmanim
+            </h2>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center min-h-0 space-y-[1.5vh]">
+          <div className="flex-1 flex flex-col justify-center min-h-0 space-y-[1.6vh]">
             {/* VENDREDI header */}
-            <div className="flex items-baseline justify-between">
-              <p className="uppercase tracking-[0.35em] font-bold text-white" style={{ fontSize: "1.7vh" }}>
+            <div className="flex items-baseline justify-between px-[0.5vw]">
+              <p className="uppercase text-white/95" style={{ fontSize: "1.55vh", letterSpacing: "0.35em", fontWeight: 600 }}>
                 Vendredi
               </p>
-              <p className="text-white/45 capitalize font-medium" style={{ fontSize: "1.55vh" }}>{vDate}</p>
+              <p className="text-white/35 capitalize" style={{ fontSize: "1.4vh", fontWeight: 400 }}>{vDate}</p>
             </div>
             {vRows.map((t) => (
-              <ZmanimRow key={`v-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD : undefined} />
+              <ZmanimRow key={`v-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD_BRIGHT : undefined} />
             ))}
 
-            <div className="h-[1.4vh]" />
+            <div className="h-[1.2vh]" style={{ borderTop: `0.5px solid ${GOLD_HAIR}`, marginTop: "1vh" }} />
 
             {/* SHABBAT header */}
-            <div className="flex items-baseline justify-between">
-              <p className="uppercase tracking-[0.35em] font-bold text-white" style={{ fontSize: "1.7vh" }}>
+            <div className="flex items-baseline justify-between px-[0.5vw]">
+              <p className="uppercase text-white/95" style={{ fontSize: "1.55vh", letterSpacing: "0.35em", fontWeight: 600 }}>
                 Shabbat
               </p>
-              <p className="text-white/45 capitalize font-medium" style={{ fontSize: "1.55vh" }}>{sDate}</p>
+              <p className="text-white/35 capitalize" style={{ fontSize: "1.4vh", fontWeight: 400 }}>{sDate}</p>
             </div>
             {sRows.map((t) => (
-              <ZmanimRow key={`s-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD : undefined} />
+              <ZmanimRow key={`s-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD_BRIGHT : undefined} />
             ))}
           </div>
         </div>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
         <div className="col-span-3 flex flex-col min-h-0 gap-[2vh]">
-          {/* Séouda */}
-          <div className="flex flex-col min-h-0">
-            <div className="pb-[1.4vh] mb-[1.6vh] border-b" style={{ borderColor: GOLD_SOFT }}>
-              <p className="uppercase tracking-[0.4em] font-bold" style={{ fontSize: "1.4vh", color: GOLD }}>
+          {/* Séouda card */}
+          <div
+            className="flex flex-col min-h-0 p-[2.4vh]"
+            style={{
+              background: CARD_BG,
+              backdropFilter: "blur(20px) saturate(140%)",
+              border: `1px solid ${CARD_BORDER}`,
+              borderRadius: "16px",
+              boxShadow: CARD_SHADOW,
+            }}
+          >
+            <div className="text-center pb-[1.6vh] mb-[1.6vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
+              <p className="uppercase" style={{ fontSize: "1.15vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
                 Communauté
               </p>
-              <h2 className="font-display font-bold text-white leading-tight mt-[0.6vh]" style={{ fontSize: "2.6vh" }}>
+              <h2 className="text-white leading-tight mt-[0.8vh]" style={{ fontSize: "2.3vh", fontFamily: HEADING_FONT, fontWeight: 500 }}>
                 La Séouda est offerte par
               </h2>
             </div>
-            <div className="min-h-0 overflow-hidden" style={{ maxHeight: "22vh" }}>
-              <AutoScrollVertical className="max-h-[22vh]" speed={22} pause={2600}>
+            <div className="min-h-0 overflow-hidden" style={{ maxHeight: "20vh" }}>
+              <AutoScrollVertical className="max-h-[20vh]" speed={22} pause={2600}>
                 {DONATIONS_REPAS.length === 0 ? (
-                  <p className="text-white/40 italic" style={{ fontSize: "1.7vh" }}>Aucune donation pour le moment.</p>
+                  <p className="text-white/40 italic text-center" style={{ fontSize: "1.6vh" }}>Aucune donation pour le moment.</p>
                 ) : (
                   DONATIONS_REPAS.map((d, i) => (
-                    <div key={i} className="py-[1vh] border-b last:border-0" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                      <p className="font-medium text-white leading-snug" style={{ fontSize: "1.95vh" }}>{d.donateur}</p>
+                    <div key={i} className="py-[0.95vh] text-center" style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "0.5px solid rgba(255,255,255,0.06)" }}>
+                      <p className="text-white/92 leading-snug" style={{ fontSize: "1.85vh", fontWeight: 500 }}>{d.donateur}</p>
                       {d.dedicace && (
-                        <p className="italic text-white/60 mt-[0.4vh]" style={{ fontSize: "1.5vh" }}>{d.dedicace}</p>
+                        <p className="italic text-white/55 mt-[0.3vh]" style={{ fontSize: "1.4vh", fontWeight: 300 }}>{d.dedicace}</p>
                       )}
                     </div>
                   ))
@@ -1879,14 +1918,15 @@ function PlanningTV() {
             </div>
           </div>
 
-          {/* Live Kotel — refined gold frame, no bubble */}
+          {/* Live Kotel — soft gold outline, rounded corners */}
           <div className="mt-auto">
             <div
               className="relative w-full overflow-hidden"
               style={{
                 aspectRatio: "16 / 9",
-                border: `1.5px solid ${GOLD}`,
-                borderRadius: "2px",
+                borderRadius: "12px",
+                border: `0.5px solid ${GOLD}`,
+                boxShadow: "0 12px 40px -12px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(197,160,89,0.18), 0 0 24px -8px rgba(197,160,89,0.25)",
               }}
             >
               <iframe
@@ -1903,8 +1943,8 @@ function PlanningTV() {
 
       {/* ─── FOOTER ─── */}
       <footer
-        className="relative text-center uppercase tracking-[0.5em] py-[1.4vh] border-t"
-        style={{ borderColor: GOLD_SOFT, color: "rgba(255,255,255,0.4)", fontSize: "1vh" }}
+        className="relative text-center uppercase py-[1.5vh]"
+        style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.95vh", letterSpacing: "0.55em", fontWeight: 500 }}
       >
         בס״ד · Hasdé Tsion
       </footer>
@@ -1913,20 +1953,29 @@ function PlanningTV() {
 }
 
 function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?: string }) {
+  const HEADING_FONT = "'Playfair Display', Georgia, serif";
   return (
-    <div className="flex items-baseline justify-between gap-[1vw]">
+    <div className="flex items-baseline justify-between gap-[1vw] px-[0.5vw]">
       <span
-        className="uppercase tracking-[0.14em] font-medium"
-        style={{ fontSize: "2.1vh", color: gold ? gold : "rgba(255,255,255,0.82)" }}
+        className="uppercase"
+        style={{
+          fontSize: "1.95vh",
+          color: gold ? gold : "rgba(255,255,255,0.75)",
+          letterSpacing: "0.16em",
+          fontWeight: gold ? 600 : 400,
+        }}
       >
         {label}
       </span>
       <span
-        className="font-display tabular-nums leading-none tracking-tighter"
+        className="tabular-nums leading-none"
         style={{
-          fontSize: gold ? "5.8vh" : "4.4vh",
-          fontWeight: gold ? 800 : 300,
+          fontSize: gold ? "5.4vh" : "4vh",
+          fontWeight: gold ? 700 : 400,
           color: gold ? gold : "#FFFFFF",
+          fontFamily: HEADING_FONT,
+          letterSpacing: "-0.01em",
+          textShadow: gold ? `0 2px 20px ${gold}33` : "none",
         }}
       >
         {value}
