@@ -2121,14 +2121,16 @@ function PlanningTV() {
         <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
           {/* Séouda card */}
           <article
-            className="flex flex-col p-[2vh] shrink-0"
+            className="flex flex-col shrink-0"
             style={{
               flexBasis: "38%",
               background: "#FFFFFF",
-              borderRadius: "20px",
-              boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+              borderRadius: "16px",
+              padding: "24px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
             }}
           >
+
             <div className="text-center pb-[1.2vh] mb-[1vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
               <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
                 Communauté
