@@ -1960,7 +1960,7 @@ function PlanningTV() {
                   {PARASHA_INTRO && (
                     <p
                       className="italic mb-[2vh]"
-                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "1.95vh", lineHeight: 1.6, color: "#4B5875" }}
+                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2.5vh", lineHeight: 1.6, color: "#4B5875" }}
                     >
                       {PARASHA_INTRO}
                     </p>
@@ -1969,7 +1969,7 @@ function PlanningTV() {
                     <section key={i} className="mb-[2.4vh] last:mb-0">
                       <p
                         className="uppercase mb-[0.9vh]"
-                        style={{ color: "#0F3D7A", fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700 }}
+                        style={{ color: "#0F3D7A", fontSize: "1.5vh", letterSpacing: "0.32em", fontWeight: 700 }}
                       >
                         {bloc.icone ? `${bloc.icone} ` : ""}
                         {bloc.titre}
@@ -1978,7 +1978,7 @@ function PlanningTV() {
                         <p
                           key={j}
                           className="mb-[1vh] last:mb-0"
-                          style={{ fontSize: "1.95vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
+                          style={{ fontSize: "2.5vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
                         >
                           {p}
                         </p>
@@ -1991,7 +1991,7 @@ function PlanningTV() {
                                 className="shrink-0 mt-[1.05vh] rounded-full"
                                 style={{ width: "0.55vh", height: "0.55vh", background: GOLD_LOCAL, boxShadow: `0 0 6px ${GOLD_LOCAL}66` }}
                               />
-                              <p style={{ fontSize: "1.9vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
+                              <p style={{ fontSize: "2.4vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
                                 {p}
                               </p>
                             </li>
