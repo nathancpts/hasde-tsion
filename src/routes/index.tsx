@@ -1929,13 +1929,16 @@ function PlanningTV() {
               Étude · Parasha
             </p>
           </div>
-          <div
-            className="flex-1 min-h-0 overflow-hidden relative"
-            style={{
-              maskImage: "linear-gradient(to bottom, transparent 0, #000 7%, #000 93%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 7%, #000 93%, transparent 100%)",
-            }}
-          >
+          <div className="flex-1 min-h-0 overflow-hidden relative">
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-10"
+              style={{ height: "8%", background: "linear-gradient(to bottom, #FFFFFF 0%, rgba(255,255,255,0) 100%)" }}
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
+              style={{ height: "8%", background: "linear-gradient(to top, #FFFFFF 0%, rgba(255,255,255,0) 100%)" }}
+            />
+
             <div className="tv-marquee-track">
               {[0, 1].map((k) => (
                 <div key={k} className="tv-marquee-block" aria-hidden={k === 1}>
