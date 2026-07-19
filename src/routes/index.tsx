@@ -1873,7 +1873,7 @@ function PlanningTV() {
 
       {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
       <section
-        className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] grid grid-cols-12 gap-[1.6vw] min-h-0 overflow-hidden"
+        className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
         style={{
           background: "linear-gradient(180deg, #FFFFFF 0%, #F5F7FB 100%)",
           borderRadius: "32px 32px 0 0",
@@ -1882,10 +1882,11 @@ function PlanningTV() {
           filter: kotelFocused ? "blur(12px)" : "none",
           opacity: kotelFocused ? 0.4 : 1,
           transition: "filter 800ms ease, opacity 800ms ease",
+          transform: "translate3d(0,0,0)",
         }}
       >
-        {/* Parasha banner ribbon (top of sheet, full-width) */}
-        <div className="col-span-12 flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
+        {/* Parasha banner ribbon */}
+        <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
           <div className="flex items-baseline gap-[1.2vw]">
             <span
               className="uppercase"
@@ -1914,6 +1915,9 @@ function PlanningTV() {
             {parashaHe}
           </span>
         </div>
+
+        {/* 3-column grid */}
+        <div className="grid grid-cols-12 gap-[1.6vw] flex-1 min-h-0">
 
         {/* COLUMN 1 — PARASHA (marquee) */}
         <article
