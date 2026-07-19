@@ -1791,8 +1791,21 @@ function PlanningTV() {
       className="relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
+      <div
+        className="contents"
+        style={{
+          transition: "filter 800ms ease, opacity 800ms ease",
+        } as React.CSSProperties}
+      >
       {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
-      <header className="relative overflow-hidden">
+      <header
+        className="relative overflow-hidden"
+        style={{
+          filter: kotelFocused ? "blur(12px)" : "none",
+          opacity: kotelFocused ? 0.4 : 1,
+          transition: "filter 800ms ease, opacity 800ms ease",
+        }}
+      >
         <DynamicBackground />
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
           {/* Left: Logo + Prochain badge */}
