@@ -1838,24 +1838,82 @@ function PlanningTV() {
               {parashaFr}
             </h2>
           </div>
-          <ul className="flex-1 flex flex-col justify-start space-y-[2.2vh] min-h-0 overflow-hidden">
-            {bullets.map((b, i) => (
-              <li key={i} className="flex gap-[1.2vw] items-start">
-                <span
-                  className="shrink-0 mt-[1.3vh] rounded-full"
-                  style={{
-                    width: "0.55vh",
-                    height: "0.55vh",
-                    background: GOLD_BRIGHT,
-                    boxShadow: `0 0 8px ${GOLD}`,
-                  }}
-                />
-                <p className="text-white/88 leading-relaxed" style={{ fontSize: "2vh", fontWeight: 300, letterSpacing: "0.005em" }}>
-                  {b}
-                </p>
-              </li>
-            ))}
-          </ul>
+          <div
+            className="flex-1 min-h-0 overflow-hidden relative"
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)",
+            }}
+          >
+            <div className="tv-marquee-track">
+              {[0, 1].map((k) => (
+                <div key={k} className="tv-marquee-block" aria-hidden={k === 1}>
+                  {PARASHA_INTRO && (
+                    <p
+                      className="italic text-white/85 mb-[2.4vh]"
+                      style={{
+                        fontFamily: HEADING_FONT,
+                        fontSize: "2vh",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      {PARASHA_INTRO}
+                    </p>
+                  )}
+                  {PARASHA_BLOCS.map((bloc, i) => (
+                    <section key={i} className="mb-[2.8vh] last:mb-0">
+                      <p
+                        className="uppercase mb-[1vh]"
+                        style={{
+                          color: GOLD,
+                          fontSize: "1.3vh",
+                          letterSpacing: "0.35em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {bloc.icone ? `${bloc.icone} ` : ""}
+                        {bloc.titre}
+                      </p>
+                      {bloc.paragraphes?.map((p, j) => (
+                        <p
+                          key={j}
+                          className="text-white mb-[1.2vh] last:mb-0"
+                          style={{ fontSize: "2vh", lineHeight: 1.6, fontWeight: 300 }}
+                        >
+                          {p}
+                        </p>
+                      ))}
+                      {bloc.puces && (
+                        <ul className="mt-[1vh] space-y-[1vh]">
+                          {bloc.puces.map((p, j) => (
+                            <li key={j} className="flex gap-[1vw] items-start">
+                              <span
+                                className="shrink-0 mt-[1.1vh] rounded-full"
+                                style={{
+                                  width: "0.5vh",
+                                  height: "0.5vh",
+                                  background: GOLD_BRIGHT,
+                                  boxShadow: `0 0 6px ${GOLD}`,
+                                }}
+                              />
+                              <p
+                                className="text-white"
+                                style={{ fontSize: "2vh", lineHeight: 1.6, fontWeight: 300 }}
+                              >
+                                {p}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </section>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* COLUMN 2 — TODAY's ZMANIM + countdown */}
