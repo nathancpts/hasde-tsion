@@ -2276,16 +2276,16 @@ function PlanningTV() {
                     title="Live Hasdé Tsion"
                     allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                     allowFullScreen
-                    className="absolute top-1/2 left-1/2 border-0 pointer-events-none"
+                    className="absolute inset-0 border-0 pointer-events-none"
                     style={{
-                      width: "190%",
-                      height: "112%",
+                      width: "100%",
+                      height: "100%",
                       maxWidth: "none",
-                      minWidth: "190%",
-                      minHeight: "112%",
+                      minWidth: "100%",
+                      minHeight: "100%",
                       display: "block",
                       background: "#FFFFFF",
-                      transform: "translate3d(-50%, -50%, 0)",
+                      transform: "translateZ(0)",
                     }}
                   />
                 </div>
