@@ -1722,7 +1722,7 @@ function PlanningTV() {
   const CARD_BORDER = "rgba(197,160,89,0.14)";
   const CARD_SHADOW = "0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 60px -20px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(197,160,89,0.18)";
 
-  const HEADING_FONT = "'Playfair Display', Georgia, serif";
+  const HEADING_FONT = "'Montserrat', 'Gotham', system-ui, sans-serif";
   const BODY_FONT = "'Inter', system-ui, sans-serif";
 
   // Column 1 — key takeaways (max 4 bullets)
@@ -1753,7 +1753,7 @@ function PlanningTV() {
     const m = diff % 60;
     countdown = h > 0 ? `dans ${h}h${m.toString().padStart(2, "0")}` : `dans ${m} min`;
   }
-  const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
+  const HEADING_FONT_LOCAL = "'Montserrat', 'Gotham', system-ui, sans-serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
   const GOLD_LOCAL = "#D4AF37";
 
@@ -1783,7 +1783,7 @@ function PlanningTV() {
               <span
                 className="leading-none"
                 style={{
-                  fontFamily: `"Playfair Display", ${HEADING_FONT_LOCAL}, serif`,
+                  fontFamily: HEADING_FONT_LOCAL,
                   fontSize: "4.2vh",
                   fontWeight: 600,
                   letterSpacing: "0.02em",
@@ -2288,7 +2288,7 @@ function ZmanimRowTV({
   isNext: boolean;
   gold: string;
 }) {
-  const HEADING_FONT = "'Playfair Display', Georgia, serif";
+  const HEADING_FONT = "'Montserrat', 'Gotham', system-ui, sans-serif";
   const labelColor = isNext ? gold : isPast ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.85)";
   const valueColor = isNext ? gold : isPast ? "rgba(255,255,255,0.4)" : "#FFFFFF";
   return (
