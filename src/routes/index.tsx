@@ -1960,7 +1960,7 @@ function PlanningTV() {
                   {PARASHA_INTRO && (
                     <p
                       className="italic mb-[2vh]"
-                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "1.95vh", lineHeight: 1.6, color: "#4B5875" }}
+                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2.5vh", lineHeight: 1.6, color: "#4B5875" }}
                     >
                       {PARASHA_INTRO}
                     </p>
