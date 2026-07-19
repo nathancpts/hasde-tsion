@@ -1978,7 +1978,7 @@ function PlanningTV() {
                         <p
                           key={j}
                           className="mb-[1vh] last:mb-0"
-                          style={{ fontSize: "2.5vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
+                          style={{ fontSize: "2vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
                         >
                           {p}
                         </p>
