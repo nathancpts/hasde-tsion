@@ -2200,6 +2200,7 @@ function PlanningTV() {
             )}
           </div>
         </div>
+        </div>
       </section>
 
       {/* ─── Kotel fullscreen overlay (weekday cycle) ─── */}
