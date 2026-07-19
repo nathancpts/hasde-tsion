@@ -1657,30 +1657,8 @@ function PlanningTV() {
     (dow === 5 && entryMin != null && nowMin >= entryMin) ||
     (dow === 6 && (exitMin == null || nowMin < exitMin));
 
-  // Kotel fullscreen cycle hook must stay before any early return.
-  const [kotelFocused, setKotelFocused] = useState(false);
-  useEffect(() => {
-    if (!isTV && !isPdfMode) {
-      setKotelFocused(false);
-      return;
-    }
-    if (isShabbatNow) {
-      setKotelFocused(false);
-      return;
-    }
-    const CYCLE = 5 * 60 * 1000;
-    const FOCUS = 60 * 1000;
-    let focusTimeout: number | undefined;
-    const tick = () => {
-      setKotelFocused(true);
-      focusTimeout = window.setTimeout(() => setKotelFocused(false), FOCUS);
-    };
-    const id = window.setInterval(tick, CYCLE);
-    return () => {
-      window.clearInterval(id);
-      if (focusTimeout) window.clearTimeout(focusTimeout);
-    };
-  }, [isTV, isPdfMode, isShabbatNow]);
+  // Kotel cycle removed for TV stability — video stays fixed in Column 3.
+
 
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
