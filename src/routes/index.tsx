@@ -2031,7 +2031,18 @@ function PlanningTV() {
                 Horaires indisponibles.
               </p>
             ) : (() => {
-              const shouldScroll = todayTimes.length > 5;
+              const upcomingTimes = todayTimes.filter((t) => {
+                const m = toMin(t.value);
+                return m == null || m > nowMin;
+              });
+              if (upcomingTimes.length === 0) {
+                return (
+                  <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
+                    Tous les horaires du jour sont passés.
+                  </p>
+                );
+              }
+              const shouldScroll = upcomingTimes.length > 5;
               const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
                 const min = toMin(t.value);
                 const isPast = min != null && min <= nowMin;
@@ -2087,18 +2098,18 @@ function PlanningTV() {
               if (!shouldScroll) {
                 return (
                   <div className="h-full flex flex-col justify-around">
-                    {todayTimes.map((t) => renderRow(t, "s"))}
+                    {upcomingTimes.map((t) => renderRow(t, "s"))}
                   </div>
                 );
               }
               return (
                 <div className="tv-zmanim-track">
                   <div className="tv-zmanim-block">
-                    {todayTimes.map((t) => renderRow(t, "a"))}
+                    {upcomingTimes.map((t) => renderRow(t, "a"))}
                     <div style={{ height: "3vh" }} />
                   </div>
                   <div className="tv-zmanim-block" aria-hidden>
-                    {todayTimes.map((t) => renderRow(t, "b"))}
+                    {upcomingTimes.map((t) => renderRow(t, "b"))}
                     <div style={{ height: "3vh" }} />
                   </div>
                 </div>
