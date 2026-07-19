@@ -571,3 +571,23 @@
   0%   { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(0, -50%, 0); }
 }
+
+/* TV Zmanim vertical marquee — seamless loop */
+.tv-zmanim-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: tv-zmanim-scroll 45s linear infinite;
+}
+.tv-zmanim-block {
+  flex-shrink: 0;
+}
+@keyframes tv-zmanim-scroll {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -50%, 0); }
+}
+.tv-fade-mask {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
