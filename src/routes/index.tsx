@@ -88,7 +88,8 @@ function DynamicBackground() {
   return (
     <div
       aria-hidden="true"
-      className="btn-blue-animated absolute inset-0 -z-10 pointer-events-none"
+      className="btn-blue-animated absolute inset-0 pointer-events-none"
+      style={{ zIndex: 0, transform: "translate3d(0,0,0)", willChange: "background-position" }}
     />
   );
 }
