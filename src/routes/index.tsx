@@ -449,38 +449,44 @@ function Header() {
     : "";
 
   return (
-    <header className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-4">
-        <img
-          src={logo}
-          alt="Hasdé Tsion"
-          className="h-[16vh] w-auto"
-        />
+    <header
+      className="relative flex items-center justify-between gap-6 rounded-2xl px-[2vw] py-[1.6vh] overflow-hidden"
+      style={{
+        background: "linear-gradient(120deg, rgba(15,61,122,0.92) 0%, rgba(31,78,168,0.88) 55%, rgba(10,44,107,0.94) 100%)",
+        border: "1px solid rgba(201,169,110,0.35)",
+        boxShadow: "0 12px 40px -12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)",
+      }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 80% at 20% 30%, rgba(120,180,255,0.35) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 70%, rgba(201,169,110,0.18) 0%, transparent 60%)",
+        }}
+      />
+      <div className="relative flex items-center gap-4">
+        <img src={logo} alt="Hasdé Tsion" className="h-[14vh] w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]" />
       </div>
 
-      <div className="flex-1 flex justify-center px-4">
+      <div className="relative flex-1 flex justify-center">
         <div
-          className="max-w-[60vw] rounded-2xl px-[2vw] py-[1.4vh] text-center"
+          className="rounded-full px-[2vw] py-[1vh] flex items-center gap-[1.5vw] text-[1.5vh] backdrop-blur-md"
           style={{
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(201,169,110,0.5)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 18px rgba(0,0,0,0.25)",
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.18)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.15)",
           }}
         >
-          <div className="flex justify-center gap-[2vw] text-[1.6vh]">
-            <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Officiant</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
-            </div>
-          </div>
+          <span className="uppercase tracking-[0.25em] text-white/70 text-[1.1vh] font-semibold">Officiant</span>
+          <span className="inline-block w-1 h-[2vh] rounded-full" style={{ background: "#C9A96E" }} />
+          <span className="font-display font-bold text-[1.8vh]" style={{ color: "#E8C98A" }}>Aharon Djian</span>
         </div>
       </div>
 
-      <div className="text-right">
-        <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+      <div className="relative text-right">
+        <div className="font-display text-[6.8vh] font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
           {time}
         </div>
-        <p className="text-[1.2vh] uppercase tracking-[0.25em] text-white/90 mt-1 capitalize font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
+        <p className="text-[1.15vh] uppercase tracking-[0.28em] text-white/80 mt-1.5 capitalize font-semibold">
           {date}
         </p>
       </div>
@@ -493,26 +499,36 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
   const fr = live?.parasha.fr ?? week.parasha.fr;
   const he = live?.parasha.he ?? week.parasha.he;
   return (
-    <div className="px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
+    <div
+      className="relative rounded-2xl px-[2vw] py-[1.4vh] flex items-center justify-between gap-4 overflow-hidden"
+      style={{
+        background: "linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.06) 100%)",
+        border: "1px solid rgba(201,169,110,0.4)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 6px 24px -8px rgba(0,0,0,0.4)",
+      }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-1" style={{ background: "linear-gradient(180deg, transparent, #C9A96E, transparent)" }} />
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-1" style={{ background: "linear-gradient(180deg, transparent, #C9A96E, transparent)" }} />
       <div>
-        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-white font-semibold mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
-          Parashat Hashavoua
+        <p className="text-[1.1vh] uppercase tracking-[0.35em] font-semibold mb-1" style={{ color: "#E8C98A" }}>
+          ✦ Parashat Hashavoua
         </p>
-        <h2 className="font-display text-[4.5vh] font-bold text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+        <h2 className="font-display text-[4.8vh] font-bold text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
           {fr}
         </h2>
       </div>
       <div className="text-right flex flex-col items-end gap-1">
-        <p className="font-hebrew text-[4vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" dir="rtl">
+        <p className="font-hebrew text-[4.2vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" dir="rtl">
           {he}
         </p>
-        <p className="font-hebrew text-[2.4vh] text-white leading-none mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]" dir="rtl">
+        <p className="font-hebrew text-[2.2vh] leading-none mt-1" style={{ color: "#E8C98A" }} dir="rtl">
           שבת מברכים
         </p>
       </div>
     </div>
   );
 }
+
 
 function TimeRow({
   label,
