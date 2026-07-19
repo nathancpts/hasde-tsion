@@ -1641,6 +1641,47 @@ function PlanningTV() {
     return () => window.clearTimeout(timerId);
   }, []);
 
+  const now = new Date(nowTs);
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const parseHM = (hm: string | null | undefined): number | null => {
+    if (!hm) return null;
+    const m = hm.match(/^(\d{1,2}):(\d{2})/);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+  };
+  const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
+  const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
+  const entryMin = parseHM(entryTime);
+  const exitMin = parseHM(exitTime);
+  const dow = now.getDay();
+  const isShabbatNow =
+    (dow === 5 && entryMin != null && nowMin >= entryMin) ||
+    (dow === 6 && (exitMin == null || nowMin < exitMin));
+
+  // Kotel fullscreen cycle hook must stay before any early return.
+  const [kotelFocused, setKotelFocused] = useState(false);
+  useEffect(() => {
+    if (!isTV && !isPdfMode) {
+      setKotelFocused(false);
+      return;
+    }
+    if (isShabbatNow) {
+      setKotelFocused(false);
+      return;
+    }
+    const CYCLE = 5 * 60 * 1000;
+    const FOCUS = 60 * 1000;
+    let focusTimeout: number | undefined;
+    const tick = () => {
+      setKotelFocused(true);
+      focusTimeout = window.setTimeout(() => setKotelFocused(false), FOCUS);
+    };
+    const id = window.setInterval(tick, CYCLE);
+    return () => {
+      window.clearInterval(id);
+      if (focusTimeout) window.clearTimeout(focusTimeout);
+    };
+  }, [isTV, isPdfMode, isShabbatNow]);
+
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
@@ -1682,8 +1723,6 @@ function PlanningTV() {
     return t;
   });
 
-  const now = new Date(nowTs);
-
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
@@ -1714,7 +1753,6 @@ function PlanningTV() {
     if (!m) return null;
     return Number(m[1]) * 60 + Number(m[2]);
   };
-  const nowMin = now.getHours() * 60 + now.getMinutes();
   const todayWithMin = todayTimes.map((t) => ({ ...t, min: toMin(t.value) }));
   const nextZman = todayWithMin.find((t) => t.min != null && t.min > nowMin) as
     | { label: string; value: string; min: number }
@@ -1726,39 +1764,6 @@ function PlanningTV() {
     const m = diff % 60;
     countdown = h > 0 ? `dans ${h}h${m.toString().padStart(2, "0")}` : `dans ${m} min`;
   }
-  const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
-  const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
-
-  // ─── Shabbat detection (Fri after entry → Sat before exit) ───
-  const dow = now.getDay();
-  const parseHM = (hm: string | null | undefined): number | null => {
-    if (!hm) return null;
-    const m = hm.match(/^(\d{1,2}):(\d{2})/);
-    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
-  };
-  const entryMin = parseHM(entryTime);
-  const exitMin = parseHM(exitTime);
-  const isShabbatNow =
-    (dow === 5 && entryMin != null && nowMin >= entryMin) ||
-    (dow === 6 && (exitMin == null || nowMin < exitMin));
-
-  // ─── Kotel fullscreen cycle: every 5 min, focused for 1 min (disabled on Shabbat) ───
-  const [kotelFocused, setKotelFocused] = useState(false);
-  useEffect(() => {
-    if (isShabbatNow) {
-      setKotelFocused(false);
-      return;
-    }
-    const CYCLE = 5 * 60 * 1000;
-    const FOCUS = 60 * 1000;
-    const tick = () => {
-      setKotelFocused(true);
-      window.setTimeout(() => setKotelFocused(false), FOCUS);
-    };
-    const id = window.setInterval(tick, CYCLE);
-    return () => window.clearInterval(id);
-  }, [isShabbatNow]);
-
   const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
   const GOLD_LOCAL = "#D4AF37";
