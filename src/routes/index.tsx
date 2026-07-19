@@ -2218,11 +2218,13 @@ function PlanningTV() {
 
           {/* Live Kotel — or Shabbat static */}
           <div
-            className="relative z-0 w-full overflow-hidden flex-1 min-h-0"
+            className="relative z-0 w-full overflow-hidden shrink-0"
             style={{
               borderRadius: "16px",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               background: "#FFFFFF",
+              aspectRatio: "16 / 9",
+              flex: "0 0 auto",
               zIndex: 0,
               isolation: "isolate",
               contain: "strict",
@@ -2279,7 +2281,7 @@ function PlanningTV() {
               <>
                 <div
                   className="absolute inset-0"
-                  style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0 }}
+                  style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
                 >
                   <iframe
                     src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
@@ -2302,10 +2304,10 @@ function PlanningTV() {
 
                 <div
                   className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
-                  style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
+                  style={{ background: "rgba(255,255,255,0.82)", border: "1px solid rgba(255,255,255,0.9)", boxShadow: "0 4px 14px rgba(10,17,40,0.12)" }}
                 >
                   <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-                  <span className="uppercase text-white" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700 }}>
+                  <span className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700, color: "#0A1128" }}>
                     Live · Hasdé Tsion
                   </span>
                 </div>
