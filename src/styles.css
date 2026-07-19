@@ -541,3 +541,19 @@
   to { --hillel-angle: 360deg; }
 }
 
+
+/* TV Parasha vertical marquee — seamless loop */
+.tv-marquee-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: tv-marquee-scroll 90s linear infinite;
+}
+.tv-marquee-block {
+  flex-shrink: 0;
+  padding-bottom: 4vh;
+}
+@keyframes tv-marquee-scroll {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -50%, 0); }
+}
