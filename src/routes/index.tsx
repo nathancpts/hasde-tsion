@@ -2025,62 +2025,80 @@ function PlanningTV() {
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-hidden">
+          <div className="flex-1 min-h-0 overflow-hidden relative tv-fade-mask">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
               </p>
-            ) : (
-              <div className="h-full flex flex-col justify-around">
-                {todayTimes.map((t) => {
-                  const min = toMin(t.value);
-                  const isPast = min != null && min <= nowMin;
-                  const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
-                  const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                  const labelColor = isPast ? "#B0B7C7" : "#1E293B";
-                  const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
-                  return (
-                    <div
-                      key={`${t.label}-${t.value}`}
-                      className="flex items-baseline gap-[1vw]"
-                      style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "1.4vh 1.4vw" } : { padding: "1.4vh 0" }}
+            ) : (() => {
+              const shouldScroll = todayTimes.length > 5;
+              const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
+                const min = toMin(t.value);
+                const isPast = min != null && min <= nowMin;
+                const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
+                const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
+                const labelColor = isPast ? "#B0B7C7" : "#1E293B";
+                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
+                return (
+                  <div
+                    key={`${t.label}-${t.value}-${keySuffix}`}
+                    className="flex items-baseline gap-[1vw]"
+                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "1.1vh 1.2vw" } : { padding: "1.1vh 0" }}
+                  >
+                    <span
+                      className="uppercase shrink-0"
+                      style={{
+                        fontSize: "3vh",
+                        letterSpacing: "0.10em",
+                        fontWeight: 600,
+                        color: labelColor,
+                      }}
                     >
-                      <span
-                        className="uppercase shrink-0"
-                        style={{
-                          fontSize: "4.6vh",
-                          letterSpacing: "0.10em",
-                          fontWeight: 600,
-                          color: labelColor,
-                        }}
-                      >
-                        {t.label}
-                      </span>
-                      <span
-                        aria-hidden
-                        className="flex-1 self-center"
-                        style={{
-                          borderBottom: "2px dotted rgba(30,41,59,0.18)",
-                          marginBottom: "0.6vh",
-                        }}
-                      />
-                      <span
-                        className="tabular-nums leading-none shrink-0"
-                        style={{
-                          fontSize: isNext ? "9.5vh" : "8.4vh",
-                          fontWeight: 800,
-                          color: valueColor,
-                          fontFamily: HEADING_FONT_LOCAL,
-                          letterSpacing: "-0.01em",
-                        }}
-                      >
-                        {t.value}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                      {t.label}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="flex-1 self-center"
+                      style={{
+                        borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                        marginBottom: "0.6vh",
+                      }}
+                    />
+                    <span
+                      className="tabular-nums leading-none shrink-0"
+                      style={{
+                        fontSize: isNext ? "5.6vh" : "5vh",
+                        fontWeight: 800,
+                        color: valueColor,
+                        fontFamily: HEADING_FONT_LOCAL,
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      {t.value}
+                    </span>
+                  </div>
+                );
+              };
+              if (!shouldScroll) {
+                return (
+                  <div className="h-full flex flex-col justify-around">
+                    {todayTimes.map((t) => renderRow(t, "s"))}
+                  </div>
+                );
+              }
+              return (
+                <div className="tv-zmanim-track">
+                  <div className="tv-zmanim-block">
+                    {todayTimes.map((t) => renderRow(t, "a"))}
+                    <div style={{ height: "3vh" }} />
+                  </div>
+                  <div className="tv-zmanim-block" aria-hidden>
+                    {todayTimes.map((t) => renderRow(t, "b"))}
+                    <div style={{ height: "3vh" }} />
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
 
