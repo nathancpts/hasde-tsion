@@ -1657,30 +1657,8 @@ function PlanningTV() {
     (dow === 5 && entryMin != null && nowMin >= entryMin) ||
     (dow === 6 && (exitMin == null || nowMin < exitMin));
 
-  // Kotel fullscreen cycle hook must stay before any early return.
-  const [kotelFocused, setKotelFocused] = useState(false);
-  useEffect(() => {
-    if (!isTV && !isPdfMode) {
-      setKotelFocused(false);
-      return;
-    }
-    if (isShabbatNow) {
-      setKotelFocused(false);
-      return;
-    }
-    const CYCLE = 5 * 60 * 1000;
-    const FOCUS = 60 * 1000;
-    let focusTimeout: number | undefined;
-    const tick = () => {
-      setKotelFocused(true);
-      focusTimeout = window.setTimeout(() => setKotelFocused(false), FOCUS);
-    };
-    const id = window.setInterval(tick, CYCLE);
-    return () => {
-      window.clearInterval(id);
-      if (focusTimeout) window.clearTimeout(focusTimeout);
-    };
-  }, [isTV, isPdfMode, isShabbatNow]);
+  // Kotel cycle removed for TV stability — video stays fixed in Column 3.
+
 
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
@@ -1770,22 +1748,14 @@ function PlanningTV() {
 
   return (
     <main
-      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
+      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[28vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
-      {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
-      <header
-        className="relative overflow-hidden"
-        style={{
-          opacity: kotelFocused ? 0.25 : 1,
-          transform: kotelFocused ? "translate3d(0,0,0) scale(0.985)" : "translate3d(0,0,0) scale(1)",
-          transition: "opacity 600ms ease, transform 600ms ease",
-          willChange: "opacity, transform",
-        }}
-      >
-
+      {/* ─── TOP header — animated royal blue ─── */}
+      <header className="relative overflow-hidden">
         <DynamicBackground />
-        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
+        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3.5vh] pb-[6vh] h-full">
+
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
             <div className="flex items-center gap-[1.2vw]">
@@ -1802,8 +1772,9 @@ function PlanningTV() {
                   fontSize: "4.2vh",
                   fontWeight: 600,
                   letterSpacing: "0.02em",
-                  color: "#D4AF37",
-                  textShadow: "0 2px 18px rgba(212,175,55,0.35)",
+                  color: "#FFFFFF",
+                  textShadow: "0 2px 24px rgba(0,0,0,0.35)",
+
                 }}
               >
                 Hasdé Tsion
@@ -1896,18 +1867,16 @@ function PlanningTV() {
 
       {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
       <section
-        className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
+
+        className="relative z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
         style={{
           background: "#F8F9FA",
           borderRadius: "32px 32px 0 0",
           boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9)",
           color: "#1E293B",
-          opacity: kotelFocused ? 0.25 : 1,
-          transform: kotelFocused ? "translate3d(0,0,0) scale(0.99)" : "translate3d(0,0,0) scale(1)",
-          transition: "opacity 600ms ease, transform 600ms ease",
-          willChange: "opacity, transform",
         }}
       >
+
 
         {/* Parasha banner ribbon */}
         <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(30,41,59,0.08)" }}>
@@ -2232,8 +2201,8 @@ function PlanningTV() {
                   allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                   allowFullScreen
                   className="absolute inset-0 w-full h-full border-0"
-                  style={{ opacity: kotelFocused ? 0 : 1, transition: "opacity 400ms ease" }}
                 />
+
                 <div
                   className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
                   style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
@@ -2250,49 +2219,8 @@ function PlanningTV() {
         </div>
       </section>
 
-      {/* ─── Kotel fullscreen overlay (weekday cycle) ─── */}
-      {!isShabbatNow && (
-        <div
-          className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center"
-          style={{
-            opacity: kotelFocused ? 1 : 0,
-            transition: "opacity 800ms ease",
-          }}
-          aria-hidden={!kotelFocused}
-        >
-          <div
-            className="relative overflow-hidden"
-            style={{
-              width: "82vw",
-              aspectRatio: "16 / 9",
-              borderRadius: "28px",
-              boxShadow:
-                "0 40px 120px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)",
-              transform: kotelFocused ? "scale(1)" : "scale(0.92)",
-              transition: "transform 800ms cubic-bezier(0.22, 1, 0.36, 1)",
-            }}
-          >
-            {kotelFocused && (
-              <iframe
-                src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                title="Live Hasdé Tsion — Plein écran"
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full border-0"
-              />
-            )}
-            <div
-              className="absolute top-[2vh] left-[2vh] inline-flex items-center gap-[0.6vw] px-[1.2vw] py-[0.7vh] rounded-full backdrop-blur-md"
-              style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
-            >
-              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 10px #FF3B30" }} />
-              <span className="uppercase text-white" style={{ fontSize: "1.3vh", letterSpacing: "0.4em", fontWeight: 700 }}>
-                Live · Hasdé Tsion
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+
+
     </main>
   );
 }
