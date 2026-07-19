@@ -449,38 +449,44 @@ function Header() {
     : "";
 
   return (
-    <header className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-4">
-        <img
-          src={logo}
-          alt="Hasdé Tsion"
-          className="h-[16vh] w-auto"
-        />
+    <header
+      className="relative flex items-center justify-between gap-6 rounded-2xl px-[2vw] py-[1.6vh] overflow-hidden"
+      style={{
+        background: "linear-gradient(120deg, rgba(15,61,122,0.92) 0%, rgba(31,78,168,0.88) 55%, rgba(10,44,107,0.94) 100%)",
+        border: "1px solid rgba(201,169,110,0.35)",
+        boxShadow: "0 12px 40px -12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)",
+      }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 80% at 20% 30%, rgba(120,180,255,0.35) 0%, transparent 60%), radial-gradient(ellipse 50% 70% at 85% 70%, rgba(201,169,110,0.18) 0%, transparent 60%)",
+        }}
+      />
+      <div className="relative flex items-center gap-4">
+        <img src={logo} alt="Hasdé Tsion" className="h-[14vh] w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]" />
       </div>
 
-      <div className="flex-1 flex justify-center px-4">
+      <div className="relative flex-1 flex justify-center">
         <div
-          className="max-w-[60vw] rounded-2xl px-[2vw] py-[1.4vh] text-center"
+          className="rounded-full px-[2vw] py-[1vh] flex items-center gap-[1.5vw] text-[1.5vh] backdrop-blur-md"
           style={{
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(201,169,110,0.5)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 18px rgba(0,0,0,0.25)",
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.18)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.15)",
           }}
         >
-          <div className="flex justify-center gap-[2vw] text-[1.6vh]">
-            <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-white/70">Officiant</span>
-              <span className="font-semibold" style={{ color: "#E8C98A" }}>Aharon Djian</span>
-            </div>
-          </div>
+          <span className="uppercase tracking-[0.25em] text-white/70 text-[1.1vh] font-semibold">Officiant</span>
+          <span className="inline-block w-1 h-[2vh] rounded-full" style={{ background: "#C9A96E" }} />
+          <span className="font-display font-bold text-[1.8vh]" style={{ color: "#E8C98A" }}>Aharon Djian</span>
         </div>
       </div>
 
-      <div className="text-right">
-        <div className="font-display text-[7vh] font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+      <div className="relative text-right">
+        <div className="font-display text-[6.8vh] font-bold tabular-nums leading-none text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
           {time}
         </div>
-        <p className="text-[1.2vh] uppercase tracking-[0.25em] text-white/90 mt-1 capitalize font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
+        <p className="text-[1.15vh] uppercase tracking-[0.28em] text-white/80 mt-1.5 capitalize font-semibold">
           {date}
         </p>
       </div>
@@ -493,26 +499,36 @@ function ParashaBanner({ live }: { live: LiveWeek | null }) {
   const fr = live?.parasha.fr ?? week.parasha.fr;
   const he = live?.parasha.he ?? week.parasha.he;
   return (
-    <div className="px-[2vw] py-[1.4vh] flex items-center justify-between gap-4">
+    <div
+      className="relative rounded-2xl px-[2vw] py-[1.4vh] flex items-center justify-between gap-4 overflow-hidden"
+      style={{
+        background: "linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.06) 100%)",
+        border: "1px solid rgba(201,169,110,0.4)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 6px 24px -8px rgba(0,0,0,0.4)",
+      }}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-1" style={{ background: "linear-gradient(180deg, transparent, #C9A96E, transparent)" }} />
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-1" style={{ background: "linear-gradient(180deg, transparent, #C9A96E, transparent)" }} />
       <div>
-        <p className="text-[1.1vh] uppercase tracking-[0.3em] text-white font-semibold mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
-          Parashat Hashavoua
+        <p className="text-[1.1vh] uppercase tracking-[0.35em] font-semibold mb-1" style={{ color: "#E8C98A" }}>
+          ✦ Parashat Hashavoua
         </p>
-        <h2 className="font-display text-[4.5vh] font-bold text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+        <h2 className="font-display text-[4.8vh] font-bold text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
           {fr}
         </h2>
       </div>
       <div className="text-right flex flex-col items-end gap-1">
-        <p className="font-hebrew text-[4vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" dir="rtl">
+        <p className="font-hebrew text-[4.2vh] text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" dir="rtl">
           {he}
         </p>
-        <p className="font-hebrew text-[2.4vh] text-white leading-none mt-1 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]" dir="rtl">
+        <p className="font-hebrew text-[2.2vh] leading-none mt-1" style={{ color: "#E8C98A" }} dir="rtl">
           שבת מברכים
         </p>
       </div>
     </div>
   );
 }
+
 
 function TimeRow({
   label,
@@ -564,72 +580,95 @@ function DayCard({
   children?: React.ReactNode;
   highlight?: React.ReactNode;
 }) {
-  const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+  const isGold = badgeTone === "gold";
+  const headerBg = isGold
+    ? "linear-gradient(120deg, #C9A96E 0%, #E8C98A 55%, #B8934D 100%)"
+    : "linear-gradient(120deg, #1f4ea8 0%, #4a7bd1 55%, #0F3D7A 100%)";
+  const headerText = isGold ? "#1a1a1a" : "#ffffff";
   return (
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col gap-[1vh] min-h-0 overflow-hidden">
-      <div>
-        <span className={`inline-block px-2 py-0.5 rounded-full text-[1.1vh] uppercase tracking-[0.25em] font-bold ${badgeBg}`}>
-          {badge}
-        </span>
-        <h3 className="font-display text-[2.6vh] font-bold text-foreground mt-1 leading-tight">
-          {title}
-        </h3>
-        <p className="text-[1.2vh] text-muted-foreground mt-0.5 uppercase tracking-wider">{subtitle}</p>
-        <p className="text-[1.1vh] text-muted-foreground/70">{hebrew}</p>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      {/* Header band with gradient */}
+      <div
+        className="relative px-[1vw] py-[1.1vh]"
+        style={{ background: headerBg, color: headerText }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/15 backdrop-blur-sm">
+            {badge}
+          </span>
+          <span className="text-[1.1vh] uppercase tracking-[0.25em] opacity-80">{subtitle}</span>
+        </div>
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">{title}</h3>
+        <p className="text-[1.05vh] opacity-75 mt-0.5">{hebrew}</p>
       </div>
 
-      {highlight}
+      <div className="flex flex-col gap-[1vh] p-[1.2vh_1vw] flex-1 min-h-0">
+        {highlight}
 
-      {/* TEHILIM — biggest visual element */}
-      {(() => {
-        const parts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
-        const display = parts.length >= 2 ? [parts[0], parts[parts.length - 1]] : parts;
-        return (
-          <div className="rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-[1vh] px-3 text-center">
-            <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
-              📖 Tehilim du jour
-            </p>
-            <div className={`grid ${display.length === 2 ? "grid-cols-2 gap-2" : "grid-cols-1"}`}>
-              {display.map((v, i) => (
-                <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-[5.5vh]">{v}</p>
-              ))}
-            </div>
-          </div>
-        );
-      })()}
-
-      {(() => {
-        const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
-        if (shemaParts.length >= 2) {
+        {/* TEHILIM — biggest visual element */}
+        {(() => {
+          const parts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
+          const display = parts.length >= 2 ? [parts[0], parts[parts.length - 1]] : parts;
           return (
-            <div className="rounded-lg border border-border bg-muted/30 py-[0.8vh] px-3 text-center">
-              <div className="grid grid-cols-2 gap-2">
-                {shemaParts.map((v, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <p className="text-[0.95vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-0.5">{i === 0 ? (badgeTone === "gold" ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
-                    <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{v}</span>
-                  </div>
+            <div
+              className="rounded-xl py-[1vh] px-3 text-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(201,169,110,0.18) 0%, rgba(232,201,138,0.08) 100%)",
+                border: "1.5px solid rgba(201,169,110,0.55)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+              }}
+            >
+              <p className="text-[1.05vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
+                📖 Tehilim du jour
+              </p>
+              <div className={`grid ${display.length === 2 ? "grid-cols-2 gap-2" : "grid-cols-1"}`}>
+                {display.map((v, i) => (
+                  <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-[5.2vh]">{v}</p>
                 ))}
               </div>
             </div>
           );
-        }
-        return (
-          <div className="flex items-center justify-between text-[1.3vh]">
-            <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
-            <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{shema}</span>
-          </div>
-        );
-      })()}
+        })()}
 
+        {(() => {
+          const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
+          if (shemaParts.length >= 2) {
+            return (
+              <div className="rounded-xl py-[0.8vh] px-3 text-center" style={{ background: "rgba(31,78,168,0.06)", border: "1px solid rgba(31,78,168,0.15)" }}>
+                <div className="grid grid-cols-2 gap-2">
+                  {shemaParts.map((v, i) => (
+                    <div key={i} className="flex flex-col items-center">
+                      <p className="text-[0.9vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-0.5">{i === 0 ? (isGold ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
+                      <span className="font-display font-semibold text-foreground tabular-nums text-[1.9vh]">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div className="flex items-center justify-between text-[1.3vh]">
+              <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
+              <span className="font-display font-semibold text-foreground tabular-nums text-[1.9vh]">{shema}</span>
+            </div>
+          );
+        })()}
 
-      <div className="flex flex-col flex-1 min-h-0">
-        {times.map((t) => (
-          <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} />
-        ))}
+        <div className="flex flex-col flex-1 min-h-0">
+          {times.map((t) => (
+            <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} />
+          ))}
+        </div>
+
+        {children}
       </div>
-
-      {children}
     </article>
   );
 }
@@ -639,73 +678,87 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
   const rh = live?.roshHodesh ?? null;
 
   return (
-
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center gap-2 mb-[1vh]">
-        <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
-        <h3 className="font-display text-[2.6vh] font-bold text-foreground">
-          La Séouda est offerte par :
-        </h3>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      <div
+        className="px-[1vw] py-[1.1vh]"
+        style={{ background: "linear-gradient(120deg, #C9A96E 0%, #E8C98A 55%, #B8934D 100%)", color: "#1a1a1a" }}
+      >
+        <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/15 backdrop-blur-sm">
+          Communauté
+        </span>
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">La Séouda est offerte par :</h3>
       </div>
 
-      <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
-        {donations.length === 0 ? (
-          <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
-            Aucune donation pour le moment.
-          </p>
-        ) : (
-          donations.map((d, i) => (
-            <div
-              key={i}
-              className="py-[1vh] border-b border-border/60 last:border-0"
-            >
-              <p className="font-display font-bold text-[2.1vh] text-foreground leading-snug">
-                {d.donateur}
-              </p>
-              {d.occasion && (
-                <p className="text-[1.5vh] uppercase tracking-[0.18em] text-primary font-semibold mt-1">
-                  {d.occasion}
+      <div className="flex flex-col flex-1 min-h-0 p-[1.2vh_1vw]">
+        <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
+          {donations.length === 0 ? (
+            <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
+              Aucune donation pour le moment.
+            </p>
+          ) : (
+            donations.map((d, i) => (
+              <div
+                key={i}
+                className="py-[1vh] border-b border-border/60 last:border-0"
+              >
+                <p className="font-display font-bold text-[2.05vh] text-foreground leading-snug">
+                  {d.donateur}
                 </p>
-              )}
-              {d.dedicace && (
-                <p className="font-display italic text-[1.85vh] text-foreground leading-snug mt-1">
-                  {d.dedicace}
-                </p>
-              )}
-              {d.dedicaceHe && (
-                <p className="font-hebrew text-[2vh] text-primary leading-tight mt-1.5" dir="rtl">
-                  {d.dedicaceHe}
-                </p>
-              )}
-              {d.details?.map((line, index) => (
-                <p key={index} className="text-[1.7vh] text-foreground leading-snug mt-2">
-                  {line}
-                </p>
-              ))}
-            </div>
-          ))
-        )}
-      </AutoScrollVertical>
-
-
-
-      {rh && (
-        <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
-          <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
-            Prochain Rosh Ḥodesh
-          </p>
-          <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
-          <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
-            {rh.dateLabel}
-          </p>
-          {rh.moladHe && (
-            <p className="text-[1.35vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+                {d.occasion && (
+                  <p className="text-[1.45vh] uppercase tracking-[0.18em] text-primary font-semibold mt-1">
+                    {d.occasion}
+                  </p>
+                )}
+                {d.dedicace && (
+                  <p className="font-display italic text-[1.8vh] text-foreground leading-snug mt-1">
+                    {d.dedicace}
+                  </p>
+                )}
+                {d.dedicaceHe && (
+                  <p className="font-hebrew text-[2vh] text-primary leading-tight mt-1.5" dir="rtl">
+                    {d.dedicaceHe}
+                  </p>
+                )}
+                {d.details?.map((line, index) => (
+                  <p key={index} className="text-[1.65vh] text-foreground leading-snug mt-2">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            ))
           )}
-        </div>
-      )}
+        </AutoScrollVertical>
+
+        {rh && (
+          <div
+            className="mt-[1vh] rounded-xl p-[1.2vh_1vw] text-center"
+            style={{
+              background: "linear-gradient(135deg, rgba(201,169,110,0.2) 0%, rgba(232,201,138,0.1) 100%)",
+              border: "1.5px solid rgba(201,169,110,0.55)",
+            }}
+          >
+            <p className="text-[1.15vh] uppercase tracking-[0.3em] text-primary font-semibold">
+              ✦ Prochain Rosh Ḥodesh
+            </p>
+            <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
+            <p className="text-[1.4vh] text-muted-foreground leading-snug mt-1">{rh.dateLabel}</p>
+            {rh.moladHe && (
+              <p className="text-[1.3vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   );
 }
+
 
 
 
@@ -770,54 +823,69 @@ function SidourLink({ className = "" }: { className?: string }) {
 function ParashaCard({ live }: { live: LiveWeek | null }) {
   const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
   return (
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center justify-between gap-2 mb-[0.6vh]">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
-          <h3 className="font-display text-[2.6vh] font-bold text-foreground truncate">
-            Parasha {parashaFr}
-          </h3>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      <div
+        className="px-[1vw] py-[1.1vh]"
+        style={{ background: "linear-gradient(120deg, #1f4ea8 0%, #4a7bd1 55%, #0F3D7A 100%)", color: "#fff" }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/20 backdrop-blur-sm">
+            Parasha
+          </span>
+          {PARASHA_NOM_HE && (
+            <span className="font-hebrew text-[2.4vh]" style={{ color: "#E8C98A" }} dir="rtl">{PARASHA_NOM_HE}</span>
+          )}
         </div>
-        {PARASHA_NOM_HE && (
-          <span className="font-hebrew text-[2.4vh] text-primary shrink-0" dir="rtl">{PARASHA_NOM_HE}</span>
-        )}
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">
+          {parashaFr}
+        </h3>
       </div>
 
-      <AutoScrollVertical className="flex-1 min-h-0 pr-1">
-        <div className="flex flex-col gap-[1.1vh]">
-          {PARASHA_INTRO && (
-            <p className="font-display italic text-[1.8vh] text-muted-foreground leading-snug">
-              {PARASHA_INTRO}
-            </p>
-          )}
-          {PARASHA_BLOCS.map((bloc, i) => (
-            <section
-              key={i}
-              className="rounded-md border border-border/60 bg-muted/30 px-[0.9vw] py-[1vh]"
-            >
-              <p className="text-[1.4vh] uppercase tracking-[0.2em] text-primary font-semibold mb-[0.5vh]">
-                {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+      <div className="flex-1 min-h-0 p-[1.2vh_1vw]">
+        <AutoScrollVertical className="h-full pr-1">
+          <div className="flex flex-col gap-[1.1vh]">
+            {PARASHA_INTRO && (
+              <p className="font-display italic text-[1.75vh] text-muted-foreground leading-snug">
+                {PARASHA_INTRO}
               </p>
-              {bloc.paragraphes?.map((p, j) => (
-                <p key={j} className="text-[1.85vh] text-foreground leading-snug mb-[0.4vh] last:mb-0">
-                  {p}
+            )}
+            {PARASHA_BLOCS.map((bloc, i) => (
+              <section
+                key={i}
+                className="rounded-xl px-[0.9vw] py-[1vh]"
+                style={{ background: "rgba(31,78,168,0.05)", border: "1px solid rgba(31,78,168,0.12)" }}
+              >
+                <p className="text-[1.35vh] uppercase tracking-[0.22em] text-primary font-semibold mb-[0.5vh]">
+                  {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
                 </p>
-              ))}
-              {bloc.puces && (
-                <ul className="list-disc pl-[1.6vh] space-y-[0.4vh] mt-[0.4vh]">
-                  {bloc.puces.map((p, j) => (
-                    <li key={j} className="text-[1.8vh] text-foreground leading-snug">{p}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-        </div>
-      </AutoScrollVertical>
-      
+                {bloc.paragraphes?.map((p, j) => (
+                  <p key={j} className="text-[1.8vh] text-foreground leading-snug mb-[0.4vh] last:mb-0">
+                    {p}
+                  </p>
+                ))}
+                {bloc.puces && (
+                  <ul className="list-disc pl-[1.6vh] space-y-[0.4vh] mt-[0.4vh]">
+                    {bloc.puces.map((p, j) => (
+                      <li key={j} className="text-[1.75vh] text-foreground leading-snug">{p}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+        </AutoScrollVertical>
+      </div>
     </article>
   );
 }
+
 
 
 
@@ -1624,10 +1692,17 @@ function PlanningTV() {
       <ParashaBanner live={live} />
 
       {/* Live YouTube — flottant coin bas-droite */}
-      <div className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] border-2 border-[#C9A96E]/60 bg-black">
-        <div className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-[#1f4ea8] to-[#0F3D7A]">
+      <div
+        className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-2xl overflow-hidden"
+        style={{
+          background: "#000",
+          border: "1.5px solid rgba(201,169,110,0.5)",
+          boxShadow: "0 20px 60px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(31,78,168,0.4), 0 0 40px -10px rgba(74,123,209,0.55)",
+        }}
+      >
+        <div className="flex items-center gap-2 px-3 py-1.5" style={{ background: "linear-gradient(90deg, #0F3D7A 0%, #1f4ea8 55%, #0a2c6b 100%)" }}>
           <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[1.1vh] uppercase tracking-[0.2em] text-white font-semibold">Live</span>
+          <span className="text-[1.1vh] uppercase tracking-[0.25em] text-white font-semibold">Live · Hasdé Tsion</span>
         </div>
         <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
           <iframe
@@ -1639,6 +1714,7 @@ function PlanningTV() {
           />
         </div>
       </div>
+
 
 
 
