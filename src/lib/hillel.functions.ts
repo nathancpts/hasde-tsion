@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 
 const SYSTEM_PROMPT = `Tu es Hillel, un assistant expert dédié exclusivement à l'étude, à la documentation et aux questions d'ordre religieux juif (Torah, Talmud, Halakha, fêtes, philosophie et histoire juive).
 
@@ -48,8 +50,10 @@ const InputSchema = z.object({
 });
 
 export const askHillel = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
+
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
