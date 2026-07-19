@@ -2169,10 +2169,11 @@ function PlanningTV() {
           <div
             className="relative w-full overflow-hidden flex-1 min-h-0"
             style={{
-              borderRadius: "20px",
-              boxShadow: "0 12px 32px -14px rgba(15,61,122,0.35), 0 0 0 1px rgba(15,61,122,0.06)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
             }}
           >
+
             {isShabbatNow ? (
               <>
                 <img
