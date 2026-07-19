@@ -2201,8 +2201,8 @@ function PlanningTV() {
                   allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                   allowFullScreen
                   className="absolute inset-0 w-full h-full border-0"
-                  style={{ opacity: kotelFocused ? 0 : 1, transition: "opacity 400ms ease" }}
                 />
+
                 <div
                   className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
                   style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
