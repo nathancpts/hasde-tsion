@@ -2037,9 +2037,11 @@ function PlanningTV() {
               });
               if (upcomingTimes.length === 0) {
                 return (
-                  <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
-                    Tous les horaires du jour sont passés.
-                  </p>
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-center italic" style={{ fontSize: "1.8vh", color: "#7A869A" }}>
+                      Plus d'événement pour aujourd'hui — à demain 🌙
+                    </p>
+                  </div>
                 );
               }
               const shouldScroll = upcomingTimes.length > 5;
