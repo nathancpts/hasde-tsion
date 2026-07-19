@@ -2038,61 +2038,68 @@ function PlanningTV() {
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 flex flex-col justify-center">
+          <div className="flex-1 min-h-0 overflow-hidden tv-fade-mask">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
               </p>
             ) : (
-              todayTimes.map((t) => {
-                const min = toMin(t.value);
-                const isPast = min != null && min <= nowMin;
-                const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
-                const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                const labelColor = isPast ? "#B0B7C7" : "#1E293B";
-                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
-                return (
-                  <div
-                    key={`${t.label}-${t.value}`}
-                    className="flex items-baseline gap-[1vw] py-[2.4vh]"
-                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "12px", padding: "2.4vh 1.2vw" } : undefined}
-                  >
-                    <span
-                      className="uppercase shrink-0"
-                      style={{
-                        fontSize: "3.2vh",
-                        letterSpacing: "0.14em",
-                        fontWeight: 500,
-                        color: labelColor,
-                      }}
-                    >
-                      {t.label}
-                    </span>
-                    <span
-                      aria-hidden
-                      className="flex-1 self-center"
-                      style={{
-                        borderBottom: "2px dotted rgba(30,41,59,0.18)",
-                        marginBottom: "0.6vh",
-                      }}
-                    />
-                    <span
-                      className="tabular-nums leading-none shrink-0"
-                      style={{
-                        fontSize: isNext ? "7.5vh" : "6vh",
-                        fontWeight: 700,
-                        color: valueColor,
-                        fontFamily: HEADING_FONT_LOCAL,
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {t.value}
-                    </span>
+              <div className="tv-zmanim-track">
+                {[0, 1].map((loop) => (
+                  <div key={loop} className="tv-zmanim-block" aria-hidden={loop === 1}>
+                    {todayTimes.map((t) => {
+                      const min = toMin(t.value);
+                      const isPast = min != null && min <= nowMin;
+                      const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
+                      const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
+                      const labelColor = isPast ? "#B0B7C7" : "#1E293B";
+                      const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
+                      return (
+                        <div
+                          key={`${loop}-${t.label}-${t.value}`}
+                          className="flex items-baseline gap-[1vw] py-[3.2vh]"
+                          style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "3.2vh 1.4vw" } : undefined}
+                        >
+                          <span
+                            className="uppercase shrink-0"
+                            style={{
+                              fontSize: "4.2vh",
+                              letterSpacing: "0.12em",
+                              fontWeight: 600,
+                              color: labelColor,
+                            }}
+                          >
+                            {t.label}
+                          </span>
+                          <span
+                            aria-hidden
+                            className="flex-1 self-center"
+                            style={{
+                              borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                              marginBottom: "0.6vh",
+                            }}
+                          />
+                          <span
+                            className="tabular-nums leading-none shrink-0"
+                            style={{
+                              fontSize: isNext ? "9vh" : "7.8vh",
+                              fontWeight: 800,
+                              color: valueColor,
+                              fontFamily: HEADING_FONT_LOCAL,
+                              letterSpacing: "-0.01em",
+                            }}
+                          >
+                            {t.value}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })
+                ))}
+              </div>
             )}
           </div>
+
 
 
           {(entryTime || exitTime) && (
