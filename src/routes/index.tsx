@@ -2052,7 +2052,7 @@ function PlanningTV() {
                         letterSpacing: "0.10em",
                         fontWeight: 600,
                         color: isPast ? "#B0B7C7" : "#000000",
-                        fontFamily: BODY_FONT,
+                        fontFamily: HEADING_FONT_LOCAL,
                       }}
                     >
                       {t.label}
@@ -2071,7 +2071,7 @@ function PlanningTV() {
                         fontSize: isNext ? "4vh" : "3.6vh",
                         fontWeight: 700,
                         color: isPast ? "#B0B7C7" : "#000000",
-                        fontFamily: BODY_FONT,
+                        fontFamily: HEADING_FONT_LOCAL,
                         letterSpacing: "-0.01em",
                       }}
                     >
