@@ -1314,7 +1314,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   </p>
                 </div>
                 <div className="space-y-1">
-                  {(zmanim?.times ?? []).map((t) => (
+                  {(zmanim?.times ?? [])
+                    .filter((t) => isShabbatDay ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label))
+                    .map((t) => (
                     <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
                       <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
                       <span className="font-display font-bold tabular-nums text-lg text-foreground">{t.value}</span>
