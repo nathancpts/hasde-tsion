@@ -2011,13 +2011,13 @@ function PlanningTV() {
                 return (
                   <div
                     key={`${t.label}-${t.value}`}
-                    className="flex items-baseline justify-between gap-[1vw] py-[1vh] transition-colors"
-                    style={isNext ? { background: "rgba(212,175,55,0.06)", borderRadius: "10px", padding: "1vh 1vw" } : undefined}
+                    className="flex items-baseline justify-between gap-[1vw] py-[1.9vh] transition-colors"
+                    style={isNext ? { background: "rgba(212,175,55,0.07)", borderRadius: "12px", padding: "1.9vh 1.2vw" } : undefined}
                   >
                     <span
                       className="uppercase"
                       style={{
-                        fontSize: "1.8vh",
+                        fontSize: "2.5vh",
                         letterSpacing: "0.16em",
                         fontWeight: isNext || isKey ? 700 : 500,
                         color: labelColor,
@@ -2028,7 +2028,7 @@ function PlanningTV() {
                     <span
                       className="tabular-nums leading-none"
                       style={{
-                        fontSize: isNext ? "4vh" : "3.2vh",
+                        fontSize: isNext ? "5.8vh" : "4.6vh",
                         fontWeight: isKey || isNext ? 700 : 600,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
