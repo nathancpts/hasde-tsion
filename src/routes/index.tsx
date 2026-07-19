@@ -1616,7 +1616,7 @@ function PlanningTV() {
   const chabad = useChabad();
   const [dayOffset, setDayOffset] = useState(0);
   const zmanim = useZmanim(null, dayOffset);
-  useKiosk();
+  const { toggle: toggleFs, isFs } = useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
   const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
