@@ -2008,12 +2008,14 @@ function PlanningTV() {
 
         {/* COLUMN 2 — ZMANIM */}
         <article
-          className="col-span-5 flex flex-col min-h-0"
+          className="col-span-5 flex flex-col min-h-0 relative"
           style={{
             background: "#FFFFFF",
             borderRadius: "16px",
             padding: "24px",
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+            zIndex: 2,
+            isolation: "isolate",
           }}
         >
           <div className="flex items-baseline justify-between mb-[1.6vh]">
@@ -2201,6 +2203,10 @@ function PlanningTV() {
               borderRadius: "16px",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               background: "#FFFFFF",
+              zIndex: 1,
+              isolation: "isolate",
+              contain: "paint",
+              transform: "translateZ(0)",
             }}
           >
 
