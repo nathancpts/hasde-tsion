@@ -1724,8 +1724,13 @@ function PlanningTV() {
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
-  const todayTimes = zmanim?.times ?? [];
+  const isWeekend = dow === 5 || dow === 6;
+  const todayTimes = (zmanim?.times ?? []).filter((t) =>
+    isWeekend ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
+  );
+
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+
   const toMin = (hm: string) => {
     const m = hm.match(/^(\d{1,2}):(\d{2})/);
     if (!m) return null;
@@ -1751,10 +1756,14 @@ function PlanningTV() {
       className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[28vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
+      {/* Global animated royal-blue backdrop — visible behind rounded corners */}
+      <DynamicBackground />
+
       {/* ─── TOP header — animated royal blue ─── */}
-      <header className="relative overflow-hidden">
+      <header className="relative overflow-hidden z-10">
         <DynamicBackground />
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3.5vh] pb-[6vh] h-full">
+
 
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
@@ -2010,71 +2019,68 @@ function PlanningTV() {
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-hidden tv-fade-mask">
+          <div className="flex-1 min-h-0 overflow-hidden">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
               </p>
             ) : (
-              <div className="tv-zmanim-track">
-                {[0, 1].map((loop) => (
-                  <div key={loop} className="tv-zmanim-block" aria-hidden={loop === 1}>
-                    {todayTimes.map((t) => {
-                      const min = toMin(t.value);
-                      const isPast = min != null && min <= nowMin;
-                      const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
-                      const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                      const labelColor = isPast ? "#B0B7C7" : "#1E293B";
-                      const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
-                      return (
-                        <div
-                          key={`${loop}-${t.label}-${t.value}`}
-                          className="flex items-baseline gap-[1vw] py-[3.2vh]"
-                          style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "3.2vh 1.4vw" } : undefined}
-                        >
-                          <span
-                            className="uppercase shrink-0"
-                            style={{
-                              fontSize: "4.2vh",
-                              letterSpacing: "0.12em",
-                              fontWeight: 600,
-                              color: labelColor,
-                            }}
-                          >
-                            {t.label}
-                          </span>
-                          <span
-                            aria-hidden
-                            className="flex-1 self-center"
-                            style={{
-                              borderBottom: "2px dotted rgba(30,41,59,0.18)",
-                              marginBottom: "0.6vh",
-                            }}
-                          />
-                          <span
-                            className="tabular-nums leading-none shrink-0"
-                            style={{
-                              fontSize: isNext ? "9vh" : "7.8vh",
-                              fontWeight: 800,
-                              color: valueColor,
-                              fontFamily: HEADING_FONT_LOCAL,
-                              letterSpacing: "-0.01em",
-                            }}
-                          >
-                            {t.value}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
+              <div className="h-full flex flex-col justify-around">
+                {todayTimes.map((t) => {
+                  const min = toMin(t.value);
+                  const isPast = min != null && min <= nowMin;
+                  const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
+                  const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
+                  const labelColor = isPast ? "#B0B7C7" : "#1E293B";
+                  const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
+                  return (
+                    <div
+                      key={`${t.label}-${t.value}`}
+                      className="flex items-baseline gap-[1vw]"
+                      style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "1.4vh 1.4vw" } : { padding: "1.4vh 0" }}
+                    >
+                      <span
+                        className="uppercase shrink-0"
+                        style={{
+                          fontSize: "4.6vh",
+                          letterSpacing: "0.10em",
+                          fontWeight: 600,
+                          color: labelColor,
+                        }}
+                      >
+                        {t.label}
+                      </span>
+                      <span
+                        aria-hidden
+                        className="flex-1 self-center"
+                        style={{
+                          borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                          marginBottom: "0.6vh",
+                        }}
+                      />
+                      <span
+                        className="tabular-nums leading-none shrink-0"
+                        style={{
+                          fontSize: isNext ? "9.5vh" : "8.4vh",
+                          fontWeight: 800,
+                          color: valueColor,
+                          fontFamily: HEADING_FONT_LOCAL,
+                          letterSpacing: "-0.01em",
+                        }}
+                      >
+                        {t.value}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
 
 
 
-          {(entryTime || exitTime) && (
+
+          {isWeekend && (entryTime || exitTime) && (
             <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
               <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
                 <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
@@ -2094,6 +2100,7 @@ function PlanningTV() {
               </div>
             </div>
           )}
+
         </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
@@ -2150,8 +2157,10 @@ function PlanningTV() {
             style={{
               borderRadius: "16px",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+              background: "#FFFFFF",
             }}
           >
+
 
             {isShabbatNow ? (
               <>
