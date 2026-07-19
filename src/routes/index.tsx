@@ -1684,7 +1684,13 @@ function PlanningTV() {
   });
 
 
-  const now = new Date();
+  // Ticking clock (for countdown)
+  const [nowTs, setNowTs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  const now = new Date(nowTs);
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
@@ -1707,9 +1713,29 @@ function PlanningTV() {
   const pointsBloc = PARASHA_BLOCS.find((b) => /point/i.test(b.titre));
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
-  // Column 2 — combined VENDREDI / SHABBAT list
-  const vRows = vTimes.map((t) => ({ ...t, isHighlight: t.label === "Entrée" }));
-  const sRows = sTimes.map((t) => ({ ...t, isHighlight: t.label === "Sortie" }));
+  // Column 2 — TODAY's zmanim + countdown, like mobile
+  const todayTimes = zmanim?.times ?? [];
+  const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const toMin = (hm: string) => {
+    const m = hm.match(/^(\d{1,2}):(\d{2})/);
+    if (!m) return null;
+    return Number(m[1]) * 60 + Number(m[2]);
+  };
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const todayWithMin = todayTimes.map((t) => ({ ...t, min: toMin(t.value) }));
+  const nextZman = todayWithMin.find((t) => t.min != null && t.min > nowMin) as
+    | { label: string; value: string; min: number }
+    | undefined;
+  let countdown: string | null = null;
+  if (nextZman) {
+    const diff = nextZman.min - nowMin;
+    const h = Math.floor(diff / 60);
+    const m = diff % 60;
+    countdown = h > 0 ? `dans ${h}h${m.toString().padStart(2, "0")}` : `dans ${m} min`;
+  }
+  const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
+  const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
+
 
   return (
     <main
