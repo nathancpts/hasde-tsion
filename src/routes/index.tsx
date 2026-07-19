@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
+import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { frenchHebMonth } from "@/lib/yahrtzeits";
 
