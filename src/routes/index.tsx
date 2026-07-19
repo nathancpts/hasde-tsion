@@ -1788,12 +1788,27 @@ function PlanningTV() {
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
-            <img
-              src={logo}
-              alt="Hasdé Tsion"
-              className="h-[9vh] w-auto"
-              style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
-            />
+            <div className="flex items-center gap-[1.2vw]">
+              <img
+                src={logo}
+                alt="Hasdé Tsion"
+                className="h-[7.5vh] w-auto"
+                style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
+              />
+              <span
+                className="leading-none"
+                style={{
+                  fontFamily: `"Playfair Display", ${HEADING_FONT_LOCAL}, serif`,
+                  fontSize: "4.2vh",
+                  fontWeight: 600,
+                  letterSpacing: "0.02em",
+                  color: "#D4AF37",
+                  textShadow: "0 2px 18px rgba(212,175,55,0.35)",
+                }}
+              >
+                Hasdé Tsion
+              </span>
+            </div>
             {nextZman && countdown && (
               <div
                 className="inline-flex items-center gap-[1vw] px-[1.6vw] py-[1.1vh] rounded-full self-start backdrop-blur-md"
@@ -1820,6 +1835,7 @@ function PlanningTV() {
               </div>
             )}
           </div>
+
 
           {/* Right: Clock + date */}
           <div className="text-right flex flex-col items-end">
@@ -1882,10 +1898,10 @@ function PlanningTV() {
       <section
         className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
         style={{
-          background: "linear-gradient(180deg, #FFFFFF 0%, #F5F7FB 100%)",
+          background: "#F8F9FA",
           borderRadius: "32px 32px 0 0",
-          boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.9)",
-          color: "#1A2540",
+          boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9)",
+          color: "#1E293B",
           opacity: kotelFocused ? 0.25 : 1,
           transform: kotelFocused ? "translate3d(0,0,0) scale(0.99)" : "translate3d(0,0,0) scale(1)",
           transition: "opacity 600ms ease, transform 600ms ease",
@@ -1894,7 +1910,8 @@ function PlanningTV() {
       >
 
         {/* Parasha banner ribbon */}
-        <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
+        <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(30,41,59,0.08)" }}>
+
           <div className="flex items-baseline gap-[1.2vw]">
             <span
               className="uppercase"
@@ -1929,13 +1946,15 @@ function PlanningTV() {
 
         {/* COLUMN 1 — PARASHA (marquee) */}
         <article
-          className="col-span-4 flex flex-col min-h-0 p-[2.4vh_2vh]"
+          className="col-span-4 flex flex-col min-h-0"
           style={{
             background: "#FFFFFF",
-            borderRadius: "20px",
-            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+            borderRadius: "16px",
+            padding: "24px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
           }}
         >
+
           <div className="mb-[1.6vh]">
             <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
               Étude · Parasha
@@ -2002,23 +2021,24 @@ function PlanningTV() {
 
         {/* COLUMN 2 — ZMANIM */}
         <article
-          className="col-span-5 flex flex-col min-h-0 p-[2.4vh_2.4vh]"
+          className="col-span-5 flex flex-col min-h-0"
           style={{
             background: "#FFFFFF",
-            borderRadius: "20px",
-            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+            borderRadius: "16px",
+            padding: "24px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
           }}
         >
           <div className="flex items-baseline justify-between mb-[1.6vh]">
-            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
+            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#1E293B", fontWeight: 700 }}>
               Horaires
             </p>
-            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#4B5875", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
+            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#64748B", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
               {todayDateLabel}
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 flex flex-col justify-center divide-y" style={{ borderColor: "rgba(15,61,122,0.06)" }}>
+          <div className="flex-1 min-h-0 flex flex-col justify-center">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
@@ -2029,30 +2049,38 @@ function PlanningTV() {
                 const isPast = min != null && min <= nowMin;
                 const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
                 const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                const labelColor = isPast ? "#B0B7C7" : "#1A2540";
-                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#0F3D7A";
+                const labelColor = isPast ? "#B0B7C7" : "#1E293B";
+                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
                 return (
                   <div
                     key={`${t.label}-${t.value}`}
-                    className="flex items-baseline justify-between gap-[1vw] py-[2.6vh] transition-colors"
-                    style={isNext ? { background: "rgba(212,175,55,0.07)", borderRadius: "12px", padding: "2.6vh 1.2vw" } : undefined}
+                    className="flex items-baseline gap-[1vw] py-[2.4vh]"
+                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "12px", padding: "2.4vh 1.2vw" } : undefined}
                   >
                     <span
-                      className="uppercase"
+                      className="uppercase shrink-0"
                       style={{
                         fontSize: "3.2vh",
-                        letterSpacing: "0.16em",
-                        fontWeight: isNext || isKey ? 700 : 500,
+                        letterSpacing: "0.14em",
+                        fontWeight: 500,
                         color: labelColor,
                       }}
                     >
                       {t.label}
                     </span>
                     <span
-                      className="tabular-nums leading-none"
+                      aria-hidden
+                      className="flex-1 self-center"
+                      style={{
+                        borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                        marginBottom: "0.6vh",
+                      }}
+                    />
+                    <span
+                      className="tabular-nums leading-none shrink-0"
                       style={{
                         fontSize: isNext ? "7.5vh" : "6vh",
-                        fontWeight: isKey || isNext ? 700 : 600,
+                        fontWeight: 700,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
                         letterSpacing: "-0.01em",
@@ -2065,6 +2093,7 @@ function PlanningTV() {
               })
             )}
           </div>
+
 
           {(entryTime || exitTime) && (
             <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
@@ -2092,14 +2121,16 @@ function PlanningTV() {
         <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
           {/* Séouda card */}
           <article
-            className="flex flex-col p-[2vh] shrink-0"
+            className="flex flex-col shrink-0"
             style={{
               flexBasis: "38%",
               background: "#FFFFFF",
-              borderRadius: "20px",
-              boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+              borderRadius: "16px",
+              padding: "24px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
             }}
           >
+
             <div className="text-center pb-[1.2vh] mb-[1vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
               <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
                 Communauté
@@ -2138,10 +2169,11 @@ function PlanningTV() {
           <div
             className="relative w-full overflow-hidden flex-1 min-h-0"
             style={{
-              borderRadius: "20px",
-              boxShadow: "0 12px 32px -14px rgba(15,61,122,0.35), 0 0 0 1px rgba(15,61,122,0.06)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
             }}
           >
+
             {isShabbatNow ? (
               <>
                 <img
