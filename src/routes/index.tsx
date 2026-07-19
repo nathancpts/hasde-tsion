@@ -2042,7 +2042,7 @@ function PlanningTV() {
                 return (
                   <div
                     key={`${t.label}-${t.value}-${keySuffix}`}
-                    className="flex items-baseline gap-[1vw]"
+                    className={`flex gap-[1vw] ${isNext ? "items-center" : "items-baseline"}`}
                     style={
                       isNext
                         ? {
