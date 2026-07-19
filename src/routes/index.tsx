@@ -1752,8 +1752,35 @@ function PlanningTV() {
   const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
   const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
 
+  // ─── Shabbat detection (Fri after entry → Sat before exit) ───
+  const dow = now.getDay();
+  const parseHM = (hm: string | null | undefined): number | null => {
+    if (!hm) return null;
+    const m = hm.match(/^(\d{1,2}):(\d{2})/);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+  };
+  const entryMin = parseHM(entryTime);
+  const exitMin = parseHM(exitTime);
+  const isShabbatNow =
+    (dow === 5 && entryMin != null && nowMin >= entryMin) ||
+    (dow === 6 && (exitMin == null || nowMin < exitMin));
 
-
+  // ─── Kotel fullscreen cycle: every 5 min, focused for 1 min (disabled on Shabbat) ───
+  const [kotelFocused, setKotelFocused] = useState(false);
+  useEffect(() => {
+    if (isShabbatNow) {
+      setKotelFocused(false);
+      return;
+    }
+    const CYCLE = 5 * 60 * 1000;
+    const FOCUS = 60 * 1000;
+    const tick = () => {
+      setKotelFocused(true);
+      window.setTimeout(() => setKotelFocused(false), FOCUS);
+    };
+    const id = window.setInterval(tick, CYCLE);
+    return () => window.clearInterval(id);
+  }, [isShabbatNow]);
 
   const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
