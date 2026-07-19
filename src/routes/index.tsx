@@ -2079,7 +2079,7 @@ function PlanningTV() {
 
 
 
-          {(entryTime || exitTime) && (
+          {isWeekend && (entryTime || exitTime) && (
             <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
               <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
                 <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
@@ -2099,6 +2099,7 @@ function PlanningTV() {
               </div>
             </div>
           )}
+
         </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
