@@ -1868,6 +1868,9 @@ function PlanningTV() {
           borderRadius: "32px 32px 0 0",
           boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.9)",
           color: "#1A2540",
+          filter: kotelFocused ? "blur(12px)" : "none",
+          opacity: kotelFocused ? 0.4 : 1,
+          transition: "filter 800ms ease, opacity 800ms ease",
         }}
       >
         {/* Parasha banner ribbon (top of sheet, full-width) */}
