@@ -1991,7 +1991,7 @@ function PlanningTV() {
                                 className="shrink-0 mt-[1.05vh] rounded-full"
                                 style={{ width: "0.55vh", height: "0.55vh", background: GOLD_LOCAL, boxShadow: `0 0 6px ${GOLD_LOCAL}66` }}
                               />
-                              <p style={{ fontSize: "2.4vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
+                              <p style={{ fontSize: "1.95vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
                                 {p}
                               </p>
                             </li>
