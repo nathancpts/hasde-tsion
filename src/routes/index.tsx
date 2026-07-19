@@ -2021,23 +2021,24 @@ function PlanningTV() {
 
         {/* COLUMN 2 — ZMANIM */}
         <article
-          className="col-span-5 flex flex-col min-h-0 p-[2.4vh_2.4vh]"
+          className="col-span-5 flex flex-col min-h-0"
           style={{
             background: "#FFFFFF",
-            borderRadius: "20px",
-            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+            borderRadius: "16px",
+            padding: "24px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
           }}
         >
           <div className="flex items-baseline justify-between mb-[1.6vh]">
-            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
+            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#1E293B", fontWeight: 700 }}>
               Horaires
             </p>
-            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#4B5875", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
+            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#64748B", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
               {todayDateLabel}
             </p>
           </div>
 
-          <div className="flex-1 min-h-0 flex flex-col justify-center divide-y" style={{ borderColor: "rgba(15,61,122,0.06)" }}>
+          <div className="flex-1 min-h-0 flex flex-col justify-center">
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
@@ -2048,30 +2049,38 @@ function PlanningTV() {
                 const isPast = min != null && min <= nowMin;
                 const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
                 const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                const labelColor = isPast ? "#B0B7C7" : "#1A2540";
-                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#0F3D7A";
+                const labelColor = isPast ? "#B0B7C7" : "#1E293B";
+                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#1E293B";
                 return (
                   <div
                     key={`${t.label}-${t.value}`}
-                    className="flex items-baseline justify-between gap-[1vw] py-[2.6vh] transition-colors"
-                    style={isNext ? { background: "rgba(212,175,55,0.07)", borderRadius: "12px", padding: "2.6vh 1.2vw" } : undefined}
+                    className="flex items-baseline gap-[1vw] py-[2.4vh]"
+                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "12px", padding: "2.4vh 1.2vw" } : undefined}
                   >
                     <span
-                      className="uppercase"
+                      className="uppercase shrink-0"
                       style={{
                         fontSize: "3.2vh",
-                        letterSpacing: "0.16em",
-                        fontWeight: isNext || isKey ? 700 : 500,
+                        letterSpacing: "0.14em",
+                        fontWeight: 500,
                         color: labelColor,
                       }}
                     >
                       {t.label}
                     </span>
                     <span
-                      className="tabular-nums leading-none"
+                      aria-hidden
+                      className="flex-1 self-center"
+                      style={{
+                        borderBottom: "2px dotted rgba(30,41,59,0.18)",
+                        marginBottom: "0.6vh",
+                      }}
+                    />
+                    <span
+                      className="tabular-nums leading-none shrink-0"
                       style={{
                         fontSize: isNext ? "7.5vh" : "6vh",
-                        fontWeight: isKey || isNext ? 700 : 600,
+                        fontWeight: 700,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
                         letterSpacing: "-0.01em",
@@ -2084,6 +2093,7 @@ function PlanningTV() {
               })
             )}
           </div>
+
 
           {(entryTime || exitTime) && (
             <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
