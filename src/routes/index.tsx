@@ -1772,8 +1772,9 @@ function PlanningTV() {
                   fontSize: "4.2vh",
                   fontWeight: 600,
                   letterSpacing: "0.02em",
-                  color: "#D4AF37",
-                  textShadow: "0 2px 18px rgba(212,175,55,0.35)",
+                  color: "#FFFFFF",
+                  textShadow: "0 2px 24px rgba(0,0,0,0.35)",
+
                 }}
               >
                 Hasdé Tsion
