@@ -329,7 +329,7 @@ function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
         .catch((e) => console.warn("Zmanim fetch failed", e));
     };
     load();
-    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
     return () => { cancelled = true; clearInterval(id); };
   }, [loc, dayOffset]);
   return z;
@@ -1737,114 +1737,153 @@ function PlanningTV() {
   const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
 
 
+  // Midnight rollover — bump nowTs precisely at 00:00 so date/labels flip instantly,
+  // then rely on the 15-min data intervals for silent Zmanim/live refresh.
+  useEffect(() => {
+    const scheduleMidnight = () => {
+      const n = new Date();
+      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 5, 0);
+      const delay = Math.max(1000, next.getTime() - n.getTime());
+      return window.setTimeout(() => {
+        setNowTs(Date.now());
+        timerId = scheduleMidnight();
+      }, delay);
+    };
+    let timerId = scheduleMidnight();
+    return () => window.clearTimeout(timerId);
+  }, []);
+
+  const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
+  const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
+  const GOLD_LOCAL = "#D4AF37";
+
   return (
     <main
-      className="relative isolate h-screen w-screen overflow-hidden text-white grid grid-rows-[auto_auto_1fr_auto]"
-      style={{
-        background: `radial-gradient(ellipse 90% 70% at 50% -10%, #14274A 0%, ${BG_MID} 45%, ${BG_DEEP} 100%)`,
-        fontFamily: BODY_FONT,
-      }}
+      className="relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
+      style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
-      {/* Ambient depth: soft gold glow + subtle noise */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 55% 40% at 15% 15%, rgba(197,160,89,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 85% 85%, rgba(31,78,168,0.10) 0%, transparent 60%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.035] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(45deg, rgba(255,255,255,0.6) 0 1px, transparent 1px 3px)",
-        }}
-      />
-
-      {/* ─── TOP BAR ─── */}
-      <header className="relative flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[2vh]">
-        <div className="flex items-center">
-          <img
-            src={logo}
-            alt="Hasdé Tsion"
-            className="h-[10vh] w-auto"
-            style={{
-              filter:
-                "brightness(0) saturate(100%) invert(72%) sepia(45%) saturate(546%) hue-rotate(4deg) brightness(96%) contrast(88%) drop-shadow(0 2px 12px rgba(197,160,89,0.25))",
-            }}
-          />
-        </div>
-
-        <div className="text-right">
-          <div
-            className="tabular-nums leading-none text-white tracking-tight"
-            style={{ fontSize: "7.8vh", fontFamily: HEADING_FONT, fontWeight: 600, textShadow: "0 2px 24px rgba(255,255,255,0.06)" }}
-          >
-            {clock}
+      {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
+      <header className="relative overflow-hidden">
+        <DynamicBackground />
+        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
+          {/* Left: Logo + Prochain badge */}
+          <div className="flex flex-col justify-between h-full">
+            <img
+              src={logo}
+              alt="Hasdé Tsion"
+              className="h-[9vh] w-auto"
+              style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
+            />
+            {nextZman && countdown && (
+              <div
+                className="inline-flex items-center gap-[1vw] px-[1.6vw] py-[1.1vh] rounded-full self-start backdrop-blur-md"
+                style={{
+                  background: "rgba(255,255,255,0.14)",
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  boxShadow: "0 8px 32px -8px rgba(0,0,0,0.35)",
+                }}
+              >
+                <span
+                  className="uppercase text-white/85"
+                  style={{ fontSize: "1.2vh", letterSpacing: "0.42em", fontWeight: 700 }}
+                >
+                  Prochain
+                </span>
+                <span className="text-white/40" style={{ fontSize: "1.4vh" }}>|</span>
+                <span className="text-white" style={{ fontSize: "2vh", fontWeight: 600 }}>
+                  {nextZman.label}
+                </span>
+                <span className="text-white/50" style={{ fontSize: "1vh" }}>•</span>
+                <span className="tabular-nums text-white" style={{ fontSize: "2vh", fontWeight: 500 }}>
+                  {countdown}
+                </span>
+              </div>
+            )}
           </div>
-          <p
-            className="uppercase tracking-[0.42em] text-white/60 mt-[1.4vh] capitalize"
-            style={{ fontSize: "1.35vh", fontWeight: 500, letterSpacing: "0.42em" }}
-          >
-            {dateStr}
-          </p>
+
+          {/* Right: Clock + date */}
+          <div className="text-right flex flex-col items-end">
+            <div
+              className="tabular-nums leading-none text-white tracking-tight"
+              style={{
+                fontSize: "12vh",
+                fontFamily: HEADING_FONT_LOCAL,
+                fontWeight: 700,
+                textShadow: "0 4px 32px rgba(0,0,0,0.25)",
+              }}
+            >
+              {clock}
+            </div>
+            <p
+              className="uppercase text-white/85 mt-[1vh] capitalize"
+              style={{ fontSize: "1.5vh", fontWeight: 600, letterSpacing: "0.35em" }}
+            >
+              {dateStr}
+            </p>
+          </div>
         </div>
       </header>
 
-      {/* ─── SECOND BAR — PARASHA ─── */}
-      <div className="relative px-[3.5vw] pb-[2.4vh]">
-        <div
-          className="flex items-baseline justify-between gap-[2vw] pb-[1.8vh]"
-          style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}
-        >
-          <h1
-            className="text-white leading-none"
-            style={{ fontSize: "5.4vh", fontFamily: HEADING_FONT, fontWeight: 600, letterSpacing: "-0.01em" }}
-          >
-            {parashaFr}
-          </h1>
-          <div className="flex items-baseline gap-[1.2vw]" dir="rtl">
-            <span className="font-hebrew leading-none text-white/95" style={{ fontSize: "4.4vh", fontWeight: 500 }}>
-              {parashaHe}
+      {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
+      <section
+        className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] grid grid-cols-12 gap-[1.6vw] min-h-0 overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg, #FFFFFF 0%, #F5F7FB 100%)",
+          borderRadius: "32px 32px 0 0",
+          boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.9)",
+          color: "#1A2540",
+        }}
+      >
+        {/* Parasha banner ribbon (top of sheet, full-width) */}
+        <div className="col-span-12 flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
+          <div className="flex items-baseline gap-[1.2vw]">
+            <span
+              className="uppercase"
+              style={{ fontSize: "1.2vh", letterSpacing: "0.5em", color: "#0F3D7A", fontWeight: 700 }}
+            >
+              Parasha
             </span>
-            <span className="text-white/25" style={{ fontSize: "2.6vh" }}>|</span>
-            <span className="font-hebrew leading-none" style={{ fontSize: "3.2vh", color: GOLD, fontWeight: 500 }}>
-              שבת מברכים
-            </span>
+            <h1
+              className="leading-none"
+              style={{
+                fontSize: "4.6vh",
+                fontFamily: HEADING_FONT_LOCAL,
+                fontWeight: 700,
+                color: "#0F3D7A",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {parashaFr}
+            </h1>
           </div>
+          <span
+            className="font-hebrew leading-none"
+            style={{ fontSize: "4.2vh", color: "#0F3D7A", fontWeight: 600 }}
+            dir="rtl"
+          >
+            {parashaHe}
+          </span>
         </div>
-      </div>
 
-      {/* ─── MAIN 3-COLUMN GRID ─── */}
-      <section className="relative grid grid-cols-12 gap-[2vw] px-[3.5vw] pb-[2.5vh] min-h-0">
-        {/* COLUMN 1 — PARASHA */}
-        <div
-          className="col-span-4 flex flex-col min-h-0 p-[3vh]"
+        {/* COLUMN 1 — PARASHA (marquee) */}
+        <article
+          className="col-span-4 flex flex-col min-h-0 p-[2.4vh_2vh]"
           style={{
-            background: CARD_BG,
-            backdropFilter: "blur(20px) saturate(140%)",
-            border: `1px solid ${CARD_BORDER}`,
-            borderRadius: "16px",
-            boxShadow: CARD_SHADOW,
+            background: "#FFFFFF",
+            borderRadius: "20px",
+            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
           }}
         >
-          <div className="text-center pb-[2vh] mb-[2.4vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
-            <p className="uppercase" style={{ fontSize: "1.25vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
-              Parasha
+          <div className="mb-[1.6vh]">
+            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
+              Étude · Parasha
             </p>
-            <h2 className="text-white leading-tight mt-[1vh]" style={{ fontSize: "4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
-              {parashaFr}
-            </h2>
           </div>
           <div
             className="flex-1 min-h-0 overflow-hidden relative"
             style={{
-              maskImage:
-                "linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)",
+              maskImage: "linear-gradient(to bottom, transparent 0, #000 7%, #000 93%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 7%, #000 93%, transparent 100%)",
             }}
           >
             <div className="tv-marquee-track">
@@ -1852,26 +1891,17 @@ function PlanningTV() {
                 <div key={k} className="tv-marquee-block" aria-hidden={k === 1}>
                   {PARASHA_INTRO && (
                     <p
-                      className="italic text-white/85 mb-[2.4vh]"
-                      style={{
-                        fontFamily: HEADING_FONT,
-                        fontSize: "2vh",
-                        lineHeight: 1.6,
-                      }}
+                      className="italic mb-[2vh]"
+                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "1.95vh", lineHeight: 1.6, color: "#4B5875" }}
                     >
                       {PARASHA_INTRO}
                     </p>
                   )}
                   {PARASHA_BLOCS.map((bloc, i) => (
-                    <section key={i} className="mb-[2.8vh] last:mb-0">
+                    <section key={i} className="mb-[2.4vh] last:mb-0">
                       <p
-                        className="uppercase mb-[1vh]"
-                        style={{
-                          color: GOLD,
-                          fontSize: "1.3vh",
-                          letterSpacing: "0.35em",
-                          fontWeight: 600,
-                        }}
+                        className="uppercase mb-[0.9vh]"
+                        style={{ color: "#0F3D7A", fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700 }}
                       >
                         {bloc.icone ? `${bloc.icone} ` : ""}
                         {bloc.titre}
@@ -1879,29 +1909,21 @@ function PlanningTV() {
                       {bloc.paragraphes?.map((p, j) => (
                         <p
                           key={j}
-                          className="text-white mb-[1.2vh] last:mb-0"
-                          style={{ fontSize: "2vh", lineHeight: 1.6, fontWeight: 300 }}
+                          className="mb-[1vh] last:mb-0"
+                          style={{ fontSize: "1.95vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
                         >
                           {p}
                         </p>
                       ))}
                       {bloc.puces && (
-                        <ul className="mt-[1vh] space-y-[1vh]">
+                        <ul className="mt-[0.8vh] space-y-[0.8vh]">
                           {bloc.puces.map((p, j) => (
-                            <li key={j} className="flex gap-[1vw] items-start">
+                            <li key={j} className="flex gap-[0.8vw] items-start">
                               <span
-                                className="shrink-0 mt-[1.1vh] rounded-full"
-                                style={{
-                                  width: "0.5vh",
-                                  height: "0.5vh",
-                                  background: GOLD_BRIGHT,
-                                  boxShadow: `0 0 6px ${GOLD}`,
-                                }}
+                                className="shrink-0 mt-[1.05vh] rounded-full"
+                                style={{ width: "0.55vh", height: "0.55vh", background: GOLD_LOCAL, boxShadow: `0 0 6px ${GOLD_LOCAL}66` }}
                               />
-                              <p
-                                className="text-white"
-                                style={{ fontSize: "2vh", lineHeight: 1.6, fontWeight: 300 }}
-                              >
+                              <p style={{ fontSize: "1.9vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
                                 {p}
                               </p>
                             </li>
@@ -1914,161 +1936,169 @@ function PlanningTV() {
               ))}
             </div>
           </div>
-        </div>
+        </article>
 
-        {/* COLUMN 2 — TODAY's ZMANIM + countdown */}
-        <div
-          className="col-span-5 flex flex-col min-h-0 p-[3vh]"
+        {/* COLUMN 2 — ZMANIM */}
+        <article
+          className="col-span-5 flex flex-col min-h-0 p-[2.4vh_2.4vh]"
           style={{
-            background: CARD_BG,
-            backdropFilter: "blur(20px) saturate(140%)",
-            border: `1px solid ${CARD_BORDER}`,
-            borderRadius: "16px",
-            boxShadow: CARD_SHADOW,
+            background: "#FFFFFF",
+            borderRadius: "20px",
+            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
           }}
         >
-          <div className="text-center pb-[1.6vh] mb-[1.4vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
-            <p className="uppercase" style={{ fontSize: "1.25vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
-              Aujourd'hui
+          <div className="flex items-baseline justify-between mb-[1.6vh]">
+            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
+              Horaires
             </p>
-            <h2 className="text-white leading-tight mt-[0.9vh] capitalize" style={{ fontSize: "3.4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
+            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#4B5875", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
               {todayDateLabel}
-            </h2>
+            </p>
           </div>
 
-          {/* Countdown badge — next zman */}
-          {nextZman && countdown && (
-            <div className="flex justify-center mb-[1.8vh]">
-              <div
-                className="inline-flex items-center gap-[1.2vw] px-[1.8vw] py-[1.2vh] rounded-full"
-                style={{
-                  background: "rgba(197,160,89,0.08)",
-                  border: `0.5px solid ${GOLD_HAIR}`,
-                  boxShadow: "0 0 24px -8px rgba(197,160,89,0.35)",
-                }}
-              >
-                <span className="uppercase" style={{ fontSize: "1.3vh", letterSpacing: "0.4em", color: GOLD, fontWeight: 600 }}>
-                  Prochain
-                </span>
-                <span className="text-white" style={{ fontSize: "1.85vh", fontWeight: 600 }}>
-                  {nextZman.label}
-                </span>
-                <span className="text-white/60" style={{ fontSize: "0.9vh" }}>•</span>
-                <span className="tabular-nums text-white/95" style={{ fontSize: "1.85vh", fontWeight: 500 }}>
-                  {countdown}
-                </span>
-              </div>
-            </div>
-          )}
-
-          {/* Today's zman list */}
-          <div className="flex-1 flex flex-col justify-center min-h-0 space-y-[1.2vh] overflow-hidden">
+          <div className="flex-1 min-h-0 flex flex-col justify-center divide-y" style={{ borderColor: "rgba(15,61,122,0.06)" }}>
             {todayTimes.length === 0 ? (
-              <p className="text-white/40 italic text-center" style={{ fontSize: "1.6vh" }}>Horaires indisponibles.</p>
+              <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
+                Horaires indisponibles.
+              </p>
             ) : (
               todayTimes.map((t) => {
                 const min = toMin(t.value);
                 const isPast = min != null && min <= nowMin;
                 const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
+                const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
+                const labelColor = isPast ? "#B0B7C7" : "#1A2540";
+                const valueColor = isKey ? GOLD_LOCAL : isPast ? "#B0B7C7" : "#0F3D7A";
                 return (
-                  <ZmanimRowTV
+                  <div
                     key={`${t.label}-${t.value}`}
-                    label={t.label}
-                    value={t.value}
-                    isPast={isPast}
-                    isNext={!!isNext}
-                    gold={GOLD_BRIGHT}
-                  />
+                    className="flex items-baseline justify-between gap-[1vw] py-[1vh] transition-colors"
+                    style={isNext ? { background: "rgba(212,175,55,0.06)", borderRadius: "10px", padding: "1vh 1vw" } : undefined}
+                  >
+                    <span
+                      className="uppercase"
+                      style={{
+                        fontSize: "1.8vh",
+                        letterSpacing: "0.16em",
+                        fontWeight: isNext || isKey ? 700 : 500,
+                        color: labelColor,
+                      }}
+                    >
+                      {t.label}
+                    </span>
+                    <span
+                      className="tabular-nums leading-none"
+                      style={{
+                        fontSize: isNext ? "4vh" : "3.2vh",
+                        fontWeight: isKey || isNext ? 700 : 600,
+                        color: valueColor,
+                        fontFamily: HEADING_FONT_LOCAL,
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      {t.value}
+                    </span>
+                  </div>
                 );
               })
             )}
           </div>
 
-          {/* Shabbat entry / exit footer */}
           {(entryTime || exitTime) && (
-            <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: `0.5px solid ${GOLD_HAIR}` }}>
-              <div className="text-center">
-                <p className="uppercase text-white/55" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", fontWeight: 500 }}>Entrée Chabbat</p>
-                <p className="tabular-nums mt-[0.6vh]" style={{ fontSize: "3vh", color: GOLD_BRIGHT, fontFamily: HEADING_FONT, fontWeight: 700 }}>{entryTime ?? "—"}</p>
+            <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
+              <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
+                <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
+                  Entrée
+                </p>
+                <p className="tabular-nums mt-[0.4vh]" style={{ fontSize: "3.4vh", color: GOLD_LOCAL, fontFamily: HEADING_FONT_LOCAL, fontWeight: 800 }}>
+                  {entryTime ?? "—"}
+                </p>
               </div>
-              <div className="text-center">
-                <p className="uppercase text-white/55" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", fontWeight: 500 }}>Sortie Chabbat</p>
-                <p className="tabular-nums mt-[0.6vh]" style={{ fontSize: "3vh", color: GOLD_BRIGHT, fontFamily: HEADING_FONT, fontWeight: 700 }}>{exitTime ?? "—"}</p>
+              <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
+                <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
+                  Sortie
+                </p>
+                <p className="tabular-nums mt-[0.4vh]" style={{ fontSize: "3.4vh", color: GOLD_LOCAL, fontFamily: HEADING_FONT_LOCAL, fontWeight: 800 }}>
+                  {exitTime ?? "—"}
+                </p>
               </div>
             </div>
           )}
-        </div>
-
+        </article>
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div className="col-span-3 flex flex-col min-h-0 gap-[2vh]">
+        <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh]">
           {/* Séouda card */}
-          <div
-            className="flex flex-col min-h-0 p-[2.4vh]"
+          <article
+            className="flex-1 min-h-0 flex flex-col p-[2vh]"
             style={{
-              background: CARD_BG,
-              backdropFilter: "blur(20px) saturate(140%)",
-              border: `1px solid ${CARD_BORDER}`,
-              borderRadius: "16px",
-              boxShadow: CARD_SHADOW,
+              background: "#FFFFFF",
+              borderRadius: "20px",
+              boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
             }}
           >
-            <div className="text-center pb-[1.6vh] mb-[1.6vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
-              <p className="uppercase" style={{ fontSize: "1.15vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
+            <div className="text-center pb-[1.2vh] mb-[1vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
+              <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
                 Communauté
               </p>
-              <h2 className="text-white leading-tight mt-[0.8vh]" style={{ fontSize: "2.3vh", fontFamily: HEADING_FONT, fontWeight: 500 }}>
+              <h3 className="leading-tight mt-[0.6vh]" style={{ fontSize: "2vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600, color: "#1A2540" }}>
                 La Séouda est offerte par
-              </h2>
+              </h3>
             </div>
-            <div className="min-h-0 overflow-hidden" style={{ maxHeight: "20vh" }}>
-              <AutoScrollVertical className="max-h-[20vh]" speed={22} pause={2600}>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <AutoScrollVertical className="h-full" speed={20} pause={2400}>
                 {DONATIONS_REPAS.length === 0 ? (
-                  <p className="text-white/40 italic text-center" style={{ fontSize: "1.6vh" }}>Aucune donation pour le moment.</p>
+                  <p className="italic text-center" style={{ fontSize: "1.5vh", color: "#7A869A" }}>
+                    Aucune donation pour le moment.
+                  </p>
                 ) : (
                   DONATIONS_REPAS.map((d, i) => (
-                    <div key={i} className="py-[0.95vh] text-center" style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "0.5px solid rgba(255,255,255,0.06)" }}>
-                      <p className="text-white/92 leading-snug" style={{ fontSize: "1.85vh", fontWeight: 500 }}>{d.donateur}</p>
+                    <div
+                      key={i}
+                      className="py-[0.9vh] text-center"
+                      style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "1px dashed rgba(15,61,122,0.08)" }}
+                    >
+                      <p style={{ fontSize: "1.75vh", fontWeight: 600, color: "#1A2540" }}>{d.donateur}</p>
                       {d.dedicace && (
-                        <p className="italic text-white/55 mt-[0.3vh]" style={{ fontSize: "1.4vh", fontWeight: 300 }}>{d.dedicace}</p>
+                        <p className="italic mt-[0.2vh]" style={{ fontSize: "1.35vh", color: "#7A869A", fontWeight: 400 }}>
+                          {d.dedicace}
+                        </p>
                       )}
                     </div>
                   ))
                 )}
               </AutoScrollVertical>
             </div>
-          </div>
+          </article>
 
-          {/* Live Kotel — soft gold outline, rounded corners */}
-          <div className="mt-auto">
+          {/* Live Kotel */}
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              aspectRatio: "16 / 9",
+              borderRadius: "20px",
+              boxShadow: "0 12px 32px -14px rgba(15,61,122,0.35), 0 0 0 1px rgba(15,61,122,0.06)",
+            }}
+          >
+            <iframe
+              src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
+              title="Live Hasdé Tsion"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full border-0"
+            />
             <div
-              className="relative w-full overflow-hidden"
-              style={{
-                aspectRatio: "16 / 9",
-                borderRadius: "12px",
-                border: `0.5px solid ${GOLD}`,
-                boxShadow: "0 12px 40px -12px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(197,160,89,0.18), 0 0 24px -8px rgba(197,160,89,0.25)",
-              }}
+              className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
+              style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
             >
-              <iframe
-                src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                title="Live Hasdé Tsion"
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full border-0"
-              />
+              <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+              <span className="uppercase text-white" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700 }}>
+                Live · Hasdé Tsion
+              </span>
             </div>
           </div>
         </div>
       </section>
-
-      {/* ─── FOOTER ─── */}
-      <footer
-        className="relative text-center uppercase py-[1.5vh]"
-        style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.95vh", letterSpacing: "0.55em", fontWeight: 500 }}
-      >
-        בס״ד · Hasdé Tsion
-      </footer>
     </main>
   );
 }
