@@ -2098,18 +2098,18 @@ function PlanningTV() {
               if (!shouldScroll) {
                 return (
                   <div className="h-full flex flex-col justify-around">
-                    {todayTimes.map((t) => renderRow(t, "s"))}
+                    {upcomingTimes.map((t) => renderRow(t, "s"))}
                   </div>
                 );
               }
               return (
                 <div className="tv-zmanim-track">
                   <div className="tv-zmanim-block">
-                    {todayTimes.map((t) => renderRow(t, "a"))}
+                    {upcomingTimes.map((t) => renderRow(t, "a"))}
                     <div style={{ height: "3vh" }} />
                   </div>
                   <div className="tv-zmanim-block" aria-hidden>
-                    {todayTimes.map((t) => renderRow(t, "b"))}
+                    {upcomingTimes.map((t) => renderRow(t, "b"))}
                     <div style={{ height: "3vh" }} />
                   </div>
                 </div>
