@@ -2034,7 +2034,17 @@ function PlanningTV() {
             </p>
           </div>
 
-          <div className="relative z-10 flex-1 min-h-0 overflow-hidden tv-fade-mask">
+          <div className="relative z-10 flex-1 min-h-0 overflow-hidden" style={{ background: "#FFFFFF" }}>
+            <div
+              aria-hidden="true"
+              className="absolute top-0 left-0 right-0 pointer-events-none"
+              style={{ height: "2.2vh", background: "linear-gradient(to bottom, #FFFFFF 0%, rgba(255,255,255,0) 100%)", zIndex: 20 }}
+            />
+            <div
+              aria-hidden="true"
+              className="absolute bottom-0 left-0 right-0 pointer-events-none"
+              style={{ height: "2.2vh", background: "linear-gradient(to top, #FFFFFF 0%, rgba(255,255,255,0) 100%)", zIndex: 20 }}
+            />
             {todayTimes.length === 0 ? (
               <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
                 Horaires indisponibles.
