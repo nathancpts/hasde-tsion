@@ -1835,6 +1835,40 @@ function PlanningTV() {
             </p>
           </div>
         </div>
+
+        {/* Discreet fullscreen toggle — fades out in kiosk */}
+        <button
+          type="button"
+          onClick={toggleFs}
+          aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
+          className="absolute top-[1.4vh] right-[1.4vw] z-20 flex items-center justify-center rounded-full backdrop-blur-md transition-opacity duration-500 hover:opacity-100"
+          style={{
+            width: "3.4vh",
+            height: "3.4vh",
+            background: "rgba(255,255,255,0.14)",
+            border: "1px solid rgba(255,255,255,0.28)",
+            color: "white",
+            opacity: isFs ? 0.08 : 0.55,
+          }}
+        >
+          <svg width="55%" height="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            {isFs ? (
+              <>
+                <path d="M9 3v4a2 2 0 0 1-2 2H3" />
+                <path d="M21 9h-4a2 2 0 0 1-2-2V3" />
+                <path d="M15 21v-4a2 2 0 0 1 2-2h4" />
+                <path d="M3 15h4a2 2 0 0 1 2 2v4" />
+              </>
+            ) : (
+              <>
+                <path d="M3 9V5a2 2 0 0 1 2-2h4" />
+                <path d="M21 9V5a2 2 0 0 0-2-2h-4" />
+                <path d="M3 15v4a2 2 0 0 0 2 2h4" />
+                <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
+              </>
+            )}
+          </svg>
+        </button>
       </header>
 
       {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
