@@ -2066,14 +2066,8 @@ function PlanningTV() {
                     >
                       {t.label}
                     </span>
-                    <span
-                      aria-hidden
-                      className="flex-1 self-center"
-                      style={{
-                        borderBottom: isNext ? "2px dotted rgba(10,17,40,0.35)" : "2px dotted rgba(0,0,0,0.25)",
-                        marginBottom: "0.6vh",
-                      }}
-                    />
+                    <span aria-hidden className="flex-1" />
+
                     <span
                       className="tabular-nums leading-none shrink-0"
                       style={{
