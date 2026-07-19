@@ -1623,6 +1623,25 @@ function PlanningTV() {
       <Header />
       <ParashaBanner live={live} />
 
+      {/* Live YouTube — flottant coin bas-droite */}
+      <div className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] border-2 border-[#C9A96E]/60 bg-black">
+        <div className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-[#1f4ea8] to-[#0F3D7A]">
+          <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-[1.1vh] uppercase tracking-[0.2em] text-white font-semibold">Live</span>
+        </div>
+        <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
+          <iframe
+            src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=1&rel=0"
+            title="Live Hasdé Tsion"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full border-0"
+          />
+        </div>
+      </div>
+
+
+
       <section className="grid grid-cols-4 gap-[1vw] min-h-0">
         <ParashaCard live={live} />
 
