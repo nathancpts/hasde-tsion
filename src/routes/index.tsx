@@ -1756,10 +1756,14 @@ function PlanningTV() {
       className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[28vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
+      {/* Global animated royal-blue backdrop — visible behind rounded corners */}
+      <DynamicBackground />
+
       {/* ─── TOP header — animated royal blue ─── */}
-      <header className="relative overflow-hidden">
+      <header className="relative overflow-hidden z-10">
         <DynamicBackground />
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3.5vh] pb-[6vh] h-full">
+
 
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
