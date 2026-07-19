@@ -1788,12 +1788,27 @@ function PlanningTV() {
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
-            <img
-              src={logo}
-              alt="Hasdé Tsion"
-              className="h-[9vh] w-auto"
-              style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
-            />
+            <div className="flex items-center gap-[1.2vw]">
+              <img
+                src={logo}
+                alt="Hasdé Tsion"
+                className="h-[7.5vh] w-auto"
+                style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
+              />
+              <span
+                className="leading-none"
+                style={{
+                  fontFamily: `"Playfair Display", ${HEADING_FONT_LOCAL}, serif`,
+                  fontSize: "4.2vh",
+                  fontWeight: 600,
+                  letterSpacing: "0.02em",
+                  color: "#D4AF37",
+                  textShadow: "0 2px 18px rgba(212,175,55,0.35)",
+                }}
+              >
+                Hasdé Tsion
+              </span>
+            </div>
             {nextZman && countdown && (
               <div
                 className="inline-flex items-center gap-[1vw] px-[1.6vw] py-[1.1vh] rounded-full self-start backdrop-blur-md"
@@ -1820,6 +1835,7 @@ function PlanningTV() {
               </div>
             )}
           </div>
+
 
           {/* Right: Clock + date */}
           <div className="text-right flex flex-col items-end">
