@@ -1663,6 +1663,7 @@ function PlanningTV() {
   // Kotel cycle removed for TV stability — video stays fixed in Column 3.
 
 
+  if (isTV === null && !isPdfMode) return <div className="h-screen w-screen bg-[#0F3D7A]" />;
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
 
