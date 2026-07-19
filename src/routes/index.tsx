@@ -366,8 +366,11 @@ function subtractMinutes(time: string | null, minutes: number): string | null {
 
 
 
-function useIsTV() {
-  const [isTV, setIsTV] = useState(false);
+function useIsTV(): boolean | null {
+  const [isTV, setIsTV] = useState<boolean | null>(() => {
+    if (typeof window === "undefined") return null;
+    return window.matchMedia("(min-width: 1024px)").matches;
+  });
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
     const update = () => setIsTV(mq.matches);
