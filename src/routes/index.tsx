@@ -2203,6 +2203,10 @@ function PlanningTV() {
               borderRadius: "16px",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
               background: "#FFFFFF",
+              zIndex: 1,
+              isolation: "isolate",
+              contain: "paint",
+              transform: "translateZ(0)",
             }}
           >
 
