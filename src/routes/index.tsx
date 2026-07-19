@@ -1643,7 +1643,28 @@ function PlanningTV() {
 
   const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
 
+  // Ticking clock (for countdown) — declared before early return to preserve hook order
+  const [nowTs, setNowTs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  useEffect(() => {
+    const scheduleMidnight = () => {
+      const n = new Date();
+      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 5, 0);
+      const delay = Math.max(1000, next.getTime() - n.getTime());
+      return window.setTimeout(() => {
+        setNowTs(Date.now());
+        timerId = scheduleMidnight();
+      }, delay);
+    };
+    let timerId = scheduleMidnight();
+    return () => window.clearTimeout(timerId);
+  }, []);
+
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
+
 
 
   // Merge live data into static fallbacks
@@ -1683,14 +1704,8 @@ function PlanningTV() {
     return t;
   });
 
-
-  // Ticking clock (for countdown)
-  const [nowTs, setNowTs] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
-    return () => clearInterval(id);
-  }, []);
   const now = new Date(nowTs);
+
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
@@ -1737,21 +1752,7 @@ function PlanningTV() {
   const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
 
 
-  // Midnight rollover — bump nowTs precisely at 00:00 so date/labels flip instantly,
-  // then rely on the 15-min data intervals for silent Zmanim/live refresh.
-  useEffect(() => {
-    const scheduleMidnight = () => {
-      const n = new Date();
-      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 5, 0);
-      const delay = Math.max(1000, next.getTime() - n.getTime());
-      return window.setTimeout(() => {
-        setNowTs(Date.now());
-        timerId = scheduleMidnight();
-      }, delay);
-    };
-    let timerId = scheduleMidnight();
-    return () => window.clearTimeout(timerId);
-  }, []);
+
 
   const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
