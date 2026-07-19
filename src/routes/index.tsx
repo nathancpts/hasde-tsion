@@ -1752,21 +1752,7 @@ function PlanningTV() {
   const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
 
 
-  // Midnight rollover — bump nowTs precisely at 00:00 so date/labels flip instantly,
-  // then rely on the 15-min data intervals for silent Zmanim/live refresh.
-  useEffect(() => {
-    const scheduleMidnight = () => {
-      const n = new Date();
-      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 5, 0);
-      const delay = Math.max(1000, next.getTime() - n.getTime());
-      return window.setTimeout(() => {
-        setNowTs(Date.now());
-        timerId = scheduleMidnight();
-      }, delay);
-    };
-    let timerId = scheduleMidnight();
-    return () => window.clearTimeout(timerId);
-  }, []);
+
 
   const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
