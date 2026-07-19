@@ -1867,7 +1867,7 @@ function PlanningTV() {
 
       {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
       <section
-      <section
+
         className="relative z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
         style={{
           background: "#F8F9FA",
