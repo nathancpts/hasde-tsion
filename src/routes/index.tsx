@@ -1724,11 +1724,11 @@ function PlanningTV() {
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
-  const dow = now.getDay();
   const isWeekend = dow === 5 || dow === 6;
   const todayTimes = (zmanim?.times ?? []).filter((t) =>
     isWeekend ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
   );
+
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
   const toMin = (hm: string) => {
