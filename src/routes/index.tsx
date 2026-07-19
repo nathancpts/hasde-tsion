@@ -1867,18 +1867,16 @@ function PlanningTV() {
 
       {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
       <section
-        className="relative -mt-[4vh] z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
+      <section
+        className="relative z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
         style={{
           background: "#F8F9FA",
           borderRadius: "32px 32px 0 0",
           boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9)",
           color: "#1E293B",
-          opacity: kotelFocused ? 0.25 : 1,
-          transform: kotelFocused ? "translate3d(0,0,0) scale(0.99)" : "translate3d(0,0,0) scale(1)",
-          transition: "opacity 600ms ease, transform 600ms ease",
-          willChange: "opacity, transform",
         }}
       >
+
 
         {/* Parasha banner ribbon */}
         <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(30,41,59,0.08)" }}>
