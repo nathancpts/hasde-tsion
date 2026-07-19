@@ -2219,49 +2219,8 @@ function PlanningTV() {
         </div>
       </section>
 
-      {/* ─── Kotel fullscreen overlay (weekday cycle) ─── */}
-      {!isShabbatNow && (
-        <div
-          className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center"
-          style={{
-            opacity: kotelFocused ? 1 : 0,
-            transition: "opacity 800ms ease",
-          }}
-          aria-hidden={!kotelFocused}
-        >
-          <div
-            className="relative overflow-hidden"
-            style={{
-              width: "82vw",
-              aspectRatio: "16 / 9",
-              borderRadius: "28px",
-              boxShadow:
-                "0 40px 120px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)",
-              transform: kotelFocused ? "scale(1)" : "scale(0.92)",
-              transition: "transform 800ms cubic-bezier(0.22, 1, 0.36, 1)",
-            }}
-          >
-            {kotelFocused && (
-              <iframe
-                src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                title="Live Hasdé Tsion — Plein écran"
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full border-0"
-              />
-            )}
-            <div
-              className="absolute top-[2vh] left-[2vh] inline-flex items-center gap-[0.6vw] px-[1.2vw] py-[0.7vh] rounded-full backdrop-blur-md"
-              style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
-            >
-              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 10px #FF3B30" }} />
-              <span className="uppercase text-white" style={{ fontSize: "1.3vh", letterSpacing: "0.4em", fontWeight: 700 }}>
-                Live · Hasdé Tsion
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+
+
     </main>
   );
 }
