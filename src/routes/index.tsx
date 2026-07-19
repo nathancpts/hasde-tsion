@@ -1946,13 +1946,15 @@ function PlanningTV() {
 
         {/* COLUMN 1 — PARASHA (marquee) */}
         <article
-          className="col-span-4 flex flex-col min-h-0 p-[2.4vh_2vh]"
+          className="col-span-4 flex flex-col min-h-0"
           style={{
             background: "#FFFFFF",
-            borderRadius: "20px",
-            boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
+            borderRadius: "16px",
+            padding: "24px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
           }}
         >
+
           <div className="mb-[1.6vh]">
             <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
               Étude · Parasha
