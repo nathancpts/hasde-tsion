@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 
 const SYSTEM_PROMPT = `Tu es Hillel, un assistant expert dédié exclusivement à l'étude, à la documentation et aux questions d'ordre religieux juif (Torah, Talmud, Halakha, fêtes, philosophie et histoire juive).
 
