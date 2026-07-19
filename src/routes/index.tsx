@@ -82,30 +82,6 @@ function useKiosk() {
   return { isFs, toggle, hint, dismissHint: () => setHint(false) };
 }
 
-function KioskControls({ isFs, toggle, hint, dismissHint }: ReturnType<typeof useKiosk>) {
-  return (
-    <>
-      <button
-        onClick={toggle}
-        aria-label={isFs ? "Quitter plein écran" : "Mode kiosque plein écran"}
-        className="fixed bottom-4 right-4 z-50 p-2.5 rounded-full bg-card/80 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition opacity-30 hover:opacity-100 backdrop-blur-sm"
-      >
-        {isFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-      </button>
-
-      {hint && !isFs && (
-        <button
-          onClick={() => { toggle(); dismissHint(); }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-primary text-primary-foreground text-xs md:text-sm font-semibold uppercase tracking-wider shadow-[0_0_30px_rgba(201,169,110,0.4)] hover:scale-105 transition flex items-center gap-2"
-        >
-          <Maximize2 className="w-4 h-4" />
-          Lancer mode TV plein écran
-          <span className="opacity-60 hidden md:inline">· touche F</span>
-        </button>
-      )}
-    </>
-  );
-}
 
 
 function DynamicBackground() {
