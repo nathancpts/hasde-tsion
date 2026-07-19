@@ -1969,7 +1969,7 @@ function PlanningTV() {
                     <section key={i} className="mb-[2.4vh] last:mb-0">
                       <p
                         className="uppercase mb-[0.9vh]"
-                        style={{ color: "#0F3D7A", fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700 }}
+                        style={{ color: "#0F3D7A", fontSize: "1.5vh", letterSpacing: "0.32em", fontWeight: 700 }}
                       >
                         {bloc.icone ? `${bloc.icone} ` : ""}
                         {bloc.titre}
