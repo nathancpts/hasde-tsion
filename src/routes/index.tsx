@@ -2069,8 +2069,9 @@ function PlanningTV() {
         <div className="col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full">
           {/* Séouda card */}
           <article
-            className="flex-1 min-h-0 flex flex-col p-[2vh]"
+            className="flex flex-col p-[2vh] shrink-0"
             style={{
+              flexBasis: "38%",
               background: "#FFFFFF",
               borderRadius: "20px",
               boxShadow: "0 8px 28px -14px rgba(15,61,122,0.18), 0 0 0 1px rgba(15,61,122,0.04)",
