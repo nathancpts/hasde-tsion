@@ -1684,7 +1684,13 @@ function PlanningTV() {
   });
 
 
-  const now = new Date();
+  // Ticking clock (for countdown)
+  const [nowTs, setNowTs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  const now = new Date(nowTs);
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
@@ -1707,9 +1713,29 @@ function PlanningTV() {
   const pointsBloc = PARASHA_BLOCS.find((b) => /point/i.test(b.titre));
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
-  // Column 2 — combined VENDREDI / SHABBAT list
-  const vRows = vTimes.map((t) => ({ ...t, isHighlight: t.label === "Entrée" }));
-  const sRows = sTimes.map((t) => ({ ...t, isHighlight: t.label === "Sortie" }));
+  // Column 2 — TODAY's zmanim + countdown, like mobile
+  const todayTimes = zmanim?.times ?? [];
+  const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const toMin = (hm: string) => {
+    const m = hm.match(/^(\d{1,2}):(\d{2})/);
+    if (!m) return null;
+    return Number(m[1]) * 60 + Number(m[2]);
+  };
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const todayWithMin = todayTimes.map((t) => ({ ...t, min: toMin(t.value) }));
+  const nextZman = todayWithMin.find((t) => t.min != null && t.min > nowMin) as
+    | { label: string; value: string; min: number }
+    | undefined;
+  let countdown: string | null = null;
+  if (nextZman) {
+    const diff = nextZman.min - nowMin;
+    const h = Math.floor(diff / 60);
+    const m = diff % 60;
+    countdown = h > 0 ? `dans ${h}h${m.toString().padStart(2, "0")}` : `dans ${m} min`;
+  }
+  const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
+  const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
+
 
   return (
     <main
@@ -1832,7 +1858,7 @@ function PlanningTV() {
           </ul>
         </div>
 
-        {/* COLUMN 2 — ZMANIM (combined) */}
+        {/* COLUMN 2 — TODAY's ZMANIM + countdown */}
         <div
           className="col-span-5 flex flex-col min-h-0 p-[3vh]"
           style={{
@@ -1843,41 +1869,78 @@ function PlanningTV() {
             boxShadow: CARD_SHADOW,
           }}
         >
-          <div className="text-center pb-[2vh] mb-[2.2vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
+          <div className="text-center pb-[1.6vh] mb-[1.4vh]" style={{ borderBottom: `0.5px solid ${GOLD_HAIR}` }}>
             <p className="uppercase" style={{ fontSize: "1.25vh", color: GOLD, letterSpacing: "0.5em", fontWeight: 600 }}>
-              Horaires
+              Aujourd'hui
             </p>
-            <h2 className="text-white leading-tight mt-[1vh]" style={{ fontSize: "4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
-              Zmanim
+            <h2 className="text-white leading-tight mt-[0.9vh] capitalize" style={{ fontSize: "3.4vh", fontFamily: HEADING_FONT, fontWeight: 600 }}>
+              {todayDateLabel}
             </h2>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center min-h-0 space-y-[1.6vh]">
-            {/* VENDREDI header */}
-            <div className="flex items-baseline justify-between px-[0.5vw]">
-              <p className="uppercase text-white/95" style={{ fontSize: "1.55vh", letterSpacing: "0.35em", fontWeight: 600 }}>
-                Vendredi
-              </p>
-              <p className="text-white/35 capitalize" style={{ fontSize: "1.4vh", fontWeight: 400 }}>{vDate}</p>
+          {/* Countdown badge — next zman */}
+          {nextZman && countdown && (
+            <div className="flex justify-center mb-[1.8vh]">
+              <div
+                className="inline-flex items-center gap-[1.2vw] px-[1.8vw] py-[1.2vh] rounded-full"
+                style={{
+                  background: "rgba(197,160,89,0.08)",
+                  border: `0.5px solid ${GOLD_HAIR}`,
+                  boxShadow: "0 0 24px -8px rgba(197,160,89,0.35)",
+                }}
+              >
+                <span className="uppercase" style={{ fontSize: "1.3vh", letterSpacing: "0.4em", color: GOLD, fontWeight: 600 }}>
+                  Prochain
+                </span>
+                <span className="text-white" style={{ fontSize: "1.85vh", fontWeight: 600 }}>
+                  {nextZman.label}
+                </span>
+                <span className="text-white/60" style={{ fontSize: "0.9vh" }}>•</span>
+                <span className="tabular-nums text-white/95" style={{ fontSize: "1.85vh", fontWeight: 500 }}>
+                  {countdown}
+                </span>
+              </div>
             </div>
-            {vRows.map((t) => (
-              <ZmanimRow key={`v-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD_BRIGHT : undefined} />
-            ))}
+          )}
 
-            <div className="h-[1.2vh]" style={{ borderTop: `0.5px solid ${GOLD_HAIR}`, marginTop: "1vh" }} />
-
-            {/* SHABBAT header */}
-            <div className="flex items-baseline justify-between px-[0.5vw]">
-              <p className="uppercase text-white/95" style={{ fontSize: "1.55vh", letterSpacing: "0.35em", fontWeight: 600 }}>
-                Shabbat
-              </p>
-              <p className="text-white/35 capitalize" style={{ fontSize: "1.4vh", fontWeight: 400 }}>{sDate}</p>
-            </div>
-            {sRows.map((t) => (
-              <ZmanimRow key={`s-${t.label}`} label={t.label} value={t.value} gold={t.isHighlight ? GOLD_BRIGHT : undefined} />
-            ))}
+          {/* Today's zman list */}
+          <div className="flex-1 flex flex-col justify-center min-h-0 space-y-[1.2vh] overflow-hidden">
+            {todayTimes.length === 0 ? (
+              <p className="text-white/40 italic text-center" style={{ fontSize: "1.6vh" }}>Horaires indisponibles.</p>
+            ) : (
+              todayTimes.map((t) => {
+                const min = toMin(t.value);
+                const isPast = min != null && min <= nowMin;
+                const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
+                return (
+                  <ZmanimRowTV
+                    key={`${t.label}-${t.value}`}
+                    label={t.label}
+                    value={t.value}
+                    isPast={isPast}
+                    isNext={!!isNext}
+                    gold={GOLD_BRIGHT}
+                  />
+                );
+              })
+            )}
           </div>
+
+          {/* Shabbat entry / exit footer */}
+          {(entryTime || exitTime) && (
+            <div className="mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: `0.5px solid ${GOLD_HAIR}` }}>
+              <div className="text-center">
+                <p className="uppercase text-white/55" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", fontWeight: 500 }}>Entrée Chabbat</p>
+                <p className="tabular-nums mt-[0.6vh]" style={{ fontSize: "3vh", color: GOLD_BRIGHT, fontFamily: HEADING_FONT, fontWeight: 700 }}>{entryTime ?? "—"}</p>
+              </div>
+              <div className="text-center">
+                <p className="uppercase text-white/55" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", fontWeight: 500 }}>Sortie Chabbat</p>
+                <p className="tabular-nums mt-[0.6vh]" style={{ fontSize: "3vh", color: GOLD_BRIGHT, fontFamily: HEADING_FONT, fontWeight: 700 }}>{exitTime ?? "—"}</p>
+              </div>
+            </div>
+          )}
         </div>
+
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
         <div className="col-span-3 flex flex-col min-h-0 gap-[2vh]">
@@ -1952,17 +2015,41 @@ function PlanningTV() {
   );
 }
 
-function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?: string }) {
+function ZmanimRowTV({
+  label,
+  value,
+  isPast,
+  isNext,
+  gold,
+}: {
+  label: string;
+  value: string;
+  isPast: boolean;
+  isNext: boolean;
+  gold: string;
+}) {
   const HEADING_FONT = "'Playfair Display', Georgia, serif";
+  const labelColor = isNext ? gold : isPast ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.85)";
+  const valueColor = isNext ? gold : isPast ? "rgba(255,255,255,0.4)" : "#FFFFFF";
   return (
-    <div className="flex items-baseline justify-between gap-[1vw] px-[0.5vw]">
+    <div
+      className="flex items-baseline justify-between gap-[1vw] px-[1vw] py-[0.4vh] rounded-lg transition-colors"
+      style={
+        isNext
+          ? {
+              background: "rgba(197,160,89,0.06)",
+              boxShadow: `inset 0 0 0 0.5px ${gold}55`,
+            }
+          : undefined
+      }
+    >
       <span
         className="uppercase"
         style={{
-          fontSize: "1.95vh",
-          color: gold ? gold : "rgba(255,255,255,0.75)",
-          letterSpacing: "0.16em",
-          fontWeight: gold ? 600 : 400,
+          fontSize: "1.75vh",
+          color: labelColor,
+          letterSpacing: "0.18em",
+          fontWeight: isNext ? 600 : 500,
         }}
       >
         {label}
@@ -1970,12 +2057,12 @@ function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?
       <span
         className="tabular-nums leading-none"
         style={{
-          fontSize: gold ? "5.4vh" : "4vh",
-          fontWeight: gold ? 700 : 400,
-          color: gold ? gold : "#FFFFFF",
+          fontSize: isNext ? "4.4vh" : "3.4vh",
+          fontWeight: isNext ? 700 : 400,
+          color: valueColor,
           fontFamily: HEADING_FONT,
           letterSpacing: "-0.01em",
-          textShadow: gold ? `0 2px 20px ${gold}33` : "none",
+          textShadow: isNext ? `0 2px 20px ${gold}44` : "none",
         }}
       >
         {value}
@@ -1983,3 +2070,4 @@ function ZmanimRow({ label, value, gold }: { label: string; value: string; gold?
     </div>
   );
 }
+
