@@ -580,72 +580,95 @@ function DayCard({
   children?: React.ReactNode;
   highlight?: React.ReactNode;
 }) {
-  const badgeBg = badgeTone === "gold" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+  const isGold = badgeTone === "gold";
+  const headerBg = isGold
+    ? "linear-gradient(120deg, #C9A96E 0%, #E8C98A 55%, #B8934D 100%)"
+    : "linear-gradient(120deg, #1f4ea8 0%, #4a7bd1 55%, #0F3D7A 100%)";
+  const headerText = isGold ? "#1a1a1a" : "#ffffff";
   return (
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col gap-[1vh] min-h-0 overflow-hidden">
-      <div>
-        <span className={`inline-block px-2 py-0.5 rounded-full text-[1.1vh] uppercase tracking-[0.25em] font-bold ${badgeBg}`}>
-          {badge}
-        </span>
-        <h3 className="font-display text-[2.6vh] font-bold text-foreground mt-1 leading-tight">
-          {title}
-        </h3>
-        <p className="text-[1.2vh] text-muted-foreground mt-0.5 uppercase tracking-wider">{subtitle}</p>
-        <p className="text-[1.1vh] text-muted-foreground/70">{hebrew}</p>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      {/* Header band with gradient */}
+      <div
+        className="relative px-[1vw] py-[1.1vh]"
+        style={{ background: headerBg, color: headerText }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/15 backdrop-blur-sm">
+            {badge}
+          </span>
+          <span className="text-[1.1vh] uppercase tracking-[0.25em] opacity-80">{subtitle}</span>
+        </div>
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">{title}</h3>
+        <p className="text-[1.05vh] opacity-75 mt-0.5">{hebrew}</p>
       </div>
 
-      {highlight}
+      <div className="flex flex-col gap-[1vh] p-[1.2vh_1vw] flex-1 min-h-0">
+        {highlight}
 
-      {/* TEHILIM — biggest visual element */}
-      {(() => {
-        const parts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
-        const display = parts.length >= 2 ? [parts[0], parts[parts.length - 1]] : parts;
-        return (
-          <div className="rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] py-[1vh] px-3 text-center">
-            <p className="text-[1.1vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
-              📖 Tehilim du jour
-            </p>
-            <div className={`grid ${display.length === 2 ? "grid-cols-2 gap-2" : "grid-cols-1"}`}>
-              {display.map((v, i) => (
-                <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-[5.5vh]">{v}</p>
-              ))}
-            </div>
-          </div>
-        );
-      })()}
-
-      {(() => {
-        const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
-        if (shemaParts.length >= 2) {
+        {/* TEHILIM — biggest visual element */}
+        {(() => {
+          const parts = tehilim.split(/[·\-\/]/).map((s) => s.trim()).filter(Boolean);
+          const display = parts.length >= 2 ? [parts[0], parts[parts.length - 1]] : parts;
           return (
-            <div className="rounded-lg border border-border bg-muted/30 py-[0.8vh] px-3 text-center">
-              <div className="grid grid-cols-2 gap-2">
-                {shemaParts.map((v, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <p className="text-[0.95vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-0.5">{i === 0 ? (badgeTone === "gold" ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
-                    <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{v}</span>
-                  </div>
+            <div
+              className="rounded-xl py-[1vh] px-3 text-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(201,169,110,0.18) 0%, rgba(232,201,138,0.08) 100%)",
+                border: "1.5px solid rgba(201,169,110,0.55)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+              }}
+            >
+              <p className="text-[1.05vh] uppercase tracking-[0.3em] text-primary font-semibold mb-0.5">
+                📖 Tehilim du jour
+              </p>
+              <div className={`grid ${display.length === 2 ? "grid-cols-2 gap-2" : "grid-cols-1"}`}>
+                {display.map((v, i) => (
+                  <p key={i} className="font-display font-bold text-primary tabular-nums leading-none text-[5.2vh]">{v}</p>
                 ))}
               </div>
             </div>
           );
-        }
-        return (
-          <div className="flex items-center justify-between text-[1.3vh]">
-            <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
-            <span className="font-display font-semibold text-foreground tabular-nums text-[1.8vh]">{shema}</span>
-          </div>
-        );
-      })()}
+        })()}
 
+        {(() => {
+          const shemaParts = shema.split("|").map((s) => s.trim()).filter(Boolean);
+          if (shemaParts.length >= 2) {
+            return (
+              <div className="rounded-xl py-[0.8vh] px-3 text-center" style={{ background: "rgba(31,78,168,0.06)", border: "1px solid rgba(31,78,168,0.15)" }}>
+                <div className="grid grid-cols-2 gap-2">
+                  {shemaParts.map((v, i) => (
+                    <div key={i} className="flex flex-col items-center">
+                      <p className="text-[0.9vh] uppercase tracking-[0.25em] text-muted-foreground font-semibold mb-0.5">{i === 0 ? (isGold ? "Début du Shema" : "Tefilin") : "Shema GR\"A"}</p>
+                      <span className="font-display font-semibold text-foreground tabular-nums text-[1.9vh]">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div className="flex items-center justify-between text-[1.3vh]">
+              <span className="uppercase tracking-[0.2em] text-muted-foreground">Limite Shema</span>
+              <span className="font-display font-semibold text-foreground tabular-nums text-[1.9vh]">{shema}</span>
+            </div>
+          );
+        })()}
 
-      <div className="flex flex-col flex-1 min-h-0">
-        {times.map((t) => (
-          <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} />
-        ))}
+        <div className="flex flex-col flex-1 min-h-0">
+          {times.map((t) => (
+            <TimeRow key={t.label} label={t.label} value={t.value} tone={t.tone} />
+          ))}
+        </div>
+
+        {children}
       </div>
-
-      {children}
     </article>
   );
 }
@@ -655,73 +678,87 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
   const rh = live?.roshHodesh ?? null;
 
   return (
-
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center gap-2 mb-[1vh]">
-        <span className="inline-block w-1.5 h-[3vh] bg-primary rounded-full" />
-        <h3 className="font-display text-[2.6vh] font-bold text-foreground">
-          La Séouda est offerte par :
-        </h3>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      <div
+        className="px-[1vw] py-[1.1vh]"
+        style={{ background: "linear-gradient(120deg, #C9A96E 0%, #E8C98A 55%, #B8934D 100%)", color: "#1a1a1a" }}
+      >
+        <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/15 backdrop-blur-sm">
+          Communauté
+        </span>
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">La Séouda est offerte par :</h3>
       </div>
 
-      <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
-        {donations.length === 0 ? (
-          <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
-            Aucune donation pour le moment.
-          </p>
-        ) : (
-          donations.map((d, i) => (
-            <div
-              key={i}
-              className="py-[1vh] border-b border-border/60 last:border-0"
-            >
-              <p className="font-display font-bold text-[2.1vh] text-foreground leading-snug">
-                {d.donateur}
-              </p>
-              {d.occasion && (
-                <p className="text-[1.5vh] uppercase tracking-[0.18em] text-primary font-semibold mt-1">
-                  {d.occasion}
+      <div className="flex flex-col flex-1 min-h-0 p-[1.2vh_1vw]">
+        <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
+          {donations.length === 0 ? (
+            <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
+              Aucune donation pour le moment.
+            </p>
+          ) : (
+            donations.map((d, i) => (
+              <div
+                key={i}
+                className="py-[1vh] border-b border-border/60 last:border-0"
+              >
+                <p className="font-display font-bold text-[2.05vh] text-foreground leading-snug">
+                  {d.donateur}
                 </p>
-              )}
-              {d.dedicace && (
-                <p className="font-display italic text-[1.85vh] text-foreground leading-snug mt-1">
-                  {d.dedicace}
-                </p>
-              )}
-              {d.dedicaceHe && (
-                <p className="font-hebrew text-[2vh] text-primary leading-tight mt-1.5" dir="rtl">
-                  {d.dedicaceHe}
-                </p>
-              )}
-              {d.details?.map((line, index) => (
-                <p key={index} className="text-[1.7vh] text-foreground leading-snug mt-2">
-                  {line}
-                </p>
-              ))}
-            </div>
-          ))
-        )}
-      </AutoScrollVertical>
-
-
-
-      {rh && (
-        <div className="mt-[1vh] rounded-lg border border-[var(--gold-line)] bg-[var(--gold-soft)] p-[1.2vh_1vw] text-center">
-          <p className="text-[1.2vh] uppercase tracking-[0.3em] text-primary font-semibold">
-            Prochain Rosh Ḥodesh
-          </p>
-          <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
-          <p className="text-[1.45vh] text-muted-foreground leading-snug mt-1">
-            {rh.dateLabel}
-          </p>
-          {rh.moladHe && (
-            <p className="text-[1.35vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+                {d.occasion && (
+                  <p className="text-[1.45vh] uppercase tracking-[0.18em] text-primary font-semibold mt-1">
+                    {d.occasion}
+                  </p>
+                )}
+                {d.dedicace && (
+                  <p className="font-display italic text-[1.8vh] text-foreground leading-snug mt-1">
+                    {d.dedicace}
+                  </p>
+                )}
+                {d.dedicaceHe && (
+                  <p className="font-hebrew text-[2vh] text-primary leading-tight mt-1.5" dir="rtl">
+                    {d.dedicaceHe}
+                  </p>
+                )}
+                {d.details?.map((line, index) => (
+                  <p key={index} className="text-[1.65vh] text-foreground leading-snug mt-2">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            ))
           )}
-        </div>
-      )}
+        </AutoScrollVertical>
+
+        {rh && (
+          <div
+            className="mt-[1vh] rounded-xl p-[1.2vh_1vw] text-center"
+            style={{
+              background: "linear-gradient(135deg, rgba(201,169,110,0.2) 0%, rgba(232,201,138,0.1) 100%)",
+              border: "1.5px solid rgba(201,169,110,0.55)",
+            }}
+          >
+            <p className="text-[1.15vh] uppercase tracking-[0.3em] text-primary font-semibold">
+              ✦ Prochain Rosh Ḥodesh
+            </p>
+            <p className="font-display font-bold text-[2.4vh] text-foreground mt-0.5 leading-none">{rh.nom}</p>
+            <p className="text-[1.4vh] text-muted-foreground leading-snug mt-1">{rh.dateLabel}</p>
+            {rh.moladHe && (
+              <p className="text-[1.3vh] text-foreground/70 mt-1">{rh.moladHe}</p>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   );
 }
+
 
 
 
