@@ -329,7 +329,7 @@ function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
         .catch((e) => console.warn("Zmanim fetch failed", e));
     };
     load();
-    const id = setInterval(load, 60 * 60 * 1000); // refresh hourly
+    const id = setInterval(load, 15 * 60 * 1000); // refresh every 15 min
     return () => { cancelled = true; clearInterval(id); };
   }, [loc, dayOffset]);
   return z;
