@@ -2297,6 +2297,7 @@ function PlanningTV() {
                       minHeight: "100%",
                       display: "block",
                       background: "#FFFFFF",
+                      borderRadius: "16px",
                       transform: "translateZ(0)",
                     }}
                   />
