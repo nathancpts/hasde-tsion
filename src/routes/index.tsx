@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo-hasde-tsion.png";
+import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { frenchHebMonth } from "@/lib/yahrtzeits";
 
@@ -1751,8 +1752,35 @@ function PlanningTV() {
   const entryTime = chabad?.candle ?? week.vendredi.times.find((t) => t.label === "Allumer les bougies")?.value ?? null;
   const exitTime = chabad?.havdalah ?? week.samedi.times.find((t) => t.label === "Fin du Chabbat")?.value ?? null;
 
+  // ─── Shabbat detection (Fri after entry → Sat before exit) ───
+  const dow = now.getDay();
+  const parseHM = (hm: string | null | undefined): number | null => {
+    if (!hm) return null;
+    const m = hm.match(/^(\d{1,2}):(\d{2})/);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+  };
+  const entryMin = parseHM(entryTime);
+  const exitMin = parseHM(exitTime);
+  const isShabbatNow =
+    (dow === 5 && entryMin != null && nowMin >= entryMin) ||
+    (dow === 6 && (exitMin == null || nowMin < exitMin));
 
-
+  // ─── Kotel fullscreen cycle: every 5 min, focused for 1 min (disabled on Shabbat) ───
+  const [kotelFocused, setKotelFocused] = useState(false);
+  useEffect(() => {
+    if (isShabbatNow) {
+      setKotelFocused(false);
+      return;
+    }
+    const CYCLE = 5 * 60 * 1000;
+    const FOCUS = 60 * 1000;
+    const tick = () => {
+      setKotelFocused(true);
+      window.setTimeout(() => setKotelFocused(false), FOCUS);
+    };
+    const id = window.setInterval(tick, CYCLE);
+    return () => window.clearInterval(id);
+  }, [isShabbatNow]);
 
   const HEADING_FONT_LOCAL = "'Playfair Display', Georgia, serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
@@ -1764,7 +1792,14 @@ function PlanningTV() {
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
       {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
-      <header className="relative overflow-hidden">
+      <header
+        className="relative overflow-hidden"
+        style={{
+          filter: kotelFocused ? "blur(12px)" : "none",
+          opacity: kotelFocused ? 0.4 : 1,
+          transition: "filter 800ms ease, opacity 800ms ease",
+        }}
+      >
         <DynamicBackground />
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
           {/* Left: Logo + Prochain badge */}
@@ -1833,6 +1868,9 @@ function PlanningTV() {
           borderRadius: "32px 32px 0 0",
           boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.9)",
           color: "#1A2540",
+          filter: kotelFocused ? "blur(12px)" : "none",
+          opacity: kotelFocused ? 0.4 : 1,
+          transition: "filter 800ms ease, opacity 800ms ease",
         }}
       >
         {/* Parasha banner ribbon (top of sheet, full-width) */}
@@ -2072,7 +2110,7 @@ function PlanningTV() {
             </div>
           </article>
 
-          {/* Live Kotel */}
+          {/* Live Kotel — or Shabbat static */}
           <div
             className="relative w-full overflow-hidden"
             style={{
@@ -2081,25 +2119,117 @@ function PlanningTV() {
               boxShadow: "0 12px 32px -14px rgba(15,61,122,0.35), 0 0 0 1px rgba(15,61,122,0.06)",
             }}
           >
-            <iframe
-              src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-              title="Live Hasdé Tsion"
-              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full border-0"
-            />
+            {isShabbatNow ? (
+              <>
+                <img
+                  src={kotelShabbat}
+                  alt="Kotel — Shabbat Shalom"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  width={1920}
+                  height={1088}
+                />
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)",
+                  }}
+                >
+                  <p
+                    className="font-hebrew leading-none"
+                    dir="rtl"
+                    style={{
+                      fontSize: "6vh",
+                      color: GOLD_LOCAL,
+                      fontWeight: 700,
+                      textShadow: "0 4px 24px rgba(0,0,0,0.55)",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    שבת שלום
+                  </p>
+                  <p
+                    className="uppercase mt-[1.2vh]"
+                    style={{
+                      fontSize: "1.4vh",
+                      letterSpacing: "0.5em",
+                      color: "rgba(255,255,255,0.9)",
+                      fontFamily: HEADING_FONT_LOCAL,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Shabbat Shalom
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <iframe
+                  src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
+                  title="Live Hasdé Tsion"
+                  allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full border-0"
+                  style={{ opacity: kotelFocused ? 0 : 1, transition: "opacity 400ms ease" }}
+                />
+                <div
+                  className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
+                  style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
+                >
+                  <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+                  <span className="uppercase text-white" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700 }}>
+                    Live · Hasdé Tsion
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Kotel fullscreen overlay (weekday cycle) ─── */}
+      {!isShabbatNow && (
+        <div
+          className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center"
+          style={{
+            opacity: kotelFocused ? 1 : 0,
+            transition: "opacity 800ms ease",
+          }}
+          aria-hidden={!kotelFocused}
+        >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              width: "82vw",
+              aspectRatio: "16 / 9",
+              borderRadius: "28px",
+              boxShadow:
+                "0 40px 120px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)",
+              transform: kotelFocused ? "scale(1)" : "scale(0.92)",
+              transition: "transform 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+          >
+            {kotelFocused && (
+              <iframe
+                src="https://www.youtube.com/embed/mjM4mYuSt6o?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
+                title="Live Hasdé Tsion — Plein écran"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
+            )}
             <div
-              className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
+              className="absolute top-[2vh] left-[2vh] inline-flex items-center gap-[0.6vw] px-[1.2vw] py-[0.7vh] rounded-full backdrop-blur-md"
               style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)" }}
             >
-              <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-              <span className="uppercase text-white" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700 }}>
+              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 10px #FF3B30" }} />
+              <span className="uppercase text-white" style={{ fontSize: "1.3vh", letterSpacing: "0.4em", fontWeight: 700 }}>
                 Live · Hasdé Tsion
               </span>
             </div>
           </div>
         </div>
-      </section>
+      )}
     </main>
   );
 }
