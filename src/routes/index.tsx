@@ -823,54 +823,69 @@ function SidourLink({ className = "" }: { className?: string }) {
 function ParashaCard({ live }: { live: LiveWeek | null }) {
   const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
   return (
-    <article className="rounded-xl border border-border bg-card p-[1.4vh_1vw] flex flex-col min-h-0 overflow-hidden">
-      <div className="flex items-center justify-between gap-2 mb-[0.6vh]">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="inline-block w-1.5 h-[3vh] bg-accent rounded-full shrink-0" />
-          <h3 className="font-display text-[2.6vh] font-bold text-foreground truncate">
-            Parasha {parashaFr}
-          </h3>
+    <article
+      className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
+      style={{
+        background: "rgba(255,255,255,0.96)",
+        border: "1px solid rgba(201,169,110,0.28)",
+        boxShadow: "0 18px 48px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)",
+      }}
+    >
+      <div
+        className="px-[1vw] py-[1.1vh]"
+        style={{ background: "linear-gradient(120deg, #1f4ea8 0%, #4a7bd1 55%, #0F3D7A 100%)", color: "#fff" }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/20 backdrop-blur-sm">
+            Parasha
+          </span>
+          {PARASHA_NOM_HE && (
+            <span className="font-hebrew text-[2.4vh]" style={{ color: "#E8C98A" }} dir="rtl">{PARASHA_NOM_HE}</span>
+          )}
         </div>
-        {PARASHA_NOM_HE && (
-          <span className="font-hebrew text-[2.4vh] text-primary shrink-0" dir="rtl">{PARASHA_NOM_HE}</span>
-        )}
+        <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">
+          {parashaFr}
+        </h3>
       </div>
 
-      <AutoScrollVertical className="flex-1 min-h-0 pr-1">
-        <div className="flex flex-col gap-[1.1vh]">
-          {PARASHA_INTRO && (
-            <p className="font-display italic text-[1.8vh] text-muted-foreground leading-snug">
-              {PARASHA_INTRO}
-            </p>
-          )}
-          {PARASHA_BLOCS.map((bloc, i) => (
-            <section
-              key={i}
-              className="rounded-md border border-border/60 bg-muted/30 px-[0.9vw] py-[1vh]"
-            >
-              <p className="text-[1.4vh] uppercase tracking-[0.2em] text-primary font-semibold mb-[0.5vh]">
-                {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
+      <div className="flex-1 min-h-0 p-[1.2vh_1vw]">
+        <AutoScrollVertical className="h-full pr-1">
+          <div className="flex flex-col gap-[1.1vh]">
+            {PARASHA_INTRO && (
+              <p className="font-display italic text-[1.75vh] text-muted-foreground leading-snug">
+                {PARASHA_INTRO}
               </p>
-              {bloc.paragraphes?.map((p, j) => (
-                <p key={j} className="text-[1.85vh] text-foreground leading-snug mb-[0.4vh] last:mb-0">
-                  {p}
+            )}
+            {PARASHA_BLOCS.map((bloc, i) => (
+              <section
+                key={i}
+                className="rounded-xl px-[0.9vw] py-[1vh]"
+                style={{ background: "rgba(31,78,168,0.05)", border: "1px solid rgba(31,78,168,0.12)" }}
+              >
+                <p className="text-[1.35vh] uppercase tracking-[0.22em] text-primary font-semibold mb-[0.5vh]">
+                  {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
                 </p>
-              ))}
-              {bloc.puces && (
-                <ul className="list-disc pl-[1.6vh] space-y-[0.4vh] mt-[0.4vh]">
-                  {bloc.puces.map((p, j) => (
-                    <li key={j} className="text-[1.8vh] text-foreground leading-snug">{p}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-        </div>
-      </AutoScrollVertical>
-      
+                {bloc.paragraphes?.map((p, j) => (
+                  <p key={j} className="text-[1.8vh] text-foreground leading-snug mb-[0.4vh] last:mb-0">
+                    {p}
+                  </p>
+                ))}
+                {bloc.puces && (
+                  <ul className="list-disc pl-[1.6vh] space-y-[0.4vh] mt-[0.4vh]">
+                    {bloc.puces.map((p, j) => (
+                      <li key={j} className="text-[1.75vh] text-foreground leading-snug">{p}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+        </AutoScrollVertical>
+      </div>
     </article>
   );
 }
+
 
 
 
