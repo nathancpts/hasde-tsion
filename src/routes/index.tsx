@@ -1670,7 +1670,7 @@ function PlanningTV() {
     }
     const CYCLE = 5 * 60 * 1000;
     const FOCUS = 60 * 1000;
-    let focusTimeout: ReturnType<typeof window.setTimeout> | undefined;
+    let focusTimeout: number | undefined;
     const tick = () => {
       setKotelFocused(true);
       focusTimeout = window.setTimeout(() => setKotelFocused(false), FOCUS);
