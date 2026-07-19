@@ -1692,10 +1692,17 @@ function PlanningTV() {
       <ParashaBanner live={live} />
 
       {/* Live YouTube — flottant coin bas-droite */}
-      <div className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] border-2 border-[#C9A96E]/60 bg-black">
-        <div className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-[#1f4ea8] to-[#0F3D7A]">
+      <div
+        className="fixed z-40 bottom-[3vh] right-[1.5vw] w-[22vw] rounded-2xl overflow-hidden"
+        style={{
+          background: "#000",
+          border: "1.5px solid rgba(201,169,110,0.5)",
+          boxShadow: "0 20px 60px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(31,78,168,0.4), 0 0 40px -10px rgba(74,123,209,0.55)",
+        }}
+      >
+        <div className="flex items-center gap-2 px-3 py-1.5" style={{ background: "linear-gradient(90deg, #0F3D7A 0%, #1f4ea8 55%, #0a2c6b 100%)" }}>
           <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[1.1vh] uppercase tracking-[0.2em] text-white font-semibold">Live</span>
+          <span className="text-[1.1vh] uppercase tracking-[0.25em] text-white font-semibold">Live · Hasdé Tsion</span>
         </div>
         <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
           <iframe
@@ -1707,6 +1714,7 @@ function PlanningTV() {
           />
         </div>
       </div>
+
 
 
 
