@@ -1765,18 +1765,20 @@ function PlanningTV() {
 
   return (
     <main
-      className="relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
+      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
       {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
       <header
         className="relative overflow-hidden"
         style={{
-          filter: kotelFocused ? "blur(12px)" : "none",
-          opacity: kotelFocused ? 0.4 : 1,
-          transition: "filter 800ms ease, opacity 800ms ease",
+          opacity: kotelFocused ? 0.25 : 1,
+          transform: kotelFocused ? "translate3d(0,0,0) scale(0.985)" : "translate3d(0,0,0) scale(1)",
+          transition: "opacity 600ms ease, transform 600ms ease",
+          willChange: "opacity, transform",
         }}
       >
+
         <DynamicBackground />
         <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
           {/* Left: Logo + Prochain badge */}
@@ -1879,12 +1881,13 @@ function PlanningTV() {
           borderRadius: "32px 32px 0 0",
           boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.9)",
           color: "#1A2540",
-          filter: kotelFocused ? "blur(12px)" : "none",
-          opacity: kotelFocused ? 0.4 : 1,
-          transition: "filter 800ms ease, opacity 800ms ease",
-          transform: "translate3d(0,0,0)",
+          opacity: kotelFocused ? 0.25 : 1,
+          transform: kotelFocused ? "translate3d(0,0,0) scale(0.99)" : "translate3d(0,0,0) scale(1)",
+          transition: "opacity 600ms ease, transform 600ms ease",
+          willChange: "opacity, transform",
         }}
       >
+
         {/* Parasha banner ribbon */}
         <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
           <div className="flex items-baseline gap-[1.2vw]">
