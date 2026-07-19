@@ -1748,22 +1748,14 @@ function PlanningTV() {
 
   return (
     <main
-      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[25vh_1fr]"
+      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[28vh_1fr]"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
     >
-      {/* ─── TOP 25% — animated royal blue (reused from mobile: .btn-blue-animated) ─── */}
-      <header
-        className="relative overflow-hidden"
-        style={{
-          opacity: kotelFocused ? 0.25 : 1,
-          transform: kotelFocused ? "translate3d(0,0,0) scale(0.985)" : "translate3d(0,0,0) scale(1)",
-          transition: "opacity 600ms ease, transform 600ms ease",
-          willChange: "opacity, transform",
-        }}
-      >
-
+      {/* ─── TOP header — animated royal blue ─── */}
+      <header className="relative overflow-hidden">
         <DynamicBackground />
-        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3vh] pb-[3vh] h-full">
+        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3.5vh] pb-[6vh] h-full">
+
           {/* Left: Logo + Prochain badge */}
           <div className="flex flex-col justify-between h-full">
             <div className="flex items-center gap-[1.2vw]">
