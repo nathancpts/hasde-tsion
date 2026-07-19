@@ -2043,15 +2043,16 @@ function PlanningTV() {
                   <div
                     key={`${t.label}-${t.value}-${keySuffix}`}
                     className="flex items-baseline gap-[1vw]"
-                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "1.1vh 1.2vw" } : { padding: "1.1vh 0" }}
+                    style={isNext ? { background: "rgba(212,175,55,0.08)", borderRadius: "14px", padding: "0.9vh 1.2vw" } : { padding: "0.9vh 0" }}
                   >
                     <span
                       className="uppercase shrink-0"
                       style={{
-                        fontSize: "3vh",
+                        fontSize: "2.2vh",
                         letterSpacing: "0.10em",
                         fontWeight: 600,
-                        color: labelColor,
+                        color: isPast ? "#B0B7C7" : "#000000",
+                        fontFamily: BODY_FONT,
                       }}
                     >
                       {t.label}
@@ -2067,10 +2068,10 @@ function PlanningTV() {
                     <span
                       className="tabular-nums leading-none shrink-0"
                       style={{
-                        fontSize: isNext ? "5.6vh" : "5vh",
-                        fontWeight: 800,
-                        color: valueColor,
-                        fontFamily: HEADING_FONT_LOCAL,
+                        fontSize: isNext ? "4vh" : "3.6vh",
+                        fontWeight: 700,
+                        color: isPast ? "#B0B7C7" : "#000000",
+                        fontFamily: BODY_FONT,
                         letterSpacing: "-0.01em",
                       }}
                     >
