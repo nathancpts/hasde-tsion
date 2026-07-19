@@ -1704,14 +1704,8 @@ function PlanningTV() {
     return t;
   });
 
-
-  // Ticking clock (for countdown)
-  const [nowTs, setNowTs] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
-    return () => clearInterval(id);
-  }, []);
   const now = new Date(nowTs);
+
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = live?.parasha.fr ?? week.parasha.fr;
