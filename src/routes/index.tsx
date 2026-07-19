@@ -1960,7 +1960,7 @@ function PlanningTV() {
                   {PARASHA_INTRO && (
                     <p
                       className="italic mb-[2vh]"
-                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2.5vh", lineHeight: 1.6, color: "#4B5875" }}
+                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2vh", lineHeight: 1.6, color: "#4B5875" }}
                     >
                       {PARASHA_INTRO}
                     </p>
@@ -1978,7 +1978,7 @@ function PlanningTV() {
                         <p
                           key={j}
                           className="mb-[1vh] last:mb-0"
-                          style={{ fontSize: "2.5vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
+                          style={{ fontSize: "2vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
                         >
                           {p}
                         </p>
@@ -1991,7 +1991,7 @@ function PlanningTV() {
                                 className="shrink-0 mt-[1.05vh] rounded-full"
                                 style={{ width: "0.55vh", height: "0.55vh", background: GOLD_LOCAL, boxShadow: `0 0 6px ${GOLD_LOCAL}66` }}
                               />
-                              <p style={{ fontSize: "2.4vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
+                              <p style={{ fontSize: "1.95vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
                                 {p}
                               </p>
                             </li>
@@ -2071,7 +2071,7 @@ function PlanningTV() {
                     <span
                       className="tabular-nums leading-none shrink-0"
                       style={{
-                        fontSize: isNext ? "4.2vh" : "3.6vh",
+                        fontSize: isNext ? "3.4vh" : "2.9vh",
                         fontWeight: isNext ? 900 : 800,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
