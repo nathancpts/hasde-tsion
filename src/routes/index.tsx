@@ -1290,7 +1290,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </div>
               <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
                 <iframe
-                  src="https://www.youtube.com/embed/77akujLn4k8?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
+                  src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
                   title="Live Hasdé Tsion"
                   allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                   allowFullScreen
@@ -2284,7 +2284,7 @@ function PlanningTV() {
                   style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
                 >
                   <iframe
-                    src="https://www.youtube.com/embed/77akujLn4k8?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
+                    src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
                     title="Live Hasdé Tsion"
                     allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                     allowFullScreen
