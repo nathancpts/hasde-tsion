@@ -2063,7 +2063,7 @@ function PlanningTV() {
                   </div>
                 );
               }
-              const shouldScroll = upcomingTimes.length > 5;
+              
               const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
                 const min = toMin(t.value);
                 const isPast = min != null && min <= nowMin;
@@ -2116,26 +2116,8 @@ function PlanningTV() {
                 );
 
               };
-              if (!shouldScroll) {
-                const justify = "justify-start gap-[2.5vh] pt-[2vh]";
-                return (
-                  <div className={`h-full flex flex-col ${justify}`}>
-                    {upcomingTimes.map((t) => renderRow(t, "s"))}
-                  </div>
-                );
-              }
-              return (
-                <div className="tv-zmanim-track">
-                  <div className="tv-zmanim-block">
-                    {upcomingTimes.map((t) => renderRow(t, "a"))}
-                    <div style={{ height: "3vh" }} />
-                  </div>
-                  <div className="tv-zmanim-block" aria-hidden>
-                    {upcomingTimes.map((t) => renderRow(t, "b"))}
-                    <div style={{ height: "3vh" }} />
-                  </div>
-                </div>
-              );
+              return <TvZmanimList items={upcomingTimes} renderRow={renderRow} />;
+
             })()}
           </div>
 
@@ -2381,3 +2363,55 @@ function ZmanimRowTV({
   );
 }
 
+
+// TV — liste des horaires : fixe si tout tient, défilement seulement si ça déborde
+function TvZmanimList({
+  items,
+  renderRow,
+}: {
+  items: { label: string; value: string }[];
+  renderRow: (t: any, keySuffix: string) => React.ReactNode;
+}) {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const innerRef = useRef<HTMLDivElement | null>(null);
+  const [overflow, setOverflow] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const w = wrapRef.current;
+      const i = innerRef.current;
+      if (!w || !i) return;
+      setOverflow(i.scrollHeight > w.clientHeight + 2);
+    };
+    check();
+    const id = window.setTimeout(check, 250);
+    window.addEventListener("resize", check);
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener("resize", check);
+    };
+  }, [items.map((t) => `${t.label}${t.value}`).join("|")]);
+
+  if (overflow) {
+    return (
+      <div className="tv-zmanim-track">
+        <div className="tv-zmanim-block">
+          {items.map((t) => renderRow(t, "a"))}
+          <div style={{ height: "3vh" }} />
+        </div>
+        <div className="tv-zmanim-block" aria-hidden>
+          {items.map((t) => renderRow(t, "b"))}
+          <div style={{ height: "3vh" }} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={wrapRef} className="h-full overflow-hidden">
+      <div ref={innerRef} className="flex flex-col justify-start gap-[2.5vh] pt-[2vh]">
+        {items.map((t) => renderRow(t, "s"))}
+      </div>
+    </div>
+  );
+}
