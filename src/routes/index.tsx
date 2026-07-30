@@ -1600,6 +1600,16 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           {sectionTab === "communaute" && null}
 
 
+          {/* Bouton Don — toujours visible en bas */}
+          <a
+            href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-blue-animated flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-5 py-4 text-[15px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all"
+          >
+            <span className="text-lg">♡</span>
+            <span>Faire un don</span>
+          </a>
 
 
           <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4">
