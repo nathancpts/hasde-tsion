@@ -2091,7 +2091,7 @@ function PlanningTV() {
                       style={{
                         fontSize: "2.2vh",
                         letterSpacing: "0.10em",
-                        fontWeight: isNext ? 800 : 700,
+                        fontWeight: 500,
                         color: labelColor,
                         fontFamily: HEADING_FONT_LOCAL,
                       }}
