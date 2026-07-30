@@ -2104,7 +2104,7 @@ function PlanningTV() {
                       className="tabular-nums leading-none shrink-0"
                       style={{
                         fontSize: isNext ? "3.4vh" : "2.9vh",
-                        fontWeight: isNext ? 900 : 800,
+                        fontWeight: 500,
                         color: valueColor,
                         fontFamily: HEADING_FONT_LOCAL,
                         letterSpacing: "-0.01em",
