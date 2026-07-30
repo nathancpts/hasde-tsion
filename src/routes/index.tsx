@@ -2103,7 +2103,7 @@ function PlanningTV() {
                         letterSpacing: "0.10em",
                         fontWeight: 500,
                         color: labelColor,
-                        fontFamily: HEADING_FONT_LOCAL,
+                        fontFamily: BODY_FONT_LOCAL,
                       }}
                     >
                       {t.label}
@@ -2116,7 +2116,7 @@ function PlanningTV() {
                         fontSize: isNext ? "3.4vh" : "2.9vh",
                         fontWeight: 500,
                         color: valueColor,
-                        fontFamily: HEADING_FONT_LOCAL,
+                        fontFamily: BODY_FONT_LOCAL,
                         letterSpacing: "-0.01em",
                       }}
                     >
