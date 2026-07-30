@@ -2063,7 +2063,7 @@ function PlanningTV() {
                   </div>
                 );
               }
-              const shouldScroll = upcomingTimes.length > 5;
+              
               const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
                 const min = toMin(t.value);
                 const isPast = min != null && min <= nowMin;
