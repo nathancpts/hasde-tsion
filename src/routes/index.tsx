@@ -2116,26 +2116,8 @@ function PlanningTV() {
                 );
 
               };
-              if (!shouldScroll) {
-                const justify = "justify-start gap-[2.5vh] pt-[2vh]";
-                return (
-                  <div className={`h-full flex flex-col ${justify}`}>
-                    {upcomingTimes.map((t) => renderRow(t, "s"))}
-                  </div>
-                );
-              }
-              return (
-                <div className="tv-zmanim-track">
-                  <div className="tv-zmanim-block">
-                    {upcomingTimes.map((t) => renderRow(t, "a"))}
-                    <div style={{ height: "3vh" }} />
-                  </div>
-                  <div className="tv-zmanim-block" aria-hidden>
-                    {upcomingTimes.map((t) => renderRow(t, "b"))}
-                    <div style={{ height: "3vh" }} />
-                  </div>
-                </div>
-              );
+              return <TvZmanimList items={upcomingTimes} renderRow={renderRow} />;
+
             })()}
           </div>
 
