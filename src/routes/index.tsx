@@ -1600,28 +1600,24 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           {sectionTab === "communaute" && null}
 
 
-          <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4 pb-[92px]">
+          {/* Bouton Don — toujours visible en bas */}
+          <a
+            href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-blue-animated flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-5 py-4 text-[15px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all"
+          >
+            <span className="text-lg">♡</span>
+            <span>Faire un don</span>
+          </a>
+
+          <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4">
             בס״ד · Hasdé Tsion
           </footer>
         </div>
       </div>
-
-      {/* Bouton Don — fixe, toujours visible */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-50 px-4 pt-3 pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 12px)" }}
-      >
-        <a
-          href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-blue-animated pointer-events-auto flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-5 py-4 text-[15px] font-display font-semibold text-white shadow-[0_10px_28px_-6px_rgba(15,61,122,0.7)] active:scale-[0.97] transition-all"
-        >
-          <span className="text-lg">♡</span>
-          <span>Faire un don</span>
-        </a>
-      </div>
     </main>
+
 
   );
 }
