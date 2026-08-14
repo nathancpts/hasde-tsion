@@ -123,8 +123,25 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sheqyia",             value: ov.sheqyia },
     { label: "Sortie des étoiles",  value: ov.tzeit },
     { label: "Nuit de R. Tam",      value: ov.rTam },
-  ] : [];
-  void t; // horaires API désactivés tant qu'aucune valeur manuelle n'est fournie
+  ] : [
+    // Repli automatique sur les horaires calculés (Hebcal) si aucune saisie manuelle
+    { label: "Hatzot Laïla",        value: timeFR(t.chatzotNight, LOC.tzid) },
+    { label: "Alot haShahar",       value: timeFR(t.alotHaShachar, LOC.tzid) },
+    { label: "Misheyakir / Tefilin", value: timeFR(t.misheyakir, LOC.tzid) },
+    { label: "Hanetz haHama",       value: timeFR(t.sunrise, LOC.tzid) },
+    { label: "Limite Shema M\"A",   value: timeFR(t.sofZmanShmaMGA, LOC.tzid) },
+    { label: "Limite Shema GR\"A",  value: timeFR(t.sofZmanShma, LOC.tzid) },
+    { label: "Limite Tefila M\"A",  value: timeFR(t.sofZmanTfillaMGA, LOC.tzid) },
+    { label: "Limite Tefila GR\"A", value: timeFR(t.sofZmanTfilla, LOC.tzid) },
+    { label: "Hatzot",              value: timeFR(t.chatzot, LOC.tzid) },
+    { label: "Minha Guedola",       value: timeFR(t.minchaGedola, LOC.tzid) },
+    { label: "Minha Ketana",        value: timeFR(t.minchaKetana, LOC.tzid) },
+    { label: "Plag haMinha",        value: timeFR(t.plagHaMincha, LOC.tzid) },
+    { label: "Sheqyia",             value: timeFR(t.sunset, LOC.tzid) },
+    { label: "Sortie des étoiles",  value: timeFR(t.tzeit85deg ?? t.tzeit7083deg, LOC.tzid) },
+    { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min, LOC.tzid) },
+  ].filter(z => z.value !== "—");
+
 
   // Mishna Yomi & Yerushalmi Yomi du jour
   const calItems = calRes.items ?? [];
