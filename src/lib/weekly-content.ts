@@ -31,11 +31,11 @@ export const PARASHA_BLOCS: ParashaBloc[] = _current.blocs;
 
 // Date (lundi) de la semaine pour laquelle ces donateurs sont valables.
 // Format YYYY-MM-DD. Dès le lundi suivant, la liste se vide automatiquement.
-const DONATIONS_WEEK_MONDAY = "2026-06-22";
+const DONATIONS_WEEK_MONDAY = "2026-08-31";
 
 const _DONATIONS_RAW: Donation[] = [
   {
-    donateur: "Avram Niddam",
+    donateur: "Anonyme",
   },
 ];
 
