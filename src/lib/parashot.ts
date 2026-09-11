@@ -1242,15 +1242,26 @@ function upcomingShabbat(d: Date): Date {
   return date;
 }
 
+function localISO(d: Date): string {
+  const m = `${d.getMonth() + 1}`.padStart(2, "0");
+  const day = `${d.getDate()}`.padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+/** Retourne l'entrée de fête qui remplace la paracha, si applicable. */
+export function getHolidayParasha(now: Date = new Date()): ParashaEntry | null {
+  const targetISO = localISO(upcomingShabbat(now));
+  const holidayName = HOLIDAY_OVERRIDES[targetISO];
+  if (!holidayName) return null;
+  return PARASHOT.find((p) => p.nom === holidayName) ?? null;
+}
+
 export function getCurrentParasha(now: Date = new Date()): ParashaEntry {
   const target = upcomingShabbat(now);
-  const targetISO = target.toISOString().slice(0, 10);
 
-  const holidayName = HOLIDAY_OVERRIDES[targetISO];
-  if (holidayName) {
-    const holiday = PARASHOT.find((p) => p.nom === holidayName);
-    if (holiday) return holiday;
-  }
+  const holiday = getHolidayParasha(now);
+  if (holiday) return holiday;
+
 
   const base = new Date(BASE_SHABBAT_ISO + "T00:00:00");
   const weeks = Math.round((target.getTime() - base.getTime()) / (7 * 24 * 3600 * 1000));
