@@ -2075,34 +2075,40 @@ function PlanningTV() {
                 );
               }
               
+              const n = upcomingTimes.length;
+              const labelSize = n > 8 ? "1.7vh" : n > 6 ? "1.9vh" : "2.1vh";
+              const timeSize = n > 8 ? "2.2vh" : n > 6 ? "2.5vh" : "2.8vh";
+
               const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
-                const min = toMin(t.value);
-                const isPast = min != null && min <= nowMin;
                 const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
-                const isKey = /entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label);
-                const labelColor = isNext ? "#0A1128" : isPast ? "#94A3B8" : "#000000";
-                const valueColor = isNext ? "#0A1128" : isPast ? "#94A3B8" : "#000000";
+                const labelColor = isNext ? "#3A2E05" : "#334155";
+                const valueColor = isNext ? "#1A1204" : "#0A1128";
                 return (
                   <div
                     key={`${t.label}-${t.value}-${keySuffix}`}
-                    className={`flex gap-[1vw] ${isNext ? "items-center" : "items-baseline"}`}
+                    className="flex items-center gap-[1vw] relative"
                     style={
                       isNext
                         ? {
-                            background: `linear-gradient(135deg, ${GOLD_LOCAL} 0%, #E8C566 100%)`,
-                            borderRadius: "14px",
+                            background: `linear-gradient(120deg, #F3DA92 0%, ${GOLD_LOCAL} 55%, #C9A227 100%)`,
+                            borderRadius: "999px",
                             padding: "1.1vh 1.4vw",
-                            boxShadow: "0 6px 20px rgba(212,175,55,0.35)",
+                            boxShadow: "0 8px 22px rgba(201,162,39,0.28)",
                           }
-                        : { padding: "0.9vh 0" }
+                        : {
+                            background: "#FBFCFE",
+                            border: "1px solid rgba(15,61,122,0.07)",
+                            borderRadius: "999px",
+                            padding: "0.95vh 1.4vw",
+                          }
                     }
                   >
                     <span
-                      className="uppercase shrink-0"
+                      className="uppercase truncate"
                       style={{
-                        fontSize: "2.2vh",
-                        letterSpacing: "0.10em",
-                        fontWeight: 500,
+                        fontSize: labelSize,
+                        letterSpacing: "0.12em",
+                        fontWeight: isNext ? 700 : 500,
                         color: labelColor,
                         fontFamily: BODY_FONT_LOCAL,
                       }}
@@ -2110,12 +2116,11 @@ function PlanningTV() {
                       {t.label}
                     </span>
                     <span aria-hidden className="flex-1" />
-
                     <span
                       className="tabular-nums leading-none shrink-0"
                       style={{
-                        fontSize: isNext ? "3.4vh" : "2.9vh",
-                        fontWeight: 500,
+                        fontSize: timeSize,
+                        fontWeight: isNext ? 700 : 600,
                         color: valueColor,
                         fontFamily: BODY_FONT_LOCAL,
                         letterSpacing: "-0.01em",
@@ -2125,11 +2130,16 @@ function PlanningTV() {
                     </span>
                   </div>
                 );
-
               };
-              return <TvZmanimList items={upcomingTimes} renderRow={renderRow} />;
-
+              return (
+                <div className="h-full overflow-hidden">
+                  <div className="flex flex-col justify-start" style={{ gap: n > 8 ? "0.7vh" : n > 6 ? "1vh" : "1.3vh" }}>
+                    {upcomingTimes.map((t) => renderRow(t, "s"))}
+                  </div>
+                </div>
+              );
             })()}
+
           </div>
 
 
