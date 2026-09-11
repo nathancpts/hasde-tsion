@@ -1174,11 +1174,65 @@ export const PARASHOT: ParashaEntry[] = [
       },
     ],
   },
+  {
+    nom: "Rosh Hashana",
+    nomComplet: "Roch Hachana 5787 — 1er jour",
+    reference: "Beréchit / Genèse 21, 1–34",
+    blocs: [
+      {
+        titre: "Roch Hachana 5787",
+        icone: "🍎",
+        paragraphes: [
+          "Le vendredi 11 septembre 2026 au soir débute Roch Hachana 5787. Le Chabbat 12 septembre correspond au 1er jour de Roch Hachana : il n’y a donc pas de paracha hebdomadaire classique. La lecture de la Torah est celle de la fête.",
+        ],
+      },
+      {
+        titre: "Lecture de la Torah",
+        icone: "📜",
+        paragraphes: [
+          "Beréchit / Genèse 21, 1–34 : naissance d’Isaac.",
+        ],
+      },
+      {
+        titre: "Maftir",
+        icone: "✨",
+        paragraphes: [
+          "Bamidbar / Nombres 29, 1–6.",
+        ],
+      },
+      {
+        titre: "Haftara",
+        icone: "🕯️",
+        paragraphes: [
+          "1 Samuel 1, 1 à 2, 10.",
+        ],
+      },
+      {
+        titre: "Prochaine paracha",
+        icone: "➡️",
+        paragraphes: [
+          "La prochaine paracha sera Haazinou, le Chabbat 19 septembre 2026.",
+        ],
+      },
+      {
+        titre: "Chana Tova Oumétouka !",
+        icone: "🍯",
+        paragraphes: [
+          "Qu’il nous soit écrit et scellé pour une année de santé, de joie, de prospérité et de paix.",
+        ],
+      },
+    ],
+  },
 ];
 
 // Shabbat de référence (samedi 18 juillet 2026) → index 7 = Devarim.
 const BASE_SHABBAT_ISO = "2026-07-18"; // Devarim
 const BASE_INDEX = 7;
+
+// Surcharges pour les fêtes qui remplacent une paracha hebdomadaire.
+const HOLIDAY_OVERRIDES: Record<string, string> = {
+  "2026-09-12": "Rosh Hashana",
+};
 
 function upcomingShabbat(d: Date): Date {
   const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -1190,6 +1244,14 @@ function upcomingShabbat(d: Date): Date {
 
 export function getCurrentParasha(now: Date = new Date()): ParashaEntry {
   const target = upcomingShabbat(now);
+  const targetISO = target.toISOString().slice(0, 10);
+
+  const holidayName = HOLIDAY_OVERRIDES[targetISO];
+  if (holidayName) {
+    const holiday = PARASHOT.find((p) => p.nom === holidayName);
+    if (holiday) return holiday;
+  }
+
   const base = new Date(BASE_SHABBAT_ISO + "T00:00:00");
   const weeks = Math.round((target.getTime() - base.getTime()) / (7 * 24 * 3600 * 1000));
   const idx = ((BASE_INDEX + weeks) % PARASHOT.length + PARASHOT.length) % PARASHOT.length;
