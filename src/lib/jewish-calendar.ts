@@ -1,5 +1,6 @@
 import { getOverride } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
+import { getCurrentParasha } from "./parashot";
 
 
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
@@ -239,11 +240,10 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   const dafFri = dafItem(ymd(friday));
   const dafSat = dafItem(ymd(saturday));
 
-  // Parasha — fallback to next upcoming parasha if Shabbat is a Yom Tov
-  const parashaItem =
-    items.find(it => it.category === "parashat" && it.date === ymd(saturday)) ??
-    items.find(it => it.category === "parashat");
-  const parashaFr = parashaItem?.title?.replace(/^Parashat\s+/i, "") ?? "—";
+  // Parasha — utilise l'override local quand le Shabbat est une fête (Yom Tov)
+  const parashaItem = items.find(it => it.category === "parashat" && it.date === ymd(saturday));
+  const localParasha = getCurrentParasha(now);
+  const parashaFr = parashaItem?.title?.replace(/^Parashat\s+/i, "") ?? localParasha.nom;
   const parashaHe = parashaItem?.hebrew?.replace(/^פרשת\s+/, "") ?? "";
 
   const candle = items.find(it => it.category === "candles" && it.date.startsWith(ymd(friday)));
