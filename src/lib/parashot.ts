@@ -1175,7 +1175,7 @@ export const PARASHOT: ParashaEntry[] = [
     ],
   },
   {
-    nom: "Rosh Hashana",
+    nom: "Roch Hachana",
     nomComplet: "Roch Hachana 5787 — 1er jour",
     reference: "Beréchit / Genèse 21, 1–34",
     blocs: [
@@ -1231,7 +1231,7 @@ const BASE_INDEX = 7;
 
 // Surcharges pour les fêtes qui remplacent une paracha hebdomadaire.
 const HOLIDAY_OVERRIDES: Record<string, string> = {
-  "2026-09-12": "Rosh Hashana",
+  "2026-09-12": "Roch Hachana",
 };
 
 function upcomingShabbat(d: Date): Date {
