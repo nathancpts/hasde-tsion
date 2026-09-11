@@ -1229,6 +1229,11 @@ export const PARASHOT: ParashaEntry[] = [
 const BASE_SHABBAT_ISO = "2026-07-18"; // Devarim
 const BASE_INDEX = 7;
 
+// Surcharges pour les fêtes qui remplacent une paracha hebdomadaire.
+const HOLIDAY_OVERRIDES: Record<string, string> = {
+  "2026-09-12": "Rosh Hashana",
+};
+
 function upcomingShabbat(d: Date): Date {
   const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const day = date.getDay(); // 0 dim … 6 sam
@@ -1239,6 +1244,14 @@ function upcomingShabbat(d: Date): Date {
 
 export function getCurrentParasha(now: Date = new Date()): ParashaEntry {
   const target = upcomingShabbat(now);
+  const targetISO = target.toISOString().slice(0, 10);
+
+  const holidayName = HOLIDAY_OVERRIDES[targetISO];
+  if (holidayName) {
+    const holiday = PARASHOT.find((p) => p.nom === holidayName);
+    if (holiday) return holiday;
+  }
+
   const base = new Date(BASE_SHABBAT_ISO + "T00:00:00");
   const weeks = Math.round((target.getTime() - base.getTime()) / (7 * 24 * 3600 * 1000));
   const idx = ((BASE_INDEX + weeks) % PARASHOT.length + PARASHOT.length) % PARASHOT.length;
