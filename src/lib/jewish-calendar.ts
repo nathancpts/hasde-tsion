@@ -243,8 +243,11 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   // Parasha — utilise l'override local quand le Shabbat est une fête (Yom Tov)
   const parashaItem = items.find(it => it.category === "parashat" && it.date === ymd(saturday));
   const localParasha = getCurrentParasha(now);
-  const parashaFr = parashaItem?.title?.replace(/^Parashat\s+/i, "") ?? localParasha.nom;
-  const parashaHe = parashaItem?.hebrew?.replace(/^פרשת\s+/, "") ?? "";
+  const holidayParasha = getHolidayParasha(now);
+  const parashaFr = holidayParasha
+    ? holidayParasha.nom
+    : (parashaItem?.title?.replace(/^Parashat\s+/i, "") ?? localParasha.nom);
+  const parashaHe = holidayParasha ? "" : (parashaItem?.hebrew?.replace(/^פרשת\s+/, "") ?? "");
 
   const candle = items.find(it => it.category === "candles" && it.date.startsWith(ymd(friday)));
   const havdal = items.find(it => it.category === "havdalah" && it.date.startsWith(ymd(saturday)));
