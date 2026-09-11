@@ -1174,6 +1174,55 @@ export const PARASHOT: ParashaEntry[] = [
       },
     ],
   },
+  {
+    nom: "Rosh Hashana",
+    nomComplet: "Roch Hachana 5787 — 1er jour",
+    reference: "Beréchit / Genèse 21, 1–34",
+    blocs: [
+      {
+        titre: "Roch Hachana 5787",
+        icone: "🍎",
+        paragraphes: [
+          "Le vendredi 11 septembre 2026 au soir débute Roch Hachana 5787. Le Chabbat 12 septembre correspond au 1er jour de Roch Hachana : il n’y a donc pas de paracha hebdomadaire classique. La lecture de la Torah est celle de la fête.",
+        ],
+      },
+      {
+        titre: "Lecture de la Torah",
+        icone: "📜",
+        paragraphes: [
+          "Beréchit / Genèse 21, 1–34 : naissance d’Isaac.",
+        ],
+      },
+      {
+        titre: "Maftir",
+        icone: "✨",
+        paragraphes: [
+          "Bamidbar / Nombres 29, 1–6.",
+        ],
+      },
+      {
+        titre: "Haftara",
+        icone: "🕯️",
+        paragraphes: [
+          "1 Samuel 1, 1 à 2, 10.",
+        ],
+      },
+      {
+        titre: "Prochaine paracha",
+        icone: "➡️",
+        paragraphes: [
+          "La prochaine paracha sera Haazinou, le Chabbat 19 septembre 2026.",
+        ],
+      },
+      {
+        titre: "Chana Tova Oumétouka !",
+        icone: "🍯",
+        paragraphes: [
+          "Qu’il nous soit écrit et scellé pour une année de santé, de joie, de prospérité et de paix.",
+        ],
+      },
+    ],
+  },
 ];
 
 // Shabbat de référence (samedi 18 juillet 2026) → index 7 = Devarim.
