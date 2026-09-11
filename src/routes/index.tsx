@@ -2132,11 +2132,11 @@ function PlanningTV() {
                 );
               };
               return (
-                <div className="h-full overflow-hidden">
+                <AutoScrollVertical className="h-full" speed={16} pause={2600}>
                   <div className="flex flex-col justify-start" style={{ gap: n > 8 ? "0.7vh" : n > 6 ? "1vh" : "1.3vh" }}>
                     {upcomingTimes.map((t) => renderRow(t, "s"))}
                   </div>
-                </div>
+                </AutoScrollVertical>
               );
             })()}
 
