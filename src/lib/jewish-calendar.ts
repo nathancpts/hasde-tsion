@@ -1,6 +1,6 @@
 import { getOverride } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
-import { getCurrentParasha } from "./parashot";
+import { getCurrentParasha, getHolidayParasha } from "./parashot";
 
 
 // Tehillim — cycle mensuel standard (jour du mois hébraïque → chapitres)
