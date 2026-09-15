@@ -90,7 +90,7 @@ export function InstallAppPrompt() {
       if (perm === "granted") {
         setNotifState("granted");
         localStorage.setItem(NOTIF_KEY, "1");
-        sendTestNotification();
+        sendThankYouNotification();
         window.setTimeout(() => setMode("none"), 1600);
       } else {
         setNotifState("denied");
@@ -235,7 +235,7 @@ export function InstallAppPrompt() {
 
               {notifState === "granted" && (
                 <p className="mt-6 rounded-2xl bg-emerald-50 px-4 py-3 text-[13px] font-medium text-emerald-700">
-                  ✓ Notifications activées, merci ! Une notification test vient de partir.
+                  ✓ Notifications activées, merci ! Un message de remerciement vient de partir.
                 </p>
               )}
               {notifState === "denied" && (
