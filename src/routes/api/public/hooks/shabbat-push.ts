@@ -152,7 +152,19 @@ export const Route = createFileRoute("/api/public/hooks/shabbat-push")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const now = new Date();
-        const { date, weekday, minutes } = parisParts(now);
+        const live = parisParts(now);
+
+        // Mode diagnostic (protégé par le secret) : simule un vendredi / une heure
+        let body: { simulateDate?: string; simulateMinutes?: number } = {};
+        try {
+          body = (await request.json()) as typeof body;
+        } catch {
+          body = {};
+        }
+        const date = body.simulateDate ?? live.date;
+        const weekday = body.simulateDate ? "Fri" : live.weekday;
+        const minutes = typeof body.simulateMinutes === "number" ? body.simulateMinutes : live.minutes;
+        const dryRun = Boolean(body.simulateDate || typeof body.simulateMinutes === "number");
 
         if (weekday !== "Fri") {
           return new Response(JSON.stringify({ skipped: "not-friday", weekday }), {
@@ -161,6 +173,23 @@ export const Route = createFileRoute("/api/public/hooks/shabbat-push")({
         }
 
         const { candles, havdalah } = await shabbatTimes(date);
+        if (dryRun) {
+          const candleMin = toMinutes(candles);
+          return new Response(
+            JSON.stringify({
+              dryRun: true,
+              date,
+              minutes,
+              candles,
+              havdalah,
+              wouldSendMorning: minutes >= 600 && minutes < 720,
+              wouldSendCandles:
+                candleMin !== null && minutes >= candleMin - 20 && minutes < candleMin + 10,
+            }),
+            { headers: { "content-type": "application/json" } },
+          );
+        }
+
         const results: Record<string, number | string> = {};
 
         // 1) Vendredi 10h00 — rappel des horaires de Chabbat
