@@ -20,6 +20,20 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
+function sendTestNotification() {
+  if (!("Notification" in window) || Notification.permission !== "granted") return false;
+  try {
+    new Notification("Hasdé Tsion 🕍", {
+      body: "Notification test : tout fonctionne ! Vous recevrez les horaires et annonces ici.",
+      icon: "/app-icon.png",
+      badge: "/app-icon.png",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function InstallAppPrompt() {
   const [mode, setMode] = useState<"none" | "install" | "notif">("none");
   const [platform, setPlatform] = useState<Platform>("other");
