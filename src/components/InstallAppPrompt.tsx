@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { registerServiceWorker, subscribeToPush } from "@/lib/push";
+
+
 type Platform = "ios" | "android" | "other";
 
 function detectPlatform(): Platform {
@@ -20,19 +23,27 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
-function sendThankYouNotification() {
+async function sendThankYouNotification() {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
+  const body =
+    "Merci d'avoir activé les notifications ! Vous recevrez ici les horaires et annonces de la communauté.";
   try {
-    new Notification("Hasdé Tsion 🕍", {
-      body: "Merci d'avoir activé les notifications ! Vous recevrez ici les horaires et annonces de la communauté.",
-      icon: "/app-icon.png",
-      badge: "/app-icon.png",
-    });
+    const reg = await navigator.serviceWorker?.getRegistration();
+    if (reg) {
+      await reg.showNotification("Hasdé Tsion 🕍", {
+        body,
+        icon: "/app-icon.png",
+        badge: "/app-icon.png",
+      });
+      return true;
+    }
+    new Notification("Hasdé Tsion 🕍", { body, icon: "/app-icon.png", badge: "/app-icon.png" });
     return true;
   } catch {
     return false;
   }
 }
+
 
 export function InstallAppPrompt() {
   const [mode, setMode] = useState<"none" | "install" | "notif">("none");
@@ -46,6 +57,16 @@ export function InstallAppPrompt() {
     const inIframe = window.top !== window.self;
     const p = detectPlatform();
     setPlatform(p);
+
+    // Service worker + resynchronisation de l'abonnement si déjà autorisé
+    void (async () => {
+      await registerServiceWorker();
+      if ("Notification" in window && Notification.permission === "granted") {
+        await subscribeToPush();
+      }
+    })();
+
+
 
     const timer = window.setTimeout(() => {
       if (isStandalone()) {
@@ -90,8 +111,10 @@ export function InstallAppPrompt() {
       if (perm === "granted") {
         setNotifState("granted");
         localStorage.setItem(NOTIF_KEY, "1");
-        sendThankYouNotification();
+        await subscribeToPush();
+        await sendThankYouNotification();
         window.setTimeout(() => setMode("none"), 1600);
+
       } else {
         setNotifState("denied");
       }
