@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { registerServiceWorker, subscribeToPush } from "@/lib/push";
+
+
 type Platform = "ios" | "android" | "other";
 
 function detectPlatform(): Platform {
@@ -54,6 +57,16 @@ export function InstallAppPrompt() {
     const inIframe = window.top !== window.self;
     const p = detectPlatform();
     setPlatform(p);
+
+    // Service worker + resynchronisation de l'abonnement si déjà autorisé
+    void (async () => {
+      await registerServiceWorker();
+      if ("Notification" in window && Notification.permission === "granted") {
+        await subscribeToPush();
+      }
+    })();
+
+
 
     const timer = window.setTimeout(() => {
       if (isStandalone()) {
