@@ -1116,7 +1116,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const tehShort = tehParts.length >= 2 ? `${tehParts[0]}–${tehParts[tehParts.length - 1]}` : heroTeh;
 
   return (
-    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-hidden" style={{ background: "#F2F4F8" }}>
+    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-clip" style={{ background: "#F2F4F8" }}>
       {/* Blue gradient hero zone — animated en vague */}
       <div
         className="btn-blue-animated relative w-full overflow-hidden select-none"
