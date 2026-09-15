@@ -108,18 +108,22 @@ export function InstallAppPrompt() {
         aria-hidden
       />
       <div
-        className="relative w-full max-w-[440px] rounded-3xl bg-white p-5 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)]"
+        className={`relative w-full max-w-[440px] bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] ${
+          mode === "notif" ? "overflow-hidden rounded-[2.5rem]" : "rounded-3xl p-5"
+        }`}
         style={{ paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}
         role="dialog"
         aria-modal="true"
       >
-        <button
-          onClick={close}
-          aria-label="Fermer"
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-lg leading-none text-slate-500"
-        >
-          ×
-        </button>
+        {mode === "install" && (
+          <button
+            onClick={close}
+            aria-label="Fermer"
+            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-lg leading-none text-slate-500"
+          >
+            ×
+          </button>
+        )}
 
         {mode === "install" ? (
           <>
@@ -192,55 +196,84 @@ export function InstallAppPrompt() {
           </>
         ) : (
           <>
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0F3D7A]/10 text-2xl">
-                🔔
+            {/* Decorative background mesh */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-blue-100 opacity-60 blur-3xl" />
+            <div className="pointer-events-none absolute -left-20 top-24 h-40 w-40 rounded-full bg-indigo-50 opacity-60 blur-3xl" />
+
+            <div className="relative px-7 pb-7 pt-11">
+              {/* Icon medallion */}
+              <div className="mb-6 flex justify-center">
+                <div className="relative">
+                  <div className="absolute inset-0 scale-150 animate-pulse rounded-full bg-blue-600 opacity-20 blur-2xl" />
+                  <div className="relative flex h-20 w-20 -rotate-3 items-center justify-center rounded-3xl bg-gradient-to-br from-[#1E5BB8] to-[#0F3D7A] shadow-lg">
+                    <svg
+                      className="h-10 w-10 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.8}
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute -right-1 -top-1 h-5 w-5 rounded-full border-4 border-white bg-sky-400" />
+                </div>
               </div>
-              <div>
-                <h2 className="font-display text-[17px] font-semibold text-slate-900">
-                  Activer les notifications
-                </h2>
-                <p className="text-[12px] text-slate-500">
-                  Recevez les horaires du Chabbat et les annonces de la communauté.
+
+              <h2 className="font-display text-[22px] font-bold leading-tight text-slate-900">
+                Activer les
+                <br />
+                notifications
+              </h2>
+              <p className="mx-auto mt-3 max-w-[300px] text-[14px] leading-relaxed text-slate-500">
+                Recevez les horaires du Chabbat et les annonces de la communauté, en direct.
+              </p>
+
+              {notifState === "granted" && (
+                <p className="mt-6 rounded-2xl bg-emerald-50 px-4 py-3 text-[13px] font-medium text-emerald-700">
+                  ✓ Notifications activées, merci ! Une notification test vient de partir.
                 </p>
+              )}
+              {notifState === "denied" && (
+                <p className="mt-6 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-800">
+                  Les notifications sont bloquées. Réactivez-les dans les réglages de votre
+                  téléphone, à la rubrique de cette application.
+                </p>
+              )}
+              {notifState === "new-tab" && (
+                <p className="mt-6 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-800">
+                  Ouvrez le site dans son propre onglet (ou depuis l'application installée)
+                  pour autoriser les notifications.
+                </p>
+              )}
+              {notifState === "unsupported" && (
+                <p className="mt-6 rounded-2xl bg-slate-100 px-4 py-3 text-[13px] text-slate-600">
+                  Votre téléphone ne prend pas en charge les notifications ici.
+                </p>
+              )}
+
+              <div className="mt-7 space-y-3">
+                <button
+                  onClick={askNotifications}
+                  className="w-full rounded-2xl bg-slate-900 py-4 text-[15px] font-semibold text-white shadow-xl shadow-slate-200 transition-all duration-200 active:scale-95"
+                >
+                  Autoriser les notifications
+                </button>
+                <button
+                  onClick={close}
+                  className="w-full py-2 text-[13px] font-medium text-slate-400 transition-colors hover:text-slate-600"
+                >
+                  Plus tard
+                </button>
               </div>
             </div>
 
-            {notifState === "granted" && (
-              <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-[13px] text-emerald-700">
-                Notifications activées, merci ! Une notification test vient de vous être envoyée.
-              </p>
-            )}
-            {notifState === "denied" && (
-              <p className="mt-4 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] text-amber-800">
-                Les notifications sont bloquées. Vous pouvez les réactiver dans les réglages de
-                votre téléphone, à la rubrique de cette application.
-              </p>
-            )}
-            {notifState === "new-tab" && (
-              <p className="mt-4 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] text-amber-800">
-                Ouvrez le site dans son propre onglet (ou depuis l'application installée) pour
-                autoriser les notifications.
-              </p>
-            )}
-            {notifState === "unsupported" && (
-              <p className="mt-4 rounded-2xl bg-slate-100 px-4 py-3 text-[13px] text-slate-600">
-                Votre téléphone ne prend pas en charge les notifications ici.
-              </p>
-            )}
-
-            <button
-              onClick={askNotifications}
-              className="btn-blue-animated mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl px-5 text-[15px] font-display font-semibold text-white active:scale-[0.97] transition-all"
-            >
-              Autoriser les notifications
-            </button>
-            <button
-              onClick={close}
-              className="mt-2 w-full py-2 text-[13px] text-slate-500"
-            >
-              Plus tard
-            </button>
+            {/* Bottom gradient accent */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-sky-500 opacity-30" />
           </>
         )}
       </div>
