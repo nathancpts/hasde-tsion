@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TextesRouteImport } from './routes/textes'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
 
 const TextesRoute = TextesRouteImport.update({
   id: '/textes',
@@ -22,31 +23,41 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksShabbatPushRoute =
+  ApiPublicHooksShabbatPushRouteImport.update({
+    id: '/api/public/hooks/shabbat-push',
+    path: '/api/public/hooks/shabbat-push',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/textes': typeof TextesRoute
+  '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/textes': typeof TextesRoute
+  '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/textes': typeof TextesRoute
+  '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/textes'
+  fullPaths: '/' | '/textes' | '/api/public/hooks/shabbat-push'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/textes'
-  id: '__root__' | '/' | '/textes'
+  to: '/' | '/textes' | '/api/public/hooks/shabbat-push'
+  id: '__root__' | '/' | '/textes' | '/api/public/hooks/shabbat-push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TextesRoute: typeof TextesRoute
+  ApiPublicHooksShabbatPushRoute: typeof ApiPublicHooksShabbatPushRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +76,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/shabbat-push': {
+      id: '/api/public/hooks/shabbat-push'
+      path: '/api/public/hooks/shabbat-push'
+      fullPath: '/api/public/hooks/shabbat-push'
+      preLoaderRoute: typeof ApiPublicHooksShabbatPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TextesRoute: TextesRoute,
+  ApiPublicHooksShabbatPushRoute: ApiPublicHooksShabbatPushRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
