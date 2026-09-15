@@ -9,6 +9,7 @@ import { frenchHebMonth } from "@/lib/yahrtzeits";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
 import CommunitySection from "@/components/community/CommunitySection";
+import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 
 
 
@@ -1616,6 +1617,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </footer>
         </div>
       </div>
+      <InstallAppPrompt />
     </main>
 
 
