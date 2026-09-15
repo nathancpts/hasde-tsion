@@ -1616,6 +1616,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </footer>
         </div>
       </div>
+      <InstallAppPrompt />
     </main>
 
 
