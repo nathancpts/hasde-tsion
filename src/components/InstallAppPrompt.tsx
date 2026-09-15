@@ -20,6 +20,20 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
+function sendTestNotification() {
+  if (!("Notification" in window) || Notification.permission !== "granted") return false;
+  try {
+    new Notification("Hasdé Tsion 🕍", {
+      body: "Notification test : tout fonctionne ! Vous recevrez les horaires et annonces ici.",
+      icon: "/app-icon.png",
+      badge: "/app-icon.png",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function InstallAppPrompt() {
   const [mode, setMode] = useState<"none" | "install" | "notif">("none");
   const [platform, setPlatform] = useState<Platform>("other");
@@ -76,6 +90,7 @@ export function InstallAppPrompt() {
       if (perm === "granted") {
         setNotifState("granted");
         localStorage.setItem(NOTIF_KEY, "1");
+        sendTestNotification();
         window.setTimeout(() => setMode("none"), 1600);
       } else {
         setNotifState("denied");
@@ -193,7 +208,7 @@ export function InstallAppPrompt() {
 
             {notifState === "granted" && (
               <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-[13px] text-emerald-700">
-                Notifications activées, merci !
+                Notifications activées, merci ! Une notification test vient de vous être envoyée.
               </p>
             )}
             {notifState === "denied" && (
