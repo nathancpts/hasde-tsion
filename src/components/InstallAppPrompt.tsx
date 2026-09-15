@@ -20,19 +20,27 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
-function sendThankYouNotification() {
+async function sendThankYouNotification() {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
+  const body =
+    "Merci d'avoir activé les notifications ! Vous recevrez ici les horaires et annonces de la communauté.";
   try {
-    new Notification("Hasdé Tsion 🕍", {
-      body: "Merci d'avoir activé les notifications ! Vous recevrez ici les horaires et annonces de la communauté.",
-      icon: "/app-icon.png",
-      badge: "/app-icon.png",
-    });
+    const reg = await navigator.serviceWorker?.getRegistration();
+    if (reg) {
+      await reg.showNotification("Hasdé Tsion 🕍", {
+        body,
+        icon: "/app-icon.png",
+        badge: "/app-icon.png",
+      });
+      return true;
+    }
+    new Notification("Hasdé Tsion 🕍", { body, icon: "/app-icon.png", badge: "/app-icon.png" });
     return true;
   } catch {
     return false;
   }
 }
+
 
 export function InstallAppPrompt() {
   const [mode, setMode] = useState<"none" | "install" | "notif">("none");
