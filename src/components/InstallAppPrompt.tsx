@@ -20,11 +20,11 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
-function sendTestNotification() {
+function sendThankYouNotification() {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
   try {
     new Notification("Hasdé Tsion 🕍", {
-      body: "Notification test : tout fonctionne ! Vous recevrez les horaires et annonces ici.",
+      body: "Merci d'avoir activé les notifications ! Vous recevrez ici les horaires et annonces de la communauté.",
       icon: "/app-icon.png",
       badge: "/app-icon.png",
     });
