@@ -111,8 +111,10 @@ export function InstallAppPrompt() {
       if (perm === "granted") {
         setNotifState("granted");
         localStorage.setItem(NOTIF_KEY, "1");
-        sendThankYouNotification();
+        await subscribeToPush();
+        await sendThankYouNotification();
         window.setTimeout(() => setMode("none"), 1600);
+
       } else {
         setNotifState("denied");
       }
