@@ -65,6 +65,51 @@ export type Database = {
         }
         Relationships: []
       }
+      push_log: {
+        Row: {
+          key: string
+          sent_at: string
+          sent_count: number
+        }
+        Insert: {
+          key: string
+          sent_at?: string
+          sent_count?: number
+        }
+        Update: {
+          key?: string
+          sent_at?: string
+          sent_count?: number
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_agent: string | null
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_agent?: string | null
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
