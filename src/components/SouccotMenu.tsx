@@ -328,6 +328,12 @@ export default function SouccotMenu() {
               ))}
             </div>
 
+            {menu.note && (
+              <p className="mt-3 rounded-xl bg-[var(--gold-soft)] px-3 py-2.5 text-[12px] text-foreground/85 leading-snug italic">
+                {menu.note}
+              </p>
+            )}
+
             <div className="mt-3 space-y-1 text-[12px] text-foreground/75">
               {menu.pain && <p>🥖 Pain de table</p>}
               {menu.boissons && (
