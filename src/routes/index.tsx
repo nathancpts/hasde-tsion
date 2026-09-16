@@ -11,6 +11,7 @@ import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_RE
 import CommunitySection from "@/components/community/CommunitySection";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import SouccotMenu from "@/components/SouccotMenu";
+import KotelLive from "@/components/KotelLive";
 
 
 
@@ -1297,22 +1298,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
               </div>
               <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-                <iframe
-                  src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&rel=0&playsinline=1&modestbranding=1"
-                  title="Live Hasdé Tsion"
-                  allow="autoplay; encrypted-media"
-                  className="absolute inset-0 w-full h-full border-0 pointer-events-none"
-                  tabIndex={-1}
-                />
-                {/* Bouclier tactile : bloque toute interaction YouTube (pause, son, infos, plein écran) */}
-                <div
-                  className="absolute inset-0 z-10"
-                  style={{ touchAction: "none" }}
-                  onClick={(e) => e.preventDefault()}
-                  onTouchStart={(e) => e.preventDefault()}
-                  onContextMenu={(e) => e.preventDefault()}
-                  aria-hidden="true"
-                />
+                <KotelLive className="absolute inset-0 w-full h-full" />
               </div>
             </article>
           )}
@@ -2366,24 +2352,7 @@ function PlanningTV() {
                   className="absolute inset-0"
                   style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
                 >
-                  <iframe
-                    src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                    title="Live Hasdé Tsion"
-                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                    allowFullScreen
-                    className="absolute inset-0 border-0 pointer-events-none"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      maxWidth: "none",
-                      minWidth: "100%",
-                      minHeight: "100%",
-                      display: "block",
-                      background: "#FFFFFF",
-                      borderRadius: "16px",
-                      transform: "translateZ(0)",
-                    }}
-                  />
+                  <KotelLive className="absolute inset-0 w-full h-full" radius={16} />
                 </div>
 
                 <div
