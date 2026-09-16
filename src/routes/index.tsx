@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight, UserRound } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
@@ -1105,6 +1106,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   // Événement Souccot : réservations ouvertes jusqu'au lundi 28 septembre 2026 inclus
   const souccotVisible = new Date() <= new Date(2026, 8, 28, 23, 59, 59);
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
+  const [accountLabel, setAccountLabel] = useState("Connexion");
 
   const heroTime = selectedDay === "vendredi"
     ? (chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "--:--")
@@ -1120,6 +1122,34 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   // Tehilim split for stat display
   const tehParts = heroTeh.split(/[·\-\/–]/).map((s) => s.trim()).filter(Boolean);
   const tehShort = tehParts.length >= 2 ? `${tehParts[0]}–${tehParts[tehParts.length - 1]}` : heroTeh;
+
+  // Prénom de l'utilisateur connecté (ou « Connexion » si déconnecté)
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      const { data } = await supabase.auth.getSession();
+      const user = data.session?.user;
+      if (!user) {
+        if (mounted) setAccountLabel("Connexion");
+        return;
+      }
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("first_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (mounted) setAccountLabel(profile?.first_name?.trim() || "Mon compte");
+    };
+    load();
+    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+      load();
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
 
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-clip" style={{ background: "#F2F4F8" }}>
@@ -1161,14 +1191,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
         <div className="max-w-md mx-auto px-5 pb-24">
           {/* Header */}
-          <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
-            <Link
-              to="/compte"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/30 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-md active:scale-[0.97] transition"
-            >
-              <UserRound className="h-3.5 w-3.5" />
-              Mon compte
-            </Link>
+          <header id="accueil" className="flex items-center justify-end scroll-mt-24">
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
@@ -1270,8 +1293,15 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
       >
         <div className="max-w-md mx-auto px-4 space-y-4">
           {/* Section heading + tabs */}
-          <div className="flex items-center justify-between px-1">
+          <div className="flex items-center justify-between gap-3 px-1">
             <h2 className="font-display text-2xl font-bold text-foreground">Cette semaine</h2>
+            <Link
+              to="/compte"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#1f4ea8] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_3px_10px_rgba(31,78,168,0.35)] active:scale-[0.97] transition"
+            >
+              <UserRound className="h-3.5 w-3.5" />
+              {accountLabel}
+            </Link>
           </div>
 
           <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
