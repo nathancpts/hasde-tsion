@@ -2180,6 +2180,60 @@ function PlanningTV() {
 
         </article>
 
+          {/* Souccot — réservation (bloc horizontal avec dates) */}
+          {now <= new Date(2026, 8, 28, 23, 59, 59) && (
+            <article
+              className="flex items-center gap-[1.2vw] shrink-0"
+              style={{
+                background: "#FFFFFF",
+                borderRadius: "16px",
+                padding: "16px 24px",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+              }}
+            >
+              <div
+                className="shrink-0 rounded-xl overflow-hidden"
+                style={{ width: "11vh", height: "11vh", background: "#FFFFFF", padding: "0.5vh", border: `1px solid ${GOLD_HAIR}` }}
+              >
+                <img src="/qr-hasde-tsion.svg" alt="QR code hasde-tsion.com" className="w-full h-full" />
+              </div>
+              <div className="shrink-0 min-w-0">
+                <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
+                  Souccot 5787
+                </p>
+                <h3
+                  className="leading-tight mt-[0.4vh]"
+                  style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}
+                >
+                  Réservez votre place
+                </h3>
+                <p className="mt-[0.4vh]" style={{ fontSize: "1.35vh", lineHeight: 1.4, color: "#4B5875" }}>
+                  Scannez le QR code ou rendez-vous sur
+                </p>
+                <p style={{ fontSize: "1.4vh", fontWeight: 600, color: GOLD_LOCAL }}>
+                  hasde-tsion.com
+                </p>
+              </div>
+              <div className="flex-1 grid grid-cols-2 gap-[1vw] ml-[0.6vw]">
+                <div className="rounded-xl px-[1vw] py-[1vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "1vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+                    1er jour
+                  </p>
+                  <p className="mt-[0.5vh]" style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Vendredi 25 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>au soir</span></p>
+                  <p style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Samedi 26 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>à midi</span></p>
+                </div>
+                <div className="rounded-xl px-[1vw] py-[1vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "1vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+                    2e jour
+                  </p>
+                  <p className="mt-[0.5vh]" style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Samedi 26 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>au soir</span></p>
+                  <p style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Dimanche 27 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>à midi</span></p>
+                </div>
+              </div>
+            </article>
+          )}
+        </div>
+
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
         <div
           className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full overflow-hidden isolate"
