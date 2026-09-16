@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { useVersionCheck } from "@/lib/use-version-check";
 import { HillelChat } from "@/components/HillelChat";
+import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 
 function NotFoundComponent() {
   return (
@@ -146,6 +147,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <InstallAppPrompt />
       {/* <HillelChat /> désactivé temporairement */}
     </QueryClientProvider>
   );

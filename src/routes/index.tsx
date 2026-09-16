@@ -11,7 +11,6 @@ import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, DONATIONS_REPAS } from "@/lib/weekly-content";
 import { useParashaContent } from "@/lib/parasha-content";
 import CommunitySection from "@/components/community/CommunitySection";
-import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import SouccotMenu from "@/components/SouccotMenu";
 import KotelLive from "@/components/KotelLive";
 
@@ -1657,7 +1656,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </footer>
         </div>
       </div>
-      <InstallAppPrompt />
     </main>
 
 
