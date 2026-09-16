@@ -2028,7 +2028,8 @@ function PlanningTV() {
           </div>
         </article>
 
-        {/* COLUMN 2 — ZMANIM */}
+        {/* COLUMN 2 — ZMANIM + SOUCCOT */}
+        <div className="col-span-5 flex flex-col min-h-0 gap-[1.6vh]">
         <article
           className="col-span-5 flex flex-col min-h-0 relative overflow-hidden"
           style={{
