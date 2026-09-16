@@ -221,7 +221,7 @@ export function InstallAppPrompt() {
                       const res = await deferredPrompt.userChoice;
                       setDeferredPrompt(null);
                       if (res?.outcome === "accepted") {
-                        localStorage.setItem(DISMISS_KEY, "1");
+                        localStorage.setItem("ht-installed", "1");
                         setMode("none");
                       }
                     } finally {
