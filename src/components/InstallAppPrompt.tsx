@@ -32,12 +32,12 @@ async function sendThankYouNotification() {
     if (reg) {
       await reg.showNotification("Hasdé Tsion 🕍", {
         body,
-        icon: "/app-icon.png",
-        badge: "/app-icon.png",
+        icon: "/app-icon-192.png",
+        badge: "/app-icon-192.png",
       });
       return true;
     }
-    new Notification("Hasdé Tsion 🕍", { body, icon: "/app-icon.png", badge: "/app-icon.png" });
+    new Notification("Hasdé Tsion 🕍", { body, icon: "/app-icon-192.png", badge: "/app-icon-192.png" });
     return true;
   } catch {
     return false;
@@ -171,7 +171,7 @@ export function InstallAppPrompt() {
         {mode === "install" ? (
           <>
             <div className="flex items-center gap-3">
-              <img src="/app-icon.png" alt="" className="h-12 w-12 rounded-2xl shadow-sm" />
+              <img src="/app-icon-192.png" alt="" className="h-12 w-12 rounded-2xl shadow-sm" />
               <div>
                 <h2 className="font-display text-[17px] font-semibold text-slate-900">
                   Installer Hasdé Tsion

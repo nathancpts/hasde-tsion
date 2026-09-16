@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, X } from "lucide-react";
-import logo from "@/assets/logo-hasde-tsion.png";
+import logoAsset from "@/assets/logo-hasde.png.asset.json";
+
+const logo = logoAsset.url;
 
 export const Route = createFileRoute("/textes")({
   head: () => ({

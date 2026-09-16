@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import logo from "@/assets/logo-hasde-tsion.png";
+import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { frenchHebMonth } from "@/lib/yahrtzeits";
@@ -12,6 +12,8 @@ import CommunitySection from "@/components/community/CommunitySection";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import SouccotMenu from "@/components/SouccotMenu";
 import KotelLive from "@/components/KotelLive";
+
+const logo = logoAsset.url;
 
 
 
