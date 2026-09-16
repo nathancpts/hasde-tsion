@@ -2366,24 +2366,7 @@ function PlanningTV() {
                   className="absolute inset-0"
                   style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
                 >
-                  <iframe
-                    src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1"
-                    title="Live Hasdé Tsion"
-                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                    allowFullScreen
-                    className="absolute inset-0 border-0 pointer-events-none"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      maxWidth: "none",
-                      minWidth: "100%",
-                      minHeight: "100%",
-                      display: "block",
-                      background: "#FFFFFF",
-                      borderRadius: "16px",
-                      transform: "translateZ(0)",
-                    }}
-                  />
+                  <KotelLive className="absolute inset-0 w-full h-full" radius={16} />
                 </div>
 
                 <div
