@@ -1190,14 +1190,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
         <div className="max-w-md mx-auto px-5 pb-24">
           {/* Header */}
-          <header id="accueil" className="flex items-center justify-between gap-3 scroll-mt-24">
-            <Link
-              to="/compte"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/30 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-md active:scale-[0.97] transition"
-            >
-              <UserRound className="h-3.5 w-3.5" />
-              Mon compte
-            </Link>
+          <header id="accueil" className="flex items-center justify-end scroll-mt-24">
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
