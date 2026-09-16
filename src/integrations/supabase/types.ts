@@ -77,6 +77,42 @@ export type Database = {
         }
         Relationships: []
       }
+      parasha_content: {
+        Row: {
+          blocs: Json
+          created_at: string
+          id: string
+          intro: string | null
+          is_active: boolean
+          nom: string | null
+          nom_he: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          blocs?: Json
+          created_at?: string
+          id?: string
+          intro?: string | null
+          is_active?: boolean
+          nom?: string | null
+          nom_he?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          blocs?: Json
+          created_at?: string
+          id?: string
+          intro?: string | null
+          is_active?: boolean
+          nom?: string | null
+          nom_he?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
