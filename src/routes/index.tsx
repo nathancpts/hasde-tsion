@@ -1271,7 +1271,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {([
               { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
-              { id: "souccot", label: "Souccot" },
+              ...(souccotVisible ? [{ id: "souccot" as const, label: "Souccot" }] : []),
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
               <button
