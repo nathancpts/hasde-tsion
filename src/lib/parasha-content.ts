@@ -12,7 +12,7 @@ export type ParashaContent = {
 };
 
 export const DEFAULT_PARASHA_CONTENT: ParashaContent = {
-  nom: PARASHA_NOM,
+  nom: "",
   nomHe: PARASHA_NOM_HE,
   intro: PARASHA_INTRO,
   blocs: PARASHA_BLOCS,
@@ -31,7 +31,7 @@ type Row = {
 function toContent(row: Row): ParashaContent {
   const blocs = Array.isArray(row.blocs) ? (row.blocs as ParashaBloc[]) : [];
   return {
-    nom: row.nom?.trim() || DEFAULT_PARASHA_CONTENT.nom,
+    nom: row.nom?.trim() || "",
     nomHe: row.nom_he?.trim() || "",
     intro: row.intro?.trim() || "",
     blocs: blocs.length > 0 ? blocs : DEFAULT_PARASHA_CONTENT.blocs,

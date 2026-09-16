@@ -8,7 +8,8 @@ import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/je
 import { frenchHebMonth } from "@/lib/yahrtzeits";
 
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
-import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
+import { PARASHA_NOM, DONATIONS_REPAS } from "@/lib/weekly-content";
+import { useParashaContent } from "@/lib/parasha-content";
 import CommunitySection from "@/components/community/CommunitySection";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import SouccotMenu from "@/components/SouccotMenu";
@@ -808,7 +809,8 @@ function SidourLink({ className = "" }: { className?: string }) {
 
 
 function ParashaCard({ live }: { live: LiveWeek | null }) {
-  const parashaFr = live?.parasha.fr ?? PARASHA_NOM;
+  const pc = useParashaContent();
+  const parashaFr = pc.nom || live?.parasha.fr || PARASHA_NOM;
   return (
     <article
       className="relative rounded-2xl flex flex-col min-h-0 overflow-hidden"
@@ -826,8 +828,8 @@ function ParashaCard({ live }: { live: LiveWeek | null }) {
           <span className="inline-block px-2.5 py-0.5 rounded-full text-[1vh] uppercase tracking-[0.28em] font-bold bg-black/20 backdrop-blur-sm">
             Parasha
           </span>
-          {PARASHA_NOM_HE && (
-            <span className="font-hebrew text-[2.4vh]" style={{ color: "#E8C98A" }} dir="rtl">{PARASHA_NOM_HE}</span>
+          {pc.nomHe && (
+            <span className="font-hebrew text-[2.4vh]" style={{ color: "#E8C98A" }} dir="rtl">{pc.nomHe}</span>
           )}
         </div>
         <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">
@@ -838,12 +840,12 @@ function ParashaCard({ live }: { live: LiveWeek | null }) {
       <div className="flex-1 min-h-0 p-[1.2vh_1vw]">
         <AutoScrollVertical className="h-full pr-1">
           <div className="flex flex-col gap-[1.1vh]">
-            {PARASHA_INTRO && (
+            {pc.intro && (
               <p className="font-display italic text-[1.75vh] text-muted-foreground leading-snug">
-                {PARASHA_INTRO}
+                {pc.intro}
               </p>
             )}
-            {PARASHA_BLOCS.map((bloc, i) => (
+            {pc.blocs.map((bloc, i) => (
               <section
                 key={i}
                 className="rounded-xl px-[0.9vw] py-[1vh]"
@@ -1045,7 +1047,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const now = useClock();
   const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
 
-  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
+  const pc = useParashaContent();
+  const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
   const vDate = live?.vendredi.date ?? week.vendredi.date;
@@ -1600,17 +1603,17 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             <article id="etude" className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] scroll-mt-24">
               <div className="flex items-center justify-between gap-2 mb-3">
                 <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
-                {PARASHA_NOM_HE && (
-                  <span className="font-hebrew text-xl text-primary" dir="rtl">{PARASHA_NOM_HE}</span>
+                {pc.nomHe && (
+                  <span className="font-hebrew text-xl text-primary" dir="rtl">{pc.nomHe}</span>
                 )}
               </div>
-              {PARASHA_INTRO && (
+              {pc.intro && (
                 <p className="font-display italic text-sm text-muted-foreground leading-snug mb-3">
-                  {PARASHA_INTRO}
+                  {pc.intro}
                 </p>
               )}
               <div className="space-y-3">
-                {PARASHA_BLOCS.map((bloc, i) => (
+                {pc.blocs.map((bloc, i) => (
                   <section key={i} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
                     <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">
                       {bloc.icone ? `${bloc.icone} ` : ""}{bloc.titre}
@@ -1759,7 +1762,8 @@ function PlanningTV() {
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const parashaFr = live?.parasha.fr ?? week.parasha.fr;
+  const pc = useParashaContent();
+  const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
   // Luxury palette
@@ -1776,7 +1780,7 @@ function PlanningTV() {
   const BODY_FONT = "'Inter', system-ui, sans-serif";
 
   // Column 1 — key takeaways (max 4 bullets)
-  const pointsBloc = PARASHA_BLOCS.find((b) => /point/i.test(b.titre));
+  const pointsBloc = pc.blocs.find((b) => /point/i.test(b.titre));
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
@@ -2007,15 +2011,15 @@ function PlanningTV() {
             <div className="tv-marquee-track">
               {[0, 1].map((k) => (
                 <div key={k} className="tv-marquee-block" aria-hidden={k === 1}>
-                  {PARASHA_INTRO && (
+                  {pc.intro && (
                     <p
                       className="italic mb-[2vh]"
                       style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2vh", lineHeight: 1.6, color: "#4B5875" }}
                     >
-                      {PARASHA_INTRO}
+                      {pc.intro}
                     </p>
                   )}
-                  {PARASHA_BLOCS.map((bloc, i) => (
+                  {pc.blocs.map((bloc, i) => (
                     <section key={i} className="mb-[2.4vh] last:mb-0">
                       <p
                         className="uppercase mb-[0.9vh]"
