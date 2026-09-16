@@ -10,6 +10,7 @@ import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_REPAS } from "@/lib/weekly-content";
 import CommunitySection from "@/components/community/CommunitySection";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
+import SouccotMenu from "@/components/SouccotMenu";
 
 
 
@@ -1098,7 +1099,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
   // Section tab in white surface
-  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
+  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "souccot" | "communaute">("horaires");
 
   const heroTime = selectedDay === "vendredi"
     ? (chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "--:--")
@@ -1265,6 +1266,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {([
               { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
+              { id: "souccot", label: "Souccot" },
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
               <button
@@ -1597,6 +1599,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </div>
             </article>
           )}
+
+          {sectionTab === "souccot" && <SouccotMenu />}
 
           {sectionTab === "communaute" && null}
 
