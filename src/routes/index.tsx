@@ -2197,7 +2197,7 @@ function PlanningTV() {
               >
                 <img src="/qr-hasde-tsion.svg" alt="QR code hasde-tsion.com" className="w-full h-full" />
               </div>
-              <div className="shrink-0 min-w-0" style={{ maxWidth: "13vw" }}>
+              <div className="shrink-0 min-w-0">
                 <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.35em", color: "#0F3D7A", fontWeight: 700 }}>
                   Souccot 5787
                 </p>
@@ -2207,8 +2207,10 @@ function PlanningTV() {
                 >
                   Réservez votre place
                 </h3>
-                <p className="mt-[0.35vh] whitespace-nowrap" style={{ fontSize: "1.15vh", lineHeight: 1.4, color: "#4B5875" }}>
-                  Scannez le QR code ou allez sur{" "}
+                <p className="mt-[0.35vh]" style={{ fontSize: "1.1vh", lineHeight: 1.45, color: "#4B5875" }}>
+                  Scannez le QR code
+                  <br />
+                  ou allez sur{" "}
                   <span style={{ fontWeight: 600, color: GOLD_LOCAL }}>hasde-tsion.com</span>
                 </p>
               </div>
