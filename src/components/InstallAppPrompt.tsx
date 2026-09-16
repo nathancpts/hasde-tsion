@@ -291,6 +291,13 @@ export function InstallAppPrompt() {
                   )}
                 </ol>
 
+                {platform === "ios" && !isIOSSafari() && (
+                  <p className="mt-4 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-800">
+                    Sur iPhone, l'installation n'est possible que depuis <strong>Safari</strong>.
+                    Ouvrez hasde-tsion.com dans Safari, puis suivez ces étapes.
+                  </p>
+                )}
+
                 <button
                   onClick={close}
                   className="btn-blue-animated mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl px-5 text-[15px] font-display font-semibold text-white active:scale-[0.97] transition-all"
