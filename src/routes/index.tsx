@@ -1102,12 +1102,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
   // Section tab in white surface
-  // Onglet Souccot visible uniquement jusqu'au 28 septembre 2026 inclus
+  // Événement Souccot : réservations ouvertes jusqu'au lundi 28 septembre 2026 inclus
   const souccotVisible = new Date() <= new Date(2026, 8, 28, 23, 59, 59);
-  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "souccot" | "communaute">("horaires");
-  useEffect(() => {
-    if (!souccotVisible) setSectionTab((t) => (t === "souccot" ? "horaires" : t));
-  }, [souccotVisible]);
+  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
 
   const heroTime = selectedDay === "vendredi"
     ? (chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "--:--")
@@ -1281,7 +1278,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {([
               { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
-              ...(souccotVisible ? [{ id: "souccot" as const, label: "Souccot" }] : []),
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
               <button
@@ -1609,9 +1605,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </article>
           )}
 
-          {sectionTab === "souccot" && <SouccotMenu />}
-
-          {sectionTab === "communaute" && null}
+          {sectionTab === "communaute" && <SouccotMenu past={!souccotVisible} />}
 
 
           {/* Bouton Don — toujours visible en bas */}
