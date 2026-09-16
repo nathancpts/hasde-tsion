@@ -231,20 +231,32 @@ export default function SouccotMenu() {
       {/* Menus */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8] mb-3">Les menus</h3>
-        <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
-          {MENU_TABS.map((t) => (
-            <button
-              key={t}
-              onClick={() => setMenuTab(t)}
-              className={`shrink-0 whitespace-nowrap rounded-full px-3.5 py-2 text-[12px] font-semibold transition-all ${
-                menuTab === t
-                  ? "btn-blue-animated text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
-                  : "bg-[#F8FAFC] text-foreground/60"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-1 px-1 [touch-action:pan-x]">
+          {MENU_TABS.map((t) => {
+            const active = menuTab === t;
+            return (
+              <button
+                key={t}
+                onClick={(e) => {
+                  setMenuTab(t);
+                  e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                }}
+                className={`relative shrink-0 whitespace-nowrap overflow-hidden rounded-full px-3.5 py-2 text-[12px] font-semibold bg-[#F8FAFC] transition-[color,box-shadow] duration-300 ease-out ${
+                  active
+                    ? "text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
+                    : "text-foreground/60 shadow-none"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className={`btn-blue-animated absolute inset-0 transition-opacity duration-300 ease-out ${
+                    active ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+                <span className="relative z-10">{t}</span>
+              </button>
+            );
+          })}
         </div>
 
         {menu.pending ? (
