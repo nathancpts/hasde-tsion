@@ -177,65 +177,105 @@ export function InstallAppPrompt() {
                   Installer Hasdé Tsion
                 </h2>
                 <p className="text-[12px] text-slate-500">
-                  Accès rapide aux horaires, comme une vraie application.
+                  Installez l'application pour rester informé de tout : horaires, Chabbat et
+                  annonces.
                 </p>
               </div>
             </div>
 
-            <ol className="mt-4 space-y-3 text-[14px] text-slate-700">
-              {platform === "ios" ? (
-                <>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">1.</span>
-                    <span>
-                      En bas de Safari, touchez le bouton <strong>Partager</strong> (le carré avec
-                      une flèche vers le haut).
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">2.</span>
-                    <span>
-                      Faites défiler et choisissez <strong>« Sur l'écran d'accueil »</strong>.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">3.</span>
-                    <span>
-                      Touchez <strong>Ajouter</strong> : l'icône apparaît sur votre écran d'accueil.
-                    </span>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">1.</span>
-                    <span>
-                      En haut à droite de Chrome, touchez le menu <strong>⋮</strong>.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">2.</span>
-                    <span>
-                      Choisissez <strong>« Installer l'application »</strong> ou{" "}
-                      <strong>« Ajouter à l'écran d'accueil »</strong>.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-semibold text-[#0F3D7A]">3.</span>
-                    <span>
-                      Confirmez avec <strong>Installer</strong>.
-                    </span>
-                  </li>
-                </>
-              )}
-            </ol>
+            {deferredPrompt ? (
+              <>
+                <p className="mt-4 text-[14px] leading-relaxed text-slate-700">
+                  Ajoutez Hasdé Tsion à votre écran d'accueil en un seul geste et recevez les
+                  notifications de la communauté.
+                </p>
+                <button
+                  onClick={async () => {
+                    try {
+                      setInstalling(true);
+                      await deferredPrompt.prompt();
+                      const res = await deferredPrompt.userChoice;
+                      setDeferredPrompt(null);
+                      if (res?.outcome === "accepted") {
+                        localStorage.setItem(DISMISS_KEY, "1");
+                        setMode("none");
+                      }
+                    } finally {
+                      setInstalling(false);
+                    }
+                  }}
+                  disabled={installing}
+                  className="btn-blue-animated mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl px-5 text-[15px] font-display font-semibold text-white active:scale-[0.97] transition-all disabled:opacity-60"
+                >
+                  {installing ? "Installation…" : "Installer l'application"}
+                </button>
+                <button
+                  onClick={close}
+                  className="mt-2 w-full py-2 text-[13px] font-medium text-slate-400"
+                >
+                  Plus tard
+                </button>
+              </>
+            ) : (
+              <>
+                <ol className="mt-4 space-y-3 text-[14px] text-slate-700">
+                  {platform === "ios" ? (
+                    <>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">1.</span>
+                        <span>
+                          En bas de Safari, touchez le bouton <strong>Partager</strong> (le carré
+                          avec une flèche vers le haut).
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">2.</span>
+                        <span>
+                          Faites défiler et choisissez <strong>« Sur l'écran d'accueil »</strong>.
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">3.</span>
+                        <span>
+                          Touchez <strong>Ajouter</strong> : l'icône apparaît sur votre écran
+                          d'accueil.
+                        </span>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">1.</span>
+                        <span>
+                          En haut à droite de Chrome, touchez le menu <strong>⋮</strong>.
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">2.</span>
+                        <span>
+                          Choisissez <strong>« Installer l'application »</strong> ou{" "}
+                          <strong>« Ajouter à l'écran d'accueil »</strong>.
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="font-semibold text-[#0F3D7A]">3.</span>
+                        <span>
+                          Confirmez avec <strong>Installer</strong>.
+                        </span>
+                      </li>
+                    </>
+                  )}
+                </ol>
 
-            <button
-              onClick={close}
-              className="btn-blue-animated mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl px-5 text-[15px] font-display font-semibold text-white active:scale-[0.97] transition-all"
-            >
-              J'ai compris
-            </button>
+                <button
+                  onClick={close}
+                  className="btn-blue-animated mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl px-5 text-[15px] font-display font-semibold text-white active:scale-[0.97] transition-all"
+                >
+                  J'ai compris
+                </button>
+              </>
+            )}
+
           </>
         ) : (
           <>
