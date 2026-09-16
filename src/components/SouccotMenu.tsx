@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 const HELLOASSO_SOUCOT =
   "https://www.helloasso.com/associations/hassidim-de-sion/evenements/repas-de-souccot-2026";
@@ -155,61 +155,6 @@ const SEANCES = [
   },
 ];
 
-function SouccotQr() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    let script: HTMLScriptElement | null = null;
-
-    const render = () => {
-      const QRCodeStyling = (window as any).QRCodeStyling;
-      if (!QRCodeStyling || !ref.current || cancelled) return false;
-      try {
-        const qr = new QRCodeStyling({
-          width: 220,
-          height: 220,
-          type: "svg",
-          data: HELLOASSO_SOUCOT,
-          margin: 0,
-          qrOptions: { errorCorrectionLevel: "M" },
-          dotsOptions: { color: "#0F3D7A" },
-          backgroundOptions: { color: "#ffffff" },
-        });
-        ref.current.innerHTML = "";
-        qr.append(ref.current);
-        const svg = ref.current.querySelector("svg");
-        if (svg) {
-          svg.removeAttribute("width");
-          svg.removeAttribute("height");
-          svg.style.width = "100%";
-          svg.style.height = "100%";
-        }
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    if (!render()) {
-      script = document.createElement("script");
-      script.src = "/calj/qr-code-styling@1.5.0.js";
-      script.onload = () => render();
-      document.head.appendChild(script);
-    }
-    return () => {
-      cancelled = true;
-      script?.remove();
-    };
-  }, []);
-
-  return (
-    <div className="w-28 h-28 shrink-0 rounded-xl bg-white p-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.06)] ring-1 ring-[#1f4ea8]/10">
-      <div ref={ref} className="w-full h-full [&>img]:w-full [&>img]:h-full" />
-    </div>
-  );
-}
-
 export default function SouccotMenu() {
   const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>("Samedi midi");
   const menu = MENUS[menuTab];
@@ -259,15 +204,10 @@ export default function SouccotMenu() {
       {/* Réservation */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8] mb-3">Réservations</h3>
-        <div className="flex items-center gap-4">
-          <SouccotQr />
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-sm font-bold text-foreground leading-snug">HelloAsso</p>
-            <p className="text-[11px] text-muted-foreground leading-snug mt-1">
-              Scannez le QR code pour réserver
-            </p>
-          </div>
-        </div>
+        <p className="text-[13px] text-foreground/80 leading-snug">
+          Les réservations se font exclusivement sur HelloAsso.
+        </p>
+
         <a
           href={HELLOASSO_SOUCOT}
           target="_blank"
