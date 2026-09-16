@@ -48,6 +48,8 @@ async function sendThankYouNotification() {
 export function InstallAppPrompt() {
   const [mode, setMode] = useState<"none" | "install" | "notif">("none");
   const [platform, setPlatform] = useState<Platform>("other");
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [installing, setInstalling] = useState(false);
   const [notifState, setNotifState] = useState<
     "idle" | "granted" | "denied" | "new-tab" | "unsupported"
   >("idle");
@@ -66,7 +68,20 @@ export function InstallAppPrompt() {
       }
     })();
 
-
+    // Android / Chrome : installation directe
+    const onBip = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      if (!isStandalone() && !inIframe && !localStorage.getItem(DISMISS_KEY)) {
+        setMode("install");
+      }
+    };
+    window.addEventListener("beforeinstallprompt", onBip);
+    const onInstalled = () => {
+      localStorage.setItem(DISMISS_KEY, "1");
+      setMode("none");
+    };
+    window.addEventListener("appinstalled", onInstalled);
 
     const timer = window.setTimeout(() => {
       if (isStandalone()) {
@@ -86,8 +101,13 @@ export function InstallAppPrompt() {
       }
     }, 1500);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("beforeinstallprompt", onBip);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
   }, []);
+
 
   if (mode === "none") return null;
 
