@@ -136,8 +136,8 @@ export function InstallAppPrompt() {
   if (mode === "none") return null;
 
   const close = () => {
-    if (mode === "install") localStorage.setItem(DISMISS_KEY, "1");
-    if (mode === "notif") localStorage.setItem(NOTIF_KEY, "1");
+    if (mode === "install") snooze(DISMISS_KEY);
+    if (mode === "notif") snooze(NOTIF_KEY);
     setMode("none");
   };
 
