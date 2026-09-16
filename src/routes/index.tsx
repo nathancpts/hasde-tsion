@@ -2285,44 +2285,6 @@ function PlanningTV() {
             </div>
           </article>
 
-          {/* Souccot — réservation avec QR code */}
-          {now <= new Date(2026, 8, 28, 23, 59, 59) && (
-            <article
-              className="flex items-center gap-[1vw] shrink-0"
-              style={{
-                background: "#FFFFFF",
-                borderRadius: "16px",
-                padding: "18px",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-              }}
-            >
-              <div
-                className="shrink-0 rounded-xl overflow-hidden"
-                style={{ width: "12vh", height: "12vh", background: "#FFFFFF", padding: "0.6vh", border: `1px solid ${GOLD_HAIR}` }}
-              >
-                <img src="/qr-hasde-tsion.svg" alt="QR code hasde-tsion.com" className="w-full h-full" />
-              </div>
-              <div className="min-w-0">
-                <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
-                  Souccot 5787
-                </p>
-                <h3
-                  className="leading-tight mt-[0.5vh]"
-                  style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}
-                >
-                  Réservez votre place
-                </h3>
-                <p className="mt-[0.6vh]" style={{ fontSize: "1.5vh", lineHeight: 1.4, color: "#4B5875" }}>
-                  Scannez le QR code pour réserver vos repas sous la Soucca.
-                </p>
-                <p className="mt-[0.6vh]" style={{ fontSize: "1.4vh", fontWeight: 600, color: GOLD_LOCAL }}>
-                  hasde-tsion.com
-                </p>
-              </div>
-            </article>
-          )}
-
-
           {/* Live Kotel — or Shabbat static */}
           <div
             className="relative z-0 w-full overflow-hidden shrink-0"
