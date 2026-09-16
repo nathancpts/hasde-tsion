@@ -13,7 +13,10 @@ const MENU_TABS = [
 
 type MenuSection = { titre: string; items: string[] };
 
-const MENUS: Record<(typeof MENU_TABS)[number], { sections: MenuSection[]; pain?: boolean; boissons?: string }> = {
+const MENUS: Record<
+  (typeof MENU_TABS)[number],
+  { sections: MenuSection[]; pain?: boolean; boissons?: string; pending?: boolean }
+> = {
   "Vendredi soir": {
     sections: [
       { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini fricassés"] },
@@ -43,111 +46,61 @@ const MENUS: Record<(typeof MENU_TABS)[number], { sections: MenuSection[]; pain?
   },
   "Samedi midi": {
     sections: [
-      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini fricassés"] },
+      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini briks"] },
       {
         titre: "Salades",
         items: [
-          "Pomme de terre harissa",
-          "Aubergine mayonnaise",
+          "Baba ganoush",
           "Pomme de terre persillée",
-          "Carottes marocaines",
           "Chakchouka",
-          "Aubergines frites",
+          "Taboulé libanais",
           "Œufs mayonnaise",
+          "Fraîcheurs",
           "Radis",
           "Piments",
-          "Mechouia grillée",
-          "Fenouil",
-          "Amandes fraîches",
+          "Caviar d'aubergine",
+          "Salade d'artichaut",
         ],
       },
-      { titre: "Entrées", items: ["Carpaccio de poisson blanc", "Feuilleté de champignons"] },
-      { titre: "Plat principal", items: ["Tajine de bœuf", "Légumes du soleil", "Semoule", "Pommes de terre sautées"] },
-      { titre: "Dessert", items: ["Tarte au chocolat", "Assortiment de petits fours"] },
+      { titre: "Entrées", items: ["Houmous bassar", "Poisson frit sauce rouge"] },
+      { titre: "Plat principal", items: ["Dafina ou Harissa ou Pkaïla", "Salade de pâtes"] },
+      { titre: "Dessert", items: ["Mousse au chocolat", "Tarte multifruits"] },
     ],
     pain: true,
     boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
   },
   "Samedi soir": {
     sections: [
-      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini fricassés"] },
+      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Choux-fleurs panés"] },
       {
         titre: "Salades",
         items: [
-          "Pomme de terre harissa",
+          "Carotte râpée citron",
           "Aubergine mayonnaise",
-          "Pomme de terre persillée",
-          "Carottes marocaines",
-          "Chakchouka",
-          "Aubergines frites",
-          "Œufs mayonnaise",
-          "Radis",
-          "Piments",
-          "Mechouia grillée",
-          "Fenouil",
-          "Amandes fraîches",
+          "Mechouia",
+          "Fattouche",
+          "Houmous aux pois chiches frais",
+          "Endives vinaigrette",
+          "Iceberg fraîche",
+          "Tourte salée",
+          "Courgette grillée zaatar",
+          "Tomates cerises oignon frais",
         ],
       },
-      { titre: "Entrées", items: ["Carpaccio de poisson blanc", "Feuilleté de champignons"] },
-      { titre: "Plat principal", items: ["Tajine de bœuf", "Légumes du soleil", "Semoule", "Pommes de terre sautées"] },
-      { titre: "Dessert", items: ["Tarte au chocolat", "Assortiment de petits fours"] },
+      { titre: "Entrées", items: ["Gravlax", "Filet de bar petits légumes"] },
+      { titre: "Plat principal", items: ["Tagine de poulet aux olives", "Riz safrané", "Tagliatelles de légumes"] },
+      { titre: "Dessert", items: ["Tarte au citron", "Tarte aux fraises"] },
     ],
     pain: true,
     boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
   },
   "Dimanche midi": {
-    sections: [
-      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini fricassés"] },
-      {
-        titre: "Salades",
-        items: [
-          "Pomme de terre harissa",
-          "Aubergine mayonnaise",
-          "Pomme de terre persillée",
-          "Carottes marocaines",
-          "Chakchouka",
-          "Aubergines frites",
-          "Œufs mayonnaise",
-          "Radis",
-          "Piments",
-          "Mechouia grillée",
-          "Fenouil",
-          "Amandes fraîches",
-        ],
-      },
-      { titre: "Entrées", items: ["Carpaccio de poisson blanc", "Feuilleté de champignons"] },
-      { titre: "Plat principal", items: ["Tajine de bœuf", "Légumes du soleil", "Semoule", "Pommes de terre sautées"] },
-      { titre: "Dessert", items: ["Tarte au chocolat", "Assortiment de petits fours"] },
-    ],
-    pain: true,
-    boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
+    pending: true,
+    sections: [],
   },
   Enfants: {
-    sections: [
-      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini fricassés"] },
-      {
-        titre: "Salades",
-        items: [
-          "Pomme de terre harissa",
-          "Aubergine mayonnaise",
-          "Pomme de terre persillée",
-          "Carottes marocaines",
-          "Chakchouka",
-          "Aubergines frites",
-          "Œufs mayonnaise",
-          "Radis",
-          "Piments",
-          "Mechouia grillée",
-          "Fenouil",
-          "Amandes fraîches",
-        ],
-      },
-      { titre: "Entrées", items: ["Carpaccio de poisson blanc", "Feuilleté de champignons"] },
-      { titre: "Plat principal", items: ["Tajine de bœuf", "Légumes du soleil", "Semoule", "Pommes de terre sautées"] },
-      { titre: "Dessert", items: ["Tarte au chocolat", "Assortiment de petits fours"] },
-    ],
-    pain: true,
-    boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
+    pending: true,
+    sections: [],
   },
 };
 
@@ -320,29 +273,37 @@ export default function SouccotMenu() {
           ))}
         </div>
 
-        <div className="mt-3 space-y-2.5">
-          {menu.sections.map((section) => (
-            <section key={section.titre} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">{section.titre}</p>
-              <ul className="space-y-1">
-                {section.items.map((item) => (
-                  <li key={item} className="text-sm text-foreground leading-snug">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-        </div>
+        {menu.pending ? (
+          <p className="mt-3 rounded-xl bg-[#F8FAFC] px-3 py-4 text-center text-[13px] text-foreground/60 italic">
+            Menu communiqué prochainement
+          </p>
+        ) : (
+          <>
+            <div className="mt-3 space-y-2.5">
+              {menu.sections.map((section) => (
+                <section key={section.titre} className="rounded-xl border border-border/60 bg-[#F8FAFC] px-3 py-2.5">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold mb-1.5">{section.titre}</p>
+                  <ul className="space-y-1">
+                    {section.items.map((item) => (
+                      <li key={item} className="text-sm text-foreground leading-snug">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
 
-        <div className="mt-3 space-y-1 text-[12px] text-foreground/75">
-          {menu.pain && <p>🥖 Pain de table</p>}
-          {menu.boissons && (
-            <p>
-              🥤 Boissons incluses : {menu.boissons}
-            </p>
-          )}
-        </div>
+            <div className="mt-3 space-y-1 text-[12px] text-foreground/75">
+              {menu.pain && <p>🥖 Pain de table</p>}
+              {menu.boissons && (
+                <p>
+                  🥤 Boissons incluses : {menu.boissons}
+                </p>
+              )}
+            </div>
+          </>
+        )}
 
         <p className="font-hebrew text-center text-2xl text-primary mt-5" dir="rtl">
           חג סוכות שמח
