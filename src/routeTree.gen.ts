@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TextesRouteImport } from './routes/textes'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -21,6 +22,11 @@ import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/publ
 const TextesRoute = TextesRouteImport.update({
   id: '/textes',
   path: '/textes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -62,6 +68,7 @@ const ApiPublicHooksShabbatPushRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/compte': typeof AuthenticatedCompteRoute
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/reset-password'
     | '/textes'
     | '/admin'
     | '/compte'
@@ -102,6 +112,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/reset-password'
     | '/textes'
     | '/admin'
     | '/compte'
@@ -112,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/reset-password'
     | '/textes'
     | '/_authenticated/admin'
     | '/_authenticated/compte'
@@ -123,6 +135,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TextesRoute: typeof TextesRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
   ApiPublicHooksShabbatPushRoute: typeof ApiPublicHooksShabbatPushRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/textes'
       fullPath: '/textes'
       preLoaderRoute: typeof TextesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -206,6 +226,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TextesRoute: TextesRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
   ApiPublicHooksShabbatPushRoute: ApiPublicHooksShabbatPushRoute,
