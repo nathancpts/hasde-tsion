@@ -155,61 +155,6 @@ const SEANCES = [
   },
 ];
 
-function SouccotQr() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    let script: HTMLScriptElement | null = null;
-
-    const render = () => {
-      const QRCodeStyling = (window as any).QRCodeStyling;
-      if (!QRCodeStyling || !ref.current || cancelled) return false;
-      try {
-        const qr = new QRCodeStyling({
-          width: 220,
-          height: 220,
-          type: "svg",
-          data: HELLOASSO_SOUCOT,
-          margin: 0,
-          qrOptions: { errorCorrectionLevel: "M" },
-          dotsOptions: { color: "#0F3D7A" },
-          backgroundOptions: { color: "#ffffff" },
-        });
-        ref.current.innerHTML = "";
-        qr.append(ref.current);
-        const svg = ref.current.querySelector("svg");
-        if (svg) {
-          svg.removeAttribute("width");
-          svg.removeAttribute("height");
-          svg.style.width = "100%";
-          svg.style.height = "100%";
-        }
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    if (!render()) {
-      script = document.createElement("script");
-      script.src = "/calj/qr-code-styling@1.5.0.js";
-      script.onload = () => render();
-      document.head.appendChild(script);
-    }
-    return () => {
-      cancelled = true;
-      script?.remove();
-    };
-  }, []);
-
-  return (
-    <div className="w-28 h-28 shrink-0 rounded-xl bg-white p-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.06)] ring-1 ring-[#1f4ea8]/10">
-      <div ref={ref} className="w-full h-full [&>img]:w-full [&>img]:h-full" />
-    </div>
-  );
-}
-
 export default function SouccotMenu() {
   const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>("Samedi midi");
   const menu = MENUS[menuTab];
