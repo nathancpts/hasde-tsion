@@ -64,6 +64,15 @@ type Row = {
   created_at: string;
 };
 
+function toEdit(blocs: any[]): EditBloc[] {
+  return blocs.map((b) => ({
+    titre: b?.titre ?? "",
+    icone: b?.icone ?? "",
+    paragraphes: (b?.paragraphes ?? []).join("\n\n"),
+    puces: (b?.puces ?? []).join("\n"),
+  }));
+}
+
 function AdminPage() {
   const navigate = useNavigate();
   const sendNow = useServerFn(sendAnnouncementNow);
@@ -323,6 +332,7 @@ function AdminPage() {
           {(
             [
               ["envoyer", "Envoyer", Bell],
+              ["parasha", "Parasha", BookOpen],
               ["historique", "Historique", History],
               ["membres", "Membres", Users],
             ] as const
@@ -428,6 +438,115 @@ function AdminPage() {
                 </ul>
               </div>
             )}
+          </section>
+        )}
+
+        {tab === "parasha" && (
+          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)] space-y-4">
+            <p className="text-xs text-muted-foreground">
+              Ce texte remplace la parasha affichée sur le site et sur la TV. Laissez vide pour
+              revenir au texte automatique.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-[11px] text-[#0a2a6b]">Nom (français)</Label>
+                <Input value={pNom} onChange={(e) => setPNom(e.target.value)} placeholder="Haazinou" />
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#0a2a6b]">Nom (hébreu)</Label>
+                <Input
+                  value={pNomHe}
+                  onChange={(e) => setPNomHe(e.target.value)}
+                  dir="rtl"
+                  placeholder="האזינו"
+                />
+              </div>
+            </div>
+            <div>
+              <Label className="text-[11px] text-[#0a2a6b]">Introduction (optionnel)</Label>
+              <Textarea value={pIntro} onChange={(e) => setPIntro(e.target.value)} rows={2} />
+            </div>
+
+            <div className="space-y-3">
+              {pBlocs.map((b, i) => (
+                <div key={i} className="rounded-xl bg-[#F1F5F9] p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      className="w-16 bg-white"
+                      value={b.icone}
+                      onChange={(e) =>
+                        setPBlocs((prev) => prev.map((x, j) => (j === i ? { ...x, icone: e.target.value } : x)))
+                      }
+                      placeholder="📜"
+                    />
+                    <Input
+                      className="flex-1 bg-white"
+                      value={b.titre}
+                      onChange={(e) =>
+                        setPBlocs((prev) => prev.map((x, j) => (j === i ? { ...x, titre: e.target.value } : x)))
+                      }
+                      placeholder="Titre du bloc"
+                    />
+                    <button
+                      onClick={() => setPBlocs((prev) => prev.filter((_, j) => j !== i))}
+                      className="p-1.5 rounded-lg text-red-600 hover:bg-white"
+                      title="Supprimer le bloc"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-[#0a2a6b]">Paragraphes (un par ligne)</Label>
+                    <Textarea
+                      className="bg-white"
+                      rows={4}
+                      value={b.paragraphes}
+                      onChange={(e) =>
+                        setPBlocs((prev) =>
+                          prev.map((x, j) => (j === i ? { ...x, paragraphes: e.target.value } : x)),
+                        )
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-[#0a2a6b]">Points clés (un par ligne)</Label>
+                    <Textarea
+                      className="bg-white"
+                      rows={3}
+                      value={b.puces}
+                      onChange={(e) =>
+                        setPBlocs((prev) => prev.map((x, j) => (j === i ? { ...x, puces: e.target.value } : x)))
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                onClick={() =>
+                  setPBlocs((prev) => [...prev, { titre: "", icone: "", paragraphes: "", puces: "" }])
+                }
+                className="w-full"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="ml-1.5">Ajouter un bloc</span>
+              </Button>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                onClick={saveParasha}
+                disabled={pBusy}
+                className="flex-1 bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8] text-white"
+              >
+                {pBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                <span className="ml-1.5">Enregistrer</span>
+              </Button>
+              <Button variant="outline" onClick={resetParasha} disabled={pBusy}>
+                <RotateCcw className="h-4 w-4" />
+                <span className="ml-1.5">Texte automatique</span>
+              </Button>
+            </div>
           </section>
         )}
 
