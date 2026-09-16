@@ -96,13 +96,13 @@ export function InstallAppPrompt() {
     const onBip = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      if (!isStandalone() && !inIframe && !localStorage.getItem(DISMISS_KEY)) {
+      if (!isStandalone() && !inIframe && localStorage.getItem("ht-installed") !== "1") {
         setMode("install");
       }
     };
     window.addEventListener("beforeinstallprompt", onBip);
     const onInstalled = () => {
-      localStorage.setItem(DISMISS_KEY, "1");
+      localStorage.setItem("ht-installed", "1");
       setMode("none");
     };
     window.addEventListener("appinstalled", onInstalled);
@@ -113,14 +113,14 @@ export function InstallAppPrompt() {
         if (
           "Notification" in window &&
           Notification.permission === "default" &&
-          !localStorage.getItem(NOTIF_KEY)
+          !isSnoozed(NOTIF_KEY)
         ) {
           setMode("notif");
         }
         return;
       }
       // Navigateur : proposer l'installation (pas dans l'aperçu en iframe)
-      if (!inIframe && p !== "other" && !localStorage.getItem(DISMISS_KEY)) {
+      if (!inIframe && p !== "other" && localStorage.getItem("ht-installed") !== "1" && !isSnoozed(DISMISS_KEY)) {
         setMode("install");
       }
     }, 1500);
