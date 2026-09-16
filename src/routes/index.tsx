@@ -2197,7 +2197,7 @@ function PlanningTV() {
               >
                 <img src="/qr-hasde-tsion.svg" alt="QR code hasde-tsion.com" className="w-full h-full" />
               </div>
-              <div className="shrink-0 min-w-0">
+              <div className="shrink-0 min-w-0" style={{ maxWidth: "16vw" }}>
                 <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
                   Souccot 5787
                 </p>
@@ -2207,27 +2207,33 @@ function PlanningTV() {
                 >
                   Réservez votre place
                 </h3>
-                <p className="mt-[0.4vh]" style={{ fontSize: "1.35vh", lineHeight: 1.4, color: "#4B5875" }}>
-                  Scannez le QR code ou rendez-vous sur
-                </p>
-                <p style={{ fontSize: "1.4vh", fontWeight: 600, color: GOLD_LOCAL }}>
-                  hasde-tsion.com
+                <p className="mt-[0.4vh]" style={{ fontSize: "1.3vh", lineHeight: 1.4, color: "#4B5875" }}>
+                  Scannez le QR code ou allez sur{" "}
+                  <span style={{ fontWeight: 600, color: GOLD_LOCAL }}>hasde-tsion.com</span>
                 </p>
               </div>
-              <div className="flex-1 grid grid-cols-2 gap-[1vw] ml-[0.6vw]">
-                <div className="rounded-xl px-[1vw] py-[1vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
-                  <p className="uppercase" style={{ fontSize: "1vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+              <div className="flex-1 grid grid-cols-2 gap-[1vw] ml-[0.6vw] min-w-0">
+                <div className="rounded-xl px-[1vw] py-[1vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
                     1er jour
                   </p>
-                  <p className="mt-[0.5vh]" style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Vendredi 25 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>au soir</span></p>
-                  <p style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Samedi 26 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>à midi</span></p>
+                  <p className="whitespace-nowrap mt-[0.4vh]" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                    Vendredi 25 septembre <span style={{ color: "#4B5875" }}>au soir</span>
+                  </p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                    Samedi 26 septembre <span style={{ color: "#4B5875" }}>à midi</span>
+                  </p>
                 </div>
-                <div className="rounded-xl px-[1vw] py-[1vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
-                  <p className="uppercase" style={{ fontSize: "1vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+                <div className="rounded-xl px-[1vw] py-[1vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
                     2e jour
                   </p>
-                  <p className="mt-[0.5vh]" style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Samedi 26 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>au soir</span></p>
-                  <p style={{ fontSize: "1.4vh", color: "#1A2540", fontWeight: 600 }}>Dimanche 27 septembre <span style={{ color: "#4B5875", fontWeight: 400 }}>à midi</span></p>
+                  <p className="whitespace-nowrap mt-[0.4vh]" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                    Samedi 26 septembre <span style={{ color: "#4B5875" }}>au soir</span>
+                  </p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                    Dimanche 27 septembre <span style={{ color: "#4B5875" }}>à midi</span>
+                  </p>
                 </div>
               </div>
             </article>
