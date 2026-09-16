@@ -101,7 +101,92 @@ function AdminPage() {
     } catch {
       /* ignore */
     }
+    const { data: pc } = await supabase
+      .from("parasha_content")
+      .select("id, nom, nom_he, intro, blocs")
+      .eq("is_active", true)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (pc) {
+      setPRowId(pc.id);
+      setPNom(pc.nom ?? "");
+      setPNomHe(pc.nom_he ?? "");
+      setPIntro(pc.intro ?? "");
+      setPBlocs(toEdit(Array.isArray(pc.blocs) ? (pc.blocs as any[]) : []));
+    } else {
+      setPRowId(null);
+      setPNom("");
+      setPNomHe("");
+      setPIntro("");
+      setPBlocs(toEdit(DEFAULT_PARASHA_CONTENT.blocs as any[]));
+    }
   }, [loadStats]);
+
+  const saveParasha = async () => {
+    setPBusy(true);
+    try {
+      const blocs = pBlocs
+        .filter((b) => b.titre.trim() || b.paragraphes.trim() || b.puces.trim())
+        .map((b) => ({
+          titre: b.titre.trim(),
+          ...(b.icone.trim() ? { icone: b.icone.trim() } : {}),
+          ...(b.paragraphes.trim()
+            ? { paragraphes: b.paragraphes.split(/\n\s*\n|\n/).map((s) => s.trim()).filter(Boolean) }
+            : {}),
+          ...(b.puces.trim()
+            ? { puces: b.puces.split("\n").map((s) => s.trim()).filter(Boolean) }
+            : {}),
+        }));
+      const { data: auth } = await supabase.auth.getUser();
+      const payload = {
+        nom: pNom.trim() || null,
+        nom_he: pNomHe.trim() || null,
+        intro: pIntro.trim() || null,
+        blocs,
+        is_active: true,
+        updated_by: auth.user?.id ?? null,
+      };
+      if (pRowId) {
+        const { error } = await supabase.from("parasha_content").update(payload).eq("id", pRowId);
+        if (error) throw error;
+      } else {
+        const { data, error } = await supabase
+          .from("parasha_content")
+          .insert(payload)
+          .select("id")
+          .single();
+        if (error) throw error;
+        setPRowId(data.id);
+      }
+      toast.success("Texte de la parasha enregistré");
+      await refresh();
+    } catch (err: any) {
+      toast.error(err?.message ?? "Erreur d'enregistrement");
+    } finally {
+      setPBusy(false);
+    }
+  };
+
+  const resetParasha = async () => {
+    setPBusy(true);
+    try {
+      if (pRowId) {
+        const { error } = await supabase.from("parasha_content").delete().eq("id", pRowId);
+        if (error) throw error;
+      }
+      setPRowId(null);
+      setPNom("");
+      setPNomHe("");
+      setPIntro("");
+      setPBlocs(toEdit(DEFAULT_PARASHA_CONTENT.blocs as any[]));
+      toast.success("Texte automatique rétabli");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Erreur");
+    } finally {
+      setPBusy(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
