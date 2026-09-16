@@ -1605,9 +1605,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </article>
           )}
 
-          {sectionTab === "souccot" && <SouccotMenu />}
-
-          {sectionTab === "communaute" && null}
+          {sectionTab === "communaute" && <SouccotMenu past={!souccotVisible} />}
 
 
           {/* Bouton Don — toujours visible en bas */}
