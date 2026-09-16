@@ -2215,27 +2215,23 @@ function PlanningTV() {
                 </p>
               </div>
               <div className="flex-1 grid grid-cols-2 gap-[0.7vw] ml-[0.5vw] min-w-0">
-                <div className="rounded-xl px-[0.7vw] py-[0.6vh] flex flex-col justify-center overflow-hidden" style={{ background: "rgba(212,175,55,0.08)" }}>
+                <div className="rounded-xl px-[0.7vw] py-[0.6vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
                   <p className="uppercase" style={{ fontSize: "0.85vh", letterSpacing: "0.25em", color: "#7A6A2E", fontWeight: 700 }}>
                     1er jour
                   </p>
-                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
-                    Vendredi 25 septembre <span style={{ color: "#4B5875", fontSize: "0.95vh" }}>au soir</span>
-                  </p>
-                  <p className="whitespace-nowrap" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
-                    Samedi 26 septembre <span style={{ color: "#4B5875", fontSize: "0.95vh" }}>à midi</span>
-                  </p>
+                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>Vendredi 25 septembre</p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "0.95vh", color: "#4B5875" }}>au soir</p>
+                  <p className="whitespace-nowrap mt-[0.25vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>Samedi 26 septembre</p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "0.95vh", color: "#4B5875" }}>à midi</p>
                 </div>
-                <div className="rounded-xl px-[0.7vw] py-[0.6vh] flex flex-col justify-center overflow-hidden" style={{ background: "rgba(212,175,55,0.08)" }}>
+                <div className="rounded-xl px-[0.7vw] py-[0.6vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
                   <p className="uppercase" style={{ fontSize: "0.85vh", letterSpacing: "0.25em", color: "#7A6A2E", fontWeight: 700 }}>
                     2e jour
                   </p>
-                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
-                    Samedi 26 septembre <span style={{ color: "#4B5875", fontSize: "0.95vh" }}>au soir</span>
-                  </p>
-                  <p className="whitespace-nowrap" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
-                    Dimanche 27 septembre <span style={{ color: "#4B5875", fontSize: "0.95vh" }}>à midi</span>
-                  </p>
+                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>Samedi 26 septembre</p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "0.95vh", color: "#4B5875" }}>au soir</p>
+                  <p className="whitespace-nowrap mt-[0.25vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>Dimanche 27 septembre</p>
+                  <p className="whitespace-nowrap" style={{ fontSize: "0.95vh", color: "#4B5875" }}>à midi</p>
                 </div>
               </div>
             </article>
