@@ -165,7 +165,7 @@ function defaultMenuTab(): (typeof MENU_TABS)[number] {
   return "Dimanche midi";                               // à partir de samedi soir
 }
 
-export default function SouccotMenu() {
+export default function SouccotMenu({ past = false }: { past?: boolean }) {
   const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>(defaultMenuTab);
   const menu = MENUS[menuTab];
 
@@ -173,10 +173,23 @@ export default function SouccotMenu() {
     <div className="space-y-3">
       {/* En-tête */}
       <article className="btn-blue-animated rounded-3xl p-5 text-center" style={{ boxShadow: "0 8px 24px rgba(31,78,168,0.25)" }}>
-        <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 mb-1">Souccot 5787</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 mb-1">
+          {past ? "Événement passé" : "Souccot 5787"}
+        </p>
         <h3 className="font-display text-2xl font-bold text-white leading-tight">Les repas de Souccot</h3>
-        <p className="text-[12px] text-white/85 mt-1">Sous la Soucca · 5787</p>
+        <p className="text-[12px] text-white/85 mt-1">
+          {past ? "Souccot 5787 · du 25 au 27 septembre 2026" : "Sous la Soucca · 5787"}
+        </p>
       </article>
+
+      {past && (
+        <article className="rounded-2xl bg-[#F8FAFC] p-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+          <p className="text-[13px] text-foreground/75 leading-snug">
+            Les repas de Souccot 5787 sont terminés et les réservations sont closes. Merci à tous
+            ceux qui nous ont rejoints sous la Soucca — à l'année prochaine !
+          </p>
+        </article>
+      )}
 
       {/* Introduction */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
