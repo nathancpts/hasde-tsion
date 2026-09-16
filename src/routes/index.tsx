@@ -2193,45 +2193,45 @@ function PlanningTV() {
             >
               <div
                 className="shrink-0 rounded-xl overflow-hidden"
-                style={{ width: "11vh", height: "11vh", background: "#FFFFFF", padding: "0.5vh", border: `1px solid ${GOLD_HAIR}` }}
+                style={{ width: "9.5vh", height: "9.5vh", background: "#FFFFFF", padding: "0.45vh", border: `1px solid ${GOLD_HAIR}` }}
               >
                 <img src="/qr-hasde-tsion.svg" alt="QR code hasde-tsion.com" className="w-full h-full" />
               </div>
-              <div className="shrink-0 min-w-0" style={{ maxWidth: "16vw" }}>
-                <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
+              <div className="shrink-0 min-w-0" style={{ maxWidth: "13vw" }}>
+                <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.35em", color: "#0F3D7A", fontWeight: 700 }}>
                   Souccot 5787
                 </p>
                 <h3
-                  className="leading-tight mt-[0.4vh]"
-                  style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}
+                  className="leading-tight mt-[0.3vh]"
+                  style={{ fontSize: "1.9vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}
                 >
                   Réservez votre place
                 </h3>
-                <p className="mt-[0.4vh]" style={{ fontSize: "1.3vh", lineHeight: 1.4, color: "#4B5875" }}>
+                <p className="mt-[0.35vh] whitespace-nowrap" style={{ fontSize: "1.15vh", lineHeight: 1.4, color: "#4B5875" }}>
                   Scannez le QR code ou allez sur{" "}
                   <span style={{ fontWeight: 600, color: GOLD_LOCAL }}>hasde-tsion.com</span>
                 </p>
               </div>
-              <div className="flex-1 grid grid-cols-2 gap-[1vw] ml-[0.6vw] min-w-0">
-                <div className="rounded-xl px-[1vw] py-[1vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
-                  <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+              <div className="flex-1 grid grid-cols-2 gap-[0.8vw] ml-[0.5vw] min-w-0">
+                <div className="rounded-xl px-[0.8vw] py-[0.8vh] flex flex-col justify-center overflow-hidden" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "0.85vh", letterSpacing: "0.25em", color: "#7A6A2E", fontWeight: 700 }}>
                     1er jour
                   </p>
-                  <p className="whitespace-nowrap mt-[0.4vh]" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
                     Vendredi 25 septembre <span style={{ color: "#4B5875" }}>au soir</span>
                   </p>
-                  <p className="whitespace-nowrap" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                  <p className="whitespace-nowrap" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
                     Samedi 26 septembre <span style={{ color: "#4B5875" }}>à midi</span>
                   </p>
                 </div>
-                <div className="rounded-xl px-[1vw] py-[1vh] flex flex-col justify-center" style={{ background: "rgba(212,175,55,0.08)" }}>
-                  <p className="uppercase" style={{ fontSize: "0.95vh", letterSpacing: "0.3em", color: "#7A6A2E", fontWeight: 700 }}>
+                <div className="rounded-xl px-[0.8vw] py-[0.8vh] flex flex-col justify-center overflow-hidden" style={{ background: "rgba(212,175,55,0.08)" }}>
+                  <p className="uppercase" style={{ fontSize: "0.85vh", letterSpacing: "0.25em", color: "#7A6A2E", fontWeight: 700 }}>
                     2e jour
                   </p>
-                  <p className="whitespace-nowrap mt-[0.4vh]" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                  <p className="whitespace-nowrap mt-[0.3vh]" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
                     Samedi 26 septembre <span style={{ color: "#4B5875" }}>au soir</span>
                   </p>
-                  <p className="whitespace-nowrap" style={{ fontSize: "1.2vh", color: "#1A2540" }}>
+                  <p className="whitespace-nowrap" style={{ fontSize: "1.05vh", color: "#1A2540" }}>
                     Dimanche 27 septembre <span style={{ color: "#4B5875" }}>à midi</span>
                   </p>
                 </div>
