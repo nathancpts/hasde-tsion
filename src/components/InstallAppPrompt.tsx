@@ -92,11 +92,17 @@ export function InstallAppPrompt() {
       }
     })();
 
+    // Si l'app n'est plus en mode installé (désinstallation), on oublie le marqueur
+    // pour que la proposition d'installation revienne.
+    if (!isStandalone() && localStorage.getItem("ht-installed") === "1") {
+      localStorage.removeItem("ht-installed");
+    }
+
     // Android / Chrome : installation directe
     const onBip = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      if (!isStandalone() && !inIframe && localStorage.getItem("ht-installed") !== "1") {
+      if (!isStandalone() && !inIframe) {
         setMode("install");
       }
     };
