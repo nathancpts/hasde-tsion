@@ -144,21 +144,6 @@ function AuthPage() {
               Votre espace membre Hasdé Tsion
             </p>
 
-            <button
-              type="button"
-              onClick={handleGoogle}
-              disabled={busy}
-              className="w-full flex items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#3c4043] ring-1 ring-black/10 shadow-sm hover:shadow-md transition active:scale-[0.98] disabled:opacity-60"
-            >
-              <GoogleIcon />
-              Continuer avec Google
-            </button>
-
-            <div className="flex items-center gap-3 my-4">
-              <div className="h-px flex-1 bg-[#0a2a6b]/15" />
-              <span className="text-[10px] uppercase tracking-widest text-[#0a2a6b]/50">ou</span>
-              <div className="h-px flex-1 bg-[#0a2a6b]/15" />
-            </div>
 
             <form onSubmit={handleEmail} className="space-y-3">
               {mode === "signup" && (
