@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TextesRouteImport } from './routes/textes'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicKotelRouteImport } from './routes/api/public/kotel'
 import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
@@ -17,6 +18,11 @@ import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/publ
 const TextesRoute = TextesRouteImport.update({
   id: '/textes',
   path: '/textes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -38,12 +44,14 @@ const ApiPublicHooksShabbatPushRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/textes': typeof TextesRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/textes': typeof TextesRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
@@ -51,6 +59,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/textes': typeof TextesRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
@@ -59,14 +68,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/textes'
     | '/api/public/kotel'
     | '/api/public/hooks/shabbat-push'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/textes' | '/api/public/kotel' | '/api/public/hooks/shabbat-push'
+  to:
+    | '/'
+    | '/auth'
+    | '/textes'
+    | '/api/public/kotel'
+    | '/api/public/hooks/shabbat-push'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/textes'
     | '/api/public/kotel'
     | '/api/public/hooks/shabbat-push'
@@ -74,6 +90,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   TextesRoute: typeof TextesRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
   ApiPublicHooksShabbatPushRoute: typeof ApiPublicHooksShabbatPushRoute
@@ -86,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/textes'
       fullPath: '/textes'
       preLoaderRoute: typeof TextesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -114,6 +138,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   TextesRoute: TextesRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
   ApiPublicHooksShabbatPushRoute: ApiPublicHooksShabbatPushRoute,
