@@ -1292,8 +1292,15 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
       >
         <div className="max-w-md mx-auto px-4 space-y-4">
           {/* Section heading + tabs */}
-          <div className="flex items-center justify-between px-1">
+          <div className="flex items-center justify-between gap-3 px-1">
             <h2 className="font-display text-2xl font-bold text-foreground">Cette semaine</h2>
+            <Link
+              to="/compte"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#1f4ea8] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_3px_10px_rgba(31,78,168,0.35)] active:scale-[0.97] transition"
+            >
+              <UserRound className="h-3.5 w-3.5" />
+              {accountLabel}
+            </Link>
           </div>
 
           <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
