@@ -15,7 +15,7 @@ type MenuSection = { titre: string; items: string[] };
 
 const MENUS: Record<
   (typeof MENU_TABS)[number],
-  { sections: MenuSection[]; pain?: boolean; boissons?: string; pending?: boolean }
+  { sections: MenuSection[]; pain?: boolean; boissons?: string; pending?: boolean; note?: string }
 > = {
   "Vendredi soir": {
     sections: [
@@ -95,12 +95,46 @@ const MENUS: Record<
     boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
   },
   "Dimanche midi": {
-    pending: true,
-    sections: [],
+    sections: [
+      {
+        titre: "Salades",
+        items: [
+          "Houmous merguez",
+          "Salade israélienne",
+          "Salade verte",
+          "Coleslaw",
+          "Endives vinaigrette",
+          "Pommes de terre aux œufs",
+          "Tourte salée",
+          "Macbouba",
+          "Champignons frais",
+        ],
+      },
+      { titre: "Entrées", items: ["Saumon teriyaki", "Bœuf chinois aux oignons"] },
+      { titre: "Plat principal", items: ["Wok de poulet", "Nouilles chinoises", "Riz cantonais"] },
+      { titre: "Dessert", items: ["Tarte aux pommes", "Mousse au chocolat"] },
+    ],
+    pain: true,
+    boissons: "eau minérale, eau gazeuse, Coca-Cola, vin rouge",
   },
   Enfants: {
-    pending: true,
-    sections: [],
+    sections: [
+      {
+        titre: "Sélection du chef",
+        items: [
+          "Riz",
+          "Spaghetti à la sauce tomate",
+          "Purée maison",
+          "Schnitzel de poulet",
+          "Nuggets de poulet",
+          "Poisson pané",
+          "Mini boulettes de viande",
+          "Frites maison",
+          "Pizza",
+        ],
+      },
+    ],
+    note: "Les plats proposés ne constituent pas un choix individuel. Le menu enfant est composé par le Chef parmi cette sélection, en fonction du menu du jour et des préparations réalisées.",
   },
 };
 
@@ -293,6 +327,12 @@ export default function SouccotMenu() {
                 </section>
               ))}
             </div>
+
+            {menu.note && (
+              <p className="mt-3 rounded-xl bg-[var(--gold-soft)] px-3 py-2.5 text-[12px] text-foreground/85 leading-snug italic">
+                {menu.note}
+              </p>
+            )}
 
             <div className="mt-3 space-y-1 text-[12px] text-foreground/75">
               {menu.pain && <p>🥖 Pain de table</p>}
