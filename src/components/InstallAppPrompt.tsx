@@ -23,6 +23,30 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
+/** Le rappel d'installation revient au bout de 3 jours s'il a été fermé. */
+const SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
+
+function isSnoozed(key: string): boolean {
+  const v = localStorage.getItem(key);
+  if (!v) return false;
+  const ts = Number(v);
+  if (!Number.isFinite(ts) || ts === 1) {
+    // ancienne valeur "1" : on la convertit en horodatage
+    localStorage.setItem(key, String(Date.now()));
+    return true;
+  }
+  return Date.now() - ts < SNOOZE_MS;
+}
+
+function snooze(key: string) {
+  localStorage.setItem(key, String(Date.now()));
+}
+
+function isIOSSafari(): boolean {
+  const ua = navigator.userAgent || "";
+  return !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+}
+
 async function sendThankYouNotification() {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
   const body =
@@ -72,13 +96,13 @@ export function InstallAppPrompt() {
     const onBip = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      if (!isStandalone() && !inIframe && !localStorage.getItem(DISMISS_KEY)) {
+      if (!isStandalone() && !inIframe && localStorage.getItem("ht-installed") !== "1") {
         setMode("install");
       }
     };
     window.addEventListener("beforeinstallprompt", onBip);
     const onInstalled = () => {
-      localStorage.setItem(DISMISS_KEY, "1");
+      localStorage.setItem("ht-installed", "1");
       setMode("none");
     };
     window.addEventListener("appinstalled", onInstalled);
@@ -89,14 +113,14 @@ export function InstallAppPrompt() {
         if (
           "Notification" in window &&
           Notification.permission === "default" &&
-          !localStorage.getItem(NOTIF_KEY)
+          !isSnoozed(NOTIF_KEY)
         ) {
           setMode("notif");
         }
         return;
       }
       // Navigateur : proposer l'installation (pas dans l'aperçu en iframe)
-      if (!inIframe && p !== "other" && !localStorage.getItem(DISMISS_KEY)) {
+      if (!inIframe && p !== "other" && localStorage.getItem("ht-installed") !== "1" && !isSnoozed(DISMISS_KEY)) {
         setMode("install");
       }
     }, 1500);
@@ -112,8 +136,8 @@ export function InstallAppPrompt() {
   if (mode === "none") return null;
 
   const close = () => {
-    if (mode === "install") localStorage.setItem(DISMISS_KEY, "1");
-    if (mode === "notif") localStorage.setItem(NOTIF_KEY, "1");
+    if (mode === "install") snooze(DISMISS_KEY);
+    if (mode === "notif") snooze(NOTIF_KEY);
     setMode("none");
   };
 
@@ -197,7 +221,7 @@ export function InstallAppPrompt() {
                       const res = await deferredPrompt.userChoice;
                       setDeferredPrompt(null);
                       if (res?.outcome === "accepted") {
-                        localStorage.setItem(DISMISS_KEY, "1");
+                        localStorage.setItem("ht-installed", "1");
                         setMode("none");
                       }
                     } finally {
@@ -266,6 +290,13 @@ export function InstallAppPrompt() {
                     </>
                   )}
                 </ol>
+
+                {platform === "ios" && !isIOSSafari() && (
+                  <p className="mt-4 rounded-2xl bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-800">
+                    Sur iPhone, l'installation n'est possible que depuis <strong>Safari</strong>.
+                    Ouvrez hasde-tsion.com dans Safari, puis suivez ces étapes.
+                  </p>
+                )}
 
                 <button
                   onClick={close}
