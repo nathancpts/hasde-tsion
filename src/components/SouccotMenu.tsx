@@ -204,15 +204,10 @@ export default function SouccotMenu() {
       {/* Réservation */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8] mb-3">Réservations</h3>
-        <div className="flex items-center gap-4">
-          <SouccotQr />
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-sm font-bold text-foreground leading-snug">HelloAsso</p>
-            <p className="text-[11px] text-muted-foreground leading-snug mt-1">
-              Scannez le QR code pour réserver
-            </p>
-          </div>
-        </div>
+        <p className="text-[13px] text-foreground/80 leading-snug">
+          Les réservations se font exclusivement sur HelloAsso.
+        </p>
+
         <a
           href={HELLOASSO_SOUCOT}
           target="_blank"
