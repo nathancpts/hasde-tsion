@@ -23,8 +23,8 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
-/** Le rappel d'installation revient au bout de 3 jours s'il a été fermé. */
-const SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
+/** Le rappel d'installation revient chaque jour tant que l'app n'est pas installée. */
+const SNOOZE_MS = 24 * 60 * 60 * 1000;
 
 function isSnoozed(key: string): boolean {
   const v = localStorage.getItem(key);
