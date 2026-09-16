@@ -1298,11 +1298,20 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </div>
               <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
                 <iframe
-                  src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1"
+                  src="https://www.youtube.com/embed/zp6LNSoq000?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&rel=0&playsinline=1&modestbranding=1"
                   title="Live Hasdé Tsion"
-                  allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full border-0"
+                  allow="autoplay; encrypted-media"
+                  className="absolute inset-0 w-full h-full border-0 pointer-events-none"
+                  tabIndex={-1}
+                />
+                {/* Bouclier tactile : bloque toute interaction YouTube (pause, son, infos, plein écran) */}
+                <div
+                  className="absolute inset-0 z-10"
+                  style={{ touchAction: "none" }}
+                  onClick={(e) => e.preventDefault()}
+                  onTouchStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
+                  aria-hidden="true"
                 />
               </div>
             </article>
