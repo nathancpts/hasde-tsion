@@ -155,8 +155,18 @@ const SEANCES = [
   },
 ];
 
+// Menu affiché par défaut selon le moment (repas de Souccot 5787)
+function defaultMenuTab(): (typeof MENU_TABS)[number] {
+  const now = new Date();
+  const at = (month: number, day: number, h: number, m = 0) => new Date(2026, month, day, h, m);
+  if (now < at(8, 25, 19, 0)) return "Vendredi soir";   // avant le repas de vendredi soir
+  if (now < at(8, 26, 14, 0)) return "Samedi midi";    // dès vendredi soir
+  if (now < at(8, 26, 21, 0)) return "Samedi soir";    // après le déjeuner de Chabbat
+  return "Dimanche midi";                               // à partir de samedi soir
+}
+
 export default function SouccotMenu() {
-  const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>("Samedi midi");
+  const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>(defaultMenuTab);
   const menu = MENUS[menuTab];
 
   return (
@@ -241,7 +251,7 @@ export default function SouccotMenu() {
                   setMenuTab(t);
                   e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
                 }}
-                className={`relative shrink-0 whitespace-nowrap overflow-hidden rounded-full px-3.5 py-2 text-[12px] font-semibold bg-[#F8FAFC] transition-[color,box-shadow] duration-300 ease-out ${
+                className={`relative shrink-0 whitespace-nowrap overflow-hidden rounded-full border-0 outline-none focus:outline-none focus-visible:outline-none appearance-none px-3.5 py-2 text-[12px] font-semibold bg-[#F8FAFC] transition-[color,box-shadow] duration-300 ease-out ${
                   active
                     ? "text-white shadow-[0_4px_12px_rgba(31,78,168,0.3)]"
                     : "text-foreground/60 shadow-none"
