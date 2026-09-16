@@ -1122,6 +1122,34 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const tehParts = heroTeh.split(/[·\-\/–]/).map((s) => s.trim()).filter(Boolean);
   const tehShort = tehParts.length >= 2 ? `${tehParts[0]}–${tehParts[tehParts.length - 1]}` : heroTeh;
 
+  // Prénom de l'utilisateur connecté (ou « Connexion » si déconnecté)
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      const { data } = await supabase.auth.getSession();
+      const user = data.session?.user;
+      if (!user) {
+        if (mounted) setAccountLabel("Connexion");
+        return;
+      }
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("first_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (mounted) setAccountLabel(profile?.first_name?.trim() || "Mon compte");
+    };
+    load();
+    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+      load();
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+
   return (
     <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-clip" style={{ background: "#F2F4F8" }}>
       {/* Blue gradient hero zone — animated en vague */}
