@@ -53,12 +53,16 @@ export async function subscribeToPush(): Promise<boolean> {
     const auth = b64(sub.getKey("auth"));
     if (!p256dh || !auth) return false;
 
+    const { data: auth_ } = await supabase.auth.getSession();
+    const userId = auth_.session?.user?.id ?? null;
+
     const { error } = await supabase.from("push_subscriptions").upsert(
       {
         endpoint: sub.endpoint,
         p256dh,
         auth,
         user_agent: navigator.userAgent.slice(0, 300),
+        ...(userId ? { user_id: userId } : {}),
       },
       { onConflict: "endpoint", ignoreDuplicates: true },
     );

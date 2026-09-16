@@ -10,19 +10,49 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TextesRouteImport } from './routes/textes'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicKotelRouteImport } from './routes/api/public/kotel'
 import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
+import { Route as ApiPublicHooksSendScheduledRouteImport } from './routes/api/public/hooks/send-scheduled'
 
 const TextesRoute = TextesRouteImport.update({
   id: '/textes',
   path: '/textes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCompteRoute = AuthenticatedCompteRouteImport.update({
+  id: '/compte',
+  path: '/compte',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiPublicKotelRoute = ApiPublicKotelRouteImport.update({
   id: '/api/public/kotel',
@@ -35,47 +65,93 @@ const ApiPublicHooksShabbatPushRoute =
     path: '/api/public/hooks/shabbat-push',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSendScheduledRoute =
+  ApiPublicHooksSendScheduledRouteImport.update({
+    id: '/api/public/hooks/send-scheduled',
+    path: '/api/public/hooks/send-scheduled',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/reset-password'
     | '/textes'
+    | '/admin'
+    | '/compte'
     | '/api/public/kotel'
+    | '/api/public/hooks/send-scheduled'
     | '/api/public/hooks/shabbat-push'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/textes' | '/api/public/kotel' | '/api/public/hooks/shabbat-push'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/textes'
+    | '/admin'
+    | '/compte'
+    | '/api/public/kotel'
+    | '/api/public/hooks/send-scheduled'
+    | '/api/public/hooks/shabbat-push'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
     | '/textes'
+    | '/_authenticated/admin'
+    | '/_authenticated/compte'
     | '/api/public/kotel'
+    | '/api/public/hooks/send-scheduled'
     | '/api/public/hooks/shabbat-push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TextesRoute: typeof TextesRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
+  ApiPublicHooksSendScheduledRoute: typeof ApiPublicHooksSendScheduledRoute
   ApiPublicHooksShabbatPushRoute: typeof ApiPublicHooksShabbatPushRoute
 }
 
@@ -88,12 +164,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TextesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/compte': {
+      id: '/_authenticated/compte'
+      path: '/compte'
+      fullPath: '/compte'
+      preLoaderRoute: typeof AuthenticatedCompteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/kotel': {
       id: '/api/public/kotel'
@@ -109,13 +220,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksShabbatPushRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/send-scheduled': {
+      id: '/api/public/hooks/send-scheduled'
+      path: '/api/public/hooks/send-scheduled'
+      fullPath: '/api/public/hooks/send-scheduled'
+      preLoaderRoute: typeof ApiPublicHooksSendScheduledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedCompteRoute: typeof AuthenticatedCompteRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedCompteRoute: AuthenticatedCompteRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TextesRoute: TextesRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
+  ApiPublicHooksSendScheduledRoute: ApiPublicHooksSendScheduledRoute,
   ApiPublicHooksShabbatPushRoute: ApiPublicHooksShabbatPushRoute,
 }
 export const routeTree = rootRouteImport
