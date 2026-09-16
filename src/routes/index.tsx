@@ -11,6 +11,7 @@ import { PARASHA_NOM, PARASHA_NOM_HE, PARASHA_INTRO, PARASHA_BLOCS, DONATIONS_RE
 import CommunitySection from "@/components/community/CommunitySection";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import SouccotMenu from "@/components/SouccotMenu";
+import KotelLive from "@/components/KotelLive";
 
 
 
