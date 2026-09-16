@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 const HELLOASSO_SOUCOT =
   "https://www.helloasso.com/associations/hassidim-de-sion/evenements/repas-de-souccot-2026";
