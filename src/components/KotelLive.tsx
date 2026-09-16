@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
-import { getKotelStreamUrl } from "@/lib/earthcam.functions";
+
+const STREAM_URL = "/api/public/kotel";
 
 /**
- * Live Jérusalem (EarthCam) — lecture HLS sans aucune interaction possible.
- * Aucun contrôle, aucune info externe, relance automatique.
+ * Live Jérusalem (EarthCam) relayé par notre serveur.
+ * Lecture HLS sans aucun contrôle ni interaction possible.
  */
 export default function KotelLive({
   className = "",
@@ -13,71 +13,54 @@ export default function KotelLive({
   className?: string;
   radius?: number;
 }) {
-  const fetchUrl = useServerFn(getKotelStreamUrl);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [src, setSrc] = useState<string | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [status, setStatus] = useState<"loading" | "playing" | "error">("loading");
+  const [attempt, setAttempt] = useState(0);
 
-  // Récupération (et rafraîchissement) de l'URL du flux
-  useEffect(() => {
-    let alive = true;
-    const load = async () => {
-      try {
-        const r = await fetchUrl({});
-        if (alive) {
-          setSrc(r.url ?? null);
-          setFailed(!r.url);
-        }
-      } catch {
-        if (alive) setFailed(true);
-      }
-    };
-    load();
-    const id = setInterval(load, 4 * 60 * 1000);
-    return () => {
-      alive = false;
-      clearInterval(id);
-    };
-  }, [fetchUrl]);
-
-  // Attache le flux HLS
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !src) return;
+    if (!video) return;
     let destroyed = false;
     let hls: { destroy: () => void } | null = null;
 
     const play = () => void video.play().catch(() => {});
+    const onPlaying = () => setStatus("playing");
+    video.addEventListener("playing", onPlaying);
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = src;
+      video.src = STREAM_URL;
       play();
     } else {
       void (async () => {
-        const mod = await import("hls.js");
-        const Hls = mod.default;
-        if (destroyed || !Hls.isSupported()) return;
-        const inst = new Hls({ lowLatencyMode: true, liveDurationInfinity: true });
+        const { default: Hls } = await import("hls.js");
+        if (destroyed || !Hls.isSupported()) {
+          if (!destroyed) setStatus("error");
+          return;
+        }
+        const inst = new Hls({ liveDurationInfinity: true, lowLatencyMode: true });
         hls = inst;
-        inst.loadSource(src);
+        inst.loadSource(STREAM_URL);
         inst.attachMedia(video);
         inst.on(Hls.Events.MANIFEST_PARSED, play);
         inst.on(Hls.Events.ERROR, (_e, data) => {
-          if (data.fatal) {
-            inst.destroy();
-            hls = null;
-            if (!destroyed) setFailed(true);
-          }
+          if (!data.fatal) return;
+          inst.destroy();
+          hls = null;
+          if (destroyed) return;
+          setStatus("error");
+          // Relance automatique (jeton du flux renouvelé côté serveur)
+          setTimeout(() => !destroyed && setAttempt((a) => a + 1), 8000);
         });
       })();
     }
 
     return () => {
       destroyed = true;
+      video.removeEventListener("playing", onPlaying);
       hls?.destroy();
       video.removeAttribute("src");
     };
-  }, [src]);
+  }, [attempt]);
 
   return (
     <div className={`relative overflow-hidden ${className}`} style={{ borderRadius: radius || undefined }}>
@@ -102,9 +85,9 @@ export default function KotelLive({
         onContextMenu={(e) => e.preventDefault()}
         aria-hidden="true"
       />
-      {(!src || failed) && (
+      {status !== "playing" && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#0b1c3a] text-white/70 text-[12px] tracking-wide">
-          {failed ? "Live momentanément indisponible" : "Connexion au live…"}
+          {status === "error" ? "Live momentanément indisponible" : "Connexion au live…"}
         </div>
       )}
     </div>
