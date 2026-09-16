@@ -1105,6 +1105,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   // Événement Souccot : réservations ouvertes jusqu'au lundi 28 septembre 2026 inclus
   const souccotVisible = new Date() <= new Date(2026, 8, 28, 23, 59, 59);
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
+  const [accountLabel, setAccountLabel] = useState("Connexion");
 
   const heroTime = selectedDay === "vendredi"
     ? (chabad?.candle ?? vTimes.find((t) => t.label === "Entrée")?.value ?? "--:--")
