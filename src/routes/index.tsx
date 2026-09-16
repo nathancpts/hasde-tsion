@@ -2241,9 +2241,10 @@ function PlanningTV() {
         >
           {/* Séouda card */}
           <article
-            className="flex flex-col shrink-0"
+            className="flex flex-col"
             style={{
-              flexBasis: "38%",
+              flex: "1 1 0%",
+              minHeight: 0,
               background: "#FFFFFF",
               borderRadius: "16px",
               padding: "24px",
