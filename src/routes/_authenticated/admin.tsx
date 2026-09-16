@@ -12,14 +12,19 @@ import { Toaster } from "@/components/ui/sonner";
 import {
   ArrowLeft,
   Bell,
+  BookOpen,
   Clock,
   Loader2,
+  Plus,
+  RotateCcw,
+  Save,
   Send,
   Trash2,
   Users,
   Smartphone,
   History,
 } from "lucide-react";
+import { DEFAULT_PARASHA_CONTENT } from "@/lib/parasha-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -41,6 +46,13 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
+type EditBloc = {
+  titre: string;
+  icone: string;
+  paragraphes: string;
+  puces: string;
+};
+
 type Row = {
   id: string;
   title: string;
@@ -58,7 +70,13 @@ function AdminPage() {
   const loadStats = useServerFn(getAdminStats);
 
   const [checking, setChecking] = useState(true);
-  const [tab, setTab] = useState<"envoyer" | "historique" | "membres">("envoyer");
+  const [tab, setTab] = useState<"envoyer" | "parasha" | "historique" | "membres">("envoyer");
+  const [pRowId, setPRowId] = useState<string | null>(null);
+  const [pNom, setPNom] = useState("");
+  const [pNomHe, setPNomHe] = useState("");
+  const [pIntro, setPIntro] = useState("");
+  const [pBlocs, setPBlocs] = useState<EditBloc[]>([]);
+  const [pBusy, setPBusy] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("");
