@@ -23,6 +23,30 @@ function isStandalone(): boolean {
 const DISMISS_KEY = "ht-install-dismissed";
 const NOTIF_KEY = "ht-notif-asked";
 
+/** Le rappel d'installation revient au bout de 3 jours s'il a été fermé. */
+const SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
+
+function isSnoozed(key: string): boolean {
+  const v = localStorage.getItem(key);
+  if (!v) return false;
+  const ts = Number(v);
+  if (!Number.isFinite(ts) || ts === 1) {
+    // ancienne valeur "1" : on la convertit en horodatage
+    localStorage.setItem(key, String(Date.now()));
+    return true;
+  }
+  return Date.now() - ts < SNOOZE_MS;
+}
+
+function snooze(key: string) {
+  localStorage.setItem(key, String(Date.now()));
+}
+
+function isIOSSafari(): boolean {
+  const ua = navigator.userAgent || "";
+  return !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+}
+
 async function sendThankYouNotification() {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
   const body =
