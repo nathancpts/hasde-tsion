@@ -259,7 +259,7 @@ export default function SouccotMenu({ past = false }: { past?: boolean }) {
       {/* Menus */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8] mb-3">Les menus</h3>
-        <div className="flex gap-1.5 overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-1 px-1 [touch-action:pan-x]">
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar scroll-smooth pb-3 -mx-1 px-1 [touch-action:pan-x]">
           {MENU_TABS.map((t) => {
             const active = menuTab === t;
             return (
