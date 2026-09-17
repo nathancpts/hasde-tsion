@@ -773,7 +773,7 @@ function SidourLink({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Ouvrir eSiddur — ${info.label}`}
-        className={`btn-blue-animated inline-flex items-center justify-center gap-3 rounded-xl border-2 border-[#0F3D7A] px-5 py-4 text-white font-display font-bold uppercase tracking-[0.25em] text-lg shadow-lg active:scale-[0.97] transition-transform w-full ${className}`}
+        className={`btn-blue-animated inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 px-5 py-2.5 text-white font-display font-semibold uppercase tracking-[0.2em] text-[13px] shadow-[0_6px_16px_-6px_rgba(15,61,122,0.55)] active:scale-[0.97] transition-transform w-full ${className}`}
       >
         <span aria-hidden>📖</span>
         <span>ESIDDUR</span>
@@ -1632,7 +1632,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               </div>
 
               <div id="siddur" className="mt-4 scroll-mt-24">
-                <SidourLink className="text-sm py-3" />
+                <SidourLink />
               </div>
             </article>
           )}
@@ -1645,9 +1645,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-blue-animated flex min-h-[56px] items-center justify-center gap-2 rounded-2xl px-5 py-4 text-[15px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all"
+            className="btn-blue-animated inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[13px] font-display font-semibold tracking-wide text-white shadow-[0_6px_16px_-6px_rgba(15,61,122,0.55)] active:scale-[0.97] transition-all"
           >
-            <span className="text-lg">♡</span>
+            <span className="text-sm">♡</span>
             <span>Faire un don</span>
           </a>
 
