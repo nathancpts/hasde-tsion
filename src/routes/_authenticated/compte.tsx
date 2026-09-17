@@ -243,9 +243,14 @@ function ComptePage() {
     ((firstName[0] ?? "") + (lastName[0] ?? "")).toUpperCase() || (email[0] ?? "?").toUpperCase();
 
   return (
-    <main className="min-h-screen bg-muted pb-16">
+    <main className="relative min-h-screen overflow-x-clip pb-16">
       <Toaster />
-      <header className="btn-blue-animated px-5 pb-20 pt-[max(1.5rem,env(safe-area-inset-top))] text-primary-foreground">
+      <div
+        aria-hidden="true"
+        className="btn-blue-animated pointer-events-none absolute inset-0"
+        style={{ transform: "translate3d(0,0,0)", willChange: "background-position" }}
+      />
+      <header className="relative px-5 pb-20 pt-[max(1.5rem,env(safe-area-inset-top))] text-primary-foreground">
         <div className="mx-auto flex max-w-xl items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-white">
             <ArrowLeft className="h-4 w-4" /> Accueil
