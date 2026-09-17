@@ -272,7 +272,7 @@ function ComptePage() {
         </div>
       </header>
 
-      <div className="mx-auto -mt-12 max-w-xl space-y-4 px-4">
+      <div className="relative mx-auto -mt-12 max-w-xl space-y-4 px-4">
         {loading ? (
           <div className="rounded-2xl bg-white p-8 flex justify-center shadow-sm">
             <Loader2 className="h-5 w-5 animate-spin text-[#1f4ea8]" />
