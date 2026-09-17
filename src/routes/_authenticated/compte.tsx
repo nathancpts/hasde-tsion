@@ -432,7 +432,7 @@ function ComptePage() {
                     <Trash2 className="h-4 w-4" /> Supprimer mon compte
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="w-[calc(100%-2rem)] rounded-2xl">
+                <AlertDialogContent className="w-[calc(100%_-_2rem)] max-w-sm rounded-2xl">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Supprimer définitivement le compte ?</AlertDialogTitle>
                     <AlertDialogDescription>
