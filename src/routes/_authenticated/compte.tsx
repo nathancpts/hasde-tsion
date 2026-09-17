@@ -247,23 +247,23 @@ function ComptePage() {
       <Toaster />
       <header className="btn-blue-animated px-5 pb-20 pt-[max(1.5rem,env(safe-area-inset-top))] text-primary-foreground">
         <div className="mx-auto flex max-w-xl items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-primary-foreground/85">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-white">
             <ArrowLeft className="h-4 w-4" /> Accueil
           </Link>
           <Button
             onClick={signOut}
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            className="gap-1.5 text-white hover:bg-white/15 hover:text-white"
           >
             <LogOut className="h-4 w-4" /> Déconnexion
           </Button>
         </div>
         <div className="mx-auto mt-8 max-w-xl">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary-foreground/65">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
             Espace personnel
           </p>
-          <h1 className="mt-1 font-display text-3xl font-bold">Mon compte</h1>
+          <h1 className="mt-1 font-display text-3xl font-bold text-white">Mon compte</h1>
         </div>
       </header>
 
