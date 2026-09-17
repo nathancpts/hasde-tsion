@@ -418,11 +418,17 @@ function ComptePage() {
                   />
                 </div>
               </div>
-              <Button onClick={changePassword} variant="outline" className="mt-3 w-full">
+              <Button
+                onClick={changePassword}
+                className="mt-3 w-full border border-[#1f4ea8]/25 bg-white font-semibold text-[#1A2540] shadow-sm hover:bg-[#f1f5fb]"
+              >
                 Modifier le mot de passe
               </Button>
               <div className="my-5 h-px bg-border" />
-              <Button onClick={signOut} variant="outline" className="w-full gap-2">
+              <Button
+                onClick={signOut}
+                className="w-full gap-2 border border-[#1f4ea8]/25 bg-white font-semibold text-[#1A2540] shadow-sm hover:bg-[#f1f5fb]"
+              >
                 <LogOut className="h-4 w-4" /> Se déconnecter
               </Button>
 
