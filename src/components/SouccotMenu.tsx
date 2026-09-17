@@ -46,7 +46,7 @@ const MENUS: Record<
   },
   "Samedi midi": {
     sections: [
-      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue", "Mini briks"] },
+      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue"] },
       {
         titre: "Salades",
         items: [
@@ -96,6 +96,7 @@ const MENUS: Record<
   },
   "Dimanche midi": {
     sections: [
+      { titre: "Kemia", items: ["Amandes", "Pistaches", "Olives", "Chips", "Boutargue"] },
       {
         titre: "Salades",
         items: [
