@@ -239,7 +239,7 @@ export default function SouccotMenu({ past = false }: { past?: boolean }) {
             href={HELLOASSO_SOUCOT}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-blue-animated mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-[15px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all"
+            className="btn-cta btn-blue-animated mt-4 w-full text-white"
           >
             Réserver sur HelloAsso
           </a>
