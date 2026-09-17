@@ -259,7 +259,7 @@ function ComptePage() {
             onClick={signOut}
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-white hover:bg-white/15 hover:text-white"
+            className="gap-1.5 text-white  "
           >
             <LogOut className="h-4 w-4" /> Déconnexion
           </Button>
@@ -347,7 +347,7 @@ function ComptePage() {
               <Button
                 onClick={saveProfile}
                 disabled={saving}
-                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm hover:opacity-90"
+                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm "
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enregistrer"}
               </Button>
@@ -425,21 +425,21 @@ function ComptePage() {
               </div>
               <Button
                 onClick={changePassword}
-                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm hover:opacity-90"
+                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm "
               >
                 Modifier le mot de passe
               </Button>
               <div className="my-5 h-px bg-border" />
               <Button
                 onClick={signOut}
-                className="btn-blue-animated w-full gap-2 font-semibold text-white shadow-sm hover:opacity-90"
+                className="btn-blue-animated w-full gap-2 font-semibold text-white shadow-sm "
               >
                 <LogOut className="h-4 w-4" /> Se déconnecter
               </Button>
 
               <AlertDialog onOpenChange={(open) => !open && setDeleteConfirmation("")}>
                 <AlertDialogTrigger asChild>
-                  <Button variant="ghost" className="mt-2 w-full gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive">
+                  <Button variant="ghost" className="mt-2 w-full gap-2 text-destructive  ">
                     <Trash2 className="h-4 w-4" /> Supprimer mon compte
                   </Button>
                 </AlertDialogTrigger>
@@ -470,7 +470,7 @@ function ComptePage() {
                         void removeAccount();
                       }}
                       disabled={deleteConfirmation !== "SUPPRIMER" || deleting}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      className="bg-destructive text-destructive-foreground "
                     >
                       {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Supprimer définitivement"}
                     </AlertDialogAction>

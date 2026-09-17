@@ -147,7 +147,7 @@ export function HillelChat() {
             <button
               onClick={close}
               aria-label="Fermer"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400  "
             >
               <X className="h-4 w-4" />
             </button>
@@ -155,7 +155,7 @@ export function HillelChat() {
               onClick={send}
               disabled={loading || !input.trim()}
               aria-label="Envoyer"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white transition hover:opacity-90 disabled:opacity-40"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#4a7bd1] to-[#1f4ea8] text-white transition  disabled:opacity-40"
             >
               {loading ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
