@@ -775,9 +775,9 @@ function SidourLink({ className = "" }: { className?: string }) {
         aria-label={`Ouvrir eSiddur — ${info.label}`}
         className={`btn-cta btn-blue-animated w-full border border-white/20 text-white ${className}`}
       >
-        <span aria-hidden>📖</span>
-        <span>ESIDDUR</span>
-        <span aria-hidden>›</span>
+        <span aria-hidden className="text-[14px]">📖</span>
+        <span>eSiddur</span>
+        <span aria-hidden className="text-[14px]">›</span>
       </button>
 
       {open && (
@@ -1582,7 +1582,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   rel="noopener noreferrer"
                   className="btn-cta bg-white text-[#1f4ea8] ring-1 ring-[#1f4ea8]/20 shadow-[0_4px_12px_rgba(31,78,168,0.1)]"
                 >
-                  <span className="text-base">♡</span>
+                  <span className="text-[14px]">♡</span>
                   <span>Faire un don</span>
                 </a>
                 <a
