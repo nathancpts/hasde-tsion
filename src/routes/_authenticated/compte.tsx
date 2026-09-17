@@ -28,7 +28,6 @@ import {
   Bell,
   Camera,
   ChevronRight,
-  CircleUserRound,
   KeyRound,
   Loader2,
   LogOut,
