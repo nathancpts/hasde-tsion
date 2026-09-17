@@ -342,7 +342,7 @@ function ComptePage() {
               <Button
                 onClick={saveProfile}
                 disabled={saving}
-                className="btn-blue-animated mt-3 w-full text-primary-foreground"
+                className="mt-3 w-full border border-[#1f4ea8]/25 bg-white font-semibold text-[#1A2540] shadow-sm hover:bg-[#f1f5fb]"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enregistrer"}
               </Button>
