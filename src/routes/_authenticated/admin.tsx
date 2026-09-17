@@ -421,14 +421,14 @@ function AdminPage() {
                       </div>
                       <button
                         onClick={() => sendPending(r)}
-                        className="p-1.5 rounded-lg text-[#1f4ea8] hover:bg-white"
+                        className="p-1.5 rounded-lg text-[#1f4ea8] "
                         title="Envoyer tout de suite"
                       >
                         <Send className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => remove(r.id)}
-                        className="p-1.5 rounded-lg text-red-600 hover:bg-white"
+                        className="p-1.5 rounded-lg text-red-600 "
                         title="Supprimer"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -489,7 +489,7 @@ function AdminPage() {
                     />
                     <button
                       onClick={() => setPBlocs((prev) => prev.filter((_, j) => j !== i))}
-                      className="p-1.5 rounded-lg text-red-600 hover:bg-white"
+                      className="p-1.5 rounded-lg text-red-600 "
                       title="Supprimer le bloc"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -562,7 +562,7 @@ function AdminPage() {
                       <p className="text-sm font-semibold text-[#0a2a6b]">{r.title}</p>
                       <button
                         onClick={() => remove(r.id)}
-                        className="p-1 rounded-lg text-red-600 hover:bg-white"
+                        className="p-1 rounded-lg text-red-600 "
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>

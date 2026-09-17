@@ -93,7 +93,7 @@ function TextesPage() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-20 bg-background/90 backdrop-blur border-b border-[var(--gold-line)]">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition">
+          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-muted-foreground  transition">
             <ArrowLeft className="h-4 w-4" /> Accueil
           </Link>
           <img src={logo} alt="Hasdé Tsion" className="h-10 w-auto" />
@@ -116,9 +116,9 @@ function TextesPage() {
                   <button
                     key={it.file}
                     onClick={() => setOpen(it)}
-                    className="text-left rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-4 py-3 hover:border-primary hover:bg-[var(--gold-soft-hover,var(--gold-soft))] transition group"
+                    className="text-left rounded-lg border-2 border-[var(--gold-line)] bg-[var(--gold-soft)] px-4 py-3  ,var(--gold-soft))] transition group"
                   >
-                    <span className="font-medium text-foreground group-hover:text-primary transition">
+                    <span className="font-medium text-foreground  transition">
                       {it.label}
                     </span>
                   </button>
@@ -139,7 +139,7 @@ function TextesPage() {
             <h3 className="font-display font-bold text-lg">{open.label}</h3>
             <button
               onClick={() => setOpen(null)}
-              className="rounded-full p-2 hover:bg-muted transition"
+              className="rounded-full p-2  transition"
               aria-label="Fermer"
             >
               <X className="h-5 w-5" />

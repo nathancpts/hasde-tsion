@@ -388,7 +388,7 @@ export function InstallAppPrompt() {
                 </button>
                 <button
                   onClick={close}
-                  className="w-full py-2 text-[13px] font-medium text-slate-400 transition-colors hover:text-slate-600"
+                  className="w-full py-2 text-[13px] font-medium text-slate-400 transition-colors "
                 >
                   Plus tard
                 </button>

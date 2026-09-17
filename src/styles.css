@@ -498,7 +498,6 @@
   isolation: isolate;
   transition: transform 0.2s ease;
 }
-.hillel-orb-btn:hover { transform: scale(1.06); }
 .hillel-orb-btn:active { transform: scale(0.95); }
 
 .hillel-orb-core {

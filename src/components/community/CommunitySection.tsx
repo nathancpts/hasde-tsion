@@ -152,7 +152,7 @@ function AuthPanel() {
         type="button"
         onClick={handleGoogle}
         disabled={busy}
-        className="w-full flex items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#3c4043] ring-1 ring-black/10 shadow-sm hover:shadow-md transition active:scale-[0.98] disabled:opacity-60"
+        className="w-full flex items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#3c4043] ring-1 ring-black/10 shadow-sm  transition active:scale-[0.98] disabled:opacity-60"
       >
         <GoogleIcon />
         Continuer avec Google
@@ -190,7 +190,7 @@ function AuthPanel() {
             className="bg-white/70 border-white/60" />
         </div>
         <Button type="submit" disabled={busy}
-          className="w-full bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8] hover:opacity-95 text-white font-semibold">
+          className="w-full bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8]  text-white font-semibold">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? "Se connecter" : "Créer le compte"}
         </Button>
       </form>
@@ -340,7 +340,7 @@ function ChatPanel({ user }: { user: User }) {
         </div>
         <button
           onClick={handleLogout}
-          className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition"
+          className="p-2 rounded-lg text-muted-foreground   transition"
           title="Déconnexion"
         >
           <LogOut className="h-4 w-4" />
@@ -519,7 +519,7 @@ function Composer({
             onClick={onSend}
             disabled={sending}
             size="icon"
-            className="bg-gradient-to-br from-[#0a2a6b] to-[#1f4ea8] text-white hover:opacity-95"
+            className="bg-gradient-to-br from-[#0a2a6b] to-[#1f4ea8] text-white "
           >
             <Send className="h-4 w-4" />
           </Button>
@@ -529,8 +529,8 @@ function Composer({
             disabled={uploading}
             size="icon"
             className={recording
-              ? "bg-red-600 hover:bg-red-700 text-white"
-              : "bg-gradient-to-br from-[#0a2a6b] to-[#1f4ea8] text-white hover:opacity-95"}
+              ? "bg-red-600  text-white"
+              : "bg-gradient-to-br from-[#0a2a6b] to-[#1f4ea8] text-white "}
           >
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : recording ? <Square className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
           </Button>

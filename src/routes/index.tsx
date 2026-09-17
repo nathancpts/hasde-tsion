@@ -888,15 +888,15 @@ function ZmanimCard({ zmanim, dayOffset, setDayOffset }: { zmanim: Zmanim | null
           <h3 className="font-display text-[2.4vh] font-bold text-foreground truncate">{titleLabel}</h3>
         </div>
         <div className="flex items-center gap-1 shrink-0">
-          <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+          <button onClick={() => setDayOffset(dayOffset - 1)} aria-label="Jour précédent" className="p-1 rounded-md border border-border  transition">
             <ChevronLeft className="w-[1.8vh] h-[1.8vh]" />
           </button>
           {dayOffset !== 0 && (
-            <button onClick={() => setDayOffset(0)} className="text-[1vh] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-md border border-border hover:bg-muted/60 transition">
+            <button onClick={() => setDayOffset(0)} className="text-[1vh] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-md border border-border  transition">
               Aujourd'hui
             </button>
           )}
-          <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1 rounded-md border border-border hover:bg-muted/60 transition">
+          <button onClick={() => setDayOffset(dayOffset + 1)} aria-label="Jour suivant" className="p-1 rounded-md border border-border  transition">
             <ChevronRight className="w-[1.8vh] h-[1.8vh]" />
           </button>
         </div>
@@ -1027,7 +1027,7 @@ function MobileGlassNav() {
                 className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 px-2 rounded-full transition-all active:scale-95 ${
                   isActive
                     ? "bg-white/15 text-white ring-1 ring-white/30 shadow-inner"
-                    : "text-white/55 hover:text-white"
+                    : "text-white/55 "
                 }`}
               >
                 {it.icon}
@@ -1902,7 +1902,7 @@ function PlanningTV() {
           type="button"
           onClick={toggleFs}
           aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
-          className="absolute top-[1.4vh] right-[1.4vw] z-20 flex items-center justify-center rounded-full backdrop-blur-md transition-opacity duration-500 hover:opacity-100"
+          className="absolute top-[1.4vh] right-[1.4vw] z-20 flex items-center justify-center rounded-full backdrop-blur-md transition-opacity duration-500 "
           style={{
             width: "3.4vh",
             height: "3.4vh",

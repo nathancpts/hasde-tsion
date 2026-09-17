@@ -92,7 +92,7 @@ function AuthPage() {
       <Toaster />
       <Link
         to="/"
-        className="self-start mb-6 inline-flex items-center gap-2 text-white/80 text-sm hover:text-white"
+        className="self-start mb-6 inline-flex items-center gap-2 text-white/80 text-sm "
       >
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
@@ -191,7 +191,7 @@ function AuthPage() {
               <Button
                 type="submit"
                 disabled={busy}
-                className="w-full bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8] hover:opacity-95 text-white font-semibold"
+                className="w-full bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8]  text-white font-semibold"
               >
                 {busy ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
