@@ -1,4 +1,4 @@
 # Roadmap
 
 - [x] Réduire et affiner les gros boutons (ESIDDUR, Faire un don)
-- [ ] Cohérence globale : mêmes formes, tailles et typographies pour tous les boutons du site
+- [x] Cohérence globale : un style unique (forme pilule, même taille et même typographie) pour tous les boutons — eSiddur, Faire un don, Participer à la séouda, Réserver sur HelloAsso
