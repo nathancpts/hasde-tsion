@@ -303,7 +303,7 @@ function ComptePage() {
                 >
                   <Avatar className="h-16 w-16 ring-2 ring-accent/20">
                     {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
-                    <AvatarFallback className="btn-blue-animated font-semibold text-primary-foreground">
+                    <AvatarFallback className="btn-blue-animated font-semibold text-white">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
