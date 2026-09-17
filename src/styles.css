@@ -414,6 +414,28 @@
     background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%, 100% 100%;
   }
 }
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.7rem 1.35rem;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+  box-shadow: 0 6px 16px -6px rgba(15, 61, 122, 0.55);
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+.btn-cta:active {
+  transform: scale(0.97);
+}
+
 .btn-blue-animated {
   background-color: #1a4690;
   background-image:

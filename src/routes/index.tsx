@@ -773,7 +773,7 @@ function SidourLink({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Ouvrir eSiddur — ${info.label}`}
-        className={`btn-blue-animated inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 px-5 py-2.5 text-white font-display font-semibold uppercase tracking-[0.2em] text-[13px] shadow-[0_6px_16px_-6px_rgba(15,61,122,0.55)] active:scale-[0.97] transition-transform w-full ${className}`}
+        className={`btn-cta btn-blue-animated w-full border border-white/20 text-white ${className}`}
       >
         <span aria-hidden>📖</span>
         <span>ESIDDUR</span>
@@ -1580,7 +1580,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex min-h-[64px] items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3.5 text-[13px] font-display font-semibold text-[#1f4ea8] ring-1 ring-[#1f4ea8]/20 shadow-[0_4px_12px_rgba(31,78,168,0.1)] active:scale-[0.97] transition-all"
+                  className="btn-cta bg-white text-[#1f4ea8] ring-1 ring-[#1f4ea8]/20 shadow-[0_4px_12px_rgba(31,78,168,0.1)]"
                 >
                   <span className="text-base">♡</span>
                   <span>Faire un don</span>
@@ -1589,7 +1589,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   href="https://www.helloasso.com/associations/hassidim-de-sion/evenements/seouda-1026?utm_source=app_ha&utm_campaign=share_campaign_button&utm_medium=android"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-blue-animated flex min-h-[64px] items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-[13px] font-display font-semibold text-white shadow-[0_8px_20px_-6px_rgba(15,61,122,0.6)] active:scale-[0.97] transition-all text-center leading-tight"
+                  className="btn-cta btn-blue-animated text-white"
                 >
                   Participer à la séouda
                 </a>
@@ -1645,7 +1645,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             href="https://www.helloasso.com/associations/hassidim-de-sion/formulaires/1"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-blue-animated inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[13px] font-display font-semibold tracking-wide text-white shadow-[0_6px_16px_-6px_rgba(15,61,122,0.55)] active:scale-[0.97] transition-all"
+            className="btn-cta btn-blue-animated w-full text-white"
           >
             <span className="text-sm">♡</span>
             <span>Faire un don</span>
