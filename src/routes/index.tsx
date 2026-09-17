@@ -1647,7 +1647,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             rel="noopener noreferrer"
             className="btn-cta btn-blue-animated w-full text-white"
           >
-            <span className="text-sm">♡</span>
+            <span className="text-[14px]">♡</span>
             <span>Faire un don</span>
           </a>
 
