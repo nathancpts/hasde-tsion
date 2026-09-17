@@ -342,7 +342,7 @@ function ComptePage() {
               <Button
                 onClick={saveProfile}
                 disabled={saving}
-                className="btn-blue-animated mt-3 w-full font-semibold text-primary-foreground shadow-sm hover:opacity-90"
+                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm hover:opacity-90"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enregistrer"}
               </Button>
@@ -420,14 +420,14 @@ function ComptePage() {
               </div>
               <Button
                 onClick={changePassword}
-                className="btn-blue-animated mt-3 w-full font-semibold text-primary-foreground shadow-sm hover:opacity-90"
+                className="btn-blue-animated mt-3 w-full font-semibold text-white shadow-sm hover:opacity-90"
               >
                 Modifier le mot de passe
               </Button>
               <div className="my-5 h-px bg-border" />
               <Button
                 onClick={signOut}
-                className="btn-blue-animated w-full gap-2 font-semibold text-primary-foreground shadow-sm hover:opacity-90"
+                className="btn-blue-animated w-full gap-2 font-semibold text-white shadow-sm hover:opacity-90"
               >
                 <LogOut className="h-4 w-4" /> Se déconnecter
               </Button>
