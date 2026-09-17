@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { subscribeToPush } from "@/lib/push";
+import { deleteMyAccount } from "@/lib/account.functions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +12,30 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { ArrowLeft, Camera, LogOut, Loader2, ShieldCheck, Bell, Megaphone } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  ArrowLeft,
+  Bell,
+  Camera,
+  ChevronRight,
+  KeyRound,
+  Loader2,
+  LogOut,
+  Mail,
+  Megaphone,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/compte")({
   head: () => ({
@@ -42,6 +67,7 @@ type Announcement = {
 function ComptePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const deleteAccount = useServerFn(deleteMyAccount);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [userId, setUserId] = useState<string | null>(null);
@@ -57,6 +83,8 @@ function ComptePage() {
   const [loading, setLoading] = useState(true);
   const [newPassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
     const { data: auth } = await supabase.auth.getUser();
@@ -195,29 +223,51 @@ function ComptePage() {
     navigate({ to: "/auth", replace: true });
   };
 
+  const removeAccount = async () => {
+    if (deleteConfirmation !== "SUPPRIMER") return;
+    setDeleting(true);
+    try {
+      await queryClient.cancelQueries();
+      await deleteAccount({});
+      queryClient.clear();
+      await supabase.auth.signOut({ scope: "local" });
+      toast.success("Votre compte a été supprimé");
+      navigate({ to: "/", replace: true });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Impossible de supprimer le compte");
+      setDeleting(false);
+    }
+  };
+
   const initials =
     ((firstName[0] ?? "") + (lastName[0] ?? "")).toUpperCase() || (email[0] ?? "?").toUpperCase();
 
   return (
-    <main className="min-h-screen bg-[#F8F9FA] pb-16">
+    <main className="min-h-screen bg-muted pb-16">
       <Toaster />
-      <header
-        className="px-5 pt-6 pb-16 text-white"
-        style={{ background: "linear-gradient(160deg,#0a2a6b 0%,#1f4ea8 100%)" }}
-      >
-        <div className="flex items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/85 text-sm">
+      <header className="btn-blue-animated px-5 pb-20 pt-[max(1.5rem,env(safe-area-inset-top))] text-primary-foreground">
+        <div className="mx-auto flex max-w-xl items-center justify-between">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-primary-foreground/85">
             <ArrowLeft className="h-4 w-4" /> Accueil
           </Link>
-          <button onClick={signOut} className="inline-flex items-center gap-1.5 text-white/85 text-sm">
+          <Button
+            onClick={signOut}
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+          >
             <LogOut className="h-4 w-4" /> Déconnexion
-          </button>
+          </Button>
         </div>
-        <h1 className="font-display text-3xl font-bold mt-6">Mon compte</h1>
-        <p className="text-white/75 text-sm mt-1">{email}</p>
+        <div className="mx-auto mt-8 max-w-xl">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary-foreground/65">
+            Espace personnel
+          </p>
+          <h1 className="mt-1 font-display text-3xl font-bold">Mon compte</h1>
+        </div>
       </header>
 
-      <div className="px-4 -mt-10 space-y-4 max-w-xl mx-auto">
+      <div className="mx-auto -mt-12 max-w-xl space-y-4 px-4">
         {loading ? (
           <div className="rounded-2xl bg-white p-8 flex justify-center shadow-sm">
             <Loader2 className="h-5 w-5 animate-spin text-[#1f4ea8]" />
@@ -225,38 +275,42 @@ function ComptePage() {
         ) : (
           <>
             {isAdmin && (
-              <Link
-                to="/admin"
-                className="block rounded-2xl bg-white p-4 shadow-[0_2px_10px_rgba(10,42,107,0.08)] border border-[#D4AF37]/40"
-              >
+              <Link to="/admin" className="block rounded-2xl border border-gold/40 bg-card p-4 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <span className="rounded-xl bg-[#D4AF37]/15 p-2.5">
-                    <ShieldCheck className="h-5 w-5 text-[#a5822a]" />
-                  </span>
-                  <div>
-                    <p className="font-display font-bold text-[#0a2a6b]">Espace administrateur</p>
-                    <p className="text-xs text-muted-foreground">
-                      Envoyer et programmer les notifications
-                    </p>
+                  <span className="rounded-xl bg-gold/15 p-2.5"><ShieldCheck className="h-5 w-5 text-gold" /></span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-display font-bold text-accent">Espace administrateur</p>
+                      <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[9px] font-bold uppercase text-foreground">Actif</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Notifications, membres et parasha</p>
                   </div>
+                  <ChevronRight className="h-5 w-5 text-gold" />
                 </div>
               </Link>
             )}
 
             {/* Profil */}
-            <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+            <section className="rounded-2xl bg-card p-5 shadow-sm">
               <div className="flex items-center gap-4">
-                <button onClick={() => fileRef.current?.click()} className="relative">
-                  <Avatar className="h-16 w-16 ring-2 ring-[#1f4ea8]/20">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Modifier la photo"
+                  onClick={() => fileRef.current?.click()}
+                  className="relative h-16 w-16 shrink-0 rounded-full p-0"
+                >
+                  <Avatar className="h-16 w-16 ring-2 ring-accent/20">
                     {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
-                    <AvatarFallback className="bg-gradient-to-br from-[#0a2a6b] to-[#1f4ea8] text-white font-semibold">
+                    <AvatarFallback className="btn-blue-animated font-semibold text-primary-foreground">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="absolute -bottom-1 -right-1 bg-[#1f4ea8] rounded-full p-1.5 ring-2 ring-white">
-                    <Camera className="h-3 w-3 text-white" />
+                  <span className="absolute -bottom-1 -right-1 rounded-full bg-accent p-1.5 ring-2 ring-card">
+                    <Camera className="h-3 w-3 text-accent-foreground" />
                   </span>
-                </button>
+                </Button>
                 <input
                   ref={fileRef}
                   type="file"
@@ -265,9 +319,10 @@ function ComptePage() {
                   onChange={(e) => e.target.files?.[0] && uploadAvatar(e.target.files[0])}
                 />
                 <div>
-                  <p className="font-display font-bold text-lg text-[#0a2a6b]">
+                    <p className="font-display text-lg font-bold text-accent">
                     {firstName || "Membre"} {lastName}
                   </p>
+                    <p className="mt-0.5 break-all text-xs text-muted-foreground">{email}</p>
                   <p className="text-xs text-muted-foreground">
                     {avatarPath ? "Photo personnalisée" : "Touchez la photo pour la changer"}
                   </p>
@@ -276,32 +331,32 @@ function ComptePage() {
 
               <div className="grid grid-cols-2 gap-2 mt-5">
                 <div>
-                  <Label className="text-[11px] text-[#0a2a6b]">Prénom</Label>
+                   <Label className="text-[11px] text-accent">Prénom</Label>
                   <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div>
-                  <Label className="text-[11px] text-[#0a2a6b]">Nom</Label>
+                   <Label className="text-[11px] text-accent">Nom</Label>
                   <Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
               </div>
               <Button
                 onClick={saveProfile}
                 disabled={saving}
-                className="mt-3 w-full bg-gradient-to-r from-[#0a2a6b] to-[#1f4ea8] text-white"
+                className="btn-blue-animated mt-3 w-full text-primary-foreground"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enregistrer"}
               </Button>
             </section>
 
             {/* Notifications */}
-            <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+            <section className="rounded-2xl bg-card p-5 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex gap-3">
-                  <span className="rounded-xl bg-[#1f4ea8]/10 p-2.5 h-fit">
-                    <Bell className="h-5 w-5 text-[#1f4ea8]" />
+                  <span className="h-fit rounded-xl bg-blue-soft p-2.5">
+                    <Bell className="h-5 w-5 text-accent" />
                   </span>
                   <div>
-                    <p className="font-display font-bold text-[#0a2a6b]">Notifications</p>
+                    <p className="font-display font-bold text-accent">Notifications</p>
                     <p className="text-xs text-muted-foreground max-w-[15rem]">
                       Horaires du Chabbat et annonces de la communauté sur cet appareil.
                     </p>
@@ -312,18 +367,18 @@ function ComptePage() {
             </section>
 
             {/* Annonces */}
-            <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+            <section className="rounded-2xl bg-card p-5 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
-                <Megaphone className="h-4 w-4 text-[#1f4ea8]" />
-                <p className="font-display font-bold text-[#0a2a6b]">Dernières annonces</p>
+                <Megaphone className="h-4 w-4 text-accent" />
+                <p className="font-display font-bold text-accent">Dernières annonces</p>
               </div>
               {announcements.length === 0 ? (
                 <p className="text-xs text-muted-foreground">Aucune annonce pour le moment.</p>
               ) : (
                 <ul className="space-y-3">
                   {announcements.map((a) => (
-                    <li key={a.id} className="rounded-xl bg-[#F1F5F9] px-3 py-2.5">
-                      <p className="text-sm font-semibold text-[#0a2a6b]">{a.title}</p>
+                    <li key={a.id} className="rounded-xl bg-muted px-3 py-2.5">
+                      <p className="text-sm font-semibold text-accent">{a.title}</p>
                       <p className="text-xs text-foreground/80 mt-0.5 whitespace-pre-wrap">{a.body}</p>
                       {a.sent_at && (
                         <p className="text-[10px] text-muted-foreground mt-1">
@@ -339,12 +394,15 @@ function ComptePage() {
               )}
             </section>
 
-            {/* Mot de passe */}
-            <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
-              <p className="font-display font-bold text-[#0a2a6b] mb-3">Mot de passe</p>
+            {/* Sécurité */}
+            <section className="rounded-2xl bg-card p-5 shadow-sm">
+              <div className="mb-4 flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-accent" />
+                <p className="font-display font-bold text-accent">Sécurité du compte</p>
+              </div>
               <div className="space-y-2">
                 <div>
-                  <Label className="text-[11px] text-[#0a2a6b]">Mot de passe actuel</Label>
+                  <Label className="text-[11px] text-accent">Mot de passe actuel</Label>
                   <Input
                     type="password"
                     value={currentPassword}
@@ -352,7 +410,7 @@ function ComptePage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-[11px] text-[#0a2a6b]">Nouveau mot de passe</Label>
+                  <Label className="text-[11px] text-accent">Nouveau mot de passe</Label>
                   <Input
                     type="password"
                     value={newPassword}
@@ -363,6 +421,63 @@ function ComptePage() {
               <Button onClick={changePassword} variant="outline" className="mt-3 w-full">
                 Modifier le mot de passe
               </Button>
+              <div className="my-5 h-px bg-border" />
+              <Button onClick={signOut} variant="outline" className="w-full gap-2">
+                <LogOut className="h-4 w-4" /> Se déconnecter
+              </Button>
+
+              <AlertDialog onOpenChange={(open) => !open && setDeleteConfirmation("")}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost" className="mt-2 w-full gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive">
+                    <Trash2 className="h-4 w-4" /> Supprimer mon compte
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="w-[calc(100%_-_2rem)] max-w-sm rounded-2xl">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Supprimer définitivement le compte ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Votre profil, vos réglages et votre accès seront supprimés. Cette action est irréversible.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div>
+                    <Label htmlFor="delete-confirmation" className="text-xs">
+                      Écrivez SUPPRIMER pour confirmer
+                    </Label>
+                    <Input
+                      id="delete-confirmation"
+                      value={deleteConfirmation}
+                      onChange={(event) => setDeleteConfirmation(event.target.value.toUpperCase())}
+                      autoComplete="off"
+                      className="mt-2"
+                    />
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={deleting}>Annuler</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(event) => {
+                        event.preventDefault();
+                        void removeAccount();
+                      }}
+                      disabled={deleteConfirmation !== "SUPPRIMER" || deleting}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Supprimer définitivement"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </section>
+
+            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="rounded-xl bg-blue-soft p-2.5"><Mail className="h-5 w-5 text-accent" /></span>
+                <div className="min-w-0">
+                  <p className="font-display font-bold text-accent">Besoin d’aide ?</p>
+                  <a href="mailto:info@hasde.fr" className="break-all text-sm text-foreground underline decoration-gold underline-offset-4">
+                    info@hasde.fr
+                  </a>
+                </div>
+              </div>
             </section>
           </>
         )}
