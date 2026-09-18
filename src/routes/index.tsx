@@ -1068,12 +1068,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
-  const vTimes = (chabad
+  const vTimes = sortByTime((chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
@@ -1084,7 +1084,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimes = (chabad
+  const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
@@ -1092,7 +1092,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  });
+  }));
 
   // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
   const today = new Date();
