@@ -1,3 +1,4 @@
+import { getCaljTimes } from "./calj.functions";
 import { getOverride } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
 import { getCurrentParasha, getHolidayParasha } from "./parashot";
@@ -92,6 +93,8 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const date = ymd(now);
 
+  const calj = loc ? null : await getCaljTimes({ data: { date } }).catch(() => null);
+
   const [zRes, convRes, calRes] = await Promise.all([
     fetch(`https://www.hebcal.com/zmanim?cfg=json&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&date=${date}`).then(r => r.json()),
     fetch(`https://www.hebcal.com/converter?cfg=json&date=${date}&g2h=1&strict=1`).then(r => r.json()),
@@ -103,9 +106,10 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   // Heures saisonnières : 1/12 de la journée
   const graSpan = diffMin(t.sunrise, t.sunset);
   const maSpan = diffMin(t.alotHaShachar, t.tzeit72min);
-  const seasonalHours = graSpan && maSpan
-    ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
-    : null;
+  const seasonalHours = calj?.seasonalHours
+    ?? (graSpan && maSpan
+      ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
+      : null);
 
   const ov = getOverride(date);
   const times: Zman[] = ov ? [
@@ -142,6 +146,14 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg, LOC.tzid) },
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min, LOC.tzid) },
   ].filter(z => z.value !== "—");
+
+  // Source de référence : Le Calendrier Juif (calj.net), localisation Neuilly-sur-Seine
+  if (calj?.times) {
+    for (const z of times) {
+      const ref = calj.times[z.label];
+      if (ref) z.value = ref;
+    }
+  }
 
   // Minha de la communauté : TOUJOURS 40 minutes avant la Chekia
   const sheqyiaZ = times.find(z => z.label === "Sheqyia");
@@ -239,6 +251,9 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
 
+  const caljWeek = loc ? null : await getCaljTimes({ data: { date: ymd(now) } }).catch(() => null);
+  const caljShab = caljWeek?.shabbat?.date === ymd(saturday) ? caljWeek.shabbat : null;
+
   const start = ymd(now);
   const endDate = new Date(now);
   endDate.setDate(endDate.getDate() + 14);
@@ -333,7 +348,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafFri ? `Daf Yomi · ${dafFri.hebrew ?? dafFri.title}` : "—",
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
-      candleLighting: getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
+      candleLighting: caljShab?.candles || getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
       hd: convFri.hd,
       hm: convFri.hm,
       yahrtzeits: getYahrtzeits(convFri.hd, convFri.hm),
@@ -343,7 +358,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       heb: convSat.hebrew,
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
-      havdalah: getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
+      havdalah: caljShab?.havdalah || getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
       hd: convSat.hd,
       hm: convSat.hm,
       yahrtzeits: getYahrtzeits(convSat.hd, convSat.hm),
