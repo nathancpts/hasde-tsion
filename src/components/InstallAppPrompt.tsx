@@ -98,11 +98,11 @@ export function InstallAppPrompt() {
       localStorage.removeItem("ht-installed");
     }
 
-    // Android / Chrome : installation directe
+    // Android / Chrome : installation directe (jamais sur PC)
     const onBip = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      if (!isStandalone() && !inIframe) {
+      if (p === "android" && !isStandalone() && !inIframe) {
         setMode("install");
       }
     };
@@ -114,6 +114,8 @@ export function InstallAppPrompt() {
     window.addEventListener("appinstalled", onInstalled);
 
     const timer = window.setTimeout(() => {
+      // PC (desktop) : aucune popup, quel qu'en soit le mode.
+      if (p === "other") return;
       if (isStandalone()) {
         // App installée : demander l'autorisation des notifications
         if (
@@ -129,7 +131,7 @@ export function InstallAppPrompt() {
       // iOS ne fournit aucun événement fiable permettant de détecter la désinstallation.
       // Dans Safari, on repropose donc l'installation à chaque nouvelle visite hors mode installé.
       const installPromptIsSnoozed = p === "ios" ? false : isSnoozed(DISMISS_KEY);
-      if (!inIframe && p !== "other" && localStorage.getItem("ht-installed") !== "1" && !installPromptIsSnoozed) {
+      if (!inIframe && localStorage.getItem("ht-installed") !== "1" && !installPromptIsSnoozed) {
         setMode("install");
       }
     }, 1500);
