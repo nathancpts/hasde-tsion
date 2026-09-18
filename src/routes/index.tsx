@@ -414,6 +414,23 @@ function useIsTV(): boolean | null {
   return isTV;
 }
 
+// Cycle TV : 5 min d'affichage normal, puis 10 min de live plein écran, en boucle.
+const SPOTLIGHT_NORMAL_MS = 5 * 60 * 1000;
+const SPOTLIGHT_LIVE_MS = 10 * 60 * 1000;
+const SPOTLIGHT_CYCLE_MS = SPOTLIGHT_NORMAL_MS + SPOTLIGHT_LIVE_MS;
+
+function useLiveSpotlight(enabled: boolean): boolean {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (!enabled) { setOn(false); return; }
+    const tick = () => setOn(Date.now() % SPOTLIGHT_CYCLE_MS >= SPOTLIGHT_NORMAL_MS);
+    tick();
+    const id = setInterval(tick, 2000);
+    return () => clearInterval(id);
+  }, [enabled]);
+  return on;
+}
+
 // ============ COMPONENTS ============
 
 function HeroCountdown({ targetTime, selectedDay }: { targetTime: string; selectedDay: "vendredi" | "shabbat" }) {
@@ -1796,6 +1813,7 @@ function PlanningTV() {
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const pc = useParashaContent();
+  const spotlight = useLiveSpotlight(!isShabbatNow && !isPdfMode);
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
@@ -2439,7 +2457,41 @@ function PlanningTV() {
         </div>
       </section>
 
-
+      {/* Live en grand au centre — 10 min toutes les 15 min */}
+      {spotlight && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
+          style={{
+            background: "rgba(10,17,40,0.72)",
+            backdropFilter: "blur(28px) saturate(130%)",
+          }}
+        >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              width: "86vw",
+              maxHeight: "86vh",
+              aspectRatio: "16 / 9",
+              borderRadius: "22px",
+              border: `1px solid ${GOLD_HAIR}`,
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.75)",
+              background: "#0A1128",
+              clipPath: "inset(0 round 22px)",
+            }}
+          >
+            <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
+            <div
+              className="absolute top-[1.6vh] left-[1.6vh] inline-flex items-center gap-[0.5vw] px-[1vw] py-[0.6vh] rounded-full"
+              style={{ background: "rgba(255,255,255,0.85)", boxShadow: "0 6px 18px rgba(10,17,40,0.18)" }}
+            >
+              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+              <span className="uppercase" style={{ fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700, color: "#0A1128" }}>
+                Live · Hasdé Tsion
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   );
