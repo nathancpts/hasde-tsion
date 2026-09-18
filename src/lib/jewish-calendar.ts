@@ -105,9 +105,10 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   // Heures saisonnières : 1/12 de la journée
   const graSpan = diffMin(t.sunrise, t.sunset);
   const maSpan = diffMin(t.alotHaShachar, t.tzeit72min);
-  const seasonalHours = graSpan && maSpan
-    ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
-    : null;
+  const seasonalHours = calj?.seasonalHours
+    ?? (graSpan && maSpan
+      ? { graMin: Math.round(graSpan / 12), maMin: Math.round(maSpan / 12) }
+      : null);
 
   const ov = getOverride(date);
   const times: Zman[] = ov ? [
