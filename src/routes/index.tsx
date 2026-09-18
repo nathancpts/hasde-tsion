@@ -370,6 +370,15 @@ function subtractMinutes(time: string | null, minutes: number): string | null {
   return `${String(Math.floor(norm / 60)).padStart(2, "0")}:${String(norm % 60).padStart(2, "0")}`;
 }
 
+/** Trie une liste d'horaires "HH:MM" par ordre chronologique (les heures invalides vont à la fin). */
+function sortByTime<T extends { value: string }>(list: T[]): T[] {
+  const key = (v: string) => {
+    const m = /^(\d{1,2}):(\d{2})/.exec(v);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : 9999;
+  };
+  return [...list].sort((a, b) => key(a.value) - key(b.value));
+}
+
 
 
 function useIsTV(): boolean | null {
