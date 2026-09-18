@@ -251,6 +251,9 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
 
+  const caljWeek = loc ? null : await getCaljTimes({ data: { date: ymd(now) } }).catch(() => null);
+  const caljShab = caljWeek?.shabbat?.date === ymd(saturday) ? caljWeek.shabbat : null;
+
   const start = ymd(now);
   const endDate = new Date(now);
   endDate.setDate(endDate.getDate() + 14);
@@ -345,7 +348,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafFri ? `Daf Yomi · ${dafFri.hebrew ?? dafFri.title}` : "—",
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
-      candleLighting: getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
+      candleLighting: caljShab?.candles || getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
       hd: convFri.hd,
       hm: convFri.hm,
       yahrtzeits: getYahrtzeits(convFri.hd, convFri.hm),
@@ -355,7 +358,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       heb: convSat.hebrew,
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
-      havdalah: getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
+      havdalah: caljShab?.havdalah || getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
       hd: convSat.hd,
       hm: convSat.hm,
       yahrtzeits: getYahrtzeits(convSat.hd, convSat.hm),
