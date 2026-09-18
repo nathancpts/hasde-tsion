@@ -1746,18 +1746,18 @@ function PlanningTV() {
   const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
-  const vTimes = (chabad
+  const vTimes = sortByTime((chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimes = (chabad
+  const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
@@ -1765,7 +1765,7 @@ function PlanningTV() {
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  });
+  }));
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
