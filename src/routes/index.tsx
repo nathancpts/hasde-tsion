@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
+import { getCommunityMinha } from "@/lib/zmanim-overrides";
 import { frenchHebMonth } from "@/lib/yahrtzeits";
 
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
@@ -361,6 +362,17 @@ function useShabbatZmanim(loc: StoredLoc) {
   return data;
 }
 
+
+// Date du prochain vendredi (aujourd'hui si vendredi) au format YYYY-MM-DD
+function fridayKey(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7));
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+// Horaire de Minha du vendredi fixé manuellement par la communauté (prioritaire)
+function getFridayMinhaOverride(): string | null {
+  return getCommunityMinha(fridayKey());
+}
 
 function pickZman(z: Zmanim | null, label: string): string | null {
   return z?.times.find(t => t.label === label)?.value ?? null;
@@ -1079,7 +1091,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t)
+    .map((t) => {
+      const ov = getFridayMinhaOverride();
+      return t.label === "Minha" && ov ? { ...t, value: ov } : t;
+    }));
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
@@ -1758,7 +1774,11 @@ function PlanningTV() {
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t)
+    .map((t) => {
+      const ov = getFridayMinhaOverride();
+      return t.label === "Minha" && ov ? { ...t, value: ov } : t;
+    }));
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
