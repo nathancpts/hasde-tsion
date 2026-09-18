@@ -280,9 +280,9 @@ function writeCache<T>(key: string, data: T) {
 }
 
 function useChabad() {
-  // Source de référence unique : Le Calendrier Juif (calj.net) via fetchLiveWeek.
-  // Chabad n'est plus utilisé pour l'allumage / la fin de Chabbat.
-  const DISABLED = true;
+  // Source de référence : Le Calendrier Juif (calj.net) via fetchLiveWeek.
+  // Chabad ne sert plus que de secours si calj est indisponible.
+  const live = useLiveWeek(null);
   const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -300,7 +300,10 @@ function useChabad() {
 
   const today = new Date().toISOString().slice(0, 10);
   const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
-  return DISABLED ? null : current;
+  const candle = live?.vendredi.candleLighting ?? current?.candle ?? null;
+  const havdalah = live?.samedi.havdalah ?? current?.havdalah ?? null;
+  if (!candle || !havdalah) return null;
+  return { friDate: current?.friDate ?? "", satDate: current?.satDate ?? "", candle, havdalah };
 }
 
 function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
