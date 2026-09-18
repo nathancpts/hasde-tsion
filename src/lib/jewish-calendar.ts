@@ -157,6 +157,13 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     }
   }
 
+  // Toujours afficher les horaires par ordre chronologique
+  const toMin = (v: string) => {
+    const m = /^(\d{1,2}):(\d{2})/.exec(v);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : 9999;
+  };
+  times.sort((a, b) => toMin(a.value) - toMin(b.value));
+
 
 
   // Mishna Yomi & Yerushalmi Yomi du jour
