@@ -211,8 +211,32 @@ export const Route = createFileRoute("/api/public/hooks/shabbat-push")({
           }
         }
 
-        // 2) 20 minutes avant l'allumage des bougies — Chabbat Chalom
+        // 2) 1 heure avant l'allumage des bougies — rappel
         const candleMin = toMinutes(candles);
+        if (candleMin !== null) {
+          const targetHour = candleMin - 60;
+          if (minutes >= targetHour && minutes < targetHour + 25) {
+            if (await claim(`hour-${date}`, supabaseAdmin)) {
+              results.hour = await sendToAll(
+                {
+                  title: "Chabbat dans 1 heure ⏳",
+                  body: `Allumage des bougies dans une heure, à ${candles}. Préparez-vous pour Chabbat !`,
+                  url: "/",
+                  tag: `hour-${date}`,
+                },
+                supabaseAdmin,
+              );
+              await supabaseAdmin
+                .from("push_log")
+                .update({ sent_count: Number(results.hour) })
+                .eq("key", `hour-${date}`);
+            } else {
+              results.hour = "already-sent";
+            }
+          }
+        }
+
+        // 3) 20 minutes avant l'allumage des bougies — Chabbat Chalom
         if (candleMin !== null) {
           const target = candleMin - 20;
           if (minutes >= target && minutes < target + 30) {
