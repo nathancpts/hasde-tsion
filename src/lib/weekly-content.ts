@@ -40,6 +40,7 @@ const _DONATIONS_RAW: Donation[] = [
   { donateur: "Niddam Avram" },
   { donateur: "Bellity Sacha" },
   { donateur: "Krief Stéphane" },
+  { donateur: "Hakoune Paul" },
 ];
 
 function currentMondayISO(now = new Date()): string {
