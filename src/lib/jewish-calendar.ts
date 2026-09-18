@@ -143,6 +143,21 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min, LOC.tzid) },
   ].filter(z => z.value !== "—");
 
+  // Minha de la communauté : TOUJOURS 40 minutes avant la Chekia
+  const sheqyiaZ = times.find(z => z.label === "Sheqyia");
+  if (sheqyiaZ) {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(sheqyiaZ.value);
+    if (m) {
+      const total = Number(m[1]) * 60 + Number(m[2]) - 40;
+      const minhaValue = `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+      const idx = times.findIndex(z => z.label === "Minha Ketana");
+      const minha: Zman = { label: "Minha", value: minhaValue };
+      if (idx >= 0) times[idx] = minha;
+      else times.splice(times.indexOf(sheqyiaZ), 0, minha);
+    }
+  }
+
+
 
   // Mishna Yomi & Yerushalmi Yomi du jour
   const calItems = calRes.items ?? [];
