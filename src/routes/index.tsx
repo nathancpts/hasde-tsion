@@ -363,15 +363,16 @@ function useShabbatZmanim(loc: StoredLoc) {
 }
 
 
+// Date du prochain vendredi (aujourd'hui si vendredi) au format YYYY-MM-DD
+function fridayKey(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7));
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+// Horaire de Minha du vendredi fixé manuellement par la communauté (prioritaire)
+const vMinhaOv = getCommunityMinha(fridayKey());
+
 function pickZman(z: Zmanim | null, label: string): string | null {
-  // Date du prochain vendredi (aujourd'hui si vendredi) au format YYYY-MM-DD
-  const fridayKey = () => {
-    const d = new Date();
-    d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7));
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  };
-  // Horaire de Minha du vendredi fixé manuellement par la communauté (prioritaire)
-  const vMinhaOv = getCommunityMinha(fridayKey());
   return z?.times.find(t => t.label === label)?.value ?? null;
 }
 
