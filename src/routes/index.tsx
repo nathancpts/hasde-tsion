@@ -370,7 +370,9 @@ function fridayKey(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 // Horaire de Minha du vendredi fixé manuellement par la communauté (prioritaire)
-const vMinhaOv = getCommunityMinha(fridayKey());
+function getFridayMinhaOverride(): string | null {
+  return getCommunityMinha(fridayKey());
+}
 
 function pickZman(z: Zmanim | null, label: string): string | null {
   return z?.times.find(t => t.label === label)?.value ?? null;
