@@ -280,6 +280,9 @@ function writeCache<T>(key: string, data: T) {
 }
 
 function useChabad() {
+  // Source de référence unique : Le Calendrier Juif (calj.net) via fetchLiveWeek.
+  // Chabad n'est plus utilisé pour l'allumage / la fin de Chabbat.
+  const DISABLED = true;
   const [weeks, setWeeks] = useState<ChabadWeek[] | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -297,7 +300,7 @@ function useChabad() {
 
   const today = new Date().toISOString().slice(0, 10);
   const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
-  return current;
+  return DISABLED ? null : current;
 }
 
 function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
