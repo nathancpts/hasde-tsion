@@ -370,6 +370,15 @@ function subtractMinutes(time: string | null, minutes: number): string | null {
   return `${String(Math.floor(norm / 60)).padStart(2, "0")}:${String(norm % 60).padStart(2, "0")}`;
 }
 
+/** Trie une liste d'horaires "HH:MM" par ordre chronologique (les heures invalides vont à la fin). */
+function sortByTime<T extends { value: string }>(list: T[]): T[] {
+  const key = (v: string) => {
+    const m = /^(\d{1,2}):(\d{2})/.exec(v);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : 9999;
+  };
+  return [...list].sort((a, b) => key(a.value) - key(b.value));
+}
+
 
 
 function useIsTV(): boolean | null {
@@ -1059,12 +1068,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
-  const vTimes = (chabad
+  const vTimes = sortByTime((chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
@@ -1075,7 +1084,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimes = (chabad
+  const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
@@ -1083,7 +1092,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  });
+  }));
 
   // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
   const today = new Date();
@@ -1737,18 +1746,18 @@ function PlanningTV() {
   const vTefilin = pickZman(shabbatZ.vendredi, "Misheyakir / Tefilin");
   const vShemaGRA = pickZman(shabbatZ.vendredi, "Limite Shema GR\"A");
   const vShema = vTefilin && vShemaGRA ? `${vTefilin} | ${vShemaGRA}` : week.vendredi.shema;
-  const vTimes = (chabad
+  const vTimes = sortByTime((chabad
     ? week.vendredi.times.map((t) => t.label === "Allumer les bougies" ? { ...t, value: chabad.candle } : t)
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t);
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = subtractMinutes(sSheqyia, 40);
-  const sTimes = (chabad
+  const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
@@ -1756,7 +1765,7 @@ function PlanningTV() {
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  });
+  }));
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
