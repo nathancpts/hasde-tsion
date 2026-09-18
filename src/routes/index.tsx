@@ -1091,7 +1091,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t)
+    .map((t) => {
+      const ov = getFridayMinhaOverride();
+      return t.label === "Minha" && ov ? { ...t, value: ov } : t;
+    }));
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
@@ -1770,7 +1774,11 @@ function PlanningTV() {
     : week.vendredi.times
   )
     .filter((t) => t.label !== "Arvit")
-    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t));
+    .map((t) => t.label === "Allumer les bougies" ? { ...t, label: "Entrée" } : t)
+    .map((t) => {
+      const ov = getFridayMinhaOverride();
+      return t.label === "Minha" && ov ? { ...t, value: ov } : t;
+    }));
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
