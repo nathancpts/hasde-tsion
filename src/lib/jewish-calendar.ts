@@ -145,6 +145,14 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min, LOC.tzid) },
   ].filter(z => z.value !== "—");
 
+  // Source de référence : Le Calendrier Juif (calj.net), localisation Neuilly-sur-Seine
+  if (calj?.times) {
+    for (const z of times) {
+      const ref = calj.times[z.label];
+      if (ref) z.value = ref;
+    }
+  }
+
   // Minha de la communauté : TOUJOURS 40 minutes avant la Chekia
   const sheqyiaZ = times.find(z => z.label === "Sheqyia");
   if (sheqyiaZ) {
