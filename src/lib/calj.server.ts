@@ -93,8 +93,20 @@ function hourMinToMinutes(v: string | null): number | null {
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
-/** Horaires du jour + allumage / fin de Chabbat de la semaine, tels qu'affichés sur calj.net */
-export async function fetchCalj(date: string): Promise<{
+type CaljResult = Awaited<ReturnType<typeof fetchCaljUncached>>;
+const CACHE = new Map<string, { at: number; value: CaljResult }>();
+const CACHE_TTL = 6 * 60 * 60 * 1000;
+
+/** Horaires du jour + allumage / fin de Chabbat, avec cache mémoire de 6 h */
+export async function fetchCalj(date: string): Promise<CaljResult> {
+  const hit = CACHE.get(date);
+  if (hit && Date.now() - hit.at < CACHE_TTL) return hit.value;
+  const value = await fetchCaljUncached(date);
+  CACHE.set(date, { at: Date.now(), value });
+  return value;
+}
+
+async function fetchCaljUncached(date: string): Promise<{
   zmanim: CaljZmanim;
   shabbat: { date: string | null; candles: string | null; havdalah: string | null };
 }> {
