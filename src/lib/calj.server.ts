@@ -125,7 +125,8 @@ export async function fetchCalj(date: string): Promise<{
   set("Minha Guedola", pick(z, "minḥa guedola"));
   set("Minha Ketana", pick(z, "minḥa ketana"));
   set("Plag haMinha", pick(z, 'plag haminḥa (GR"A)'));
-  set("Sheqyia", pick(z, "shqi'â"));
+  const shqi = /shqi[^|]*\|(\d{1,2})h(\d{2})/.exec(z);
+  set("Sheqyia", shqi ? `${shqi[1].padStart(2, "0")}:${shqi[2]}` : null);
   set("Sortie des étoiles", pick(z, "tzeit hacokhavim"));
   set("Nuit de R. Tam", pick(z, "nuit Rabenou Tam", "Rav Ovadia") ?? pick(z, "nuit Rabenou Tam"));
 
