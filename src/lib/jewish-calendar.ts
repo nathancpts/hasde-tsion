@@ -1,5 +1,5 @@
 import { getCaljTimes } from "./calj.functions";
-import { getOverride } from "./zmanim-overrides";
+import { getOverride, getCommunityMinha } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
 import { getCurrentParasha, getHolidayParasha } from "./parashot";
 
@@ -167,6 +167,14 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
       if (idx >= 0) times[idx] = minha;
       else times.splice(times.indexOf(sheqyiaZ), 0, minha);
     }
+  }
+
+  // Exception manuelle du jour : horaire de Minha fixé par la communauté
+  const minhaOv = getCommunityMinha(date);
+  if (minhaOv) {
+    const idx = times.findIndex(z => z.label === "Minha");
+    if (idx >= 0) times[idx] = { ...times[idx], value: minhaOv };
+    else times.splice(times.findIndex(z => z.label === "Sheqyia"), 0, { label: "Minha", value: minhaOv });
   }
 
   // Toujours afficher les horaires par ordre chronologique

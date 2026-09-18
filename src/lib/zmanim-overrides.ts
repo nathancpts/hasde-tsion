@@ -115,6 +115,16 @@ export const ZMANIM_OVERRIDES: Record<string, DayOverride> = {
   "2026-09-01": D("01:50","05:26","05:54","07:07","09:38","10:29","11:36","11:36","13:50","14:24","17:46","19:10","20:33","21:13","22:15"),
 };
 
+// Minha de la communauté fixée manuellement pour une date précise (YYYY-MM-DD).
+// Prioritaire sur la règle « chekia − 40 min ».
+export const COMMUNITY_MINHA_OVERRIDES: Record<string, string> = {
+  "2026-09-18": "19:30",
+};
+
+export function getCommunityMinha(ymd: string): string | null {
+  return COMMUNITY_MINHA_OVERRIDES[ymd] ?? null;
+}
+
 export function getOverride(ymd: string): DayOverride | null {
   return ZMANIM_OVERRIDES[ymd] ?? null;
 }
