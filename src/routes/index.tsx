@@ -1094,7 +1094,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
-    if (t.label === "Minha" && sMinha) return { ...t, value: sMinha };
+    if (t.label.startsWith("Minha") && sMinha) return { ...t, value: sMinha };
+    if (t.label === "Chaharit") return { ...t, value: "09:15" };
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
@@ -1767,7 +1768,8 @@ function PlanningTV() {
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
-    if (t.label === "Minha" && sMinha) return { ...t, value: sMinha };
+    if (t.label.startsWith("Minha") && sMinha) return { ...t, value: sMinha };
+    if (t.label === "Chaharit") return { ...t, value: "09:15" };
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
