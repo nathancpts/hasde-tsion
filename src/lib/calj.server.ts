@@ -95,7 +95,7 @@ function hourMinToMinutes(v: string | null): number | null {
 
 type CaljResult = Awaited<ReturnType<typeof fetchCaljUncached>>;
 const CACHE = new Map<string, { at: number; value: CaljResult }>();
-const CACHE_TTL = 6 * 60 * 60 * 1000;
+const CACHE_TTL = 60 * 60 * 1000;
 
 /** Horaires du jour + allumage / fin de Chabbat, avec cache mémoire de 6 h */
 export async function fetchCalj(date: string): Promise<CaljResult> {
