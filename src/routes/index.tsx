@@ -2457,7 +2457,41 @@ function PlanningTV() {
         </div>
       </section>
 
-
+      {/* Live en grand au centre — 10 min toutes les 15 min */}
+      {spotlight && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
+          style={{
+            background: "rgba(10,17,40,0.72)",
+            backdropFilter: "blur(28px) saturate(130%)",
+          }}
+        >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              width: "86vw",
+              maxHeight: "86vh",
+              aspectRatio: "16 / 9",
+              borderRadius: "22px",
+              border: `1px solid ${GOLD_HAIR}`,
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.75)",
+              background: "#0A1128",
+              clipPath: "inset(0 round 22px)",
+            }}
+          >
+            <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
+            <div
+              className="absolute top-[1.6vh] left-[1.6vh] inline-flex items-center gap-[0.5vw] px-[1vw] py-[0.6vh] rounded-full"
+              style={{ background: "rgba(255,255,255,0.85)", boxShadow: "0 6px 18px rgba(10,17,40,0.18)" }}
+            >
+              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+              <span className="uppercase" style={{ fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700, color: "#0A1128" }}>
+                Live · Hasdé Tsion
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   );
