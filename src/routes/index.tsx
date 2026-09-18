@@ -747,7 +747,6 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
               </div>
             ))
           )}
-        </AutoScrollVertical>
 
         {rh && (
           <div
