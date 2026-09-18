@@ -710,18 +710,17 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
         <h3 className="font-display text-[2.4vh] font-bold mt-1 leading-tight">La Séouda est offerte par :</h3>
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0 p-[1.2vh_1vw]">
-        <AutoScrollVertical className="flex-1 min-h-0 pr-1" speed={24} pause={2800}>
-          {donations.length === 0 ? (
-            <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
-              Aucune donation pour le moment.
-            </p>
-          ) : (
-            donations.map((d, i) => (
-              <div
-                key={i}
-                className="py-[1vh] border-b border-border/60 last:border-0"
-              >
+      <div className="flex flex-col justify-center flex-1 min-h-0 p-[1.2vh_1vw]">
+        {donations.length === 0 ? (
+          <p className="text-[1.6vh] text-muted-foreground italic text-center py-[2vh]">
+            Aucune donation pour le moment.
+          </p>
+        ) : (
+          donations.map((d, i) => (
+            <div
+              key={i}
+              className="py-[0.8vh] border-b border-border/60 last:border-0 text-center"
+            >
                 <p className="font-display font-bold text-[2.05vh] text-foreground leading-snug">
                   {d.donateur}
                 </p>
@@ -748,7 +747,6 @@ function DonationsCard({ live }: { live?: LiveWeek | null }) {
               </div>
             ))
           )}
-        </AutoScrollVertical>
 
         {rh && (
           <div
@@ -2331,29 +2329,27 @@ function PlanningTV() {
                 La Séouda est offerte par
               </h3>
             </div>
-            <div className="flex-1 min-h-0 overflow-hidden">
-              <AutoScrollVertical className="h-full" speed={20} pause={2400}>
-                {DONATIONS_REPAS.length === 0 ? (
-                  <p className="italic text-center" style={{ fontSize: "1.5vh", color: "#7A869A" }}>
-                    Aucune donation pour le moment.
-                  </p>
-                ) : (
-                  DONATIONS_REPAS.map((d, i) => (
-                    <div
-                      key={i}
-                      className="py-[0.9vh] text-center"
-                      style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "1px dashed rgba(15,61,122,0.08)" }}
-                    >
-                      <p style={{ fontSize: "1.75vh", fontWeight: 600, color: "#1A2540" }}>{d.donateur}</p>
-                      {d.dedicace && (
-                        <p className="italic mt-[0.2vh]" style={{ fontSize: "1.35vh", color: "#7A869A", fontWeight: 400 }}>
-                          {d.dedicace}
-                        </p>
-                      )}
-                    </div>
-                  ))
-                )}
-              </AutoScrollVertical>
+            <div className="flex-1 min-h-0 flex flex-col justify-center">
+              {DONATIONS_REPAS.length === 0 ? (
+                <p className="italic text-center" style={{ fontSize: "1.5vh", color: "#7A869A" }}>
+                  Aucune donation pour le moment.
+                </p>
+              ) : (
+                DONATIONS_REPAS.map((d, i) => (
+                  <div
+                    key={i}
+                    className="py-[0.7vh] text-center"
+                    style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "1px dashed rgba(15,61,122,0.08)" }}
+                  >
+                    <p style={{ fontSize: "1.6vh", fontWeight: 600, color: "#1A2540" }}>{d.donateur}</p>
+                    {d.dedicace && (
+                      <p className="italic mt-[0.2vh]" style={{ fontSize: "1.35vh", color: "#7A869A", fontWeight: 400 }}>
+                        {d.dedicace}
+                      </p>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </article>
 
