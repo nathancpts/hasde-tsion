@@ -1,3 +1,4 @@
+import { getCaljTimes } from "./calj.functions";
 import { getOverride } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
 import { getCurrentParasha, getHolidayParasha } from "./parashot";
