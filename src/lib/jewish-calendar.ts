@@ -92,6 +92,8 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
   const date = ymd(now);
 
+  const calj = loc ? null : await getCaljTimes({ data: { date } }).catch(() => null);
+
   const [zRes, convRes, calRes] = await Promise.all([
     fetch(`https://www.hebcal.com/zmanim?cfg=json&latitude=${LOC.lat}&longitude=${LOC.lon}&tzid=${encodeURIComponent(LOC.tzid)}&date=${date}`).then(r => r.json()),
     fetch(`https://www.hebcal.com/converter?cfg=json&date=${date}&g2h=1&strict=1`).then(r => r.json()),
