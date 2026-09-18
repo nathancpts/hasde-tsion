@@ -139,7 +139,7 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     { label: "Minha Ketana",        value: timeFR(t.minchaKetana, LOC.tzid) },
     { label: "Plag haMinha",        value: timeFR(t.plagHaMincha, LOC.tzid) },
     { label: "Sheqyia",             value: timeFR(t.sunset, LOC.tzid) },
-    { label: "Sortie des étoiles",  value: timeFR(t.tzeit85deg ?? t.tzeit7083deg, LOC.tzid) },
+    { label: "Sortie des étoiles",  value: timeFR(t.tzeit7083deg ?? t.tzeit85deg, LOC.tzid) },
     { label: "Nuit de R. Tam",      value: timeFR(t.tzeit72min, LOC.tzid) },
   ].filter(z => z.value !== "—");
 
