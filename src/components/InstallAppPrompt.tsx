@@ -131,7 +131,7 @@ export function InstallAppPrompt() {
       // iOS ne fournit aucun événement fiable permettant de détecter la désinstallation.
       // Dans Safari, on repropose donc l'installation à chaque nouvelle visite hors mode installé.
       const installPromptIsSnoozed = p === "ios" ? false : isSnoozed(DISMISS_KEY);
-      if (!inIframe && p !== "other" && localStorage.getItem("ht-installed") !== "1" && !installPromptIsSnoozed) {
+      if (!inIframe && localStorage.getItem("ht-installed") !== "1" && !installPromptIsSnoozed) {
         setMode("install");
       }
     }, 1500);
