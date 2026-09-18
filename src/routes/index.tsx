@@ -414,6 +414,23 @@ function useIsTV(): boolean | null {
   return isTV;
 }
 
+// Cycle TV : 5 min d'affichage normal, puis 10 min de live plein écran, en boucle.
+const SPOTLIGHT_NORMAL_MS = 5 * 60 * 1000;
+const SPOTLIGHT_LIVE_MS = 10 * 60 * 1000;
+const SPOTLIGHT_CYCLE_MS = SPOTLIGHT_NORMAL_MS + SPOTLIGHT_LIVE_MS;
+
+function useLiveSpotlight(enabled: boolean): boolean {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (!enabled) { setOn(false); return; }
+    const tick = () => setOn(Date.now() % SPOTLIGHT_CYCLE_MS >= SPOTLIGHT_NORMAL_MS);
+    tick();
+    const id = setInterval(tick, 2000);
+    return () => clearInterval(id);
+  }, [enabled]);
+  return on;
+}
+
 // ============ COMPONENTS ============
 
 function HeroCountdown({ targetTime, selectedDay }: { targetTime: string; selectedDay: "vendredi" | "shabbat" }) {
