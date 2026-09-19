@@ -1,5 +1,5 @@
 import { getCaljTimes } from "./calj.functions";
-import { getOverride, getCommunityMinha } from "./zmanim-overrides";
+import { getOverride, getCommunityMinha, getCommunitySchedule } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
 import { getCurrentParasha, getHolidayParasha } from "./parashot";
 
@@ -70,6 +70,8 @@ export type Zmanim = {
   yerushalmiYomi: { fr: string; he: string } | null;
   tahanun: { recited: boolean; reason: string };
   birkatLevana: { start: string; end: string } | null;
+  specialSchedule: boolean;
+  message?: string;
   fetchedAt: string;
 };
 
@@ -177,6 +179,12 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     else times.splice(times.findIndex(z => z.label === "Sheqyia"), 0, { label: "Minha", value: minhaOv });
   }
 
+  // Programme exceptionnel communiqué par la communauté pour cette date seulement.
+  const communitySchedule = getCommunitySchedule(date);
+  if (communitySchedule) {
+    times.splice(0, times.length, ...communitySchedule.times);
+  }
+
   // Toujours afficher les horaires par ordre chronologique
   const toMin = (v: string) => {
     const m = /^(\d{1,2}):(\d{2})/.exec(v);
@@ -225,6 +233,8 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
     yerushalmiYomi,
     tahanun,
     birkatLevana,
+    specialSchedule: Boolean(communitySchedule),
+    message: communitySchedule?.message,
     fetchedAt: new Date().toISOString(),
   };
 }

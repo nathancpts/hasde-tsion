@@ -1402,7 +1402,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 </div>
                 <div className="space-y-1">
                   {(zmanim?.times ?? [])
-                    .filter((t) => isShabbatDay ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label))
+                    .filter((t) => isShabbatDay || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label))
                     .map((t) => (
                     <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
                       <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
@@ -1412,6 +1412,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   {(!zmanim || zmanim.times.length === 0) && (
                     <p className="text-[12px] text-muted-foreground italic text-center py-6">
                       {zmanim ? "Horaires non disponibles." : "Chargement…"}
+                    </p>
+                  )}
+                  {zmanim?.message && (
+                    <p className="px-3 pt-3 text-center font-display text-sm font-semibold leading-relaxed text-[#1f4ea8]">
+                      {zmanim.message}
                     </p>
                   )}
                 </div>
@@ -1837,7 +1842,7 @@ function PlanningTV() {
   // Column 2 — TODAY's zmanim + countdown, like mobile
   const isWeekend = dow === 5 || dow === 6;
   const todayTimes = (zmanim?.times ?? []).filter((t) =>
-    isWeekend ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
+    isWeekend || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
   );
 
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
@@ -2234,6 +2239,12 @@ function PlanningTV() {
                 </AutoScrollVertical>
               );
             })()}
+
+            {zmanim?.message && (
+              <p className="relative z-10 mt-[1vh] text-center" style={{ fontSize: "1.35vh", color: "#1F4EA8", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}>
+                {zmanim.message}
+              </p>
+            )}
 
           </div>
 

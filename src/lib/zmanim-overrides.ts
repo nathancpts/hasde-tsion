@@ -128,3 +128,35 @@ export function getCommunityMinha(ymd: string): string | null {
 export function getOverride(ymd: string): DayOverride | null {
   return ZMANIM_OVERRIDES[ymd] ?? null;
 }
+
+export type CommunitySchedule = {
+  times: { label: string; value: string }[];
+  message?: string;
+};
+
+// Programmes exceptionnels : les horaires habituels reprennent automatiquement
+// dès le lendemain de chaque date indiquée.
+const COMMUNITY_SCHEDULES: Record<string, CommunitySchedule> = {
+  "2026-09-20": {
+    times: [
+      { label: "Minha", value: "15:00" },
+      { label: "Allumage / Début du jeûne", value: "19:35" },
+      { label: "Kol Nidré suivi d’Arvit", value: "19:40" },
+    ],
+  },
+  "2026-09-21": {
+    times: [
+      { label: "Chah’arit", value: "08:30" },
+      { label: "Étude Sefer Yona", value: "17:00" },
+      { label: "Minha", value: "18:00" },
+      { label: "Néila", value: "19:30" },
+      { label: "Arvit", value: "20:30" },
+      { label: "Chofar", value: "20:50" },
+    ],
+    message: "Que nous soyons tous inscrits et scellés dans le livre de la vie",
+  },
+};
+
+export function getCommunitySchedule(ymd: string): CommunitySchedule | null {
+  return COMMUNITY_SCHEDULES[ymd] ?? null;
+}
