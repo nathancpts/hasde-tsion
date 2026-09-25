@@ -1223,6 +1223,728 @@ export const PARASHOT: ParashaEntry[] = [
       },
     ],
   },
+  {
+    nom: "Bereshit",
+    nomComplet: "Parachat Bereshit",
+    reference: "Beréchit / Genèse 1, 1 à 6, 8",
+    blocs: [
+      {
+        titre: "Parachat Bereshit",
+        icone: "📜",
+        paragraphes: [
+          "La Torah s'ouvre sur la création du monde en six jours : la lumière, le ciel et la terre, les astres, les animaux et enfin l'homme, créé à l'image de Hachem. Adam et Hava demeurent dans le jardin d'Éden, d'où ils sont chassés après avoir goûté au fruit de l'arbre de la connaissance. Leurs fils Caïn et Hével incarnent le premier drame humain, et dix générations séparent Adam de Noé.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Le monde a été créé par dix paroles : chaque détail de la création porte un dessein divin.",
+          "L'homme est créé à l'image de Hachem : chaque personne possède une valeur infinie.",
+          "Le Chabbat couronne la création : le temps lui-même est sanctifié.",
+          "Caïn et Hével enseignent la responsabilité : « Suis-je le gardien de mon frère ? »",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "Rachi cite Rabbi Its'hak : la Torah étant avant tout le livre des mitsvot, elle aurait pu commencer par « Ce mois-ci sera pour vous ». Si elle s'ouvre sur la création, c'est pour proclamer que le monde entier appartient à son Créateur, qui l'a donné à qui Il a voulu.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Commencer par le commencement : reconnaître que tout nous est donné, et agir en gardien du monde et de notre prochain.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Après la faute vient la promesse : l'histoire de l'humanité commence par une lumière qui ne s'éteint jamais.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que cette nouvelle année de Torah soit une source de lumière, de santé et de paix.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Noach",
+    nomComplet: "Parachat Noach",
+    reference: "Beréchit / Genèse 6, 9 à 11, 32",
+    blocs: [
+      {
+        titre: "Parachat Noach",
+        icone: "📜",
+        paragraphes: [
+          "Noé, homme juste de sa génération, reçoit l'ordre de construire l'arche : le déluge efface une humanité corrompue, mais la vie est préservée par paires. En sortant de l'arche, Noé offre des sacrifices et reçoit l'alliance de l'arc-en-ciel, signe qu'un déluge ne détruira plus le monde. Les sept lois de Noé sont données à toute l'humanité, et la tour de Babel, qui voit les langues se confondre, précède la naissance d'Avraham.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "L'arche a été construite pendant de longues années : Hachem laisse toujours le temps de se reprendre.",
+          "L'arc-en-ciel est une alliance universelle : la miséricorde triomphe du jugement.",
+          "Les sept lois de Noé unissent toutes les nations autour d'une morale commune.",
+          "Babel enseigne qu'une union qui écarte Hachem se fissure.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "Noé est qualifié de « juste et intègre » dans ses générations : certains commentent qu'à côté de ses contemporains il brillait, mais face à Avraham il aurait été encore plus grand — chacun est jugé selon ses propres défis.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Sauver le monde, une vie à la fois : Noé n'a pas convaincu la foule, mais il a préservé l'avenir.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Après chaque déluge, un arc-en-ciel : Hachem s'engage à ne jamais abandonner son monde.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Lech Lecha",
+    nomComplet: "Parachat Lech Lecha",
+    reference: "Beréchit / Genèse 12, 1 à 17, 27",
+    blocs: [
+      {
+        titre: "Parachat Lech Lecha",
+        icone: "📜",
+        paragraphes: [
+          "Hachem dit à Avram : « Va pour toi, quitte ton pays, ta terre natale et la maison de ton père. » Avram part pour Canaan, descend en Égypte lors de la famine, se sépare de son neveu Lot, le délivre lors de la guerre des rois et refuse les richesses du roi de Sodome. L'alliance entre les morceaux lui promet une descendance nombreuse comme les étoiles, et l'alliance de la mila scelle pour toujours son pacte avec Hachem.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "La foi d'Avraham : partir sans connaître la destination, guidé par la confiance.",
+          "« Lève les yeux et compte les étoiles » : une promesse qui dépasse toute mesure.",
+          "L'hospitalité d'Avraham ouvre la voie à toute sa descendance.",
+          "La mila, signe visible de l'alliance gravée dans le corps même du peuple.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Lech lecha » : pour ton bénéfice et pour ton bien. Partir pour Hachem, c'est recevoir plus qu'on ne laisse derrière soi.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Grandir exige de quitter ses certitudes : chaque départ fidèle ouvre un chemin neuf.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "L'étoile promise à Avraham : une descendance innombrable porte encore sa lumière dans le monde.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayera",
+    nomComplet: "Parachat Vayera",
+    reference: "Beréchit / Genèse 18, 1 à 22, 24",
+    blocs: [
+      {
+        titre: "Parachat Vayera",
+        icone: "📜",
+        paragraphes: [
+          "Trois jours après la mila, Hachem apparaît à Avraham convalescent : c'est le célèbre épisode de l'hospitalité. Les anges annoncent la naissance de Yits'hak, sauvent Lot de Sodome, puis naît Yits'hak. Hagar et Yishmael sont sauvés dans le désert, et la paracha culmine avec l'Akéda : l'épreuve suprême de Yits'hak, interrompue au dernier instant par un appel du ciel.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Visiter le malade est une voie divine : Hachem vient au chevet d'Avraham.",
+          "L'hospitalité d'Avraham : convalescent, il courait accueillir des inconnus.",
+          "La naissance de Yits'hak : l'impossible devient promesse accomplie.",
+          "L'Akéda : une foi inébranlable, arrêtée par la voix de l'ange.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Et il apparut » : Hachem vient visiter le malade. Imiter les voies d'Hachem commence par le chevet de celui qui souffre.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "La vraie grandeur se mesure à l'accueil de l'autre, surtout quand on est soi-même fragile.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "À l'instant où l'épreuve allait s'accomplir, le bélier apparut : au cœur de l'épreuve, le secours est déjà en chemin.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Haye Sarah",
+    nomComplet: "Parachat Haye Sarah",
+    reference: "Beréchit / Genèse 23, 1 à 25, 18",
+    blocs: [
+      {
+        titre: "Parachat Haye Sarah",
+        icone: "📜",
+        paragraphes: [
+          "Sarah meurt à Kiryat Arba, à cent vingt-sept ans. Avraham achète la grotte de Makpéla à Éphron pour l'enterrer : c'est la première possession d'Israël en Terre promise, payée au prix fort. La paracha poursuit avec la mission d'Éliézer, chargé de trouver une épouse pour Yits'hak : au puits, Rivka se distingue par sa générosité et devient la seconde matriarche. Avraham s'éteint ensuite « vieux et rassasié ».",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Makpéla : la première acquisition en Israël, irréprochable et pour toujours.",
+          "Rivka donne à boire avant même qu'on ne le demande.",
+          "La fidélité d'Éliézer : une mission confiée, une mission accomplie.",
+          "Yits'hak consolé après la perte de sa mère.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "Avraham insiste pour payer le prix complet du champ : une acquisition irréprochable, pour que la première terre d'Israël soit incontestable.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "La générosité discrète de Rivka au puits définit la noblesse : donner avant qu'on ne demande.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Un puits, une rencontre, un avenir : les plus grandes histoires commencent par un geste simple de bonté.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Toldot",
+    nomComplet: "Parachat Toldot",
+    reference: "Beréchit / Genèse 25, 19 à 28, 9",
+    blocs: [
+      {
+        titre: "Parachat Toldot",
+        icone: "📜",
+        paragraphes: [
+          "Yaakov et Essaou naissent jumeaux, déjà opposés : l'un demeure dans les tentes d'étude, l'autre est chasseur des champs. Essaou vend son droit d'aînesse pour un plat de lentilles, preuve qu'il n'en voit pas la valeur. Yits'hak veut bénir l'aîné ; à l'instigation de Rivka, Yaakov reçoit les bénédictions, puis part vers Haran, envoyé par son père pour y chercher épouse.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Le droit d'aînesse : ce qui est précieux ne se vend pas.",
+          "Les puits déterrés par les Philistins : la source se redécouvre à chaque génération.",
+          "Rivka, discernement maternel : « la voix est la voix de Yaakov ».",
+          "Deux jumeaux, deux chemins : l'identité se choisit.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Voici l'odeur de mon fils comme l'odeur d'un champ que Hachem a béni » : les bénédictions d'Yits'hak s'accrochent au champ d'Israël et à sa fertilité spirituelle.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Protéger ce qui est précieux : ne jamais troquer l'essentiel contre l'immédiat.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Chacun porte une lumière singulière qui finira par éclater au grand jour.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayetse",
+    nomComplet: "Parachat Vayetse",
+    reference: "Beréchit / Genèse 28, 10 à 32, 3",
+    blocs: [
+      {
+        titre: "Parachat Vayetse",
+        icone: "📜",
+        paragraphes: [
+          "En route vers Haran, Yaakov rêve d'une échelle dressée vers le ciel où montent et descendent des anges : « Hachem est en ce lieu, et moi, je ne le savais pas. » Il sert Lavan vingt ans, épouse Léa puis Rachel, et voit naître onze de ses fils. Malgré les changements de salaires et les ruses de Lavan, Yaakov prospère, puis s'en va avec sa famille ; Lavan le rattrape et ils scellent une alliance.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "L'échelle de Yaakov : le lieu de la prière, porte du ciel.",
+          "Vingt ans de labeur fidèle malgré l'injustice.",
+          "L'honnêteté de Yaakov dans les comptes les plus difficiles.",
+          "Les douze tribus se construisent dans l'épreuve.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Et il rencontra le lieu » : Rachi explique qu'il s'agit du Mont du Temple — le lieu même où ses descendants prieront, preuve qu'Hachem accompagne chaque étape du chemin.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Fidélité dans le travail et intègrité dans les comptes : on peut prospérer sans jamais céder sur l'honnêteté.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Vingt ans dans la maison de Lavan, et Yaakov n'a rien perdu de son âme : on peut traverser l'épreuve sans y laisser son identité.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayishlach",
+    nomComplet: "Parachat Vayishlach",
+    reference: "Beréchit / Genèse 32, 4 à 36, 43",
+    blocs: [
+      {
+        titre: "Parachat Vayishlach",
+        icone: "📜",
+        paragraphes: [
+          "Yaakov prépare sa rencontre avec Essaou : dons, prière et stratégie. La nuit précédant les retrouvailles, un homme se bat avec lui jusqu'à l'aube ; Yaakov en sort blessé, mais reçoit un nouveau nom : Israël, « car tu as lutté avec des êtres divins et avec des hommes, et tu as prévalu ». Essaou l'accueille en frère. Suivent l'épisode de Dina à Shéhem, la mort de Rachel en donnant naissance à Binyamine, puis le recensement des fils d'Israël.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Trois voies face au danger : cadeaux, prière, préparation.",
+          "Israël : un nom porté dans la lutte et la victoire.",
+          "Rachel meurt en route ; sa tombe demeure un lieu de prière pour son peuple.",
+          "Les douze fils d'Israël, fondement du peuple.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "L'ange lutte avec Yaakov à la nuit tombée : les ténèbres de l'exil assaillent Israël, mais l'aube finit toujours par se lever.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Traverser l'épreuve laisse une marque — et fait de nous quelqu'un de plus fort.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "« Ton nom ne sera plus Yaakov, mais Israël » : l'identité reçue dans la lutte est celle qui demeure.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayeshev",
+    nomComplet: "Parachat Vayeshev",
+    reference: "Beréchit / Genèse 37, 1 à 40, 23",
+    blocs: [
+      {
+        titre: "Parachat Vayeshev",
+        icone: "📜",
+        paragraphes: [
+          "Yaakov s'établit enfin, mais l'histoire de Yossef bouleverse tout : ses rêves attisent la jalousie de ses frères, qui le vendent à des marchands en route pour l'Égypte, avant de tromper leur père avec la tunique trempée dans le sang d'un chevreau. En Égypte, Yossef sert dans la maison de Potifar, résiste aux avances de la femme de son maître, est emprisonné à tort, et y déchiffre les rêves de l'échanson et du panetier — qui, oubliant sa promesse, le laisse encore en prison.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Yossef : des rêves et une fidélité qui ne faillit pas.",
+          "Yehuda et Tamar : la leçon de responsabilité.",
+          "La droiture de Yossef dans la maison du maître comme en prison.",
+          "L'échanson oublie — mais Hachem n'oublie jamais.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Yaakov voulait demeurer dans la tranquillité » : le juste aspire au repos, mais Hachem lui réserve de plus grands destins — à peine s'assied-il que l'histoire de Yossef s'embrase.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Rester droit quand tout se dérègle : la grandeur de Yossef s'écrit dans la maison du maître et dans la prison, pas seulement dans les rêves.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Encore deux années en prison, puis le palais : le délai n'est jamais un abandon — c'est la préparation du relèvement.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Miketz",
+    nomComplet: "Parachat Miketz",
+    reference: "Beréchit / Genèse 41, 1 à 44, 17",
+    blocs: [
+      {
+        titre: "Parachat Miketz",
+        icone: "📜",
+        paragraphes: [
+          "Pharaon rêve de sept vaches grasses dévorées par sept vaches maigres, puis de sept épis : nul ne sait les interpréter, sauf Yossef, tiré de prison sur la recommandation de l'échanson. « Hachem répondra à la paix de Pharaon » : sept années d'abondance seront suivies de sept années de famine. Nommé vice-roi, Yossef engrange le blé d'Égypte. La famine pousse les frères à descendre chercher du pain ; Yossef les reconnaît sans se dévoiler, retient Siméon, puis exige que Binyamine descende, qu'il fait accuser du vol de sa coupe d'argent — éprouvant ainsi le cœur de ses frères.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Yossef attribue tout à Hachem, jusqu'aux rêves du roi.",
+          "La sagesse de la prévoyance : économiser les temps gras pour les temps durs.",
+          "Les frères se reconnaissent coupables : la prise de conscience commence.",
+          "La coupe et Binyamine : l'épreuve du cœur.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Miketz, deux années de jours » : le délai d'Yossef s'achève au juste compte — Hachem retient la délivrance pour la libérer entière, au moment fixé.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Gérer l'abondance pour traverser la disette : la sagesse consiste à préparer demain dès aujourd'hui.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "Au plus profond de la famine, la porte du palais s'ouvre : la chute de Yossef préparait le salut d'Israël.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayigash",
+    nomComplet: "Parachat Vayigash",
+    reference: "Beréchit / Genèse 44, 18 à 47, 27",
+    blocs: [
+      {
+        titre: "Parachat Vayigash",
+        icone: "📜",
+        paragraphes: [
+          "Yehuda s'approche de Yossef et plaide avec une force qui émeut encore : « Ton serviteur a un père, un vieillard, et un enfant de sa vieillesse. » Voyant ses frères prêts à tout pour Binyamine, Yossef se dévoile : « Je suis Yossef — mon père vit-il encore ? » Les frères, bouleversés, sont rassurés : « Ce n'est pas vous qui m'avez envoyé ici, c'est Hachem. » Yaakov descend en Égypte avec soixante-dix âmes ; retrouvailles déchirantes avec son fils, installation à Goshen, et prospérité de la famille en terre d'exil.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Yehuda, chef par le sacrifice : « Je me porte garant pour lui. »",
+          "« Je suis Yossef » : deux mots qui pansent vingt-deux années de silence.",
+          "« Ce n'est pas vous qui m'avez envoyé ici, c'est Hachem » : tout est providence.",
+          "Goshen : garder son identité même en terre étrangère.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "« Yehuda s'approcha » : de cœur comme de corps — celui qui plaide pour son frère le fait de tout son être.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Se porter garant les uns pour les autres : la force d'un peuple tient à celui qui dit « prends-moi à sa place ».",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "« Israël vécut dans le meilleur du pays » : même en terre étrangère, la promesse suit son peuple.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Vayehi",
+    nomComplet: "Parachat Vayehi",
+    reference: "Beréchit / Genèse 47, 28 à 50, 26",
+    blocs: [
+      {
+        titre: "Parachat Vayehi",
+        icone: "📜",
+        paragraphes: [
+          "Yaakov vit ses dix-sept dernières années en Égypte. Avant de mourir, il bénit Éphraïm et Ménaché — plaçant le cadet devant l'aîné — puis ses douze fils, chacun selon sa singularité, et leur transmet la promesse du retour en Terre d'Israël. Il est enseveli à Makpéla par tous ses fils. Yossef pardonne à ses frères : « Vous aviez pensé me faire du mal, Hachem l'a tourné en bien. » La Genèse se clôt sur la mort de Yossef et la promesse que Hachem « se souviendra » de son peuple.",
+        ],
+      },
+      {
+        titre: "Points à retenir",
+        icone: "✨",
+        puces: [
+          "Bénir chaque enfant selon sa propre lumière.",
+          "La foi transmise à toute la famille avant le dernier souffle.",
+          "Le pardon de Yossef : retourner le mal en bien.",
+          "Les ossements de Yossef, promesse confiée du retour.",
+        ],
+      },
+      {
+        titre: "Commentaire de Rachi",
+        icone: "💬",
+        paragraphes: [
+          "Pourquoi le livre du juste s'ouvre-t-il sur « Vayehi », mot de tristesse ? Yaakov voulait révéler la fin des temps, et elle lui fut cachée : l'avenir appartient à Hachem seul.",
+        ],
+      },
+      {
+        titre: "Moralité",
+        icone: "🌿",
+        paragraphes: [
+          "Transmettre : la plus grande richesse de Yaakov n'est pas ce qu'il possédait, mais ce qu'il a béni et confié.",
+        ],
+      },
+      {
+        titre: "Message d'espoir",
+        icone: "🕯️",
+        paragraphes: [
+          "« Hachem veillera sur vous et vous ramènera » : le premier livre de la Torah se clôt sur une promesse de retour.",
+        ],
+      },
+      {
+        titre: "Chabbat Chalom à tous !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que ce Chabbat soit une source de paix, de réconfort et de lumière pour vous et vos familles.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Souccot",
+    nomComplet: "Souccot 5787 — 1er jour (Chabbat)",
+    reference: "Bamidbar / Nombres 29, 12–16",
+    blocs: [
+      {
+        titre: "Chabbat Souccot 5787",
+        icone: "🌿",
+        paragraphes: [
+          "Ce Chabbat correspond au 1er jour de Souccot : il n'y a donc pas de paracha hebdomadaire classique. La lecture de la Torah est celle de la fête.",
+        ],
+      },
+      {
+        titre: "Lecture de la Torah",
+        icone: "📜",
+        paragraphes: [
+          "Bamidbar / Nombres 29, 12–16 : les sacrifices du 1er jour de Souccot. Treize taureaux sont offerts ce jour-là ; sur les sept jours de la fête, soixante-dix taureaux au total, correspondant aux soixante-dix nations du monde — Souccot est la fête pour laquelle on sollicitait la paix du monde entier.",
+        ],
+      },
+      {
+        titre: "Maftir",
+        icone: "✨",
+        paragraphes: [
+          "Bamidbar / Nombres 29, 17–19.",
+        ],
+      },
+      {
+        titre: "Haftara",
+        icone: "🕯️",
+        paragraphes: [
+          "Zekharya / Zacharie 14, 1–21 : à l'ère messianique, toutes les nations monteront à Jérusalem, année après année, pour célébrer la fête des Souccot.",
+        ],
+      },
+      {
+        titre: "Prochaine paracha",
+        icone: "➡️",
+        paragraphes: [
+          "Pas de paracha non plus le Chabbat 3 octobre 2026 (Chemini Atseret / Sim'hat Torah). La prochaine paracha hebdomadaire sera Bereshit, lue le Chabbat 10 octobre 2026, après les fêtes de Tichri.",
+        ],
+      },
+      {
+        titre: "Hag Souccot Sameach !",
+        icone: "🎉",
+        paragraphes: [
+          "Que cette fête soit une source de joie, de protection et de lumière pour vous et vos familles, sous les ailes de la Soucca.",
+        ],
+      },
+    ],
+  },
+  {
+    nom: "Chemini Atseret / Sim'hat Torah",
+    nomComplet: "Chemini Atseret & Sim'hat Torah 5787",
+    reference: "Devarim / Deutéronome 14, 22 à 16, 17",
+    blocs: [
+      {
+        titre: "Chemini Atseret & Sim'hat Torah 5787",
+        icone: "🎉",
+        paragraphes: [
+          "Le Chabbat 3 octobre 2026 est Chemini Atseret, le « huitième jour » qui clôt les fêtes de Tichri ; en diaspora, Sim'hat Torah est célébrée le dimanche 4 octobre. Il n'y a donc pas de paracha hebdomadaire classique.",
+        ],
+      },
+      {
+        titre: "Lecture de la Torah",
+        icone: "📜",
+        paragraphes: [
+          "Devarim / Deutéronome 14, 22 à 16, 17, et Maftir : Bamidbar / Nombres 29, 35 à 30, 1 — le jour où la Torah réclame explicitement la joie.",
+        ],
+      },
+      {
+        titre: "Haftara",
+        icone: "🕯️",
+        paragraphes: [
+          "Melakhim I / 1 Rois 8, 54 à 66 : la dédicace du Temple par le roi Chlomo et la bénédiction du peuple.",
+        ],
+      },
+      {
+        titre: "Sim'hat Torah",
+        icone: "📜",
+        paragraphes: [
+          "Le dimanche 4 octobre, on conclut la Torah avec Vezot Haberakha (Devarim 33, 1 à 34, 12) et on recommence aussitôt avec Bereshit — la fin n'existe pas vraiment. On clame : « Chazak, chazak venitchazek ! »",
+        ],
+      },
+      {
+        titre: "Prochaine paracha",
+        icone: "➡️",
+        paragraphes: [
+          "Bereshit, lue le Chabbat 10 octobre 2026 — un nouveau cycle annuel de Torah commence.",
+        ],
+      },
+      {
+        titre: "Hag Sameach !",
+        icone: "🕊️",
+        paragraphes: [
+          "Que la joie de la Torah et le sceau des fêtes de Tichri nous accompagnent toute l'année.",
+        ],
+      },
+    ],
+  },
 ];
 
 // Shabbat de référence (samedi 18 juillet 2026) → index 7 = Devarim.
@@ -1232,6 +1954,9 @@ const BASE_INDEX = 7;
 // Surcharges pour les fêtes qui remplacent une paracha hebdomadaire.
 const HOLIDAY_OVERRIDES: Record<string, string> = {
   "2026-09-12": "Roch Hachana",
+  "2026-09-26": "Souccot",
+  "2026-10-03": "Chemini Atseret / Sim'hat Torah",
+  "2026-10-10": "Bereshit",
 };
 
 function upcomingShabbat(d: Date): Date {
