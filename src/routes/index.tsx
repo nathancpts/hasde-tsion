@@ -1796,7 +1796,7 @@ function PlanningTV() {
   const hayomYom = getHayomYom(now);
   const spotlight = useLiveSpotlight(Boolean(isTV) && !isShabbatNow && !isPdfMode);
 
-  // Kotel cycle removed for TV stability — video stays fixed in Column 3.
+  // Le même lecteur reste monté pendant tout le cycle pour éviter un écran noir au retour.
 
 
   if (isTV === null && !isPdfMode) return <div className="h-screen w-screen bg-[#0F3D7A]" />;
@@ -2386,20 +2386,36 @@ function PlanningTV() {
             </div>
           </article>
 
+          {/* Fond du live agrandi — le lecteur reste unique et ne redémarre pas */}
+          {spotlight && !isShabbatNow && (
+            <div
+              className="fixed inset-0 z-40"
+              style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
+              aria-hidden="true"
+            />
+          )}
+
           {/* Live Kotel — or Shabbat static */}
           <div
-            className="relative z-0 w-full overflow-hidden shrink-0"
+            className="relative w-full overflow-hidden shrink-0"
             style={{
-              borderRadius: "16px",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-              background: "#FFFFFF",
+              position: spotlight && !isShabbatNow ? "fixed" : "relative",
+              left: spotlight && !isShabbatNow ? "50%" : undefined,
+              top: spotlight && !isShabbatNow ? "50%" : undefined,
+              width: spotlight && !isShabbatNow ? "86vw" : "100%",
+              maxHeight: spotlight && !isShabbatNow ? "86vh" : undefined,
+              borderRadius: spotlight && !isShabbatNow ? "22px" : "16px",
+              border: spotlight && !isShabbatNow ? `1px solid ${GOLD_HAIR}` : undefined,
+              boxShadow: spotlight && !isShabbatNow ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0, 0, 0, 0.05)",
+              background: spotlight && !isShabbatNow ? "#0A1128" : "#FFFFFF",
               aspectRatio: "16 / 9",
               flex: "0 0 auto",
-              zIndex: 0,
+              zIndex: spotlight && !isShabbatNow ? 50 : 0,
               isolation: "isolate",
               contain: "strict",
-              transform: "translateZ(0)",
-              clipPath: "inset(0 round 16px)",
+              transform: spotlight && !isShabbatNow ? "translate(-50%, -50%) translateZ(0)" : "translateZ(0)",
+              clipPath: spotlight && !isShabbatNow ? "inset(0 round 22px)" : "inset(0 round 16px)",
+              transition: "width 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
             }}
           >
 
@@ -2453,7 +2469,7 @@ function PlanningTV() {
                   className="absolute inset-0"
                   style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
                 >
-                  <KotelLive className="absolute inset-0 w-full h-full" radius={16} />
+                  <KotelLive className="absolute inset-0 w-full h-full" radius={spotlight ? 22 : 16} />
                 </div>
 
                 <div
@@ -2471,42 +2487,6 @@ function PlanningTV() {
         </div>
         </div>
       </section>
-
-      {/* Live en grand au centre — 10 min toutes les 15 min */}
-      {spotlight && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
-          style={{
-            background: "rgba(10,17,40,0.72)",
-            backdropFilter: "blur(28px) saturate(130%)",
-          }}
-        >
-          <div
-            className="relative overflow-hidden"
-            style={{
-              width: "86vw",
-              maxHeight: "86vh",
-              aspectRatio: "16 / 9",
-              borderRadius: "22px",
-              border: `1px solid ${GOLD_HAIR}`,
-              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.75)",
-              background: "#0A1128",
-              clipPath: "inset(0 round 22px)",
-            }}
-          >
-            <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
-            <div
-              className="absolute top-[1.6vh] left-[1.6vh] inline-flex items-center gap-[0.5vw] px-[1vw] py-[0.6vh] rounded-full"
-              style={{ background: "rgba(255,255,255,0.85)", boxShadow: "0 6px 18px rgba(10,17,40,0.18)" }}
-            >
-              <span className="inline-block rounded-full" style={{ width: "1vh", height: "1vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-              <span className="uppercase" style={{ fontSize: "1.2vh", letterSpacing: "0.32em", fontWeight: 700, color: "#0A1128" }}>
-                Live · Hasdé Tsion
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
 
     </main>
   );
