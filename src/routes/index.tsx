@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { isTVDevice } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
