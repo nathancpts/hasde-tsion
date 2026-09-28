@@ -2215,7 +2215,7 @@ function PlanningTV() {
         {/* COLUMN 2 — ZMANIM + SOUCCOT */}
         <div className="col-span-5 flex flex-col min-h-0 gap-[1.6vh]">
         <article
-          className="col-span-5 flex flex-col min-h-0 relative overflow-hidden"
+          className="flex-1 flex flex-col min-h-0 relative overflow-hidden"
           style={{
             background: "#FFFFFF",
             borderRadius: "16px",
