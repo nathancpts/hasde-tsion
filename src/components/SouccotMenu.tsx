@@ -170,18 +170,41 @@ export default function SouccotMenu({ past = false }: { past?: boolean }) {
   const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>(defaultMenuTab);
   const menu = MENUS[menuTab];
 
+  // Après Souccot : carte compacte « événement passé », sans menus ni réservations
+  if (past) {
+    return (
+      <div className="space-y-2.5">
+        <article
+          className="btn-blue-animated rounded-2xl px-5 py-3.5 text-center"
+          style={{ boxShadow: "0 4px 14px rgba(31,78,168,0.2)" }}
+        >
+          <p className="text-[9px] uppercase tracking-[0.3em] font-semibold text-white/80">Événement passé</p>
+          <h3 className="font-display text-base font-bold text-white leading-tight mt-0.5">Les repas de Souccot 5787</h3>
+          <p className="text-[11px] text-white/80 mt-0.5">Du 25 au 27 septembre 2026</p>
+        </article>
+        <article className="rounded-2xl bg-white p-3.5 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+          <p className="text-[12px] text-foreground/70 leading-snug">
+            Les repas de Souccot 5787 sont terminés et les réservations sont closes. Merci à tous ceux qui nous ont
+            rejoints sous la Soucca — à l'année prochaine !
+          </p>
+        </article>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {/* En-tête */}
       <article className="btn-blue-animated rounded-3xl p-5 text-center" style={{ boxShadow: "0 8px 24px rgba(31,78,168,0.25)" }}>
         <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 mb-1">
-          {past ? "Événement passé" : "Souccot 5787"}
+          Souccot 5787
         </p>
         <h3 className="font-display text-2xl font-bold text-white leading-tight">Les repas de Souccot</h3>
         <p className="text-[12px] text-white/85 mt-1">
-          {past ? "Souccot 5787 · du 25 au 27 septembre 2026" : "Sous la Soucca · 5787"}
+          Sous la Soucca · 5787
         </p>
       </article>
+
 
       {past && (
         <article className="rounded-2xl bg-[#F8FAFC] p-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
