@@ -2307,8 +2307,7 @@ function PlanningTV() {
 
         {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
         <div
-          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full overflow-hidden isolate"
-          style={{ contain: "layout paint style" }}
+          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full"
         >
           {/* Hayom Yom du jour */}
           {hayomYom && (
