@@ -28,6 +28,7 @@ function useKiosk() {
   const [hint, setHint] = useState(true);
 
   const enter = useCallback(async () => {
+    if (window.top !== window.self) { window.parent.postMessage({ type: "ht-fs" }, window.location.origin); return; }
     try {
       await document.documentElement.requestFullscreen();
       const so = screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> };
@@ -36,16 +37,22 @@ function useKiosk() {
   }, []);
 
   const exit = useCallback(async () => {
+    if (window.top !== window.self) { window.parent.postMessage({ type: "ht-fs" }, window.location.origin); return; }
     if (document.fullscreenElement) await document.exitFullscreen();
   }, []);
 
   const toggle = useCallback(() => {
+    if (window.top !== window.self) { window.parent.postMessage({ type: "ht-fs" }, window.location.origin); return; }
     if (document.fullscreenElement) exit(); else enter();
   }, [enter, exit]);
 
   useEffect(() => {
     const onChange = () => setIsFs(!!document.fullscreenElement);
     document.addEventListener("fullscreenchange", onChange);
+    const onParent = (e: MessageEvent) => {
+      if (e.origin === window.location.origin && e.data?.type === "ht-fs-state") setIsFs(!!e.data.fs);
+    };
+    window.addEventListener("message", onParent);
 
     // Keyboard: F = toggle fullscreen, Esc handled by browser
     const onKey = (e: KeyboardEvent) => {
@@ -80,6 +87,7 @@ function useKiosk() {
 
     return () => {
       document.removeEventListener("fullscreenchange", onChange);
+      window.removeEventListener("message", onParent);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("visibilitychange", onVis);
@@ -129,8 +137,65 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: PlanningTV,
+  component: HomeEntry,
 });
+
+const isFramed = () => typeof window !== "undefined" && window.top !== window.self;
+
+/** Sur TV, la page reste fixe (plein écran conservé) et recharge un cadre interne toutes les 10 min. */
+function HomeEntry() {
+  const [shell, setShell] = useState(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (isTVDevice() && !isFramed() && params.get("pdf") !== "1") setShell(true);
+  }, []);
+  return shell ? <TVFrameShell /> : <PlanningTV />;
+}
+
+function TVFrameShell() {
+  const makeSrc = () => `/?tv=1&frame=1&r=${Date.now()}`;
+  const [frames, setFrames] = useState<{ a: string; b: string | null; active: "a" | "b" }>(() => ({ a: makeSrc(), b: null, active: "a" }));
+  useEffect(() => {
+    try { localStorage.setItem("ht-tv", "1"); } catch {}
+    const id = window.setInterval(() => {
+      if (navigator.onLine === false) return;
+      setFrames((f) => (f.active === "a" ? { ...f, b: makeSrc() } : { ...f, a: makeSrc() }));
+    }, 10 * 60 * 1000);
+    const sendState = () => {
+      const fs = !!document.fullscreenElement;
+      document.querySelectorAll("iframe").forEach((f) => f.contentWindow?.postMessage({ type: "ht-fs-state", fs }, "*"));
+    };
+    const onMsg = async (e: MessageEvent) => {
+      if (e.origin !== window.location.origin || e.data?.type !== "ht-fs") return;
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen();
+      } catch { /* geste requis */ }
+    };
+    window.addEventListener("message", onMsg);
+    document.addEventListener("fullscreenchange", sendState);
+    return () => { window.clearInterval(id); window.removeEventListener("message", onMsg); document.removeEventListener("fullscreenchange", sendState); };
+  }, []);
+  const onLoad = (which: "a" | "b") => {
+    // Nouveau cadre chargé : on l'affiche, puis on libère l'ancien.
+    setFrames((f) => {
+      if (f.active === which) return f;
+      return which === "a" ? { a: f.a, b: null, active: "a" } : { a: "", b: f.b, active: "b" };
+    });
+    const fs = !!document.fullscreenElement;
+    setTimeout(() => document.querySelectorAll("iframe").forEach((fr) => fr.contentWindow?.postMessage({ type: "ht-fs-state", fs }, "*")), 500);
+  };
+  const style = (on: boolean): React.CSSProperties => ({
+    position: "fixed", inset: 0, width: "100vw", height: "100vh", border: 0,
+    opacity: on ? 1 : 0, zIndex: on ? 2 : 1, transition: "opacity 600ms ease",
+  });
+  return (
+    <main style={{ position: "fixed", inset: 0, background: "#0A1128" }}>
+      {frames.a && <iframe title="Hasdé Tsion TV" src={frames.a} style={style(frames.active === "a")} onLoad={() => onLoad("a")} allow="autoplay; fullscreen" />}
+      {frames.b && <iframe title="Hasdé Tsion TV" src={frames.b} style={style(frames.active === "b")} onLoad={() => onLoad("b")} allow="autoplay; fullscreen" />}
+    </main>
+  );
+}
 
 // ============ DATA ============
 const week = {
@@ -1755,6 +1820,7 @@ function PlanningTV() {
   useEffect(() => {
     if (!isTVDevice()) return;
     try { localStorage.setItem("ht-tv", "1"); } catch {}
+    if (isFramed()) return; // le cadre parent gère le rafraîchissement sans quitter le plein écran
     const id = setTimeout(() => {
       if (navigator.onLine === false) return;
       const url = new URL(window.location.href);
