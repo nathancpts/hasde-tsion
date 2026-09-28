@@ -1156,8 +1156,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
   // Section tab in white surface
-  // Événement Souccot : réservations ouvertes jusqu'au lundi 28 septembre 2026 inclus
-  const souccotVisible = new Date() <= new Date(2026, 8, 28, 23, 59, 59);
+  // Événement Souccot : affiché jusqu'au 27 septembre 2026 inclus, puis « événement passé » compact
+  const souccotVisible = new Date() <= new Date(2026, 8, 27, 23, 59, 59);
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
   const [accountLabel, setAccountLabel] = useState("Connexion");
 
