@@ -25,24 +25,25 @@ export default function KotelLive({
     let retryTimer: number | null = null;
     let lastTime = -1;
     let stalledChecks = 0;
+    let mediaRetries = 0;
 
     const play = () => void video.play().catch(() => {});
     const retry = () => {
       if (destroyed || retryTimer !== null) return;
-      setStatus("loading");
+      // Garde la dernière image affichée pendant la reconnexion (pas d'écran vide).
+      setStatus((s) => (s === "playing" ? "playing" : "loading"));
       retryTimer = window.setTimeout(() => {
         retryTimer = null;
         if (!destroyed) setAttempt((value) => value + 1);
-      }, 5000);
+      }, 3000);
     };
     const onPlaying = () => {
-      stalledChecks = 0;
+      stalledChecks = 0; mediaRetries = 0;
       setStatus("playing");
     };
     const onPlaybackProblem = () => retry();
     video.addEventListener("playing", onPlaying);
     video.addEventListener("error", onPlaybackProblem);
-    video.addEventListener("stalled", onPlaybackProblem);
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = STREAM_URL;
@@ -54,17 +55,18 @@ export default function KotelLive({
           if (!destroyed) setStatus("error");
           return;
         }
-        const inst = new Hls({ liveDurationInfinity: true, lowLatencyMode: true });
+        const inst = new Hls({ liveDurationInfinity: true, lowLatencyMode: false, manifestLoadingMaxRetry: 6, levelLoadingMaxRetry: 6, fragLoadingMaxRetry: 6 });
         hls = inst;
         inst.loadSource(STREAM_URL);
         inst.attachMedia(video);
         inst.on(Hls.Events.MANIFEST_PARSED, play);
         inst.on(Hls.Events.ERROR, (_e, data) => {
           if (!data.fatal) return;
+          if (data.type === Hls.ErrorTypes.MEDIA_ERROR) { inst.recoverMediaError(); return; }
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR && mediaRetries++ < 3) { inst.startLoad(); return; }
           inst.destroy();
           hls = null;
           if (destroyed) return;
-          setStatus("error");
           retry();
         });
       })();
@@ -79,7 +81,7 @@ export default function KotelLive({
       if (video.readyState < 2 || video.currentTime === lastTime) stalledChecks += 1;
       else stalledChecks = 0;
       lastTime = video.currentTime;
-      if (stalledChecks >= 3) retry();
+      if (stalledChecks >= 4) retry();
     }, 7000);
 
     return () => {
@@ -88,7 +90,6 @@ export default function KotelLive({
       if (retryTimer !== null) window.clearTimeout(retryTimer);
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("error", onPlaybackProblem);
-      video.removeEventListener("stalled", onPlaybackProblem);
       hls?.destroy();
       video.pause();
       video.removeAttribute("src");
