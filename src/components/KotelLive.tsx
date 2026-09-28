@@ -22,10 +22,27 @@ export default function KotelLive({
     if (!video) return;
     let destroyed = false;
     let hls: { destroy: () => void } | null = null;
+    let retryTimer: number | null = null;
+    let lastTime = -1;
+    let stalledChecks = 0;
 
     const play = () => void video.play().catch(() => {});
-    const onPlaying = () => setStatus("playing");
+    const retry = () => {
+      if (destroyed || retryTimer !== null) return;
+      setStatus("loading");
+      retryTimer = window.setTimeout(() => {
+        retryTimer = null;
+        if (!destroyed) setAttempt((value) => value + 1);
+      }, 5000);
+    };
+    const onPlaying = () => {
+      stalledChecks = 0;
+      setStatus("playing");
+    };
+    const onPlaybackProblem = () => retry();
     video.addEventListener("playing", onPlaying);
+    video.addEventListener("error", onPlaybackProblem);
+    video.addEventListener("stalled", onPlaybackProblem);
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = STREAM_URL;
@@ -48,17 +65,34 @@ export default function KotelLive({
           hls = null;
           if (destroyed) return;
           setStatus("error");
-          // Relance automatique (jeton du flux renouvelé côté serveur)
-          setTimeout(() => !destroyed && setAttempt((a) => a + 1), 8000);
+          retry();
         });
       })();
     }
 
+    // Certaines TV ne signalent pas une coupure HLS : on vérifie que l'image avance réellement.
+    const watchdog = window.setInterval(() => {
+      if (video.paused) {
+        play();
+        return;
+      }
+      if (video.readyState < 2 || video.currentTime === lastTime) stalledChecks += 1;
+      else stalledChecks = 0;
+      lastTime = video.currentTime;
+      if (stalledChecks >= 3) retry();
+    }, 7000);
+
     return () => {
       destroyed = true;
+      window.clearInterval(watchdog);
+      if (retryTimer !== null) window.clearTimeout(retryTimer);
       video.removeEventListener("playing", onPlaying);
+      video.removeEventListener("error", onPlaybackProblem);
+      video.removeEventListener("stalled", onPlaybackProblem);
       hls?.destroy();
+      video.pause();
       video.removeAttribute("src");
+      video.load();
     };
   }, [attempt]);
 
