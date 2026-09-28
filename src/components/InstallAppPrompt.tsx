@@ -83,6 +83,11 @@ export function InstallAppPrompt() {
     if (typeof window === "undefined") return;
     // Mode télé : jamais de popup ni de demande de notification.
     if (isTVDevice() || window.innerWidth >= 1024) return;
+    const closeIfTV = () => {
+      if (isTVDevice() || window.innerWidth >= 1024) setMode("none");
+    };
+    window.addEventListener("resize", closeIfTV);
+    window.addEventListener("orientationchange", closeIfTV);
     const inIframe = window.top !== window.self;
     const p = detectPlatform();
     setPlatform(p);
@@ -143,6 +148,8 @@ export function InstallAppPrompt() {
       window.clearTimeout(timer);
       window.removeEventListener("beforeinstallprompt", onBip);
       window.removeEventListener("appinstalled", onInstalled);
+      window.removeEventListener("resize", closeIfTV);
+      window.removeEventListener("orientationchange", closeIfTV);
     };
   }, []);
 

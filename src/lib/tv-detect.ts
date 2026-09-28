@@ -22,10 +22,27 @@ export function isTVDevice(): boolean {
     )
   )
     return true;
-  // Box Android sans mention "Mobile" en paysage large = TV
-  const landscapeWide =
-    window.matchMedia("(orientation: landscape)").matches && window.innerWidth >= 900;
-  if (/Android/i.test(ua) && !/Mobile/i.test(ua) && landscapeWide && !("ontouchstart" in window))
+  // Les navigateurs de certaines TV Android annoncent à tort "Mobile" et
+  // exposent une surface tactile. Leur viewport CSS peut aussi être limité à
+  // 960 px malgré une dalle Full HD : on se base donc surtout sur le paysage.
+  const viewportWidth = Math.max(
+    window.innerWidth,
+    window.visualViewport?.width ?? 0,
+    window.screen?.width ?? 0,
+  );
+  const viewportHeight = Math.max(
+    window.innerHeight,
+    window.visualViewport?.height ?? 0,
+    window.screen?.height ?? 0,
+  );
+  const landscapeWide = viewportWidth > viewportHeight && viewportWidth >= 800;
+  if (/Android/i.test(ua) && landscapeWide) {
+    try {
+      localStorage.setItem("ht-tv", "1");
+    } catch {
+      /* noop */
+    }
     return true;
+  }
   return false;
 }

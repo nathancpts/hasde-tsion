@@ -401,16 +401,19 @@ function sortByTime<T extends { value: string }>(list: T[]): T[] {
 
 
 function useIsTV(): boolean | null {
-  const [isTV, setIsTV] = useState<boolean | null>(() => {
-    if (typeof window === "undefined") return null;
-    return isTVDevice() || window.matchMedia("(min-width: 1024px)").matches;
-  });
+  const [isTV, setIsTV] = useState<boolean | null>(null);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
     const update = () => setIsTV(isTVDevice() || mq.matches);
     update();
     mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      mq.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
   }, []);
   return isTV;
 }
