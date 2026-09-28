@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/logo-hasde.png.asset.json";
@@ -2385,38 +2386,9 @@ function PlanningTV() {
             </div>
           </article>
 
-          {/* Fond du live agrandi — le lecteur reste unique et ne redémarre pas */}
-          {spotlight && !isShabbatNow && (
-            <div
-              className="fixed inset-0 z-40"
-              style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
-              aria-hidden="true"
-            />
-          )}
+          {/* Live Kotel — rendu au-dessus de toute la page (portal), suit son emplacement */}
+          <LivePortalBox big={spotlight && !isShabbatNow}>
 
-          {/* Live Kotel — or Shabbat static */}
-          <div
-            className="relative w-full overflow-hidden shrink-0"
-            style={{
-              position: spotlight && !isShabbatNow ? "fixed" : "relative",
-              left: spotlight && !isShabbatNow ? "50%" : undefined,
-              top: spotlight && !isShabbatNow ? "50%" : undefined,
-              width: spotlight && !isShabbatNow ? "86vw" : "100%",
-              maxHeight: spotlight && !isShabbatNow ? "86vh" : undefined,
-              borderRadius: spotlight && !isShabbatNow ? "22px" : "16px",
-              border: spotlight && !isShabbatNow ? `1px solid ${GOLD_HAIR}` : undefined,
-              boxShadow: spotlight && !isShabbatNow ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0, 0, 0, 0.05)",
-              background: spotlight && !isShabbatNow ? "#0A1128" : "#FFFFFF",
-              aspectRatio: "16 / 9",
-              flex: "0 0 auto",
-              zIndex: spotlight && !isShabbatNow ? 50 : 0,
-              isolation: "isolate",
-              contain: "strict",
-              transform: spotlight && !isShabbatNow ? "translate(-50%, -50%) translateZ(0)" : "translateZ(0)",
-              clipPath: spotlight && !isShabbatNow ? "inset(0 round 22px)" : "inset(0 round 16px)",
-              transition: "width 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
-            }}
-          >
 
 
             {isShabbatNow ? (
@@ -2482,12 +2454,69 @@ function PlanningTV() {
                 </div>
               </>
             )}
-          </div>
+          </LivePortalBox>
         </div>
         </div>
       </section>
 
     </main>
+  );
+}
+
+function LivePortalBox({ big, children }: { big: boolean; children: React.ReactNode }) {
+  const slotRef = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
+  const [vp, setVp] = useState({ w: 1920, h: 1080 });
+  useEffect(() => {
+    const measure = () => {
+      const el = slotRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setRect({ l: r.left, t: r.top, w: r.width, h: r.height });
+      setVp({ w: window.innerWidth, h: window.innerHeight });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (slotRef.current) ro.observe(slotRef.current);
+    window.addEventListener("resize", measure);
+    const id = window.setInterval(measure, 2000);
+    return () => { ro.disconnect(); window.removeEventListener("resize", measure); window.clearInterval(id); };
+  }, []);
+  const bw = Math.min(vp.w * 0.86, vp.h * 0.86 * (16 / 9));
+  const bh = bw * (9 / 16);
+  const box = big
+    ? { l: (vp.w - bw) / 2, t: (vp.h - bh) / 2, w: bw, h: bh }
+    : rect;
+  return (
+    <>
+      <div ref={slotRef} className="relative w-full shrink-0" style={{ aspectRatio: "16 / 9" }} />
+      {box && typeof document !== "undefined" && createPortal(
+        <>
+          <div
+            aria-hidden="true"
+            style={{
+              position: "fixed", inset: 0, zIndex: 9000,
+              background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)",
+              opacity: big ? 1 : 0, pointerEvents: "none", transition: "opacity 700ms ease",
+            }}
+          />
+          <div
+            style={{
+              position: "fixed", left: box.l, top: box.t, width: box.w, height: box.h,
+              zIndex: 9001, overflow: "hidden",
+              borderRadius: big ? 22 : 16,
+              border: big ? `1px solid ${GOLD_HAIR}` : "1px solid transparent",
+              boxShadow: big ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0,0,0,0.05)",
+              background: big ? "#0A1128" : "#FFFFFF",
+              transition: "left 700ms ease, top 700ms ease, width 700ms ease, height 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
+            }}
+          >
+            {children}
+          </div>
+        </>,
+        document.body,
+      )}
+    </>
   );
 }
 
