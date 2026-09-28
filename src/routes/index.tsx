@@ -2505,7 +2505,7 @@ function LivePortalBox({ big, children }: { big: boolean; children: React.ReactN
               position: "fixed", left: box.l, top: box.t, width: box.w, height: box.h,
               zIndex: 9001, overflow: "hidden",
               borderRadius: big ? 22 : 16,
-              border: big ? `1px solid ${GOLD_HAIR}` : "1px solid transparent",
+              border: big ? "1px solid rgba(212,175,55,0.55)" : "1px solid transparent",
               boxShadow: big ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0,0,0,0.05)",
               background: big ? "#0A1128" : "#FFFFFF",
               transition: "left 700ms ease, top 700ms ease, width 700ms ease, height 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
