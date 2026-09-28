@@ -12,9 +12,11 @@ import { frenchHebMonth } from "@/lib/yahrtzeits";
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
 import { PARASHA_NOM, DONATIONS_REPAS } from "@/lib/weekly-content";
 import { useParashaContent } from "@/lib/parasha-content";
+import { getHayomYom } from "@/lib/hayom-yom";
 import CommunitySection from "@/components/community/CommunitySection";
 import SouccotMenu from "@/components/SouccotMenu";
 import KotelLive from "@/components/KotelLive";
+import { HayomYomCard } from "@/components/HayomYomCard";
 
 const logo = logoAsset.url;
 
@@ -111,6 +113,10 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Hasdé Tsion — Planning de la semaine" },
       { name: "description", content: "Horaires des offices et cours de la synagogue Hasdé Tsion, affichage TV." },
+      { property: "og:title", content: "Hasdé Tsion — Planning de la semaine" },
+      { property: "og:description", content: "Horaires, études quotidiennes et informations de la communauté Hasdé Tsion." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
     ],
     links: [
@@ -1140,6 +1146,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const today = new Date();
   const selectedDate = new Date(today);
   selectedDate.setDate(today.getDate() + dayOffset);
+  const hayomYom = getHayomYom(selectedDate);
   const selectedDow = selectedDate.getDay(); // 0=Dim..6=Sam
   const isFri = selectedDow === 5;
   const isSat = selectedDow === 6;
@@ -1655,7 +1662,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           )}
 
           {sectionTab === "etude" && (
-            <article id="etude" className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)] scroll-mt-24">
+            <div id="etude" className="space-y-4 scroll-mt-24">
+              <HayomYomCard content={hayomYom} />
+            <article className="rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
               <div className="flex items-center justify-between gap-2 mb-3">
                 <h3 className="font-display text-xl font-bold text-foreground">Parasha {parashaFr}</h3>
                 {pc.nomHe && (
@@ -1691,6 +1700,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 <SidourLink />
               </div>
             </article>
+            </div>
           )}
 
           {sectionTab === "communaute" && <SouccotMenu past={!souccotVisible} />}
@@ -1783,6 +1793,7 @@ function PlanningTV() {
     (dow === 5 && entryMin != null && nowMin >= entryMin) ||
     (dow === 6 && (exitMin == null || nowMin < exitMin));
   const pc = useParashaContent();
+  const hayomYom = getHayomYom(now);
   const spotlight = useLiveSpotlight(Boolean(isTV) && !isShabbatNow && !isPdfMode);
 
   // Kotel cycle removed for TV stability — video stays fixed in Column 3.
@@ -2299,11 +2310,42 @@ function PlanningTV() {
           className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full overflow-hidden isolate"
           style={{ contain: "layout paint style" }}
         >
+          {/* Hayom Yom du jour */}
+          {hayomYom && (
+            <article
+              className="flex min-h-0 flex-col"
+              style={{
+                flex: "1.25 1 0%",
+                background: "#FFFFFF",
+                borderRadius: "16px",
+                padding: "20px 24px",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+              }}
+            >
+              <div className="pb-[1vh] mb-[0.8vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
+                <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
+                  Aujourd’hui, c’est le jour…
+                </p>
+                <div className="mt-[0.45vh] flex items-baseline justify-between gap-3">
+                  <h3 style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}>
+                    Hayom Yom
+                  </h3>
+                  <span style={{ fontSize: "1.15vh", color: "#7A869A", fontWeight: 500 }}>{hayomYom.hebrewDate}</span>
+                </div>
+              </div>
+              <AutoScrollVertical className="flex-1 min-h-0" speed={12} pause={3200}>
+                <p className="whitespace-pre-line" style={{ fontSize: "1.48vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
+                  {hayomYom.fr}
+                </p>
+              </AutoScrollVertical>
+            </article>
+          )}
+
           {/* Séouda card */}
           <article
             className="flex flex-col"
             style={{
-              flex: "1 1 0%",
+              flex: "0.8 1 0%",
               minHeight: 0,
               background: "#FFFFFF",
               borderRadius: "16px",

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TextesRouteImport } from './routes/textes'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as HayomYomRouteImport } from './routes/hayom-yom'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const TextesRoute = TextesRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HayomYomRoute = HayomYomRouteImport.update({
+  id: '/hayom-yom',
+  path: '/hayom-yom',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -82,6 +88,7 @@ const ApiPublicHooksParashaPushRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/hayom-yom'
     | '/reset-password'
     | '/textes'
     | '/admin'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/hayom-yom'
     | '/reset-password'
     | '/textes'
     | '/admin'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/hayom-yom'
     | '/reset-password'
     | '/textes'
     | '/_authenticated/admin'
@@ -161,6 +173,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  HayomYomRoute: typeof HayomYomRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TextesRoute: typeof TextesRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
@@ -183,6 +196,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hayom-yom': {
+      id: '/hayom-yom'
+      path: '/hayom-yom'
+      fullPath: '/hayom-yom'
+      preLoaderRoute: typeof HayomYomRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -268,6 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  HayomYomRoute: HayomYomRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TextesRoute: TextesRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
