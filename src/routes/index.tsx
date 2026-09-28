@@ -402,11 +402,11 @@ function sortByTime<T extends { value: string }>(list: T[]): T[] {
 function useIsTV(): boolean | null {
   const [isTV, setIsTV] = useState<boolean | null>(() => {
     if (typeof window === "undefined") return null;
-    return window.matchMedia("(min-width: 1024px)").matches;
+    return isTVDevice() || window.matchMedia("(min-width: 1024px)").matches;
   });
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsTV(mq.matches);
+    const update = () => setIsTV(isTVDevice() || mq.matches);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
