@@ -167,7 +167,7 @@ function defaultMenuTab(): (typeof MENU_TABS)[number] {
 }
 
 export default function SouccotMenu({ past = false }: { past?: boolean }) {
-  const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>(defaultMenuTab grab);
+  const [menuTab, setMenuTab] = useState<(typeof MENU_TABS)[number]>(defaultMenuTab);
   const menu = MENUS[menuTab];
 
   return (
