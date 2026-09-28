@@ -205,16 +205,6 @@ export default function SouccotMenu({ past = false }: { past?: boolean }) {
         </p>
       </article>
 
-
-      {past && (
-        <article className="rounded-2xl bg-[#F8FAFC] p-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-          <p className="text-[13px] text-foreground/75 leading-snug">
-            Les repas de Souccot 5787 sont terminés et les réservations sont closes. Merci à tous
-            ceux qui nous ont rejoints sous la Soucca — à l'année prochaine !
-          </p>
-        </article>
-      )}
-
       {/* Introduction */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <p className="font-display italic text-sm text-foreground/80 leading-relaxed">
@@ -252,21 +242,17 @@ export default function SouccotMenu({ past = false }: { past?: boolean }) {
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8] mb-3">Réservations</h3>
         <p className="text-[13px] text-foreground/80 leading-snug">
-          {past
-            ? "Les réservations sont closes : l'événement a eu lieu du 25 au 27 septembre 2026."
-            : "Les réservations se font exclusivement sur HelloAsso."}
+          Les réservations se font exclusivement sur HelloAsso.
         </p>
 
-        {!past && (
-          <a
-            href={HELLOASSO_SOUCOT}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-cta btn-blue-animated mt-4 w-full text-white"
-          >
-            Réserver sur HelloAsso
-          </a>
-        )}
+        <a
+          href={HELLOASSO_SOUCOT}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-cta btn-blue-animated mt-4 w-full text-white"
+        >
+          Réserver sur HelloAsso
+        </a>
         <div className="mt-3 space-y-2">
           <p className="rounded-xl bg-[var(--gold-soft)] px-3 py-2 text-[12px] text-foreground/85 leading-snug">
             <span className="font-semibold">Places nominatives</span> — assises et en nombre limité. Merci d'indiquer
