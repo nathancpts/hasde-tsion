@@ -38,7 +38,7 @@ export default function KotelLive({
       }, 3000);
     };
     const onPlaying = () => {
-      stalledChecks = 0;
+      stalledChecks = 0; mediaRetries = 0;
       setStatus("playing");
     };
     const onPlaybackProblem = () => retry();
