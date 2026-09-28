@@ -2370,18 +2370,12 @@ function PlanningTV() {
 
         </article>
 
-        </div>
-
-        {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div
-          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full"
-        >
           {/* Hayom Yom du jour */}
           {hayomYom && (
             <article
               className="flex min-h-0 flex-col"
               style={{
-                flex: "1.25 1 0%",
+                flex: "0 0 32%",
                 background: "#FFFFFF",
                 borderRadius: "16px",
                 padding: "20px 24px",
@@ -2406,6 +2400,13 @@ function PlanningTV() {
               </AutoScrollVertical>
             </article>
           )}
+
+        </div>
+
+        {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
+        <div
+          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full"
+        >
 
           {/* Séouda card */}
           <article
