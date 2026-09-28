@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { registerServiceWorker, subscribeToPush } from "@/lib/push";
+import { isTVDevice } from "@/lib/tv-detect";
 
 
 type Platform = "ios" | "android" | "other";
@@ -80,6 +81,8 @@ export function InstallAppPrompt() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Mode télé : jamais de popup ni de demande de notification.
+    if (isTVDevice() || window.innerWidth >= 1024) return;
     const inIframe = window.top !== window.self;
     const p = detectPlatform();
     setPlatform(p);
