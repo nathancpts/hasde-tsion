@@ -1739,6 +1739,20 @@ function PlanningTV() {
     const id = setInterval(() => setNowTs(Date.now()), 30 * 1000);
     return () => clearInterval(id);
   }, []);
+  // TV : rechargement complet toutes les 10 min pour récupérer les nouvelles infos publiées
+  // (Séouda, parasha, annonces). Le mode TV est mémorisé et reste en plein écran.
+  useEffect(() => {
+    if (!isTVDevice()) return;
+    try { localStorage.setItem("ht-tv", "1"); } catch {}
+    const id = setTimeout(() => {
+      if (navigator.onLine === false) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("tv", "1");
+      url.searchParams.set("r", String(Date.now()));
+      window.location.replace(url.toString());
+    }, 10 * 60 * 1000);
+    return () => clearTimeout(id);
+  }, []);
   useEffect(() => {
     const scheduleMidnight = () => {
       const n = new Date();
