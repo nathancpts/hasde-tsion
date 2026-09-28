@@ -1768,6 +1768,8 @@ function PlanningTV() {
   const isShabbatNow =
     (dow === 5 && entryMin != null && nowMin >= entryMin) ||
     (dow === 6 && (exitMin == null || nowMin < exitMin));
+  const pc = useParashaContent();
+  const spotlight = useLiveSpotlight(Boolean(isTV) && !isShabbatNow && !isPdfMode);
 
   // Kotel cycle removed for TV stability — video stays fixed in Column 3.
 
@@ -1821,8 +1823,6 @@ function PlanningTV() {
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const pc = useParashaContent();
-  const spotlight = useLiveSpotlight(!isShabbatNow && !isPdfMode);
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
