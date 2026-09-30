@@ -1921,6 +1921,20 @@ function PlanningTV() {
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  // Hebrew year in gematria letters (e.g. 5787 → תשפ״ז)
+  const GEMATRIA: [number, string][] = [[400, "ת"], [300, "ש"], [200, "ר"], [100, "ק"], [90, "צ"], [80, "פ"], [70, "ע"], [60, "ס"], [50, "נ"], [40, "מ"], [30, "ל"], [20, "כ"], [19, "טו"], [10, "י"], [9, "ט"], [8, "ח"], [7, "ז"], [6, "ו"], [5, "ה"], [4, "ד"], [3, "ג"], [2, "ב"], [1, "א"]];
+  const toGematria = (n: number): string => {
+    let rest = n % 1000, out = "";
+    for (const [val, letters] of GEMATRIA) while (rest >= val) { out += letters; rest -= val; }
+    if (out.length === 1) return out + "׳";
+    return out.slice(0, -1) + "״" + out.slice(-1);
+  };
+  const dateHeParts = new Intl.DateTimeFormat("he-u-ca-hebrew", { day: "numeric", month: "long", year: "numeric" }).formatToParts(now);
+  const heDay = dateHeParts.find((p) => p.type === "day")?.value ?? "";
+  const heMonth = dateHeParts.find((p) => p.type === "month")?.value ?? "";
+  const heYearNum = parseInt(dateHeParts.find((p) => p.type === "year")?.value ?? "0", 10);
+  const heWeekday = now.toLocaleDateString("he-u-ca-hebrew", { weekday: "long" });
+  const dateHeStr = `${heWeekday}, ${heDay} ${heMonth} ${toGematria(heYearNum)}`;
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
@@ -2053,6 +2067,13 @@ function PlanningTV() {
               style={{ fontSize: "1.5vh", fontWeight: 600, letterSpacing: "0.35em" }}
             >
               {dateStr}
+            </p>
+            <p
+              dir="rtl"
+              className="text-white/80 mt-[0.8vh]"
+              style={{ fontSize: "1.9vh", fontWeight: 500, fontFamily: HEADING_FONT_LOCAL }}
+            >
+              {dateHeStr}
             </p>
           </div>
         </div>
