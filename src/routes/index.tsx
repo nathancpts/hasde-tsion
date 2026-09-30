@@ -2221,8 +2221,10 @@ function PlanningTV() {
         {/* COLUMN 2 — ZMANIM + SOUCCOT */}
         <div className="col-span-5 flex flex-col min-h-0 gap-[1.6vh]">
         <article
-          className="flex-1 flex flex-col min-h-0 relative overflow-hidden"
+          className="flex flex-col min-h-0 relative overflow-hidden"
           style={{
+            flex: "0 1 auto",
+            maxHeight: "58%",
             background: "#FFFFFF",
             borderRadius: "16px",
             padding: "24px",
@@ -2381,7 +2383,7 @@ function PlanningTV() {
             <article
               className="flex min-h-0 flex-col"
               style={{
-                flex: "0 0 32%",
+                flex: "1 1 0%",
                 background: "#FFFFFF",
                 borderRadius: "16px",
                 padding: "20px 24px",
