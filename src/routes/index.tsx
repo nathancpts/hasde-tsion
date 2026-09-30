@@ -2310,8 +2310,11 @@ function PlanningTV() {
                 return hit ? HE[hit] : "";
               };
               const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
-              const footer = upcomingTimes.filter((t) => isFooter(t.label)).slice(0, 2);
-              const main = upcomingTimes.filter((t) => !footer.includes(t));
+              const footerCand = upcomingTimes.filter((t) => isFooter(t.label)).slice(0, 2);
+              const mainCand = upcomingTimes.filter((t) => !footerCand.includes(t));
+              // S'il ne reste plus de prière, on affiche Sheqyia / Nuit dans la liste principale
+              const footer = mainCand.length > 0 ? footerCand : [];
+              const main = mainCand.length > 0 ? mainCand : upcomingTimes;
               const nextMain = main[0];
               const inLabel = (v: string) => {
                 const m = toMin(v);
