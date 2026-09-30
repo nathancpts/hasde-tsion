@@ -87,7 +87,7 @@ export const Route = createFileRoute("/api/public/kotel")({
           master = null;
           return new Response("Stream unavailable", { status: 502 });
         }
-
+        if (!target) return new Response("Stream unavailable", { status: 502 });
         const type = upstream.headers.get("content-type") ?? "";
         const isPlaylist = type.includes("mpegurl") || target.includes(".m3u8");
 
