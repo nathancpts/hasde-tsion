@@ -2244,8 +2244,7 @@ function PlanningTV() {
         <article
           className="flex flex-col min-h-0 relative overflow-hidden"
           style={{
-            flex: "0 1 auto",
-            maxHeight: "58%",
+            flex: "1 1 0%",
             background: "#FFFFFF",
             borderRadius: "16px",
             padding: "24px",
@@ -2416,7 +2415,8 @@ function PlanningTV() {
             <article
               className="flex min-h-0 flex-col"
               style={{
-                flex: "1 1 0%",
+                flex: "0 1 auto",
+                maxHeight: "46%",
                 background: "#FFFFFF",
                 borderRadius: "16px",
                 padding: "20px 24px",
