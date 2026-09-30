@@ -2358,8 +2358,8 @@ function PlanningTV() {
               };
               return (
                 <div className="flex flex-col h-full">
-                  <AutoScrollVertical className="flex-1 min-h-0" speed={16} pause={2600}>
-                    <div className="flex flex-col" style={{ gap: "0.4vh" }}>
+                  <AutoScrollLoop className="flex-1 min-h-0" speed={18}>
+                    <div className="flex flex-col" style={{ gap: "0.4vh", paddingBottom: "0.4vh" }}>
                       {main.map((t) => {
                         const next = t === nextMain;
                         const he = heOf(t.label);
@@ -2388,7 +2388,7 @@ function PlanningTV() {
                         );
                       })}
                     </div>
-                  </AutoScrollVertical>
+                  </AutoScrollLoop>
                   {footer.length > 0 && (
                     <div className="relative z-30 grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB", background: "#FFFFFF", opacity: 1, isolation: "isolate" }}>
                       {footer.map((t, i) => (
