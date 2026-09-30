@@ -2312,9 +2312,9 @@ function PlanningTV() {
               const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
               const footerCand = upcomingTimes.filter((t) => isFooter(t.label)).slice(0, 2);
               const mainCand = upcomingTimes.filter((t) => !footerCand.includes(t));
-              // S'il ne reste plus de prière, on affiche Sheqyia / Nuit dans la liste principale
-              const footer = mainCand.length > 0 ? footerCand : [];
-              const main = mainCand.length > 0 ? mainCand : upcomingTimes;
+              // Sheqyia / Nuit de R. Tam toujours en pied de carte, jamais dans la liste principale
+              const footer = footerCand;
+              const main = mainCand;
               const nextMain = main[0];
               const inLabel = (v: string) => {
                 const m = toMin(v);
@@ -2333,18 +2333,13 @@ function PlanningTV() {
                           <div
                             key={`${t.label}-${t.value}`}
                             className="flex items-center"
-                            style={{
-                              background: next ? NAVY : "transparent",
-                              borderRadius: "1.2vh",
-                              padding: next ? "1.8vh 2vw" : "1.3vh 2vw",
-                              gap: "1.2vw",
-                            }}
+                            style={{ padding: "1.3vh 2vw", gap: "1.2vw" }}
                           >
-                            <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: next ? "#FFFFFF" : "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
+                            <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
                               {t.label}
                             </span>
                             {he && (
-                              <span dir="rtl" style={{ fontSize: "2.4vh", color: next ? "rgba(255,255,255,0.6)" : "#64748B" }}>{he}</span>
+                              <span dir="rtl" style={{ fontSize: "2.4vh", color: "#64748B" }}>{he}</span>
                             )}
                             <span className="flex-1" />
                             {next && (
@@ -2352,7 +2347,7 @@ function PlanningTV() {
                                 {inLabel(t.value)}
                               </span>
                             )}
-                            <span className="tabular-nums shrink-0 leading-none" style={{ fontSize: next ? "4.2vh" : "3.4vh", fontWeight: 700, color: next ? "#FFFFFF" : NAVY, fontFamily: BODY_FONT_LOCAL }}>
+                            <span className="tabular-nums shrink-0 leading-none" style={{ fontSize: "3.4vh", fontWeight: 700, color: NAVY, fontFamily: BODY_FONT_LOCAL }}>
                               {t.value}
                             </span>
                           </div>
