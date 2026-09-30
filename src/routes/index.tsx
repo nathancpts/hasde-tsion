@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { ChevronLeft, ChevronRight, UserRound } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoonStar, Sunset, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
@@ -2262,11 +2262,11 @@ function PlanningTV() {
             style={{ background: "#FFFFFF", borderRadius: "16px", zIndex: 0 }}
           />
           <div className="relative z-10 flex items-baseline justify-between mb-[1.6vh]">
-            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#1E293B", fontWeight: 700 }}>
+            <p className="uppercase" style={{ fontSize: "1.5vh", letterSpacing: "0.3em", color: "#1E3A73", fontWeight: 700 }}>
               Horaires
             </p>
-            <p className="capitalize" style={{ fontSize: "1.7vh", color: "#64748B", fontFamily: HEADING_FONT_LOCAL, fontWeight: 500 }}>
-              {todayDateLabel}
+            <p style={{ fontSize: "1.9vh", color: "#64748B", fontWeight: 500 }}>
+              Aujourd'hui
             </p>
           </div>
 
@@ -2300,68 +2300,80 @@ function PlanningTV() {
                 );
               }
               
-              const n = upcomingTimes.length;
-              const labelSize = n > 8 ? "1.7vh" : n > 6 ? "1.9vh" : "2.1vh";
-              const timeSize = n > 8 ? "2.2vh" : n > 6 ? "2.5vh" : "2.8vh";
-
-              const renderRow = (t: typeof todayTimes[number], keySuffix: string) => {
-                const isNext = nextZman && t.label === nextZman.label && t.value === nextZman.value;
-                const labelColor = isNext ? "#3A2E05" : "#334155";
-                const valueColor = isNext ? "#1A1204" : "#0A1128";
-                return (
-                  <div
-                    key={`${t.label}-${t.value}-${keySuffix}`}
-                    className="flex items-center gap-[1vw] relative"
-                    style={
-                      isNext
-                        ? {
-                            background: `linear-gradient(120deg, #F3DA92 0%, ${GOLD_LOCAL} 55%, #C9A227 100%)`,
-                            borderRadius: "999px",
-                            padding: "1.1vh 1.4vw",
-                            boxShadow: "0 8px 22px rgba(201,162,39,0.28)",
-                          }
-                        : {
-                            background: "#FBFCFE",
-                            border: "1px solid rgba(15,61,122,0.07)",
-                            borderRadius: "999px",
-                            padding: "0.95vh 1.4vw",
-                          }
-                    }
-                  >
-                    <span
-                      className="uppercase truncate"
-                      style={{
-                        fontSize: labelSize,
-                        letterSpacing: "0.12em",
-                        fontWeight: isNext ? 700 : 500,
-                        color: labelColor,
-                        fontFamily: BODY_FONT_LOCAL,
-                      }}
-                    >
-                      {t.label}
-                    </span>
-                    <span aria-hidden className="flex-1" />
-                    <span
-                      className="tabular-nums leading-none shrink-0"
-                      style={{
-                        fontSize: timeSize,
-                        fontWeight: isNext ? 700 : 600,
-                        color: valueColor,
-                        fontFamily: BODY_FONT_LOCAL,
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {t.value}
-                    </span>
-                  </div>
-                );
+              const NAVY = "#1E3A73";
+              const HE: Record<string, string> = {
+                minha: "מנחה", arvit: "ערבית", chaharit: "שחרית", "chah'arit": "שחרית", shaharit: "שחרית",
+                "plag hamin'ha": "פלג המנחה", "plag haminha": "פלג המנחה", neila: "נעילה", "néila": "נעילה",
+              };
+              const heOf = (l: string) => {
+                const k = l.toLowerCase();
+                const hit = Object.keys(HE).find((key) => k.startsWith(key));
+                return hit ? HE[hit] : "";
+              };
+              const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
+              const footer = upcomingTimes.filter((t) => isFooter(t.label)).slice(0, 2);
+              const main = upcomingTimes.filter((t) => !footer.includes(t));
+              const nextMain = main[0];
+              const inLabel = (v: string) => {
+                const m = toMin(v);
+                if (m == null) return "";
+                const d = m - nowMin;
+                return d >= 60 ? `dans ${Math.floor(d / 60)}h${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
               };
               return (
-                <AutoScrollVertical className="h-full" speed={16} pause={2600}>
-                  <div className="flex flex-col justify-start" style={{ gap: n > 8 ? "0.7vh" : n > 6 ? "1vh" : "1.3vh" }}>
-                    {upcomingTimes.map((t) => renderRow(t, "s"))}
-                  </div>
-                </AutoScrollVertical>
+                <div className="flex flex-col h-full">
+                  <AutoScrollVertical className="flex-1 min-h-0" speed={16} pause={2600}>
+                    <div className="flex flex-col" style={{ gap: "0.4vh" }}>
+                      {main.map((t) => {
+                        const next = t === nextMain;
+                        const he = heOf(t.label);
+                        return (
+                          <div
+                            key={`${t.label}-${t.value}`}
+                            className="flex items-center"
+                            style={{
+                              background: next ? NAVY : "transparent",
+                              borderRadius: "1.2vh",
+                              padding: next ? "1.8vh 2vw" : "1.3vh 2vw",
+                              gap: "1.2vw",
+                            }}
+                          >
+                            <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: next ? "#FFFFFF" : "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
+                              {t.label}
+                            </span>
+                            {he && (
+                              <span dir="rtl" style={{ fontSize: "2.4vh", color: next ? "rgba(255,255,255,0.6)" : "#64748B" }}>{he}</span>
+                            )}
+                            <span className="flex-1" />
+                            {next && (
+                              <span className="shrink-0" style={{ background: "#EBD69A", color: NAVY, borderRadius: 999, padding: "0.6vh 1.2vw", fontSize: "1.6vh", fontWeight: 700 }}>
+                                {inLabel(t.value)}
+                              </span>
+                            )}
+                            <span className="tabular-nums shrink-0 leading-none" style={{ fontSize: next ? "4.2vh" : "3.4vh", fontWeight: 700, color: next ? "#FFFFFF" : NAVY, fontFamily: BODY_FONT_LOCAL }}>
+                              {t.value}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </AutoScrollVertical>
+                  {footer.length > 0 && (
+                    <div className="grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB" }}>
+                      {footer.map((t, i) => (
+                        <div key={t.label} className="flex items-center" style={{ gap: "1vw", paddingLeft: "1.5vw", borderLeft: i ? "1px solid #E5E7EB" : "none" }}>
+                          {/nuit|tset|sortie/i.test(t.label)
+                            ? <MoonStar style={{ width: "3vh", height: "3vh", color: "#64748B" }} />
+                            : <Sunset style={{ width: "3vh", height: "3vh", color: "#64748B" }} />}
+                          <div>
+                            <p style={{ fontSize: "1.8vh", color: "#475569", fontWeight: 500 }}>{t.label}</p>
+                            <p className="tabular-nums" style={{ fontSize: "3.2vh", fontWeight: 700, color: NAVY, fontFamily: BODY_FONT_LOCAL, lineHeight: 1.1 }}>{t.value}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               );
             })()}
 
