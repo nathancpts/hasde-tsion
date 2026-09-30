@@ -2358,15 +2358,15 @@ function PlanningTV() {
                     </div>
                   </AutoScrollVertical>
                   {footer.length > 0 && (
-                    <div className="grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB" }}>
+                    <div className="relative z-30 grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB", background: "#FFFFFF", opacity: 1, isolation: "isolate" }}>
                       {footer.map((t, i) => (
                         <div key={t.label} className="flex items-center" style={{ gap: "1vw", paddingLeft: "1.5vw", borderLeft: i ? "1px solid #E5E7EB" : "none" }}>
                           {/nuit|tset|sortie/i.test(t.label)
-                            ? <MoonStar style={{ width: "3vh", height: "3vh", color: "#64748B" }} />
-                            : <Sunset style={{ width: "3vh", height: "3vh", color: "#64748B" }} />}
+                            ? <MoonStar style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />
+                            : <Sunset style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />}
                           <div>
-                            <p style={{ fontSize: "1.8vh", color: "#475569", fontWeight: 500 }}>{t.label}</p>
-                            <p className="tabular-nums" style={{ fontSize: "3.2vh", fontWeight: 700, color: NAVY, fontFamily: BODY_FONT_LOCAL, lineHeight: 1.1 }}>{t.value}</p>
+                            <p style={{ fontSize: "1.8vh", color: "#1A2540", fontWeight: 600 }}>{t.label}</p>
+                            <p className="tabular-nums" style={{ fontSize: "3.2vh", fontWeight: 800, color: "#0F2A5C", WebkitTextFillColor: "#0F2A5C", background: "none", fontFamily: BODY_FONT_LOCAL, lineHeight: 1.1 }}>{t.value}</p>
                           </div>
                         </div>
                       ))}
