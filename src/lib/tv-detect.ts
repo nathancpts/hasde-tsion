@@ -11,20 +11,29 @@ export function isTVDevice(): boolean {
       localStorage.removeItem("ht-tv");
       return false;
     }
-    if (localStorage.getItem("ht-tv") === "1") return true;
   } catch {
     /* noop */
   }
   const ua = navigator.userAgent || "";
+  // Téléphone / tablette : le plus petit côté de l'écran reste petit, même en
+  // paysage. Dans ce cas, jamais le mode télé (on efface l'ancien marqueur auto).
+  const shortSide = Math.min(window.screen?.width ?? 9999, window.screen?.height ?? 9999);
+  const isPhone = /Android|iPhone|iPod/i.test(ua) && /Mobile/i.test(ua) && shortSide < 500;
+  try {
+    if (localStorage.getItem("ht-tv") === "1") {
+      if (!isPhone) return true;
+      localStorage.removeItem("ht-tv");
+    }
+  } catch {
+    /* noop */
+  }
+  if (isPhone) return false;
   if (
     /SmartTV|SMART-TV|Tizen|Web0S|webOS|NetCast|HbbTV|BRAVIA|AFT[A-Z]|Android TV|GoogleTV|CrKey|AppleTV|Roku|Philips|Hisense|VIDAA|TitanOS|Large Screen|\bTV\b/i.test(
       ua,
     )
   )
     return true;
-  // Les navigateurs de certaines TV Android annoncent à tort "Mobile" et
-  // exposent une surface tactile. Leur viewport CSS peut aussi être limité à
-  // 960 px malgré une dalle Full HD : on se base donc surtout sur le paysage.
   const viewportWidth = Math.max(
     window.innerWidth,
     window.visualViewport?.width ?? 0,
@@ -36,13 +45,6 @@ export function isTVDevice(): boolean {
     window.screen?.height ?? 0,
   );
   const landscapeWide = viewportWidth > viewportHeight && viewportWidth >= 800;
-  if (/Android/i.test(ua) && landscapeWide) {
-    try {
-      localStorage.setItem("ht-tv", "1");
-    } catch {
-      /* noop */
-    }
-    return true;
-  }
+  if (/Android/i.test(ua) && landscapeWide) return true;
   return false;
 }
