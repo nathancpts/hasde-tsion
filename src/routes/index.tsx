@@ -1929,7 +1929,6 @@ function PlanningTV() {
     if (out.length === 1) return out + "׳";
     return out.slice(0, -1) + "״" + out.slice(-1);
   };
-  const heYear = toGematria(now.getFullYear());
   const dateHeParts = new Intl.DateTimeFormat("he-u-ca-hebrew", { day: "numeric", month: "long", year: "numeric" }).formatToParts(now);
   const heDay = dateHeParts.find((p) => p.type === "day")?.value ?? "";
   const heMonth = dateHeParts.find((p) => p.type === "month")?.value ?? "";
