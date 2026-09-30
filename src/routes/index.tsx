@@ -2055,6 +2055,13 @@ function PlanningTV() {
             >
               {dateStr}
             </p>
+            <p
+              dir="rtl"
+              className="text-white/80 mt-[0.8vh]"
+              style={{ fontSize: "1.9vh", fontWeight: 500, fontFamily: HEADING_FONT_LOCAL }}
+            >
+              {dateHeStr}
+            </p>
           </div>
         </div>
 
