@@ -2441,7 +2441,7 @@ function PlanningTV() {
           <article
             className="flex flex-col"
             style={{
-              flex: "0.8 1 0%",
+              flex: "1 1 0%",
               minHeight: 0,
               background: "#FFFFFF",
               borderRadius: "16px",
