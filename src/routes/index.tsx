@@ -2588,7 +2588,7 @@ function LivePortalBox({ big: allowed, children }: { big: boolean; children: Rea
   return (
     <>
       <div ref={slotRef} className="relative w-full shrink-0" style={{ aspectRatio: "16 / 9" }} />
-      {box && typeof document !== "undefined" && createPortal(
+      {box && rect && rect.w > 0 && rect.h > 0 && typeof document !== "undefined" && createPortal(
         <>
           <div
             aria-hidden="true"
