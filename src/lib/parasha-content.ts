@@ -11,11 +11,31 @@ export type ParashaContent = {
   blocs: ParashaBloc[];
 };
 
+function stripEmojis(s: string): string {
+  return s
+    .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, "")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+}
+
+function normalizeBlocs(blocs: ParashaBloc[]): ParashaBloc[] {
+  return blocs.map((b) => {
+    const icone = b.icone ? stripEmojis(b.icone) : "";
+    return {
+      ...b,
+      icone: icone || undefined,
+      titre: stripEmojis(b.titre ?? ""),
+      paragraphes: b.paragraphes?.map((p) => stripEmojis(p)),
+      puces: b.puces?.map((p) => stripEmojis(p)),
+    };
+  });
+}
+
 export const DEFAULT_PARASHA_CONTENT: ParashaContent = {
   nom: "",
   nomHe: PARASHA_NOM_HE,
-  intro: PARASHA_INTRO,
-  blocs: PARASHA_BLOCS,
+  intro: stripEmojis(PARASHA_INTRO),
+  blocs: normalizeBlocs(PARASHA_BLOCS),
 };
 
 const CACHE_KEY = "ht-parasha-content";
@@ -31,10 +51,10 @@ type Row = {
 function toContent(row: Row): ParashaContent {
   const blocs = Array.isArray(row.blocs) ? (row.blocs as ParashaBloc[]) : [];
   return {
-    nom: row.nom?.trim() || "",
-    nomHe: row.nom_he?.trim() || "",
-    intro: row.intro?.trim() || "",
-    blocs: blocs.length > 0 ? blocs : DEFAULT_PARASHA_CONTENT.blocs,
+    nom: stripEmojis(row.nom?.trim() || ""),
+    nomHe: stripEmojis(row.nom_he?.trim() || ""),
+    intro: stripEmojis(row.intro?.trim() || ""),
+    blocs: blocs.length > 0 ? normalizeBlocs(blocs) : DEFAULT_PARASHA_CONTENT.blocs,
   };
 }
 
@@ -50,12 +70,16 @@ export async function fetchParashaOverride(): Promise<ParashaContent | null> {
   return toContent(data as Row);
 }
 
+function sanitize(content: ParashaContent): ParashaContent {
+  return { ...content, intro: stripEmojis(content.intro ?? ""), blocs: normalizeBlocs(content.blocs ?? []) };
+}
+
 export function useParashaContent(): ParashaContent {
   const [content, setContent] = useState<ParashaContent>(() => {
     if (typeof window === "undefined") return DEFAULT_PARASHA_CONTENT;
     try {
       const raw = window.localStorage.getItem(CACHE_KEY);
-      if (raw) return { ...DEFAULT_PARASHA_CONTENT, ...(JSON.parse(raw) as ParashaContent) };
+      if (raw) return sanitize({ ...DEFAULT_PARASHA_CONTENT, ...(JSON.parse(raw) as ParashaContent) });
     } catch {
       /* ignore */
     }
