@@ -2348,7 +2348,7 @@ function PlanningTV() {
               const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
               // Toutes les heures du jour restent affichées (les passées en grisé)
               const footer = todayTimes.filter((t) => isFooter(t.label)).slice(0, 2);
-              const main = todayTimes.filter((t) => !footer.includes(t));
+              const main = todayTimes.filter((t) => !footer.includes(t) && !isPast(t.value));
               const nextMain = main.find((t) => !isPast(t.value));
               const inLabel = (v: string) => {
                 const m = toMin(v);
