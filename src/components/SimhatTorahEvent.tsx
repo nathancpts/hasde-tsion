@@ -1,6 +1,3 @@
-import { useState } from "react";
-import simhatTorahPoster from "@/assets/simhat-torah.jpg.asset.json";
-
 const HELLOASSO_SIMHAT_TORAH =
   "https://www.helloasso.com/associations/hassidim-de-sion/evenements/simhat-torah";
 
@@ -8,8 +5,6 @@ const PHONE_DISPLAY = "07 67 95 94 26";
 const PHONE_TEL = "+33767959426";
 
 export default function SimhatTorahEvent() {
-  const [posterOpen, setPosterOpen] = useState(false);
-
   return (
     <div className="space-y-3">
       {/* En-tête */}
@@ -25,26 +20,6 @@ export default function SimhatTorahEvent() {
         </h3>
         <p className="text-[12px] text-white/85 mt-1">
           🕊️ Torah · Joie · Partage 🎶
-        </p>
-      </article>
-
-      {/* Affiche */}
-      <article className="rounded-2xl bg-white p-3 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-        <button
-          type="button"
-          onClick={() => setPosterOpen(true)}
-          className="block w-full rounded-xl overflow-hidden outline-none focus:outline-none appearance-none"
-          aria-label="Agrandir l'affiche de la Grande Séouda de Sim'hat Torah"
-        >
-          <img
-            src={simhatTorahPoster.url}
-            alt="Affiche — La Grande Séouda de Sim'hat Torah"
-            className="w-full h-auto"
-            loading="lazy"
-          />
-        </button>
-        <p className="text-center text-[10px] text-muted-foreground mt-2">
-          Touchez l'affiche pour l'agrandir
         </p>
       </article>
 
