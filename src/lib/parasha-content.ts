@@ -70,12 +70,16 @@ export async function fetchParashaOverride(): Promise<ParashaContent | null> {
   return toContent(data as Row);
 }
 
+function sanitize(content: ParashaContent): ParashaContent {
+  return { ...content, intro: stripEmojis(content.intro ?? ""), blocs: normalizeBlocs(content.blocs ?? []) };
+}
+
 export function useParashaContent(): ParashaContent {
   const [content, setContent] = useState<ParashaContent>(() => {
     if (typeof window === "undefined") return DEFAULT_PARASHA_CONTENT;
     try {
       const raw = window.localStorage.getItem(CACHE_KEY);
-      if (raw) return { ...DEFAULT_PARASHA_CONTENT, ...(JSON.parse(raw) as ParashaContent) };
+      if (raw) return sanitize({ ...DEFAULT_PARASHA_CONTENT, ...(JSON.parse(raw) as ParashaContent) });
     } catch {
       /* ignore */
     }
