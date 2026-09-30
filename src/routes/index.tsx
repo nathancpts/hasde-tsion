@@ -313,6 +313,43 @@ function AutoScrollVertical({
   );
 }
 
+/** Défilement continu vers le bas, en boucle (contenu dupliqué si trop long). */
+function AutoScrollLoop({ children, speed = 20, className = "" }: { children: React.ReactNode; speed?: number; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLDivElement>(null);
+  const [loop, setLoop] = useState(false);
+  useEffect(() => {
+    const el = ref.current, a = inner.current;
+    if (!el || !a) return;
+    const check = () => setLoop(a.offsetHeight > el.clientHeight + 2);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el); ro.observe(a);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(() => {
+    const el = ref.current, a = inner.current;
+    if (!el || !a || !loop) { if (el) el.scrollTop = 0; return; }
+    let raf = 0, pos = 0, last = performance.now();
+    const tick = (t: number) => {
+      const dt = t - last; last = t;
+      const h = a.offsetHeight;
+      pos += speed * (dt / 1000);
+      if (h > 0 && pos >= h) pos -= h;
+      el.scrollTop = pos;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [loop, speed]);
+  return (
+    <div ref={ref} className={`no-scrollbar overflow-hidden ${className}`}>
+      <div ref={inner}>{children}</div>
+      {loop && <div aria-hidden="true">{children}</div>}
+    </div>
+  );
+}
+
 type StoredLoc = { lat: number; lon: number; label?: string } | null;
 const LOC_KEY = "ht.geoloc.v1";
 const LOC_DISMISS_KEY = "ht.geoloc.dismissed.v1";
@@ -2321,8 +2358,8 @@ function PlanningTV() {
               };
               return (
                 <div className="flex flex-col h-full">
-                  <AutoScrollVertical className="flex-1 min-h-0" speed={16} pause={2600}>
-                    <div className="flex flex-col" style={{ gap: "0.4vh" }}>
+                  <AutoScrollLoop className="flex-1 min-h-0" speed={18}>
+                    <div className="flex flex-col" style={{ gap: "0.4vh", paddingBottom: "0.4vh" }}>
                       {main.map((t) => {
                         const next = t === nextMain;
                         const he = heOf(t.label);
@@ -2351,7 +2388,7 @@ function PlanningTV() {
                         );
                       })}
                     </div>
-                  </AutoScrollVertical>
+                  </AutoScrollLoop>
                   {footer.length > 0 && (
                     <div className="relative z-30 grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB", background: "#FFFFFF", opacity: 1, isolation: "isolate" }}>
                       {footer.map((t, i) => (
