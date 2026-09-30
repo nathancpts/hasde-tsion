@@ -73,13 +73,21 @@ export const Route = createFileRoute("/api/public/kotel")({
           if (!target) return new Response("Stream unavailable", { status: 503 });
         }
 
-        const upstream = await fetch(target, { headers: UPSTREAM_HEADERS });
-        if (!upstream.ok) {
-          // Le jeton signé a peut-être expiré : on force un rafraîchissement au prochain appel.
-          if (!requested) master = null;
+        const get = () =>
+          fetch(target!, { headers: UPSTREAM_HEADERS, signal: AbortSignal.timeout(8000) }).catch(() => null);
+        let upstream = await get();
+        if (!upstream || !upstream.ok) upstream = await get();
+        if (!upstream && !requested) {
+          master = null;
+          target = await getMasterUrl();
+          if (target) upstream = await get();
+        }
+        if (!upstream || !upstream.ok) {
+          // Le jeton signé a peut-être expiré : on force un rafraîchissement.
+          master = null;
           return new Response("Stream unavailable", { status: 502 });
         }
-
+        if (!target) return new Response("Stream unavailable", { status: 502 });
         const type = upstream.headers.get("content-type") ?? "";
         const isPlaylist = type.includes("mpegurl") || target.includes(".m3u8");
 

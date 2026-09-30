@@ -55,7 +55,7 @@ export default function KotelLive({
           if (!destroyed) setStatus("error");
           return;
         }
-        const inst = new Hls({ liveDurationInfinity: true, lowLatencyMode: false, manifestLoadingMaxRetry: 6, levelLoadingMaxRetry: 6, fragLoadingMaxRetry: 6 });
+        const inst = new Hls({ liveDurationInfinity: true, lowLatencyMode: false, liveSyncDurationCount: 4, maxBufferLength: 30, manifestLoadingMaxRetry: 3, levelLoadingMaxRetry: 3, fragLoadingMaxRetry: 4 });
         hls = inst;
         inst.loadSource(STREAM_URL);
         inst.attachMedia(video);
@@ -63,7 +63,7 @@ export default function KotelLive({
         inst.on(Hls.Events.ERROR, (_e, data) => {
           if (!data.fatal) return;
           if (data.type === Hls.ErrorTypes.MEDIA_ERROR) { inst.recoverMediaError(); return; }
-          if (data.type === Hls.ErrorTypes.NETWORK_ERROR && mediaRetries++ < 3) { inst.startLoad(); return; }
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR && mediaRetries++ < 1) { inst.startLoad(); return; }
           inst.destroy();
           hls = null;
           if (destroyed) return;
