@@ -2322,7 +2322,7 @@ function PlanningTV() {
                           <div
                             key={`${t.label}-${t.value}`}
                             className="flex items-center"
-                            style={{ padding: "1.3vh 2vw", gap: "1.2vw" }}
+                            style={{ padding: "1.3vh 2vw", gap: "1.2vw", opacity: isPast(t.value) ? 0.4 : 1 }}
                           >
                             <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
                               {t.label}
