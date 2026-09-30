@@ -1921,6 +1921,7 @@ function PlanningTV() {
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const dateHeStr = now.toLocaleDateString("he-u-ca-hebrew", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
