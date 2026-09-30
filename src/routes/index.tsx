@@ -1957,9 +1957,17 @@ function PlanningTV() {
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
   const isWeekend = dow === 5 || dow === 6;
-  const todayTimes = (zmanim?.times ?? []).filter((t) =>
-    isWeekend || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
-  );
+  const rawToday = zmanim?.times ?? [];
+  const tzeitToday = rawToday.find((t) => t.label === "Sortie des étoiles")?.value;
+  const todayTimes = [
+    ...rawToday.filter((t) =>
+      isWeekend || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
+    ),
+    // Arvit en semaine : à la sortie des étoiles, si aucun horaire d'Arvit n'est fourni
+    ...(!rawToday.some((t) => /arvit/i.test(t.label)) && tzeitToday && !isWeekend
+      ? [{ label: "Arvit", value: tzeitToday }]
+      : []),
+  ].sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
 
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
@@ -2675,3 +2683,8 @@ function ZmanimRowTV({
   );
 }
 
+
+function toMinTop(hm: string): number | null {
+  const m = hm.match(/^(\d{1,2}):(\d{2})/);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
