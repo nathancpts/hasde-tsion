@@ -1930,11 +1930,12 @@ function PlanningTV() {
     return out.slice(0, -1) + "״" + out.slice(-1);
   };
   const heYear = toGematria(now.getFullYear());
-  const dateHeParts = new Intl.DateTimeFormat("he-u-ca-hebrew", { day: "numeric", month: "long" }).formatToParts(now);
+  const dateHeParts = new Intl.DateTimeFormat("he-u-ca-hebrew", { day: "numeric", month: "long", year: "numeric" }).formatToParts(now);
   const heDay = dateHeParts.find((p) => p.type === "day")?.value ?? "";
   const heMonth = dateHeParts.find((p) => p.type === "month")?.value ?? "";
+  const heYearNum = parseInt(dateHeParts.find((p) => p.type === "year")?.value ?? "0", 10);
   const heWeekday = now.toLocaleDateString("he-u-ca-hebrew", { weekday: "long" });
-  const dateHeStr = `${heWeekday}, ${heDay} ${heMonth} ${heYear}`;
+  const dateHeStr = `${heWeekday}, ${heDay} ${heMonth} ${toGematria(heYearNum)}`;
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
   const parashaHe = live?.parasha.he ?? week.parasha.he;
 
