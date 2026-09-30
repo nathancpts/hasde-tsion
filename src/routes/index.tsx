@@ -2422,11 +2422,11 @@ function PlanningTV() {
                   <span style={{ fontSize: "1.15vh", color: "#7A869A", fontWeight: 500 }}>{hayomYom.hebrewDate}</span>
                 </div>
               </div>
-              <AutoScrollVertical className="flex-1 min-h-0" speed={12} pause={3200}>
-                <p className="whitespace-pre-line" style={{ fontSize: "2vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}>
+              <div className="flex-1 min-h-0 overflow-hidden">
+                <p className="whitespace-pre-line" style={{ fontSize: "1.35vh", lineHeight: 1.5, color: "#1A2540", fontWeight: 400 }}>
                   {hayomYom.fr}
                 </p>
-              </AutoScrollVertical>
+              </div>
             </article>
           )}
 
