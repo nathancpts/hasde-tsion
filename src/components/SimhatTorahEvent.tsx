@@ -83,28 +83,6 @@ export default function SimhatTorahEvent() {
         </p>
       </article>
 
-      {/* Aperçu plein écran de l'affiche */}
-      {posterOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4"
-          onClick={() => setPosterOpen(false)}
-          role="dialog"
-          aria-label="Affiche de la Grande Séouda de Sim'hat Torah"
-        >
-          <img
-            src={simhatTorahPoster.url}
-            alt="Affiche — La Grande Séouda de Sim'hat Torah"
-            className="max-h-full max-w-full rounded-xl shadow-2xl"
-          />
-          <button
-            type="button"
-            className="absolute top-4 right-4 rounded-full bg-white/90 px-3 py-1.5 text-sm font-semibold text-foreground"
-            onClick={() => setPosterOpen(false)}
-          >
-            Fermer
-          </button>
-        </div>
-      )}
     </div>
   );
 }
