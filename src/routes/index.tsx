@@ -2285,19 +2285,10 @@ function PlanningTV() {
                 Horaires indisponibles.
               </p>
             ) : (() => {
-              const upcomingTimes = todayTimes.filter((t) => {
-                const m = toMin(t.value);
-                return m == null || m > nowMin;
-              });
-              if (upcomingTimes.length === 0) {
-                return (
-                  <div className="h-full flex items-center justify-center">
-                    <p className="text-center italic" style={{ fontSize: "1.8vh", color: "#7A869A" }}>
-                      Plus d'événement pour aujourd'hui — à demain 🌙
-                    </p>
-                  </div>
-                );
-              }
+              const isPast = (v: string) => {
+                const m = toMin(v);
+                return m != null && m <= nowMin;
+              };
               
               const NAVY = "#1E3A73";
               const HE: Record<string, string> = {
@@ -2310,12 +2301,10 @@ function PlanningTV() {
                 return hit ? HE[hit] : "";
               };
               const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
-              const footerCand = upcomingTimes.filter((t) => isFooter(t.label)).slice(0, 2);
-              const mainCand = upcomingTimes.filter((t) => !footerCand.includes(t));
-              // Sheqyia / Nuit de R. Tam toujours en pied de carte, jamais dans la liste principale
-              const footer = footerCand;
-              const main = mainCand;
-              const nextMain = main[0];
+              // Toutes les heures du jour restent affichées (les passées en grisé)
+              const footer = todayTimes.filter((t) => isFooter(t.label)).slice(0, 2);
+              const main = todayTimes.filter((t) => !footer.includes(t));
+              const nextMain = main.find((t) => !isPast(t.value));
               const inLabel = (v: string) => {
                 const m = toMin(v);
                 if (m == null) return "";
@@ -2333,7 +2322,7 @@ function PlanningTV() {
                           <div
                             key={`${t.label}-${t.value}`}
                             className="flex items-center"
-                            style={{ padding: "1.3vh 2vw", gap: "1.2vw" }}
+                            style={{ padding: "1.3vh 2vw", gap: "1.2vw", opacity: isPast(t.value) ? 0.4 : 1 }}
                           >
                             <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
                               {t.label}
