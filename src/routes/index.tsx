@@ -2683,3 +2683,8 @@ function ZmanimRowTV({
   );
 }
 
+
+function toMinTop(hm: string): number | null {
+  const m = hm.match(/^(\d{1,2}):(\d{2})/);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
