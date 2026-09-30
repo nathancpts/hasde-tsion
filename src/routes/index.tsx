@@ -16,6 +16,7 @@ import { useParashaContent } from "@/lib/parasha-content";
 import { getHayomYom } from "@/lib/hayom-yom";
 import CommunitySection from "@/components/community/CommunitySection";
 import SouccotMenu from "@/components/SouccotMenu";
+import SimhatTorahEvent from "@/components/SimhatTorahEvent";
 import KotelLive from "@/components/KotelLive";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
@@ -1769,7 +1770,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </div>
           )}
 
-          {sectionTab === "communaute" && <SouccotMenu past={!souccotVisible} />}
+          {sectionTab === "communaute" && (
+            <div className="space-y-5">
+              <SimhatTorahEvent />
+              <SouccotMenu past={!souccotVisible} />
+            </div>
+          )}
 
 
           {/* Bouton Don — toujours visible en bas */}
