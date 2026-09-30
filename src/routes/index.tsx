@@ -2423,7 +2423,7 @@ function PlanningTV() {
                 </div>
               </div>
               <AutoScrollVertical className="flex-1 min-h-0" speed={12} pause={3200}>
-                <p className="whitespace-pre-line" style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2vh", lineHeight: 1.6, color: "#4B5875" }}>
+                <p className="whitespace-pre-line" style={{ fontSize: "2vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}>
                   {hayomYom.fr}
                 </p>
               </AutoScrollVertical>
