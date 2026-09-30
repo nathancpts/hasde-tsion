@@ -1867,7 +1867,7 @@ function PlanningTV() {
     (dow === 6 && (exitMin == null || nowMin < exitMin));
   const pc = useParashaContent();
   const hayomYom = getHayomYom(now);
-  const spotlight = useLiveSpotlight(Boolean(isTV) && !isShabbatNow && !isPdfMode);
+  const spotlight = false;
 
   // Le même lecteur reste monté pendant tout le cycle pour éviter un écran noir au retour.
 
@@ -2460,7 +2460,7 @@ function PlanningTV() {
           </article>
 
           {/* Live Kotel — rendu au-dessus de toute la page (portal), suit son emplacement */}
-          <LivePortalBox big={spotlight && !isShabbatNow}>
+          <LivePortalBox big={!isShabbatNow}>
 
 
 
@@ -2536,10 +2536,12 @@ function PlanningTV() {
   );
 }
 
-function LivePortalBox({ big, children }: { big: boolean; children: React.ReactNode }) {
+function LivePortalBox({ big: allowed, children }: { big: boolean; children: React.ReactNode }) {
   const slotRef = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
   const [vp, setVp] = useState({ w: 1920, h: 1080 });
+  const [open, setOpen] = useState(false);
+  const big = open && allowed;
   useEffect(() => {
     const measure = () => {
       const el = slotRef.current;
@@ -2567,16 +2569,18 @@ function LivePortalBox({ big, children }: { big: boolean; children: React.ReactN
         <>
           <div
             aria-hidden="true"
+            onClick={() => setOpen(false)}
             style={{
               position: "fixed", inset: 0, zIndex: 9000,
               background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)",
-              opacity: big ? 1 : 0, pointerEvents: "none", transition: "opacity 700ms ease",
+              opacity: big ? 1 : 0, pointerEvents: big ? "auto" : "none", transition: "opacity 700ms ease",
             }}
           />
           <div
+            onClick={() => setOpen((v) => !v)}
             style={{
               position: "fixed", left: box.l, top: box.t, width: box.w, height: box.h,
-              zIndex: 9001, overflow: "hidden",
+              zIndex: 9001, overflow: "hidden", cursor: "pointer",
               borderRadius: big ? 22 : 16,
               border: big ? "1px solid rgba(212,175,55,0.55)" : "1px solid transparent",
               boxShadow: big ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0,0,0,0.05)",
