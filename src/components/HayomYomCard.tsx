@@ -15,7 +15,7 @@ export function HayomYomCard({ content }: { content: HayomYomDay | null }) {
         </div>
       </div>
       <div className="p-5">
-        <p className="line-clamp-5 text-sm leading-relaxed text-foreground">{preview}</p>
+        <p className="line-clamp-5 text-[15px] leading-relaxed text-foreground">{preview}</p>
         <Link to="/hayom-yom" className="btn-cta btn-blue-animated mt-4 w-full text-white">
           Lire l’enseignement du jour
         </Link>

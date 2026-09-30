@@ -2435,7 +2435,7 @@ function PlanningTV() {
                 </div>
               </div>
               <div className="flex-1 min-h-0 overflow-hidden">
-                <p className="whitespace-pre-line" style={{ fontSize: "1.35vh", lineHeight: 1.5, color: "#1A2540", fontWeight: 400 }}>
+                <p className="whitespace-pre-line" style={{ fontSize: "1.6vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
                   {hayomYom.fr}
                 </p>
               </div>
