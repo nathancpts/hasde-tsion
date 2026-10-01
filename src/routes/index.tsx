@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { ChevronLeft, ChevronRight, MoonStar, Sunset, UserRound } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
@@ -2411,7 +2411,7 @@ function PlanningTV() {
                         <div key={t.label} className="flex items-center justify-center text-center" style={{ gap: "1vw", borderLeft: i ? "1px solid #E5E7EB" : "none" }}>
                           {/nuit|tset|sortie/i.test(t.label)
                             ? <MoonStar className="shrink-0" style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />
-                            : <Sunset className="shrink-0" style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />}
+                            : <Sun className="shrink-0" style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />}
                           <div>
                             <p style={{ fontSize: "1.8vh", color: "#1A2540", fontWeight: 600 }}>{t.label}</p>
                             <p className="tabular-nums" style={{ fontSize: "3.2vh", fontWeight: 800, color: "#0F2A5C", WebkitTextFillColor: "#0F2A5C", background: "none", fontFamily: BODY_FONT_LOCAL, lineHeight: 1.1 }}>{t.value}</p>
