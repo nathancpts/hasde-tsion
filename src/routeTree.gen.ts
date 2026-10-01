@@ -9,32 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TextesRouteImport } from './routes/textes'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as HayomYomRouteImport } from './routes/hayom-yom'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as HayomYomRouteImport } from './routes/hayom-yom'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as TextesRouteImport } from './routes/textes'
+import { Route as TvRouteImport } from './routes/tv'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
 import { Route as ApiPublicKotelRouteImport } from './routes/api/public/kotel'
-import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
-import { Route as ApiPublicHooksSendScheduledRouteImport } from './routes/api/public/hooks/send-scheduled'
 import { Route as ApiPublicHooksParashaPushRouteImport } from './routes/api/public/hooks/parasha-push'
+import { Route as ApiPublicHooksSendScheduledRouteImport } from './routes/api/public/hooks/send-scheduled'
+import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
 
-const TextesRoute = TextesRouteImport.update({
-  id: '/textes',
-  path: '/textes',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HayomYomRoute = HayomYomRouteImport.update({
-  id: '/hayom-yom',
-  path: '/hayom-yom',
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -42,23 +43,34 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const HayomYomRoute = HayomYomRouteImport.update({
+  id: '/hayom-yom',
+  path: '/hayom-yom',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCompteRoute = AuthenticatedCompteRouteImport.update({
-  id: '/compte',
-  path: '/compte',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const TextesRoute = TextesRouteImport.update({
+  id: '/textes',
+  path: '/textes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TvRoute = TvRouteImport.update({
+  id: '/tv',
+  path: '/tv',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCompteRoute = AuthenticatedCompteRouteImport.update({
+  id: '/compte',
+  path: '/compte',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiPublicKotelRoute = ApiPublicKotelRouteImport.update({
@@ -66,10 +78,10 @@ const ApiPublicKotelRoute = ApiPublicKotelRouteImport.update({
   path: '/api/public/kotel',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicHooksShabbatPushRoute =
-  ApiPublicHooksShabbatPushRouteImport.update({
-    id: '/api/public/hooks/shabbat-push',
-    path: '/api/public/hooks/shabbat-push',
+const ApiPublicHooksParashaPushRoute =
+  ApiPublicHooksParashaPushRouteImport.update({
+    id: '/api/public/hooks/parasha-push',
+    path: '/api/public/hooks/parasha-push',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksSendScheduledRoute =
@@ -78,19 +90,21 @@ const ApiPublicHooksSendScheduledRoute =
     path: '/api/public/hooks/send-scheduled',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksParashaPushRoute =
-  ApiPublicHooksParashaPushRouteImport.update({
-    id: '/api/public/hooks/parasha-push',
-    path: '/api/public/hooks/parasha-push',
+const ApiPublicHooksShabbatPushRoute =
+  ApiPublicHooksShabbatPushRouteImport.update({
+    id: '/api/public/hooks/shabbat-push',
+    path: '/api/public/hooks/shabbat-push',
     getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/tv': typeof TvRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
@@ -100,10 +114,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/tv': typeof TvRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
@@ -115,10 +131,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
+  '/tv': typeof TvRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
@@ -130,10 +148,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/auth'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
+    | '/tv'
     | '/admin'
     | '/compte'
     | '/api/public/kotel'
@@ -143,10 +163,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/auth'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
+    | '/tv'
     | '/admin'
     | '/compte'
     | '/api/public/kotel'
@@ -157,10 +179,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/app'
     | '/auth'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
+    | '/tv'
     | '/_authenticated/admin'
     | '/_authenticated/compte'
     | '/api/public/kotel'
@@ -172,10 +196,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
   HayomYomRoute: typeof HayomYomRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TextesRoute: typeof TextesRoute
+  TvRoute: typeof TvRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
   ApiPublicHooksParashaPushRoute: typeof ApiPublicHooksParashaPushRoute
   ApiPublicHooksSendScheduledRoute: typeof ApiPublicHooksSendScheduledRoute
@@ -184,32 +210,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/textes': {
-      id: '/textes'
-      path: '/textes'
-      fullPath: '/textes'
-      preLoaderRoute: typeof TextesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hayom-yom': {
-      id: '/hayom-yom'
-      path: '/hayom-yom'
-      fullPath: '/hayom-yom'
-      preLoaderRoute: typeof HayomYomRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -219,25 +224,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/compte': {
-      id: '/_authenticated/compte'
-      path: '/compte'
-      fullPath: '/compte'
-      preLoaderRoute: typeof AuthenticatedCompteRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hayom-yom': {
+      id: '/hayom-yom'
+      path: '/hayom-yom'
+      fullPath: '/hayom-yom'
+      preLoaderRoute: typeof HayomYomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/textes': {
+      id: '/textes'
+      path: '/textes'
+      fullPath: '/textes'
+      preLoaderRoute: typeof TextesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tv': {
+      id: '/tv'
+      path: '/tv'
+      fullPath: '/tv'
+      preLoaderRoute: typeof TvRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/compte': {
+      id: '/_authenticated/compte'
+      path: '/compte'
+      fullPath: '/compte'
+      preLoaderRoute: typeof AuthenticatedCompteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/kotel': {
@@ -247,11 +287,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicKotelRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/shabbat-push': {
-      id: '/api/public/hooks/shabbat-push'
-      path: '/api/public/hooks/shabbat-push'
-      fullPath: '/api/public/hooks/shabbat-push'
-      preLoaderRoute: typeof ApiPublicHooksShabbatPushRouteImport
+    '/api/public/hooks/parasha-push': {
+      id: '/api/public/hooks/parasha-push'
+      path: '/api/public/hooks/parasha-push'
+      fullPath: '/api/public/hooks/parasha-push'
+      preLoaderRoute: typeof ApiPublicHooksParashaPushRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/send-scheduled': {
@@ -261,11 +301,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSendScheduledRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/parasha-push': {
-      id: '/api/public/hooks/parasha-push'
-      path: '/api/public/hooks/parasha-push'
-      fullPath: '/api/public/hooks/parasha-push'
-      preLoaderRoute: typeof ApiPublicHooksParashaPushRouteImport
+    '/api/public/hooks/shabbat-push': {
+      id: '/api/public/hooks/shabbat-push'
+      path: '/api/public/hooks/shabbat-push'
+      fullPath: '/api/public/hooks/shabbat-push'
+      preLoaderRoute: typeof ApiPublicHooksShabbatPushRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -287,10 +327,12 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AppRoute: AppRoute,
   AuthRoute: AuthRoute,
   HayomYomRoute: HayomYomRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TextesRoute: TextesRoute,
+  TvRoute: TvRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
   ApiPublicHooksParashaPushRoute: ApiPublicHooksParashaPushRoute,
   ApiPublicHooksSendScheduledRoute: ApiPublicHooksSendScheduledRoute,
