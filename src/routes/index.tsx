@@ -2483,9 +2483,7 @@ function PlanningTV() {
                 </div>
               </div>
               <div className="flex-1 min-h-0 overflow-hidden">
-                <p className="whitespace-pre-line" style={{ fontSize: "1.6vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
-                  {hayomYom.fr}
-                </p>
+                <FitText text={hayomYom.fr} className="whitespace-pre-line" style={{ fontSize: "1.6vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }} />
               </div>
             </article>
           )}
@@ -2740,4 +2738,31 @@ function ZmanimRowTV({
 function toMinTop(hm: string): number | null {
   const m = hm.match(/^(\d{1,2}):(\d{2})/);
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+/** Raccourcit automatiquement le texte (fin par « … ») pour qu'il tienne dans son cadre. */
+function FitText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    const box = el?.parentElement;
+    if (!el || !box) return;
+    const fit = () => {
+      el.textContent = text;
+      if (el.scrollHeight <= box.clientHeight + 1) return;
+      const words = text.split(" ");
+      let lo = 0, hi = words.length;
+      while (lo < hi) {
+        const mid = Math.ceil((lo + hi) / 2);
+        el.textContent = words.slice(0, mid).join(" ") + " …";
+        if (el.scrollHeight <= box.clientHeight + 1) lo = mid; else hi = mid - 1;
+      }
+      el.textContent = words.slice(0, lo).join(" ").replace(/[\s,;:.]+$/, "") + " …";
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [text]);
+  return <p ref={ref} className={className} style={style}>{text}</p>;
 }
