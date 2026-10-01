@@ -1,3 +1,4 @@
+import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -509,6 +510,19 @@ function sortByTime<T extends { value: string }>(list: T[]): T[] {
 }
 
 
+
+/** PC / tablette large (≥ 768 px) hors téléviseur : site de présentation. */
+function useShowPresentation(): boolean {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setShow(mq.matches && !isTVDevice());
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return show;
+}
 
 function useIsTV(): boolean | null {
   const [isTV, setIsTV] = useState<boolean | null>(null);
@@ -1843,6 +1857,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 function PlanningTV() {
   const isTV = useIsTV();
+  const showSite = useShowPresentation();
   const live = useLiveWeek(null);
   const chabad = useChabad();
   const [dayOffset, setDayOffset] = useState(0);
@@ -1909,6 +1924,7 @@ function PlanningTV() {
   // Le même lecteur reste monté pendant tout le cycle pour éviter un écran noir au retour.
 
 
+  if (showSite && !isPdfMode) return <PresentationSite />;
   if (isTV === null && !isPdfMode) return <div className="h-screen w-screen bg-[#0F3D7A]" />;
   if (!isTV && !isPdfMode) return <MobileLayout live={live} chabad={chabad} zmanim={zmanim} dayOffset={dayOffset} setDayOffset={setDayOffset} />;
 
