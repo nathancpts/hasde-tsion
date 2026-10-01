@@ -195,6 +195,15 @@ function TVFrameShell() {
     <main style={{ position: "fixed", inset: 0, background: "#0A1128" }}>
       {frames.a && <iframe title="Hasdé Tsion TV" src={frames.a} style={style(frames.active === "a")} onLoad={() => onLoad("a")} allow="autoplay; fullscreen" />}
       {frames.b && <iframe title="Hasdé Tsion TV" src={frames.b} style={style(frames.active === "b")} onLoad={() => onLoad("b")} allow="autoplay; fullscreen" />}
+      <a
+        href="/?tv=0"
+        onClick={() => { try { localStorage.removeItem("ht-tv"); } catch {} }}
+        title="Quitter le mode TV"
+        aria-label="Quitter le mode TV"
+        style={{ position: "fixed", top: 12, right: 52, zIndex: 5, height: 28, padding: "0 12px", borderRadius: 999, display: "flex", alignItems: "center", fontSize: 12, fontWeight: 600, letterSpacing: ".04em", color: "rgba(255,255,255,.9)", background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)", textDecoration: "none", backdropFilter: "blur(6px)" }}
+      >
+        Quitter le mode TV
+      </a>
     </main>
   );
 }
