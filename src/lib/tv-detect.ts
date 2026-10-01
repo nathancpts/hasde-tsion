@@ -1,6 +1,9 @@
 /** Détecte un téléviseur / box TV (navigateur TV, écran large en paysage, ou ?tv=1). */
 export function isTVDevice(): boolean {
   if (typeof window === "undefined") return false;
+  const path = window.location.pathname.toLowerCase();
+  if (path.startsWith("/tv")) return true;
+  if (path.startsWith("/app")) return false;
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get("tv") === "1") {
@@ -47,4 +50,9 @@ export function isTVDevice(): boolean {
   const landscapeWide = viewportWidth > viewportHeight && viewportWidth >= 800;
   if (/Android/i.test(ua) && landscapeWide) return true;
   return false;
+}
+
+/** Adresse /APP : toujours la web app (vue téléphone), même sur grand écran. */
+export function isAppPath(): boolean {
+  return typeof window !== "undefined" && window.location.pathname.toLowerCase().startsWith("/app");
 }

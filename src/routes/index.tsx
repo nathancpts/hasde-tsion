@@ -1,6 +1,6 @@
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { isTVDevice } from "@/lib/tv-detect";
+import { isTVDevice, isAppPath } from "@/lib/tv-detect";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
@@ -145,7 +145,7 @@ export const Route = createFileRoute("/")({
 const isFramed = () => typeof window !== "undefined" && window.top !== window.self;
 
 /** Sur TV, la page reste fixe (plein écran conservé) et recharge un cadre interne toutes les 10 min. */
-function HomeEntry() {
+export function HomeEntry() {
   const [shell, setShell] = useState(false);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -155,7 +155,7 @@ function HomeEntry() {
 }
 
 function TVFrameShell() {
-  const makeSrc = () => `/?tv=1&frame=1&r=${Date.now()}`;
+  const makeSrc = () => `/tv?frame=1&r=${Date.now()}`;
   const [frames, setFrames] = useState<{ a: string; b: string | null; active: "a" | "b" }>(() => ({ a: makeSrc(), b: null, active: "a" }));
   useEffect(() => {
     try { localStorage.setItem("ht-tv", "1"); } catch {}
@@ -196,7 +196,7 @@ function TVFrameShell() {
       {frames.a && <iframe title="Hasdé Tsion TV" src={frames.a} style={style(frames.active === "a")} onLoad={() => onLoad("a")} allow="autoplay; fullscreen" />}
       {frames.b && <iframe title="Hasdé Tsion TV" src={frames.b} style={style(frames.active === "b")} onLoad={() => onLoad("b")} allow="autoplay; fullscreen" />}
       <a
-        href="/?tv=0"
+        href="/"
         onClick={() => { try { localStorage.removeItem("ht-tv"); } catch {} }}
         title="Quitter le mode TV"
         aria-label="Quitter le mode TV"
@@ -525,7 +525,7 @@ function useShowPresentation(): boolean {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setShow(mq.matches && !isTVDevice());
+    const update = () => setShow(mq.matches && !isTVDevice() && !isAppPath());
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
@@ -537,7 +537,7 @@ function useIsTV(): boolean | null {
   const [isTV, setIsTV] = useState<boolean | null>(null);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsTV(isTVDevice() || mq.matches);
+    const update = () => setIsTV(isTVDevice() || (mq.matches && !isAppPath()));
     update();
     mq.addEventListener("change", update);
     window.addEventListener("resize", update);
