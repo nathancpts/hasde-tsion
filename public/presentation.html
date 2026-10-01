@@ -780,10 +780,11 @@ function setDay(p){
   const rf_ = $('[data-refl]'); rf_.style.left = s.x.toFixed(1) + 'px'; rf_.style.opacity = (near * (.5 + warm*.5)).toFixed(3);
   const nf = clamp(1 - day*1.7 - dusk*.7);
   $('[data-stars]').style.opacity = nf.toFixed(3);
-  // lune
-  const mp = clamp((m - SS - 20) / 110), moon = $('[data-moon]');
-  moon.style.opacity = (Math.min(1, .9 + mp * .25) * (1 - day * .25)).toFixed(3);
-  moon.style.transform = `translate(${(G.W*(.72 + mp*.14)).toFixed(1)}px, ${(G.HY + 30 - mp*G.HY*.75).toFixed(1)}px) rotate(${(-18 + mp*18).toFixed(1)}deg)`;
+  // lune — arc nocturne continu : se lève à la Sheqyia, culmine en milieu de nuit, se couche à l'aube
+  const nightLen = 1440 - SS + SR;
+  const np = clamp(((m - SS + 1440) % 1440) / nightLen), mArc = Math.sin(Math.PI * np), moon = $('[data-moon]');
+  moon.style.opacity = (Math.min(1, .55 + mArc * .5) * (1 - day * .25)).toFixed(3);
+  moon.style.transform = `translate(${(G.W*(.82 - np*.52)).toFixed(1)}px, ${(G.HY + 40 - (G.HY*.92 + 40) * mArc).toFixed(1)}px) rotate(${(-18 + np*30).toFixed(1)}deg)`;
   // textes et cartes
   $('[data-dtime]').textContent = fmt(m);
   $('[data-dphase]').textContent = sunPhase(m);
