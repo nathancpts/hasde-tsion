@@ -146,7 +146,7 @@ svg{flex-shrink:0}
 @keyframes drift{to{transform:translateX(60px)}}
 .sun{width:0;height:0;will-change:transform}
 .suncv{left:0!important;top:0!important;width:100%;height:100%;display:block}
-.moon{width:76px;height:76px;margin:-38px 0 0 -38px;opacity:0;will-change:transform;filter:drop-shadow(0 0 10px rgba(219,231,251,.8)) drop-shadow(0 0 28px rgba(90,154,230,.75))}
+.moon{width:92px;height:92px;margin:-46px 0 0 -46px;opacity:0;will-change:transform;filter:drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 34px rgba(126,181,246,.9))}
 .moon svg{width:100%;height:100%;display:block}
 .haze{position:absolute;left:-30vw;right:-30vw;height:220px;pointer-events:none;--hr:24;--hg:58;--hb:110;--ha:.35;background:linear-gradient(to top,rgba(var(--hr),var(--hg),var(--hb),0) 0%,rgba(var(--hr),var(--hg),var(--hb),var(--ha)) 55%,rgba(var(--hr),var(--hg),var(--hb),0) 100%)}
 .sun-refl{position:absolute;width:110px;height:150px;margin-left:-55px;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,rgba(255,205,130,.6),transparent 70%);filter:blur(9px);opacity:0;pointer-events:none;animation:shimmer 2.4s ease-in-out infinite}
@@ -649,7 +649,7 @@ function moonData(date = new Date()){
   return {phase, illumination:(1 - Math.cos(2 * Math.PI * phase)) / 2};
 }
 function moonSVG(phase, illumination){
-  const r = 46, cx = 50, cy = 50, terminator = Math.cos(2 * Math.PI * phase), left = [], right = [];
+  const r = 46, cx = 50, cy = 50, terminator = -Math.cos(2 * Math.PI * phase), left = [], right = [];
   for (let i = 0; i <= 80; i++) { const y = cy-r + 2*r*i/80, hw = Math.sqrt(Math.max(0, r*r-(y-cy)*(y-cy)));
     const xl = cx-hw, xr = cx+hw, xt = cx+terminator*hw;
     if (phase < .5) { left.push([xt,y]); right.push([xr,y]); } else { left.push([xl,y]); right.push([xt,y]); }
@@ -657,7 +657,7 @@ function moonSVG(phase, illumination){
   const pts = left.concat(right.reverse()), d = 'M' + pts.map(p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(' L') + 'Z';
   const pct = Math.round(illumination * 100), name = phase < .03 || phase > .97 ? 'nouvelle lune' : phase < .22 ? 'premier croissant' : phase < .28 ? 'premier quartier' : phase < .47 ? 'gibbeuse croissante' : phase < .53 ? 'pleine lune' : phase < .72 ? 'gibbeuse décroissante' : phase < .78 ? 'dernier quartier' : 'dernier croissant';
   return `<svg viewBox="0 0 100 100" role="img" aria-label="Lune ${name}, illuminée à ${pct} %"><title>Lune ${name} — ${pct} %</title><defs><radialGradient id="mg" cx="38%" cy="34%" r="76%"><stop offset="0" stop-color="#ffffff"/><stop offset=".72" stop-color="#e8eef9"/><stop offset="1" stop-color="#b8c8e5"/></radialGradient><clipPath id="mc"><path d="${d}"/></clipPath></defs>
-    <circle cx="50" cy="50" r="47.5" fill="#08142e" stroke="#88a8d8" stroke-width="1.5" opacity=".98"/><path d="${d}" fill="url(#mg)"/>
+    <circle cx="50" cy="50" r="47.5" fill="#172b51" stroke="#d9e8ff" stroke-width="2.2" opacity="1"/><path d="${d}" fill="url(#mg)"/>
     <g clip-path="url(#mc)" fill="#899bb9" opacity=".28"><ellipse cx="37" cy="39" rx="10" ry="7"/><ellipse cx="61" cy="58" rx="9" ry="7"/><circle cx="45" cy="67" r="4"/><circle cx="67" cy="34" r="3"/></g></svg>`;
 }
 function buildScene(){
@@ -783,7 +783,7 @@ function setDay(p){
   $('[data-stars]').style.opacity = nf.toFixed(3);
   // lune
   const mp = clamp((m - SS - 20) / 110), moon = $('[data-moon]');
-  moon.style.opacity = (Math.min(1, .3 + mp * .9) * (1 - day)).toFixed(3);
+  moon.style.opacity = (Math.min(1, .72 + mp * .55) * (1 - day * .72)).toFixed(3);
   moon.style.transform = `translate(${(G.W*(.72 + mp*.14)).toFixed(1)}px, ${(G.HY + 30 - mp*G.HY*.75).toFixed(1)}px) rotate(${(-18 + mp*18).toFixed(1)}deg)`;
   // textes et cartes
   $('[data-dtime]').textContent = fmt(m);
