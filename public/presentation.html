@@ -146,7 +146,7 @@ svg{flex-shrink:0}
 @keyframes drift{to{transform:translateX(60px)}}
 .sun{width:0;height:0;will-change:transform}
 .suncv{left:0!important;top:0!important;width:100%;height:100%;display:block}
-.moon{width:92px;height:92px;margin:-46px 0 0 -46px;opacity:0;will-change:transform;filter:drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 34px rgba(126,181,246,.9))}
+.moon{position:absolute;left:0;top:0;width:92px;height:92px;margin:-46px 0 0 -46px;opacity:0;will-change:transform;filter:drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 34px rgba(126,181,246,.9)) drop-shadow(0 0 70px rgba(160,200,255,.7)) brightness(1.25)}
 .moon svg{width:100%;height:100%;display:block}
 .haze{position:absolute;left:-30vw;right:-30vw;height:220px;pointer-events:none;--hr:24;--hg:58;--hb:110;--ha:.35;background:linear-gradient(to top,rgba(var(--hr),var(--hg),var(--hb),0) 0%,rgba(var(--hr),var(--hg),var(--hb),var(--ha)) 55%,rgba(var(--hr),var(--hg),var(--hb),0) 100%)}
 .sun-refl{position:absolute;width:110px;height:150px;margin-left:-55px;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,rgba(255,205,130,.6),transparent 70%);filter:blur(9px);opacity:0;pointer-events:none;animation:shimmer 2.4s ease-in-out infinite}
@@ -269,7 +269,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
   .day{height:auto}
   .day-stick{position:relative;height:auto;min-height:100svh;padding-top:100px}
   .arc-wrap{min-height:0;flex:none;margin-top:24px}
-  .arc-wrap svg.scene,.sky-above,.haze,.sun-refl,.rail{display:none}
+  .arc-wrap svg.scene,.sky-above,.haze,.sun-refl,.moon,.rail{display:none}
   .events{position:relative;grid-template-columns:repeat(2,minmax(0,1fr))}
   .day-note{display:none}
   .blocks,.acts{grid-template-columns:minmax(0,1fr)}
@@ -347,10 +347,10 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
           <div class="clouds" data-clouds></div>
           <canvas class="suncv" data-suncv aria-hidden="true"></canvas>
           <div class="sun" data-sun></div>
-          <div class="moon" data-moon></div>
         </div>
         <div class="haze" data-haze></div>
         <div class="sun-refl" data-refl></div>
+        <div class="moon" data-moon></div>
         <div class="rail" data-rail></div>
         <div class="events" data-events></div>
       </div>
@@ -780,10 +780,11 @@ function setDay(p){
   const rf_ = $('[data-refl]'); rf_.style.left = s.x.toFixed(1) + 'px'; rf_.style.opacity = (near * (.5 + warm*.5)).toFixed(3);
   const nf = clamp(1 - day*1.7 - dusk*.7);
   $('[data-stars]').style.opacity = nf.toFixed(3);
-  // lune
-  const mp = clamp((m - SS - 20) / 110), moon = $('[data-moon]');
-  moon.style.opacity = (Math.min(1, .72 + mp * .55) * (1 - day * .72)).toFixed(3);
-  moon.style.transform = `translate(${(G.W*(.72 + mp*.14)).toFixed(1)}px, ${(G.HY + 30 - mp*G.HY*.75).toFixed(1)}px) rotate(${(-18 + mp*18).toFixed(1)}deg)`;
+  // lune — arc nocturne continu : se lève à la Sheqyia, culmine en milieu de nuit, se couche à l'aube
+  const nightLen = 1440 - SS + SR;
+  const np = clamp(((m - SS + 1440) % 1440) / nightLen), mArc = Math.sin(Math.PI * np), moon = $('[data-moon]');
+  moon.style.opacity = (Math.min(1, .55 + mArc * .5) * (1 - day * .25)).toFixed(3);
+  moon.style.transform = `translate(${(G.W*(.82 - np*.52)).toFixed(1)}px, ${(G.HY + 40 - (G.HY*.92 + 40) * mArc).toFixed(1)}px) rotate(${(-18 + np*30).toFixed(1)}deg)`;
   // textes et cartes
   $('[data-dtime]').textContent = fmt(m);
   $('[data-dphase]').textContent = sunPhase(m);
