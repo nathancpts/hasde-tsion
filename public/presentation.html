@@ -783,7 +783,8 @@ function setDay(p){
   // lune — arc nocturne continu : se lève à la Sheqyia, culmine en milieu de nuit, se couche à l'aube
   const nightLen = 1440 - SS + SR;
   const np = clamp(((m - SS + 1440) % 1440) / nightLen), mArc = Math.sin(Math.PI * np), moon = $('[data-moon]');
-  moon.style.opacity = (Math.min(1, .55 + mArc * .5) * (1 - day * .25)).toFixed(3);
+  const sunUp = m > SR && m < SS;
+  moon.style.opacity = sunUp ? '0' : (Math.min(1, .55 + mArc * .5) * (1 - day * .25)).toFixed(3);
   moon.style.transform = `translate(${(G.W*(.82 - np*.52)).toFixed(1)}px, ${(G.HY + 40 - (G.HY*.92 + 40) * mArc).toFixed(1)}px) rotate(${(-18 + np*30).toFixed(1)}deg)`;
   // textes et cartes
   $('[data-dtime]').textContent = fmt(m);
