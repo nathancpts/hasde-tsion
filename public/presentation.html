@@ -660,7 +660,6 @@ function buildScene(){
   wrap.style.setProperty('--at', G.oy + 'px');
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.style.height = h + 'px';
   const gr = $('[data-ground]'); gr.setAttribute('y', G.HY); gr.setAttribute('height', h - G.HY + 150);
-  const hl = $('[data-hline]'); hl.setAttribute('y1', G.HY); hl.setAttribute('y2', G.HY);
   const pts = []; for (let i = 0; i <= 140; i++){ const m = D0 + (D1 - D0) * i / 140, p = sunAt(m); pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`); }
   $('[data-guide]').setAttribute('d', 'M' + pts.join(' L'));
   $('[data-above]').style.height = (G.HY + 420) + 'px';
