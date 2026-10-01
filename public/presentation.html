@@ -655,7 +655,7 @@ function moonSVG(phase, illumination){
     if (phase < .5) { left.push([xt,y]); right.push([xr,y]); } else { left.push([xl,y]); right.push([xt,y]); }
   }
   const pts = left.concat(right.reverse()), d = 'M' + pts.map(p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(' L') + 'Z';
-  const pct = Math.round(illumination * 100), name = phase < .03 || phase > .97 ? 'nouvelle lune' : phase < .22 ? 'croissant croissant' : phase < .28 ? 'premier quartier' : phase < .47 ? 'gibbeuse croissante' : phase < .53 ? 'pleine lune' : phase < .72 ? 'gibbeuse décroissante' : phase < .78 ? 'dernier quartier' : 'croissant décroissant';
+  const pct = Math.round(illumination * 100), name = phase < .03 || phase > .97 ? 'nouvelle lune' : phase < .22 ? 'premier croissant' : phase < .28 ? 'premier quartier' : phase < .47 ? 'gibbeuse croissante' : phase < .53 ? 'pleine lune' : phase < .72 ? 'gibbeuse décroissante' : phase < .78 ? 'dernier quartier' : 'dernier croissant';
   return `<svg viewBox="0 0 100 100" role="img" aria-label="Lune ${name}, illuminée à ${pct} %"><title>Lune ${name} — ${pct} %</title><defs><radialGradient id="mg" cx="38%" cy="34%" r="76%"><stop offset="0" stop-color="#ffffff"/><stop offset=".72" stop-color="#e8eef9"/><stop offset="1" stop-color="#b8c8e5"/></radialGradient><clipPath id="mc"><path d="${d}"/></clipPath></defs>
     <circle cx="50" cy="50" r="47.5" fill="#08142e" stroke="#88a8d8" stroke-width="1.5" opacity=".98"/><path d="${d}" fill="url(#mg)"/>
     <g clip-path="url(#mc)" fill="#899bb9" opacity=".28"><ellipse cx="37" cy="39" rx="10" ry="7"/><ellipse cx="61" cy="58" rx="9" ry="7"/><circle cx="45" cy="67" r="4"/><circle cx="67" cy="34" r="3"/></g></svg>`;
