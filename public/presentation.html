@@ -82,9 +82,9 @@ svg{flex-shrink:0}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 .hero .eyebrow{display:flex;gap:14px;align-items:center}
 .hero .eyebrow .he{font-size:1.5rem;color:var(--gold-soft)}
-.clock{font-family:var(--f-display);font-weight:900;font-size:clamp(5rem,22vw,21rem);line-height:.82;letter-spacing:-.05em;display:flex;margin:28px 0 0 -.04em;font-variant-numeric:tabular-nums;will-change:transform}
-.clock .d{display:inline-block;overflow:hidden;height:.84em;position:relative}
-.clock .d span{display:block;background:linear-gradient(180deg,#ffffff 0%,#e9f0fb 60%,#c9d8f3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.clock{font-family:var(--f-display);font-weight:900;font-size:clamp(5rem,22vw,21rem);line-height:1;letter-spacing:0;display:flex;margin:28px 0 0 -.04em;font-variant-numeric:tabular-nums;will-change:transform}
+.clock .d{display:inline-block;overflow:hidden;height:1.06em;position:relative}
+.clock .d span{display:block;height:1.06em;line-height:1.06;background:linear-gradient(180deg,#ffffff 0%,#e9f0fb 60%,#c9d8f3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .clock .sep{animation:blink 2s steps(1) infinite;color:var(--gold-soft)}
 @keyframes blink{50%{opacity:.25}}
 .hero-date{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap;margin-top:26px}
