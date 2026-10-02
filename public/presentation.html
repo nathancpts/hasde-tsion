@@ -895,6 +895,34 @@ function applyWx(code, cover){ showWxNow(code);
 })();
 /* pluie réaliste sur canvas : gouttes fines, longueurs et vitesses variées, densité selon l'intensité */
 let RAIN = 0;
+(function(){ const RM = matchMedia('(prefers-reduced-motion:reduce)').matches, st = new WeakMap(); let last = 0;
+  function setup(ev){ let cv = ev.querySelector(':scope>canvas.ev-water'); if (!cv){ cv = document.createElement('canvas'); cv.className='ev-water'; ev.appendChild(cv); }
+    let o = st.get(ev); if (!o || o.cv !== cv){ o = {cv, cx:cv.getContext('2d'), d:[], tr:[], w:0, h:0, next:0}; st.set(ev, o); } return o; }
+  function drop(cx, x, y, r){
+    const g = cx.createRadialGradient(x - r*.3, y - r*.35, r*.1, x, y, r);
+    g.addColorStop(0,'rgba(255,255,255,.28)'); g.addColorStop(.6,'rgba(210,225,245,.12)'); g.addColorStop(1,'rgba(10,25,55,.28)');
+    cx.fillStyle = g; cx.beginPath(); cx.ellipse(x, y, r, r*1.08, 0, 0, 7); cx.fill();
+    cx.strokeStyle='rgba(255,255,255,.45)'; cx.lineWidth = .8; cx.beginPath(); cx.arc(x, y, r*.92, 3.5, 5.2); cx.stroke();
+    cx.strokeStyle='rgba(0,15,40,.3)'; cx.beginPath(); cx.arc(x, y, r*.92, .3, 1.9); cx.stroke();
+    cx.fillStyle='rgba(255,255,255,.85)'; cx.beginPath(); cx.arc(x - r*.35, y - r*.4, Math.max(.6, r*.22), 0, 7); cx.fill(); }
+  function frame(t){
+    requestAnimationFrame(frame); if (document.hidden || t - last < 30) return; const dt = Math.min(60, t - last); last = t;
+    const box = $('[data-events]'); if (!box || !box.classList.contains('wet') || !RAIN) { if (box) box.querySelectorAll('canvas.ev-water').forEach(c => c.remove()); return; }
+    box.querySelectorAll(':scope>.ev').forEach(ev => { const o = setup(ev), dpr = Math.min(2, devicePixelRatio||1), W = ev.clientWidth, H = ev.clientHeight;
+      if (o.w !== W || o.h !== H){ o.w = W; o.h = H; o.cv.width = W*dpr; o.cv.height = H*dpr; o.cx.setTransform(dpr,0,0,dpr,0,0); }
+      const max = Math.round(8 + RAIN*16);
+      if (t > o.next && o.d.length < max){ o.d.push({x:Math.random()*W, y:Math.random()*H, r:1 + Math.random()*2 + (Math.random()<.15 ? 1.5 : 0), v:0, p:Math.random()*3000}); o.next = t + 150 + Math.random()*(1400 - RAIN*900); }
+      const cx = o.cx; cx.clearRect(0,0,W,H);
+      o.tr = o.tr.filter(q => (q.a -= dt/2600) > 0); o.tr.forEach(q => { cx.fillStyle = `rgba(220,235,255,${(q.a*.18).toFixed(3)})`; cx.beginPath(); cx.ellipse(q.x, q.y, q.r, q.r*1.3, 0, 0, 7); cx.fill(); });
+      for (const d of o.d){
+        if (!RM){ d.r = Math.min(3, d.r + dt*.00008*RAIN);
+          if (d.r > 2.4){ d.p -= dt; if (d.p < 0){ d.v = d.v > 0 && Math.random() < .02 ? 0 : Math.min(.12, d.v + .004 + Math.random()*.006); if (Math.random() < .01) d.p = 300 + Math.random()*900; }
+            if (d.v){ d.y += d.v*dt; d.x += (Math.random()-.5)*.4; if (Math.random() < .5) o.tr.push({x:d.x, y:d.y - d.r, r:d.r*.35, a:1}); } } }
+        drop(cx, d.x, d.y, d.r); }
+      if (!RM) for (const a of o.d) if (a.v) for (const b of o.d) if (b !== a && !b.v && !b.dead && Math.hypot(a.x-b.x, a.y-b.y) < a.r + b.r){ b.dead = 1; a.r = Math.min(3, a.r + b.r*.25); }
+      o.d = o.d.filter(d => !d.dead && d.y < H + 8); if (o.tr.length > 140) o.tr.splice(0, o.tr.length - 140); });
+  }
+  requestAnimationFrame(frame); })();
 (function(){ const cv = $('[data-wx="rain"]'); if (!cv) return; const cx = cv.getContext('2d'); let drops = [], W = 0, H = 0;
   const rnd = (a, b) => a + Math.random() * (b - a);
   function size(){ W = cv.width = cv.clientWidth; H = cv.height = cv.clientHeight; }
