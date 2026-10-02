@@ -587,7 +587,7 @@ $('[data-events]').innerHTML = DATA.events.map(e =>
 $('[data-blocks]').innerHTML = DATA.blocs.map(([h,p]) => `<div class="reveal"><h3>${h}</h3><p>${p}</p></div>`).join('');
 $$('[data-hayom]').forEach(e => e.textContent = DATA.hayom);
 $('[data-acts]').innerHTML = DATA.acts.map(([i,h,p]) =>
-  `<a class="act" href="${HA}" target="_blank" rel="noopener" data-cursor><span class="i">${ic(i,24)}</span><span class="go">${ic('arrow',18)}</span><h3>${h}</h3><p>${p}</p></a>`).join('');
+  `<a class="act" href="${HA}" target="_blank" rel="noopener" data-cursor><span class="i">${ic(i,30)}</span><span class="go">${ic('arrow',18)}</span><h3>${h}</h3><p>${p}</p></a>`).join('');
 const iso = x => `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
 let hebShort; try { hebShort = new Intl.DateTimeFormat('fr-FR-u-ca-hebrew',{day:'numeric',month:'long'}); } catch(e){}
 const days = Array.from({length:7},(_,i) => { const x = new Date(); x.setDate(x.getDate()+i); return x; });
