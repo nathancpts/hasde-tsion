@@ -787,7 +787,7 @@ function setDay(p){
   if (!G) buildScene(); lastP = p;
   const stk = $('.day-stick'); stk.style.setProperty('--ft', (clamp(1 - p / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb', (clamp((p - .84) / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb2', (clamp((p - .84) / .16) * 560).toFixed(0) + 'px');
   { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); }
-  const m = nowM(), s = sunAt(m);
+  const n0 = nowM(), m = n0 + Math.max(0, D1 - n0) * p, s = sunAt(m);
   const warm = clamp(1 - Math.max(s.alt, 0) / .4);
   const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;                 // 0 au-dessus de l'horizon → 1 bien en dessous
   const sun = $('[data-sun]');
