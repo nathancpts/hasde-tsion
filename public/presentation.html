@@ -153,6 +153,7 @@ svg{flex-shrink:0}
 .wx-grey{background:radial-gradient(28% 18% at 12% 18%,rgba(120,130,145,.9),transparent 70%),radial-gradient(34% 20% at 40% 10%,rgba(105,115,130,.95),transparent 70%),radial-gradient(30% 22% at 70% 22%,rgba(125,135,150,.9),transparent 70%),radial-gradient(30% 18% at 92% 12%,rgba(110,120,135,.9),transparent 70%),radial-gradient(40% 16% at 25% 40%,rgba(140,150,162,.7),transparent 70%),radial-gradient(45% 16% at 75% 42%,rgba(135,145,158,.7),transparent 70%),linear-gradient(rgba(85,95,110,.7),rgba(110,120,135,.35) 60%,transparent);filter:blur(18px);animation:fogm 60s ease-in-out infinite alternate}
 .wx-flash{opacity:1!important;width:calc(100% + 60vw);height:calc(100% + 340px);z-index:2}
 @keyframes flash{0%,93%,100%{opacity:0}94%{opacity:.7}95%{opacity:0}96%{opacity:.5}}
+.greet{margin-top:10px;font-family:var(--f-display);font-weight:800;font-size:clamp(1.3rem,2.6vw,2.2rem);color:var(--gold-soft);display:flex;gap:.6em;align-items:baseline;text-shadow:0 2px 18px rgba(240,214,137,.35)}.greet .he{font-weight:600;opacity:.9}
 .wx-tag{position:absolute;right:clamp(16px,4vw,56px);bottom:14px;z-index:5;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .sun{width:0;height:0;will-change:transform}
 .suncv{left:0!important;top:0!important;width:100%;height:100%;display:block}
@@ -335,6 +336,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
       <div class="eyebrow"><span class="label">Synagogue · Neuilly-sur-Seine</span><span class="he" lang="he" dir="rtl">חסדי ציון</span></div>
       <span class="label" style="color:var(--muted)" data-hebdate></span>
     </div>
+    <div class="greet" data-greet hidden></div>
     <div class="clock" data-clock aria-label="Heure actuelle">18:36</div>
     <div class="hero-date"><span class="label" style="color:var(--ice)" data-date></span><span class="he" lang="he" dir="rtl" data-hebfull></span></div>
     <div class="hero-bottom">
@@ -357,6 +359,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
           <span class="label">La journée · horaires du jour</span>
           <div class="day-time" data-dtime>06:00</div>
           <div class="day-phase" data-dphase>Avant l'aube</div>
+          <div class="greet" data-greet hidden></div>
           <div class="wxnow label" data-wxnow aria-live="polite" style="margin-top:6px;color:var(--ice);font-size:clamp(.95rem,1.6vw,1.25rem);letter-spacing:.08em"></div>
           <button class="now-btn" type="button" data-now data-cursor hidden style="display:none"><i></i>Aller à maintenant</button>
         </div>
@@ -502,8 +505,14 @@ try { const L = window.parent && window.parent.__HT_LIVE__; if (L) {
   const E = DATA.events, set = (n,t) => { const e = E.find(x => x.n === n); if (e && t) { e.t = t; delete e.ex; } };
   set("Lever du soleil", L.sunrise); set("Minha", L.minha); set("Sheqyia", L.sunset); set("Arvit", L.arvit); set("Nuit de R. Tam", L.rtam);
   if (L.sunrise) DATA.sunrise = L.sunrise; if (L.sunset) DATA.sunset = L.sunset;
+  if (L.candles && !E.some(x => x.n === "Allumage des bougies")) E.push({k:"Chabbat", n:"Allumage des bougies", he:"הדלקת נרות", t:L.candles});
   E.sort((a,b) => a.t.localeCompare(b.t));
 } } catch (e) {}
+/* Vendredi : allumage (secours : coucher − 18 min) et salutation de Chabbat */
+{ const wd = new Date().getDay(), E = DATA.events;
+  if (wd === 5 && !E.some(x => x.n === "Allumage des bougies")) { const s = DATA.sunset.split(':').map(Number), m = s[0]*60 + s[1] - 18;
+    E.push({k:"Chabbat", n:"Allumage des bougies", he:"הדלקת נרות", t:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}); E.sort((a,b) => a.t.localeCompare(b.t)); }
+  DATA.greet = wd === 5 || wd === 6 ? ['Chabbat Chalom', 'שבת שלום'] : null; }
 
 /* ===== Icônes ===== */
 const P = {
@@ -582,6 +591,7 @@ function tick(){
 }
 
 /* ===== Rendus ===== */
+if (DATA.greet) $$('[data-greet]').forEach(e => { e.hidden = false; e.innerHTML = `<span>${DATA.greet[0]}</span><span class="he" lang="he" dir="rtl">${DATA.greet[1]}</span>`; });
 $('[data-events]').innerHTML = DATA.events.map(e =>
   `<div class="ev" data-t="${toM(e.t)}"><span class="k">${e.k}<span class="nx">prochain</span></span><strong>${e.n} <span class="he" lang="he" dir="rtl">${e.he}</span></strong><div class="t">${e.t}</div>${e.ex?'<span class="tag">exemple</span>':''}</div>`).join('');
 $('[data-blocks]').innerHTML = DATA.blocs.map(([h,p]) => `<div class="reveal"><h3>${h}</h3><p>${p}</p></div>`).join('');
