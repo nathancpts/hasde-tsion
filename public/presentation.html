@@ -189,7 +189,7 @@ svg{flex-shrink:0}
 .ev.cur::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;pointer-events:none;background:conic-gradient(from var(--ang),transparent 0%,rgba(255,240,190,.95) 10%,transparent 22%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;animation:ring 3.2s linear infinite}
 @keyframes ring{to{--ang:360deg}}
-.js-io .rv{opacity:0;transform:translateY(70px) rotate(var(--rot,0deg));transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
+.js-io .rv{will-change:transform,opacity;opacity:0;transform:translateY(70px) rotate(var(--rot,0deg));transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
 .js-io .rv.in{opacity:1;transform:none}
 .js-io .ev.rv{transition-property:opacity,transform,background,border-color}
 .js-io .ev.rv.in.past{opacity:.38}.js-io .ev.rv.in.cur{transform:translateY(-10px)}
@@ -973,9 +973,9 @@ setInterval(() => setDay(lastP), 15000);
 function choreo(){
   buildScene();
   if (!window.gsap || !window.ScrollTrigger){ setDay(clamp((nowM() - D0) / (D1 - D0))); return; }
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger); ScrollTrigger.config({ignoreMobileResize:true}); gsap.config({force3D:true});
   let lenis;
-  if (window.Lenis && !RM){ lenis = new Lenis({lerp:.09, smoothWheel:true}); window.lenisRef = lenis; lenis.on('scroll', ScrollTrigger.update);
+  if (window.Lenis && !RM){ lenis = new Lenis({duration:1.25, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true, wheelMultiplier:.9, touchMultiplier:1.4}); window.lenisRef = lenis; lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(t => lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
     $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); if (id.length > 1 && $(id)){ e.preventDefault(); lenis.scrollTo(id, {offset:-40, duration:1.6}); }})); }
   const mm = gsap.matchMedia();
@@ -994,12 +994,12 @@ function choreo(){
         cX(px*-26); cY(py*-16); hX(px*-10); hY(py*-6); nX(px*16); nY(py*12); });
     }
     gsap.to('.hero .clock', {scale:.86, yPercent:-18, opacity:.25, ease:'none', transformOrigin:'left bottom',
-      scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+      scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:.8}});
     gsap.utils.toArray('.sec .words, .give .words, .info .words').forEach(h => gsap.from(h.querySelectorAll('.w > span'), {yPercent:110, duration:1.2, stagger:.04, ease:'expo.out',
       scrollTrigger:{trigger:h, start:'top 85%'}}));
     gsap.utils.toArray('.lead, .reveal, .hayom, .amts, .info-actions > *').forEach(el => gsap.from(el, {y:50, opacity:0, duration:1.2, ease:'expo.out', scrollTrigger:{trigger:el, start:'top 90%'}}));
     // journée : scrub
-    window.dayST = ScrollTrigger.create({trigger:'.day', start:'top top', end:'bottom bottom', scrub:true, onUpdate:s => setDay(s.progress), onRefresh:() => { buildScene(); setDay(lastP); }});
+    window.dayST = ScrollTrigger.create({trigger:'.day', start:'top top', end:'bottom bottom', scrub:.6, onUpdate:s => setDay(s.progress), onRefresh:() => { buildScene(); setDay(lastP); }});
     // semaine : défilement horizontal épinglé
     const track = $('[data-track]');
     gsap.to(track, {x:() => -(track.scrollWidth - innerWidth + 60), ease:'none',
