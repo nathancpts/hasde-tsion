@@ -130,7 +130,7 @@ export function ChantsPage() {
         </div>
       </section>
 
-      <section className="sticky top-[72px] z-20 border-y border-chant-line bg-chant-night/95 px-4 py-4 backdrop-blur-xl sm:px-8 lg:px-12">
+      <section className="sticky top-0 z-20 border-y border-chant-line bg-chant-night/95 px-4 py-4 backdrop-blur-xl sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl space-y-3">
           <label className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-chant-line bg-chant-panel px-4 py-3">
             <Search className="size-5 text-chant-gold" />
