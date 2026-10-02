@@ -853,7 +853,11 @@ function applyWx(code, cover){
   const sv = $('[data-suncv]'), sn = $('[data-sun]'); const dim = c > .85 ? .8 : c > .6 ? .9 : 1;
   if (sv) sv.style.opacity = dim; if (sn) sn.style.filter = dim < 1 ? `opacity(${dim})` : '';
 }
-function loadWx(){ fetch('https://api.open-meteo.com/v1/forecast?latitude=48.885&longitude=2.269&current=weather_code,cloud_cover&timezone=Europe%2FParis')
+function loadWx(){
+  let q = ''; try { q = new URLSearchParams((window.parent||window).location.search).get('meteo') || ''; } catch(e){}
+  const F = {pluie:[63,90], forte:[65,100], orage:[95,100], brouillard:[45,70], neige:[73,90], nuages:[3,95], soleil:[0,5]}[q];
+  if (F) return applyWx(F[0], F[1]);
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=48.885&longitude=2.269&current=weather_code,cloud_cover&timezone=Europe%2FParis')
   .then(r => r.json()).then(d => d.current && applyWx(d.current.weather_code, d.current.cloud_cover)).catch(() => {}); }
 setTimeout(loadWx, 1500); setInterval(loadWx, 30*60*1000);
 
