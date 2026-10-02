@@ -2219,12 +2219,14 @@ function PlanningTV() {
                         {b.titre}
                       </p>
                     )}
-                    <p style={{ marginTop: "0.5vh", fontSize: "1.55vh", lineHeight: 1.7, color: "#DBE7FB", whiteSpace: "pre-line" }}>
-                      {b.texte}
-                    </p>
+                    {(b.paragraphes ?? []).map((para, k) => (
+                      <p key={`pvb-${i}-${k}`} style={{ marginTop: "0.5vh", fontSize: "1.55vh", lineHeight: 1.7, color: "#DBE7FB", whiteSpace: "pre-line" }}>
+                        {para}
+                      </p>
+                    ))}
                     {(b.puces?.length ?? 0) > 0 && (
                       <ul style={{ marginTop: "0.5vh", paddingLeft: "1.1em" }}>
-                        {b.puces.map((p, j) => (
+                        {(b.puces ?? []).map((p, j) => (
                           <li key={`pvb-${i}-${j}`} style={{ position: "relative", paddingLeft: "0.9em", fontSize: "1.45vh", lineHeight: 1.65, color: "#C9D6EE" }}>
                             <span style={{ position: "absolute", left: 0, top: "0.62em", width: "0.34em", height: "0.34em", borderRadius: "50%", background: "#F0D689" }} />
                             {p}
@@ -2255,7 +2257,7 @@ function PlanningTV() {
                     style={{ padding: "0.55vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
                   >
                     <span className="min-w-0 truncate" style={{ fontSize: "1.75vh", fontWeight: 600, color: "#F3F6FC" }}>
-                      {d.name}
+                      {d.donateur}
                     </span>
                     {d.dedicace && (
                       <span className="shrink-0 truncate" style={{ fontSize: "1.35vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>

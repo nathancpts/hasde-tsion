@@ -413,9 +413,12 @@ export function TVSky({
       if (spr[k]) return spr[k];
       const cnv = document.createElement("canvas"), s = Math.ceil(r * 4) + 2;
       cnv.width = cnv.height = s;
-      const g = cnv.getContext("2d"), mc = s / 2, gr = g.createRadialGradient(mc, mc, 0, mc, mc, mc);
-      gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(0.35, "rgba(255,255,255,.6)"); gr.addColorStop(1, "rgba(255,255,255,0)");
-      g.fillStyle = gr; g.fillRect(0, 0, s, s);
+      const g = cnv.getContext("2d");
+      if (g) {
+        const mc = s / 2, gr = g.createRadialGradient(mc, mc, 0, mc, mc, mc);
+        gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(0.35, "rgba(255,255,255,.6)"); gr.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = gr; g.fillRect(0, 0, s, s);
+      }
       return (spr[k] = cnv);
     };
     const mk = (top: boolean) => {
