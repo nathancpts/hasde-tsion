@@ -642,7 +642,7 @@ export function TVSky({
                   background: cur ? "linear-gradient(135deg, rgba(240,214,137,.22), rgba(214,178,74,.10))" : "rgba(5,13,32,.52)",
                   border: `1px solid ${cur ? "rgba(240,214,137,.5)" : "rgba(219,231,251,.26)"}`,
                   backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(6px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   transform: cur ? "translateY(-8px)" : "none",
                   transition: "background .5s, border-color .5s, transform .5s",
                   boxShadow: cur ? "0 12px 40px rgba(0,0,0,.18)" : "none",
