@@ -27,6 +27,14 @@
   --color-red-soft: var(--red-soft);
   --color-green-live: var(--green-live);
   --color-border: var(--border);
+  --color-chant-night: var(--chant-night);
+  --color-chant-panel: var(--chant-panel);
+  --color-chant-ink: var(--chant-ink);
+  --color-chant-ice: var(--chant-ice);
+  --color-chant-muted: var(--chant-muted);
+  --color-chant-line: var(--chant-line);
+  --color-chant-gold: var(--chant-gold);
+  --color-chant-accent: var(--chant-accent);
   --font-display: "Gotham", "Montserrat", sans-serif;
   --font-hebrew: "Noto Serif Hebrew", serif;
   --font-sans: "Gotham", "Montserrat", sans-serif;
@@ -55,6 +63,14 @@
   --green-live: #2F8A5E;
   --dim: rgba(15,17,21,0.2);
   --border: rgba(15,17,21,0.1);
+  --chant-night: #050d20;
+  --chant-panel: #0a1a3d;
+  --chant-ink: #f3f6fc;
+  --chant-ice: #dbe7fb;
+  --chant-muted: #9fb0cf;
+  --chant-line: rgba(219,231,251,0.16);
+  --chant-gold: #f0d689;
+  --chant-accent: #1f4ea8;
 }
 
 @layer base {
@@ -75,6 +91,13 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  body:has(.chants-page) {
+    background: var(--chant-night);
+  }
+  body:has(.chants-page)::before,
+  body:has(.chants-page)::after {
+    display: none;
   }
   html {
     background-color: #1f4ea8;
