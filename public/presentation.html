@@ -345,9 +345,9 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
           <span class="label">La journée · horaires du jour</span>
           <div class="day-time" data-dtime>06:00</div>
           <div class="day-phase" data-dphase>Avant l'aube</div>
-          <button class="now-btn" type="button" data-now data-cursor><i></i>Aller à maintenant</button>
+          <button class="now-btn" type="button" data-now data-cursor hidden style="display:none"><i></i>Aller à maintenant</button>
         </div>
-        <p class="day-note">Faites défiler pour avancer dans la journée. Cha'harit et Arvit : horaires d'exemple. La lune est à sa phase réelle.</p>
+        <p class="day-note">Le ciel suit l'heure réelle : soleil le jour, lune la nuit. Seuls les horaires à venir sont affichés.</p>
       </div>
       <div class="arc-wrap" data-arcwrap>
         <svg class="scene" data-scene aria-hidden="true">
@@ -787,7 +787,7 @@ function setDay(p){
   if (!G) buildScene(); lastP = p;
   const stk = $('.day-stick'); stk.style.setProperty('--ft', (clamp(1 - p / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb', (clamp((p - .84) / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb2', (clamp((p - .84) / .16) * 560).toFixed(0) + 'px');
   { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); }
-  const m = D0 + (D1 - D0) * p, s = sunAt(m);
+  const m = nowM(), s = sunAt(m);
   const warm = clamp(1 - Math.max(s.alt, 0) / .4);
   const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;                 // 0 au-dessus de l'horizon → 1 bien en dessous
   const sun = $('[data-sun]');
@@ -822,10 +822,11 @@ function setDay(p){
   $('[data-dtime]').textContent = fmt(m);
   $('[data-dphase]').textContent = sunPhase(m);
   const evs = $$('[data-events] .ev'), curIdx = evs.findIndex(e => +e.dataset.t >= m);
-  evs.forEach((e,i) => { e.classList.toggle('past', +e.dataset.t < m - 1); e.classList.toggle('cur', i === curIdx); });
-  $$('[data-rail] .mk').forEach((k,i) => { k.classList.toggle('done', +k.dataset.t < m); k.classList.toggle('cur', i === curIdx); });
+  evs.forEach((e,i) => { e.classList.toggle('past', +e.dataset.t < m - 1); e.style.display = +e.dataset.t < m - 1 ? 'none' : ''; e.classList.toggle('cur', i === curIdx); });
+  $$('[data-rail] .mk').forEach((k,i) => { k.classList.toggle('done', +k.dataset.t < m); k.style.display = +k.dataset.t < m ? 'none' : ''; k.classList.toggle('cur', i === curIdx); });
 }
 addEventListener('resize', () => { buildScene(); setDay(lastP); });
+setInterval(() => setDay(lastP), 30000);
 
 /* ===== Chorégraphie (GSAP + Lenis) ===== */
 function choreo(){
