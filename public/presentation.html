@@ -177,9 +177,8 @@ svg{flex-shrink:0}
 .ev .he{color:var(--muted);font-size:1rem}
 .ev .t{font-family:var(--f-display);font-weight:800;font-size:1.7rem;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:6px}
 .ev .tag{display:inline-block;margin-top:10px;font-family:var(--f-display);font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:999px;color:var(--muted);border:1px solid var(--line)}
-.events{position:relative;z-index:3}
-.wet .ev{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.32);border-radius:26px;backdrop-filter:blur(18px) saturate(1.8) brightness(1.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -1px 0 rgba(255,255,255,.12),inset 0 0 24px rgba(255,255,255,.07),0 12px 40px rgba(0,0,0,.28);overflow:hidden}
-@supports not (backdrop-filter:blur(1px)){.wet .ev{background:rgba(255,255,255,.14)}}
+.wet .ev{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.32);border-radius:26px;backdrop-filter:blur(6px) saturate(1.4) brightness(1.04);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -1px 0 rgba(255,255,255,.12),inset 0 0 24px rgba(255,255,255,.07),0 12px 40px rgba(0,0,0,.28);overflow:hidden}
+@supports not (backdrop-filter:blur(1px)){.wet .ev{background:rgba(255,255,255,.06)}}
 .wet .ev .k,.wet .ev .he{color:rgba(255,255,255,.85)}.wet .ev strong,.wet .ev .t{color:#fff;text-shadow:0 1px 6px rgba(0,15,40,.35)}
 .wet .ev>*{position:relative;z-index:2}
 .wet .ev::before{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,.08) 28%,transparent 45%);mix-blend-mode:soft-light}
