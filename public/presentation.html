@@ -505,13 +505,13 @@ try { const L = window.parent && window.parent.__HT_LIVE__; if (L) {
   const E = DATA.events, set = (n,t) => { const e = E.find(x => x.n === n); if (e && t) { e.t = t; delete e.ex; } };
   set("Lever du soleil", L.sunrise); set("Minha", L.minha); set("Sheqyia", L.sunset); set("Arvit", L.arvit); set("Nuit de R. Tam", L.rtam);
   if (L.sunrise) DATA.sunrise = L.sunrise; if (L.sunset) DATA.sunset = L.sunset;
-  if (L.candles && !E.some(x => x.n === "Allumage des bougies")) E.push({k:"Chabbat", n:"Allumage des bougies", he:"הדלקת נרות", t:L.candles});
+  if (L.candles && !E.some(x => x.n === "Allumage")) E.push({k:"Chabbat", n:"Allumage", he:"הדלקת נרות", t:L.candles});
   E.sort((a,b) => a.t.localeCompare(b.t));
 } } catch (e) {}
 /* Vendredi : allumage (secours : coucher − 18 min) et salutation de Chabbat */
 { const wd = new Date().getDay(), E = DATA.events;
-  if (wd === 5 && !E.some(x => x.n === "Allumage des bougies")) { const s = DATA.sunset.split(':').map(Number), m = s[0]*60 + s[1] - 18;
-    E.push({k:"Chabbat", n:"Allumage des bougies", he:"הדלקת נרות", t:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}); E.sort((a,b) => a.t.localeCompare(b.t)); }
+  if (wd === 5 && !E.some(x => x.n === "Allumage")) { const s = DATA.sunset.split(':').map(Number), m = s[0]*60 + s[1] - 18;
+    E.push({k:"Chabbat", n:"Allumage", he:"הדלקת נרות", t:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}); E.sort((a,b) => a.t.localeCompare(b.t)); }
   DATA.greet = wd === 5 || wd === 6 ? ['Chabbat Chalom', 'שבת שלום'] : null; }
 
 /* ===== Icônes ===== */
