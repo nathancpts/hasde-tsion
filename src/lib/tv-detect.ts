@@ -4,6 +4,10 @@ export function isTVDevice(): boolean {
   const path = window.location.pathname.toLowerCase();
   if (path.startsWith("/tv")) return true;
   if (path.startsWith("/app")) return false;
+  // Accueil « / » : toujours le site, sauf ?tv=1 explicite (cadre TV interne).
+  if (path === "/" || path === "") {
+    try { return new URLSearchParams(window.location.search).get("tv") === "1"; } catch { return false; }
+  }
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get("tv") === "1") {
