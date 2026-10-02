@@ -2252,7 +2252,7 @@ function PlanningTV() {
 
           {/* HAYOM YOM */}
           {hayomYom && (
-            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "27%", padding: "1.5vh 1.4vw" }}>
+            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "22%", padding: "1.5vh 1.4vw" }}>
               <p className="uppercase" style={LABEL}>
                 Aujourd’hui, c’est le jour…
               </p>
@@ -2397,7 +2397,7 @@ function toMinTop(hm: string): number | null {
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
-/** Raccourcit automatiquement le texte (fin par « … ») pour qu'il tienne dans son cadre. */
+/** Réduit automatiquement la taille du texte pour qu'il tienne entièrement dans son cadre (jamais tronqué). */
 function FitText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
@@ -2406,15 +2406,16 @@ function FitText({ text, className, style }: { text: string; className?: string;
     if (!el || !box) return;
     const fit = () => {
       el.textContent = text;
+      el.style.fontSize = "";
+      const base = parseFloat(getComputedStyle(el).fontSize);
+      let lo = 6, hi = base;
       if (el.scrollHeight <= box.clientHeight + 1) return;
-      const words = text.split(" ");
-      let lo = 0, hi = words.length;
-      while (lo < hi) {
-        const mid = Math.ceil((lo + hi) / 2);
-        el.textContent = words.slice(0, mid).join(" ") + " …";
-        if (el.scrollHeight <= box.clientHeight + 1) lo = mid; else hi = mid - 1;
+      for (let i = 0; i < 14; i++) {
+        const mid = (lo + hi) / 2;
+        el.style.fontSize = mid + "px";
+        if (el.scrollHeight <= box.clientHeight + 1) lo = mid; else hi = mid;
       }
-      el.textContent = words.slice(0, lo).join(" ").replace(/[\s,;:.]+$/, "") + " …";
+      el.style.fontSize = lo + "px";
     };
     fit();
     const ro = new ResizeObserver(fit);
