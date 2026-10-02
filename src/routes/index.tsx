@@ -1502,7 +1502,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               <button
                 key={t.id}
                 onClick={() => setSectionTab(t.id)}
-                className={`flex-1 py-2 rounded-full text-[12px] font-semibold transition-colors ${
+                className={`min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold transition-colors ${
                   sectionTab === t.id
                     ? "btn-blue-animated text-white"
                     : "text-foreground/60"
