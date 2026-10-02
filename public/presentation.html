@@ -868,21 +868,21 @@ function applyWx(code, cover){ showWxNow(code);
   if (sv) sv.style.opacity = dim; if (sn) sn.style.filter = dim < 1 ? `opacity(${dim})` : '';
 }
 
-/* éclairs : zigzags ramifiés aléatoires + léger halo */
+/* orage : petits flashs lumineux discrets, de temps en temps */
 (function(){ const cv = $('[data-wx="flash"]'); if (!cv) return; const cx = cv.getContext('2d');
-  function seg(x,y,a,len,w,depth,out){ let px=x,py=y; const pts=[[x,y]]; const n=Math.round(len/18);
-    for(let i=0;i<n;i++){ a+=(Math.random()-.5)*.9; px+=Math.sin(a)*18; py+=Math.cos(a)*18; pts.push([px,py]);
-      if(depth<2 && Math.random()<.12) seg(px,py,a+(Math.random()<.5?-.7:.7),len*(.25+Math.random()*.3),w*.5,depth+1,out); }
-    out.push({pts,w}); }
   function strike(){ if (cv.style.display==='none' || !sceneOn) return;
-    const W = cv.width = cv.clientWidth, H = cv.height = cv.clientHeight; const bolts=[];
-    seg(W*(.3+Math.random()*.4), 0, (Math.random()-.5)*.4, H*(.6+Math.random()*.25), 3.2, 0, bolts);
-    let k=0; const seq=[1,0,.8,0,.5,.3,.15,0];
-    (function fr(){ cx.clearRect(0,0,W,H); const o=seq[k]; if(o){ cx.fillStyle=`rgba(220,230,255,${(o*.18).toFixed(2)})`; cx.fillRect(0,0,W,H);
-        cx.lineCap='round'; cx.lineJoin='round'; cx.shadowColor='rgba(170,200,255,.95)'; cx.shadowBlur=22;
-        for(const b of bolts){ cx.strokeStyle=`rgba(255,255,255,${o})`; cx.lineWidth=b.w; cx.beginPath(); b.pts.forEach(([x,y],i)=>i?cx.lineTo(x,y):cx.moveTo(x,y)); cx.stroke(); } }
-      if(++k<seq.length) setTimeout(fr,60); else cx.clearRect(0,0,W,H); })(); }
-  (function next(){ setTimeout(()=>{ strike(); if(Math.random()<.35) setTimeout(strike,500); next(); }, 2500+Math.random()*4500); })();
+    const W = cv.width = cv.clientWidth, H = cv.height = cv.clientHeight;
+    const x = W*(.15+Math.random()*.7), y = H*(.08+Math.random()*.3), r = 90+Math.random()*160;
+    const seq=[1,.35,.7,0,.45,0];
+    let k=0;
+    (function fr(){ cx.clearRect(0,0,W,H); const o=seq[k]; if(o){
+        const g = cx.createRadialGradient(x,y,0,x,y,r);
+        g.addColorStop(0,`rgba(232,240,255,${(o*.8).toFixed(2)})`);
+        g.addColorStop(.45,`rgba(205,220,255,${(o*.35).toFixed(2)})`);
+        g.addColorStop(1,'rgba(205,220,255,0)');
+        cx.fillStyle=g; cx.fillRect(0,0,W,H); }
+      if(++k<seq.length) setTimeout(fr,55); else cx.clearRect(0,0,W,H); })(); }
+  (function next(){ setTimeout(()=>{ strike(); if(Math.random()<.25) setTimeout(strike,420); next(); }, 3000+Math.random()*6000); })();
 })();
 /* pluie réaliste sur canvas : gouttes fines, longueurs et vitesses variées, densité selon l'intensité */
 let RAIN = 0;
@@ -909,7 +909,7 @@ function loadWx(){
   .then(r => r.json()).then(d => d.current && applyWx(d.current.weather_code, d.current.cloud_cover)).catch(() => {}); }
 setTimeout(loadWx, 1500); setInterval(loadWx, 30*60*1000);
 
-setInterval(() => setDay(lastP), 30000);
+setInterval(() => setDay(lastP), 15000);
 
 /* ===== Chorégraphie (GSAP + Lenis) ===== */
 function choreo(){
