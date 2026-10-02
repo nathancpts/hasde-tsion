@@ -643,8 +643,8 @@ document.addEventListener('pointerover', e => cur.classList.toggle('big', !!e.ta
 $$('[data-amt]').forEach(b => b.addEventListener('click', () => {
   $$('[data-amt]').forEach(x => x.setAttribute('aria-pressed', x === b));
   const v = +b.dataset.amt, cta = $('[data-amtcta]');
-  if (window.gsap && !RM){ const o = {v:parseInt(cta.textContent)}; gsap.to(o, {v, duration:.8, ease:'expo.out', onUpdate:() => cta.textContent = Math.round(o.v) + ' €', onComplete:() => cta.textContent = v + ' €'});
-    gsap.fromTo('.big-cta', {scale:.92}, {scale:1, duration:.9, ease:'elastic.out(1,.45)'}); } else cta.textContent = v + ' €';
+  cta.textContent = v + ' €';
+  if (window.gsap && !RM) gsap.fromTo('.big-cta', {scale:.92}, {scale:1, duration:.9, ease:'elastic.out(1,.45)'});
   $('[data-amtnote]').textContent = 'Le montant se confirme sur HelloAsso.';
 }));
 
