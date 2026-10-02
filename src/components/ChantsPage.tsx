@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SiteChrome } from "@/components/SiteChrome";
 import songsData from "@/data/chants.json";
 import bookletAsset from "@/assets/livret-chants-simhat-torah.pdf.asset.json";
 
@@ -113,19 +114,9 @@ export function ChantsPage() {
 
   return (
     <main className="chants-page min-h-[100dvh] bg-chant-night text-chant-ink">
-      <header className="border-b border-chant-line px-4 py-5 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-          <Link to="/" className="flex min-w-0 items-center gap-3 font-display font-bold text-chant-ink">
-            <span className="grid size-10 shrink-0 place-items-center border border-chant-gold text-chant-gold">✦</span>
-            <span className="truncate">Hasdé Tsion</span>
-          </Link>
-          <Button asChild variant="ghost" className="border border-chant-line bg-chant-panel text-chant-ink">
-            <Link to="/"><ArrowLeft /> Accueil</Link>
-          </Button>
-        </div>
-      </header>
+      <SiteChrome />
 
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-8 lg:px-12 lg:pt-16">
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-32 sm:px-8 lg:px-12 lg:pt-40">
         <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">Hasdé Tsion · 5787 — 2026</p>
         <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
@@ -139,7 +130,7 @@ export function ChantsPage() {
         </div>
       </section>
 
-      <section className="sticky top-0 z-20 border-y border-chant-line bg-chant-night/95 px-4 py-4 backdrop-blur-xl sm:px-8 lg:px-12">
+      <section className="sticky top-[72px] z-20 border-y border-chant-line bg-chant-night/95 px-4 py-4 backdrop-blur-xl sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl space-y-3">
           <label className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-chant-line bg-chant-panel px-4 py-3">
             <Search className="size-5 text-chant-gold" />
