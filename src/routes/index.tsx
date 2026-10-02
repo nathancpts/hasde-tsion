@@ -1,6 +1,7 @@
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice, isAppPath } from "@/lib/tv-detect";
+import { TVSky, type TVSkyEvent } from "@/components/TVSky";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
@@ -2056,579 +2057,252 @@ function PlanningTV() {
   const HEADING_FONT_LOCAL = "'Montserrat', 'Gotham', system-ui, sans-serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
   const GOLD_LOCAL = "#D4AF37";
+  const GLASS: React.CSSProperties = {
+    background: "linear-gradient(160deg, rgba(90,154,230,.16), rgba(10,26,61,.55))",
+    border: "1px solid rgba(219,231,251,.14)",
+    borderRadius: "24px",
+    backdropFilter: "blur(16px)",
+    color: "#f3f6fc",
+  };
+  const LABEL: React.CSSProperties = {
+    fontSize: "1.05vh",
+    letterSpacing: "0.4em",
+    color: "#F0D689",
+    fontWeight: 700,
+    fontFamily: HEADING_FONT_LOCAL,
+  };
+  const tvSunrise = todayTimes.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
+  const tvSunset = todayTimes.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
+  const tvEvents: TVSkyEvent[] = todayTimes.map((t) => ({ label: t.label, value: t.value }));
+  const tvGreeting: [string, string] | null = dow === 5 || dow === 6 ? ["Chabbat Chalom", "שבת שלום"] : null;
+
 
   return (
     <main
-      className="tv-mode relative isolate h-screen w-screen overflow-hidden grid grid-rows-[28vh_1fr]"
-      style={{ fontFamily: BODY_FONT_LOCAL, background: "#0F3D7A" }}
+      className="tv-mode relative isolate h-screen w-screen overflow-hidden"
+      style={{ fontFamily: BODY_FONT_LOCAL, background: "linear-gradient(160deg,#0a1a3d 0%,#071230 55%,#050d20 100%)" }}
     >
-      {/* Global animated royal-blue backdrop — visible behind rounded corners */}
-      <DynamicBackground />
+      <div className="relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
 
-      {/* ─── TOP header — animated royal blue ─── */}
-      <header className="relative overflow-hidden z-10">
-        <DynamicBackground />
-        <div className="relative z-10 flex items-center justify-between px-[3.5vw] pt-[3.5vh] pb-[6vh] h-full">
-
-
-          {/* Left: Logo + Prochain badge */}
-          <div className="flex flex-col justify-between h-full">
-            <div className="flex items-center gap-[1.2vw]">
-              <img
-                src={logo}
-                alt="Hasdé Tsion"
-                className="h-[7.5vh] w-auto"
-                style={{ filter: "brightness(0) invert(1) drop-shadow(0 2px 14px rgba(255,255,255,0.25))" }}
-              />
-              <span
-                className="leading-none"
-                style={{
-                  fontFamily: HEADING_FONT_LOCAL,
-                  fontSize: "4.2vh",
-                  fontWeight: 600,
-                  letterSpacing: "0.02em",
-                  color: "#FFFFFF",
-                  textShadow: "0 2px 24px rgba(0,0,0,0.35)",
-
-                }}
-              >
-                Hasdé Tsion
-              </span>
-            </div>
-            {nextZman && countdown && (
-              <div
-                className="inline-flex items-center gap-[1vw] px-[1.6vw] py-[1.1vh] rounded-full self-start backdrop-blur-md"
-                style={{
-                  background: "rgba(255,255,255,0.14)",
-                  border: "1px solid rgba(255,255,255,0.28)",
-                  boxShadow: "0 8px 32px -8px rgba(0,0,0,0.35)",
-                }}
-              >
-                <span
-                  className="uppercase text-white/85"
-                  style={{ fontSize: "1.2vh", letterSpacing: "0.42em", fontWeight: 700 }}
-                >
-                  Prochain
-                </span>
-                <span className="text-white/40" style={{ fontSize: "1.4vh" }}>|</span>
-                <span className="text-white" style={{ fontSize: "2vh", fontWeight: 600 }}>
-                  {nextZman.label}
-                </span>
-                <span className="text-white/50" style={{ fontSize: "1vh" }}>•</span>
-                <span className="tabular-nums text-white" style={{ fontSize: "2vh", fontWeight: 500 }}>
-                  {countdown}
-                </span>
-              </div>
-            )}
-          </div>
-
-
-          {/* Right: Clock + date */}
-          <div className="text-right flex flex-col items-end">
-            <div
-              className="tabular-nums leading-none text-white tracking-tight"
-              style={{
-                fontSize: "12vh",
-                fontFamily: HEADING_FONT_LOCAL,
-                fontWeight: 700,
-                textShadow: "0 4px 32px rgba(0,0,0,0.25)",
-              }}
-            >
-              {clock}
-            </div>
-            <p
-              className="uppercase text-white/85 mt-[1vh] capitalize"
-              style={{ fontSize: "1.5vh", fontWeight: 600, letterSpacing: "0.35em" }}
-            >
-              {dateStr}
-            </p>
-            <p
-              dir="rtl"
-              className="text-white/80 mt-[0.8vh]"
-              style={{ fontSize: "1.9vh", fontWeight: 500, fontFamily: HEADING_FONT_LOCAL }}
-            >
-              {dateHeStr}
-            </p>
-          </div>
-        </div>
-
-        {/* Discreet fullscreen toggle — fades out in kiosk */}
-        <button
-          type="button"
-          onClick={toggleFs}
-          aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
-          className="absolute top-[1.4vh] right-[1.4vw] z-20 flex items-center justify-center rounded-full backdrop-blur-md transition-opacity duration-500 "
-          style={{
-            width: "3.4vh",
-            height: "3.4vh",
-            background: "rgba(255,255,255,0.14)",
-            border: "1px solid rgba(255,255,255,0.28)",
-            color: "white",
-            opacity: isFs ? 0.08 : 0.55,
-          }}
-        >
-          <svg width="55%" height="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            {isFs ? (
-              <>
-                <path d="M9 3v4a2 2 0 0 1-2 2H3" />
-                <path d="M21 9h-4a2 2 0 0 1-2-2V3" />
-                <path d="M15 21v-4a2 2 0 0 1 2-2h4" />
-                <path d="M3 15h4a2 2 0 0 1 2 2v4" />
-              </>
-            ) : (
-              <>
-                <path d="M3 9V5a2 2 0 0 1 2-2h4" />
-                <path d="M21 9V5a2 2 0 0 0-2-2h-4" />
-                <path d="M3 15v4a2 2 0 0 0 2 2h4" />
-                <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
-              </>
-            )}
-          </svg>
-        </button>
-      </header>
-
-      {/* ─── BOTTOM 75% — white overlay sheet with rounded top ─── */}
-      <section
-
-        className="relative z-10 px-[2vw] pt-[3vh] pb-[2.5vh] flex flex-col min-h-0 overflow-hidden"
-        style={{
-          background: "#F8F9FA",
-          borderRadius: "32px 32px 0 0",
-          boxShadow: "0 -20px 60px -30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9)",
-          color: "#1E293B",
-        }}
-      >
-
-
-        {/* Parasha banner ribbon */}
-        <div className="flex items-baseline justify-between gap-[2vw] px-[1.4vw] pb-[1.6vh] mb-[1.6vh] shrink-0" style={{ borderBottom: "1px solid rgba(30,41,59,0.08)" }}>
-
-          <div className="flex items-baseline gap-[1.2vw]">
-            <span
-              className="uppercase"
-              style={{ fontSize: "1.2vh", letterSpacing: "0.5em", color: "#0F3D7A", fontWeight: 700 }}
-            >
-              Parasha
-            </span>
-            <h1
-              className="leading-none"
-              style={{
-                fontSize: "4.6vh",
-                fontFamily: HEADING_FONT_LOCAL,
-                fontWeight: 700,
-                color: "#0F3D7A",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              {parashaFr}
-            </h1>
-          </div>
-          <span
-            className="font-hebrew leading-none"
-            style={{ fontSize: "4.2vh", color: "#0F3D7A", fontWeight: 600 }}
-            dir="rtl"
-          >
-            {parashaHe}
-          </span>
-        </div>
-
-        {/* 3-column grid */}
-        <div className="relative z-10 grid grid-cols-12 gap-[1.6vw] flex-1 min-h-0 isolate">
-
-        {/* COLUMN 1 — PARASHA (marquee) */}
-        <article
-          className="col-span-4 flex flex-col min-h-0"
-          style={{
-            background: "#FFFFFF",
-            borderRadius: "16px",
-            padding: "24px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-          }}
-        >
-
-          <div className="mb-[1.6vh]">
-            <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
-              Étude · Parasha
-            </p>
-          </div>
-          <div className="flex-1 min-h-0 overflow-hidden relative">
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 z-10"
-              style={{ height: "8%", background: "linear-gradient(to bottom, #FFFFFF 0%, rgba(255,255,255,0) 100%)" }}
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
-              style={{ height: "8%", background: "linear-gradient(to top, #FFFFFF 0%, rgba(255,255,255,0) 100%)" }}
-            />
-
-            <div className="tv-marquee-track">
-              {[0, 1].map((k) => (
-                <div key={k} className="tv-marquee-block" aria-hidden={k === 1}>
-                  {pc.intro && (
-                    <p
-                      className="italic mb-[2vh]"
-                      style={{ fontFamily: HEADING_FONT_LOCAL, fontSize: "2vh", lineHeight: 1.6, color: "#4B5875" }}
-                    >
-                      {pc.intro}
-                    </p>
-                  )}
-                  {pc.blocs.map((bloc, i) => (
-                    <section key={i} className="mb-[2.4vh] last:mb-0">
-                      <p
-                        className="uppercase mb-[0.9vh]"
-                        style={{ color: "#0F3D7A", fontSize: "1.5vh", letterSpacing: "0.32em", fontWeight: 700 }}
-                      >
-                        {bloc.icone ? `${bloc.icone} ` : ""}
-                        {bloc.titre}
-                      </p>
-                      {bloc.paragraphes?.map((p, j) => (
-                        <p
-                          key={j}
-                          className="mb-[1vh] last:mb-0"
-                          style={{ fontSize: "2vh", lineHeight: 1.6, color: "#1A2540", fontWeight: 400 }}
-                        >
-                          {p}
-                        </p>
-                      ))}
-                      {bloc.puces && (
-                        <ul className="mt-[0.8vh] space-y-[0.8vh]">
-                          {bloc.puces.map((p, j) => (
-                            <li key={j} className="flex gap-[0.8vw] items-start">
-                              <span
-                                className="shrink-0 mt-[1.05vh] rounded-full"
-                                style={{ width: "0.55vh", height: "0.55vh", background: GOLD_LOCAL, boxShadow: `0 0 6px ${GOLD_LOCAL}66` }}
-                              />
-                              <p style={{ fontSize: "1.95vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }}>
-                                {p}
-                              </p>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </section>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </article>
-
-        {/* COLUMN 2 — ZMANIM + SOUCCOT */}
-        <div className="col-span-5 flex flex-col min-h-0 gap-[1.6vh]">
-        <article
-          className="flex flex-col min-h-0 relative overflow-hidden"
-          style={{
-            flex: "1 1 0%",
-            background: "#FFFFFF",
-            borderRadius: "16px",
-            padding: "24px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-            zIndex: 40,
-            isolation: "isolate",
-            contain: "layout paint style",
-            transform: "translateZ(0)",
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: "#FFFFFF", borderRadius: "16px", zIndex: 0 }}
+        {/* ─── GAUCHE — la journée : ciel, soleil/lune, météo, horaires en bas ─── */}
+        <section className="relative min-h-0 min-w-0 overflow-hidden">
+          <TVSky
+            logoUrl={logo}
+            sunrise={tvSunrise}
+            sunset={tvSunset}
+            events={tvEvents}
+            greeting={tvGreeting}
+            dateFr={dateStr}
+            dateHe={dateHeStr}
           />
-          <div className="relative z-10 flex items-baseline justify-between mb-[1.6vh]">
-            <p className="uppercase" style={{ fontSize: "1.5vh", letterSpacing: "0.3em", color: "#1E3A73", fontWeight: 700 }}>
-              Horaires
-            </p>
-            <p style={{ fontSize: "1.9vh", color: "#64748B", fontWeight: 500 }}>
-              Aujourd'hui
-            </p>
-          </div>
-
-          <div className="relative z-10 flex-1 min-h-0 overflow-hidden" style={{ background: "#FFFFFF" }}>
-            <div
-              aria-hidden="true"
-              className="absolute top-0 left-0 right-0 pointer-events-none"
-              style={{ height: "2.2vh", background: "linear-gradient(to bottom, #FFFFFF 0%, rgba(255,255,255,0) 100%)", zIndex: 20 }}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute bottom-0 left-0 right-0 pointer-events-none"
-              style={{ height: "2.2vh", background: "linear-gradient(to top, #FFFFFF 0%, rgba(255,255,255,0) 100%)", zIndex: 20 }}
-            />
-            {todayTimes.length === 0 ? (
-              <p className="text-center italic" style={{ fontSize: "1.6vh", color: "#7A869A" }}>
-                Horaires indisponibles.
-              </p>
-            ) : (() => {
-              const isPast = (v: string) => {
-                const m = toMin(v);
-                return m != null && m <= nowMin;
-              };
-              
-              const NAVY = "#1E3A73";
-              const HE: Record<string, string> = {
-                minha: "מנחה", arvit: "ערבית", chaharit: "שחרית", "chah'arit": "שחרית", shaharit: "שחרית",
-                "plag hamin'ha": "פלג המנחה", "plag haminha": "פלג המנחה", neila: "נעילה", "néila": "נעילה",
-              };
-              const heOf = (l: string) => {
-                const k = l.toLowerCase();
-                const hit = Object.keys(HE).find((key) => k.startsWith(key));
-                return hit ? HE[hit] : "";
-              };
-              const isFooter = (l: string) => /sheq|chekia|shekia|nuit|tset|sortie/i.test(l);
-              // Toutes les heures du jour restent affichées (les passées en grisé)
-              const footer = todayTimes.filter((t) => isFooter(t.label)).slice(0, 2);
-              const main = todayTimes.filter((t) => !footer.includes(t) && !isPast(t.value));
-              const nextMain = main.find((t) => !isPast(t.value));
-              const inLabel = (v: string) => {
-                const m = toMin(v);
-                if (m == null) return "";
-                const d = m - nowMin;
-                return d >= 60 ? `dans ${Math.floor(d / 60)}h${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
-              };
-              return (
-                <div className="flex flex-col h-full">
-                  <AutoScrollLoop className="flex-1 min-h-0" speed={18}>
-                    <div className="flex flex-col" style={{ gap: "0.4vh", paddingBottom: "0.4vh" }}>
-                      {main.map((t) => {
-                        const next = t === nextMain;
-                        const he = heOf(t.label);
-                        return (
-                          <div
-                            key={`${t.label}-${t.value}`}
-                            className="flex items-center"
-                            style={{ padding: "1.3vh 2vw", gap: "1.2vw", opacity: isPast(t.value) ? 0.4 : 1 }}
-                          >
-                            <span className="truncate" style={{ fontSize: "2.6vh", fontWeight: 600, color: "#0F172A", fontFamily: BODY_FONT_LOCAL }}>
-                              {t.label}
-                            </span>
-                            {he && (
-                              <span dir="rtl" style={{ fontSize: "2.4vh", color: "#64748B" }}>{he}</span>
-                            )}
-                            <span className="flex-1" />
-                            {next && (
-                              <span className="shrink-0" style={{ background: "#EBD69A", color: NAVY, borderRadius: 999, padding: "0.6vh 1.2vw", fontSize: "1.6vh", fontWeight: 700 }}>
-                                {inLabel(t.value)}
-                              </span>
-                            )}
-                            <span className="tabular-nums shrink-0 leading-none" style={{ fontSize: "3.4vh", fontWeight: 700, color: NAVY, fontFamily: BODY_FONT_LOCAL }}>
-                              {t.value}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </AutoScrollLoop>
-                  {footer.length > 0 && (
-                    <div className="relative z-30 grid grid-cols-2 mt-[1.4vh] pt-[1.6vh]" style={{ borderTop: "1px solid #E5E7EB", background: "#FFFFFF", opacity: 1, isolation: "isolate" }}>
-                      {footer.map((t, i) => (
-                        <div key={t.label} className="flex items-center justify-center text-center" style={{ gap: "1vw", borderLeft: i ? "1px solid #E5E7EB" : "none" }}>
-                          {/nuit|tset|sortie/i.test(t.label)
-                            ? <MoonStar className="shrink-0" style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />
-                            : <Sun className="shrink-0" style={{ width: "3vh", height: "3vh", color: "#1E3A73" }} />}
-                          <div>
-                            <p style={{ fontSize: "1.8vh", color: "#1A2540", fontWeight: 600 }}>{t.label}</p>
-                            <p className="tabular-nums" style={{ fontSize: "3.2vh", fontWeight: 800, color: "#0F2A5C", WebkitTextFillColor: "#0F2A5C", background: "none", fontFamily: BODY_FONT_LOCAL, lineHeight: 1.1 }}>{t.value}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-
-            {zmanim?.message && (
-              <p className="relative z-10 mt-[1vh] text-center" style={{ fontSize: "1.35vh", color: "#1F4EA8", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}>
-                {zmanim.message}
-              </p>
-            )}
-
-          </div>
-
-
-
-
-          {isWeekend && (entryTime || exitTime) && (
-            <div className="relative z-10 mt-[1.6vh] pt-[1.6vh] grid grid-cols-2 gap-[1vw]" style={{ borderTop: "1px solid rgba(15,61,122,0.08)" }}>
-              <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
-                <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
-                  Entrée
-                </p>
-                <p className="tabular-nums mt-[0.4vh]" style={{ fontSize: "3.4vh", color: GOLD_LOCAL, fontFamily: HEADING_FONT_LOCAL, fontWeight: 800 }}>
-                  {entryTime ?? "—"}
-                </p>
-              </div>
-              <div className="text-center rounded-2xl py-[1.2vh]" style={{ background: "rgba(212,175,55,0.08)" }}>
-                <p className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.35em", color: "#7A6A2E", fontWeight: 700 }}>
-                  Sortie
-                </p>
-                <p className="tabular-nums mt-[0.4vh]" style={{ fontSize: "3.4vh", color: GOLD_LOCAL, fontFamily: HEADING_FONT_LOCAL, fontWeight: 800 }}>
-                  {exitTime ?? "—"}
-                </p>
-              </div>
-            </div>
-          )}
-
-        </article>
-
-          {/* Hayom Yom du jour */}
-          {hayomYom && (
-            <article
-              className="flex min-h-0 flex-col"
-              style={{
-                flex: "0 1 auto",
-                maxHeight: "46%",
-                background: "#FFFFFF",
-                borderRadius: "16px",
-                padding: "20px 24px",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-              }}
-            >
-              <div className="pb-[1vh] mb-[0.8vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
-                <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.4em", color: "#0F3D7A", fontWeight: 700 }}>
-                  Aujourd’hui, c’est le jour…
-                </p>
-                <div className="mt-[0.45vh] flex items-baseline justify-between gap-3">
-                  <h3 style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#1A2540" }}>
-                    Hayom Yom
-                  </h3>
-                  <span style={{ fontSize: "1.15vh", color: "#7A869A", fontWeight: 500 }}>{hayomYom.hebrewDate}</span>
-                </div>
-              </div>
-              <div className="flex-1 min-h-0 overflow-hidden">
-                <FitText text={hayomYom.fr} className="whitespace-pre-line" style={{ fontSize: "1.6vh", lineHeight: 1.55, color: "#1A2540", fontWeight: 400 }} />
-              </div>
-            </article>
-          )}
-
-        </div>
-
-        {/* COLUMN 3 — COMMUNAUTÉ + LIVE */}
-        <div
-          className="relative z-0 col-span-3 flex flex-col min-h-0 gap-[1.6vh] h-full"
-        >
-
-          {/* Séouda card */}
-          <article
-            className="flex flex-col"
+          <button
+            type="button"
+            onClick={toggleFs}
+            aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
+            className="absolute bottom-[2vh] right-[1.2vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
             style={{
-              flex: "1 1 0%",
-              minHeight: 0,
-              background: "#FFFFFF",
-              borderRadius: "16px",
-              padding: "24px",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+              width: "3.4vh", height: "3.4vh",
+              background: "rgba(5,13,32,.45)", border: "1px solid rgba(219,231,251,.3)",
+              color: "white", opacity: isFs ? 0.1 : 0.5, backdropFilter: "blur(8px)",
             }}
           >
+            {isFs ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 3 9 9 3 9" /><polyline points="15 21 15 15 21 15" /><polyline points="3 15 9 15 9 21" /><polyline points="21 9 15 9 15 3" /></svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="4 14 10 14 10 20" /><polyline points="20 10 14 10 14 4" /><line x1="14" y1="10" x2="21" y2="3" /><line x1="3" y1="21" x2="10" y2="14" /><line x1="14" y1="4" x2="21" y2="10" /><line x1="10" y1="20" x2="3" y2="14" /></svg>
+            )}
+          </button>
+        </section>
 
-            <div className="text-center pb-[1.2vh] mb-[1vh]" style={{ borderBottom: "1px solid rgba(15,61,122,0.08)" }}>
-              <p className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.45em", color: "#0F3D7A", fontWeight: 700 }}>
-                Communauté
-              </p>
-              <h3 className="leading-tight mt-[0.6vh]" style={{ fontSize: "2vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600, color: "#1A2540" }}>
-                La Séouda est offerte par
-              </h3>
-            </div>
-            <div className="flex-1 min-h-0 flex flex-col justify-center">
-              {DONATIONS_REPAS.length === 0 ? (
-                <p className="italic text-center" style={{ fontSize: "1.5vh", color: "#7A869A" }}>
-                  Aucune donation pour le moment.
-                </p>
+        {/* ─── DROITE — live, parasha, communauté, Hayom Yom ─── */}
+        <aside
+          className="relative z-20 flex min-h-0 flex-col"
+          style={{
+            padding: "2.6vh 1.4vw 2.6vh 1vw",
+            gap: "1.6vh",
+            background: "linear-gradient(180deg, rgba(5,13,32,.30), rgba(5,13,32,.60))",
+            borderLeft: "1px solid rgba(219,231,251,.10)",
+            boxShadow: "inset 40px 0 80px -60px rgba(0,0,0,.8)",
+          }}
+        >
+          {/* LIVE — le Kotel */}
+          <div className="shrink-0">
+            <LivePortalBox big={!isShabbatNow}>
+              {isShabbatNow ? (
+                <>
+                  <img
+                    src={kotelShabbat}
+                    alt="Kotel — Shabbat Shalom"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    width={1920}
+                    height={1088}
+                  />
+                  <div
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                    style={{ background: "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)" }}
+                  >
+                    <p
+                      className="font-hebrew leading-none"
+                      dir="rtl"
+                      style={{ fontSize: "5.2vh", color: GOLD_LOCAL, fontWeight: 700, textShadow: "0 4px 24px rgba(0,0,0,0.55)", letterSpacing: "0.02em" }}
+                    >
+                      שבת שלום
+                    </p>
+                    <p
+                      className="uppercase mt-[1vh]"
+                      style={{ fontSize: "1.2vh", letterSpacing: "0.5em", color: "rgba(255,255,255,0.9)", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}
+                    >
+                      Shabbat Shalom
+                    </p>
+                  </div>
+                </>
               ) : (
+                <>
+                  <div
+                    className="absolute inset-0"
+                    style={{ overflow: "hidden", borderRadius: "18px", clipPath: "inset(0 round 18px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
+                  >
+                    <KotelLive className="absolute inset-0 w-full h-full" radius={spotlight ? 22 : 18} />
+                  </div>
+                  <div
+                    className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full"
+                    style={{ background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", backdropFilter: "blur(8px)", boxShadow: "0 4px 14px rgba(10,17,40,0.35)" }}
+                  >
+                    <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+                    <span className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC" }}>
+                      Live · Le Kotel
+                    </span>
+                  </div>
+                </>
+              )}
+            </LivePortalBox>
+          </div>
+
+          {/* PARASHA — défilement doux */}
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
+            <p className="uppercase" style={LABEL}>
+              Étude · Parasha
+            </p>
+            <div className="mt-[0.6vh] flex items-baseline justify-between gap-[1vw]">
+              <h1
+                className="min-w-0 truncate"
+                style={{ fontSize: "2.6vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 800, color: "#F3F6FC", letterSpacing: "-0.01em" }}
+              >
+                {parashaFr}
+              </h1>
+              <span className="font-hebrew shrink-0 leading-none" dir="rtl" style={{ fontSize: "2.4vh", color: "#F0D689", fontWeight: 600 }}>
+                {parashaHe}
+              </span>
+            </div>
+            <div className="relative mt-[1vh] min-h-0 flex-1 overflow-hidden">
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 z-10"
+                style={{ height: "2.4vh", background: "linear-gradient(rgba(10,22,50,1), rgba(10,22,50,0))" }}
+              />
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
+                style={{ height: "2.4vh", background: "linear-gradient(rgba(10,22,50,0), rgba(10,22,50,1))" }}
+              />
+              <div className="tv-marquee-track">
+                {pc.intro && (
+                  <p style={{ marginTop: "0.6vh", fontSize: "1.45vh", lineHeight: 1.65, color: "#9FB0CF", fontStyle: "italic", whiteSpace: "pre-line" }}>
+                    {pc.intro}
+                  </p>
+                )}
+                {pc.blocs.map((b, i) => (
+                  <div key={`pvb-${i}`} style={{ marginTop: "1.4vh" }}>
+                    {b.titre && (
+                      <p
+                        className="uppercase"
+                        style={{ fontSize: "1.1vh", letterSpacing: "0.3em", color: "#F0D689", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700 }}
+                      >
+                        {b.titre}
+                      </p>
+                    )}
+                    {(b.paragraphes ?? []).map((para, k) => (
+                      <p key={`pvb-${i}-${k}`} style={{ marginTop: "0.5vh", fontSize: "1.55vh", lineHeight: 1.7, color: "#DBE7FB", whiteSpace: "pre-line" }}>
+                        {para}
+                      </p>
+                    ))}
+                    {(b.puces?.length ?? 0) > 0 && (
+                      <ul style={{ marginTop: "0.5vh", paddingLeft: "1.1em" }}>
+                        {(b.puces ?? []).map((p, j) => (
+                          <li key={`pvb-${i}-${j}`} style={{ position: "relative", paddingLeft: "0.9em", fontSize: "1.45vh", lineHeight: 1.65, color: "#C9D6EE" }}>
+                            <span style={{ position: "absolute", left: 0, top: "0.62em", width: "0.34em", height: "0.34em", borderRadius: "50%", background: "#F0D689" }} />
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          {/* COMMUNAUTÉ — donateurs de la Séouda */}
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "22%", padding: "1.5vh 1.4vw" }}>
+            <p className="uppercase" style={LABEL}>
+              Communauté
+            </p>
+            <h3 className="mt-[0.4vh]" style={{ fontSize: "1.7vh", fontWeight: 600, color: "#DBE7FB" }}>
+              La Séouda est offerte par
+            </h3>
+            <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
+              {DONATIONS_REPAS.length > 0 ? (
                 DONATIONS_REPAS.map((d, i) => (
                   <div
-                    key={i}
-                    className="py-[0.7vh] text-center"
-                    style={{ borderBottom: i === DONATIONS_REPAS.length - 1 ? "none" : "1px dashed rgba(15,61,122,0.08)" }}
+                    key={`tvdon-${i}`}
+                    className="flex items-baseline justify-between gap-[1vw]"
+                    style={{ padding: "0.4vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
                   >
-                    <p style={{ fontSize: "1.6vh", fontWeight: 600, color: "#1A2540" }}>{d.donateur}</p>
+                    <span className="min-w-0 truncate" style={{ fontSize: "1.6vh", fontWeight: 600, color: "#F3F6FC" }}>
+                      {d.donateur}
+                    </span>
                     {d.dedicace && (
-                      <p className="italic mt-[0.2vh]" style={{ fontSize: "1.35vh", color: "#7A869A", fontWeight: 400 }}>
+                      <span className="shrink-0 truncate" style={{ fontSize: "1.25vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
                         {d.dedicace}
-                      </p>
+                      </span>
                     )}
                   </div>
                 ))
+              ) : (
+                <p style={{ padding: "0.4vh 0", fontSize: "1.4vh", fontStyle: "italic", color: "#9FB0CF" }}>
+                  Aucune donation pour le moment.
+                </p>
               )}
             </div>
           </article>
 
-          {/* Live Kotel — rendu au-dessus de toute la page (portal), suit son emplacement */}
-          <LivePortalBox big={!isShabbatNow}>
-
-
-
-            {isShabbatNow ? (
-              <>
-                <img
-                  src={kotelShabbat}
-                  alt="Kotel — Shabbat Shalom"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  width={1920}
-                  height={1088}
+          {/* HAYOM YOM */}
+          {hayomYom && (
+            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "27%", padding: "1.5vh 1.4vw" }}>
+              <p className="uppercase" style={LABEL}>
+                Aujourd’hui, c’est le jour…
+              </p>
+              <div className="mt-[0.4vh] flex items-baseline justify-between gap-3">
+                <h3 style={{ fontSize: "1.9vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#F3F6FC" }}>
+                  Hayom Yom
+                </h3>
+                <span className="shrink-0" style={{ fontSize: "1.15vh", color: "#9FB0CF", fontWeight: 500 }}>
+                  {hayomYom.hebrewDate}
+                </span>
+              </div>
+              <div className="mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
+                <FitText
+                  text={hayomYom.fr}
+                  className="whitespace-pre-line"
+                  style={{ fontSize: "1.5vh", lineHeight: 1.55, color: "#DBE7FB", fontWeight: 400 }}
                 />
-                <div
-                  className="absolute inset-0 flex flex-col items-center justify-center text-center"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)",
-                  }}
-                >
-                  <p
-                    className="font-hebrew leading-none"
-                    dir="rtl"
-                    style={{
-                      fontSize: "6vh",
-                      color: GOLD_LOCAL,
-                      fontWeight: 700,
-                      textShadow: "0 4px 24px rgba(0,0,0,0.55)",
-                      letterSpacing: "0.02em",
-                    }}
-                  >
-                    שבת שלום
-                  </p>
-                  <p
-                    className="uppercase mt-[1.2vh]"
-                    style={{
-                      fontSize: "1.4vh",
-                      letterSpacing: "0.5em",
-                      color: "rgba(255,255,255,0.9)",
-                      fontFamily: HEADING_FONT_LOCAL,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Shabbat Shalom
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className="absolute inset-0"
-                  style={{ overflow: "hidden", borderRadius: "16px", clipPath: "inset(0 round 16px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
-                >
-                  <KotelLive className="absolute inset-0 w-full h-full" radius={spotlight ? 22 : 16} />
-                </div>
-
-                <div
-                  className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full backdrop-blur-md"
-                  style={{ background: "rgba(255,255,255,0.82)", border: "1px solid rgba(255,255,255,0.9)", boxShadow: "0 4px 14px rgba(10,17,40,0.12)" }}
-                >
-                  <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-                  <span className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700, color: "#0A1128" }}>
-                    Live · Hasdé Tsion
-                  </span>
-                </div>
-              </>
-            )}
-          </LivePortalBox>
-        </div>
-        </div>
-      </section>
-
+              </div>
+            </article>
+          )}
+        </aside>
+      </div>
     </main>
   );
 }
+
 
 function LivePortalBox({ big: allowed, children }: { big: boolean; children: React.ReactNode }) {
   const slotRef = useRef<HTMLDivElement>(null);
