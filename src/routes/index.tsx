@@ -20,6 +20,7 @@ import CommunitySection from "@/components/community/CommunitySection";
 import SouccotMenu from "@/components/SouccotMenu";
 import SimhatTorahEvent from "@/components/SimhatTorahEvent";
 import KotelLive from "@/components/KotelLive";
+import { TVAppQrPopup } from "@/components/TVAppQrPopup";
 import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
@@ -2276,6 +2277,7 @@ function PlanningTV() {
         </aside>
       </div>
 
+      <TVAppQrPopup />
       {liveOpen && typeof document !== "undefined" && createPortal(
         <div
           className="fixed inset-0 z-[9000] flex items-center justify-center"
