@@ -498,10 +498,6 @@ export function TVSky({
   const visible = evMin.filter((e) => e.min > m - 1).slice(0, 5);
   const curIdx = evMin.findIndex((e) => e.min >= m);
   const rf = (min: number) => clamp((min - D0) / (D1 - D0)) * 100;
-  const inLabel = (min: number) => {
-    const d = Math.max(0, Math.round(min - m));
-    return d >= 60 ? `dans ${Math.floor(d / 60)}h${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
-  };
   const hhmm = fmt(m);
   const ticks: { left: string; label: string }[] = [];
   for (let t = D0; t <= D1; t += 180) ticks.push({ left: `${rf(t)}%`, label: `${String(t / 60).padStart(2, "0")} h` });
