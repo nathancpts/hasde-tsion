@@ -19,6 +19,7 @@ import CommunitySection from "@/components/community/CommunitySection";
 import SouccotMenu from "@/components/SouccotMenu";
 import SimhatTorahEvent from "@/components/SimhatTorahEvent";
 import KotelLive from "@/components/KotelLive";
+import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
 const logo = logoAsset.url;
@@ -1292,7 +1293,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   // Section tab in white surface
   // Événement Souccot : affiché jusqu'au 27 septembre 2026 inclus, puis « événement passé » compact
   const souccotVisible = new Date() <= new Date(2026, 8, 27, 23, 59, 59);
-  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "communaute">("horaires");
+  const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "chants" | "communaute">("horaires");
   const [accountLabel, setAccountLabel] = useState("Connexion");
 
   const heroTime = selectedDay === "vendredi"
@@ -1495,12 +1496,13 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             {([
               { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
+              { id: "chants", label: "Chants" },
               { id: "communaute", label: "Communauté" },
             ] as const).map((t) => (
               <button
                 key={t.id}
                 onClick={() => setSectionTab(t.id)}
-                className={`flex-1 py-2 rounded-full text-[12px] font-semibold transition-colors ${
+                className={`min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold transition-colors ${
                   sectionTab === t.id
                     ? "btn-blue-animated text-white"
                     : "text-foreground/60"
@@ -1829,6 +1831,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </article>
             </div>
           )}
+
+          {sectionTab === "chants" && <MobileChants />}
 
           {sectionTab === "communaute" && (
             <div className="space-y-5">
