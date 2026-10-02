@@ -648,3 +648,34 @@ select:focus-visible {
   --tw-ring-shadow: none !important;
   --tw-ring-offset-shadow: none !important;
 }
+
+/* Page Chants — même direction « Nuit bleue » que l'accueil */
+.chants-page {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(900px 600px at 15% -10%, color-mix(in oklab, var(--chant-accent) 55%, transparent), transparent 70%),
+    var(--chant-night);
+  font-family: "Inter", system-ui, sans-serif;
+}
+.chants-page h1, .chants-page h3, .chants-page .font-display { font-family: "Montserrat", system-ui, sans-serif; letter-spacing: -0.01em; }
+.chants-page h1 { font-size: clamp(2.6rem, 7vw, 6rem); line-height: 1; font-weight: 900; }
+.chants-page .font-hebrew { font-family: "Frank Ruhl Libre", "Noto Serif Hebrew", serif; }
+.chants-page .bg-chant-panel {
+  background: rgba(255,255,255,.05);
+  backdrop-filter: blur(14px) saturate(1.3);
+}
+.chants-page article, .chants-page label, .chants-page a.border, .chants-page div.border, .chants-page iframe { border-radius: 24px; }
+.chants-page article {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 20px 50px -30px rgba(0,0,0,.6);
+  transition: transform .6s cubic-bezier(.16,1,.3,1), border-color .4s, box-shadow .4s;
+}
+.chants-page article:hover { transform: translateY(-6px); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 30px 60px -25px rgba(0,0,0,.7), 0 0 0 1px color-mix(in oklab, var(--chant-gold) 35%, transparent); }
+.chants-page button, .chants-page a[data-slot="button"], .chants-page span.border { border-radius: 999px; }
+.chants-page button, .chants-page a { transition: background .3s, color .3s, border-color .3s, transform .3s cubic-bezier(.16,1,.3,1); }
+.chants-page .bg-chant-gold { box-shadow: 0 10px 30px -10px color-mix(in oklab, var(--chant-gold) 55%, transparent); }
+.chants-page .bg-chant-gold:hover { transform: translateY(-1px); }
+.chants-page section.sticky { background: transparent; border-color: transparent; }
+.chants-page header.border-b { border-color: transparent; }
+.chants-page p.uppercase { letter-spacing: .32em; font-size: .7rem; }
+.chants-page [role="dialog"] > div { border-radius: 28px; }
