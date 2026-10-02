@@ -2179,22 +2179,22 @@ function PlanningTV() {
           </div>
 
           {/* PARASHA — défilement doux */}
-          <article className="flex min-h-0 flex-1 flex-col" style={{ ...GLASS, padding: "2vh 1.4vw" }}>
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
             <p className="uppercase" style={LABEL}>
               Étude · Parasha
             </p>
-            <div className="mt-[0.8vh] flex items-baseline justify-between gap-[1vw]">
+            <div className="mt-[0.6vh] flex items-baseline justify-between gap-[1vw]">
               <h1
                 className="min-w-0 truncate"
-                style={{ fontSize: "3.2vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 800, color: "#F3F6FC", letterSpacing: "-0.01em" }}
+                style={{ fontSize: "2.6vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 800, color: "#F3F6FC", letterSpacing: "-0.01em" }}
               >
                 {parashaFr}
               </h1>
-              <span className="font-hebrew shrink-0 leading-none" dir="rtl" style={{ fontSize: "3vh", color: "#F0D689", fontWeight: 600 }}>
+              <span className="font-hebrew shrink-0 leading-none" dir="rtl" style={{ fontSize: "2.4vh", color: "#F0D689", fontWeight: 600 }}>
                 {parashaHe}
               </span>
             </div>
-            <div className="relative mt-[1.2vh] min-h-0 flex-1 overflow-hidden">
+            <div className="relative mt-[1vh] min-h-0 flex-1 overflow-hidden">
               <div
                 className="pointer-events-none absolute inset-x-0 top-0 z-10"
                 style={{ height: "2.4vh", background: "linear-gradient(rgba(10,22,50,1), rgba(10,22,50,0))" }}
@@ -2241,33 +2241,33 @@ function PlanningTV() {
           </article>
 
           {/* COMMUNAUTÉ — donateurs de la Séouda */}
-          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "27%", padding: "1.8vh 1.4vw" }}>
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "22%", padding: "1.5vh 1.4vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
             </p>
-            <h3 className="mt-[0.5vh]" style={{ fontSize: "1.9vh", fontWeight: 600, color: "#DBE7FB" }}>
+            <h3 className="mt-[0.4vh]" style={{ fontSize: "1.7vh", fontWeight: 600, color: "#DBE7FB" }}>
               La Séouda est offerte par
             </h3>
-            <div className="mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
+            <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
               {DONATIONS_REPAS.length > 0 ? (
                 DONATIONS_REPAS.map((d, i) => (
                   <div
                     key={`tvdon-${i}`}
                     className="flex items-baseline justify-between gap-[1vw]"
-                    style={{ padding: "0.55vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
+                    style={{ padding: "0.4vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
                   >
-                    <span className="min-w-0 truncate" style={{ fontSize: "1.75vh", fontWeight: 600, color: "#F3F6FC" }}>
+                    <span className="min-w-0 truncate" style={{ fontSize: "1.6vh", fontWeight: 600, color: "#F3F6FC" }}>
                       {d.donateur}
                     </span>
                     {d.dedicace && (
-                      <span className="shrink-0 truncate" style={{ fontSize: "1.35vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
+                      <span className="shrink-0 truncate" style={{ fontSize: "1.25vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
                         {d.dedicace}
                       </span>
                     )}
                   </div>
                 ))
               ) : (
-                <p style={{ padding: "0.55vh 0", fontSize: "1.5vh", fontStyle: "italic", color: "#9FB0CF" }}>
+                <p style={{ padding: "0.4vh 0", fontSize: "1.4vh", fontStyle: "italic", color: "#9FB0CF" }}>
                   Aucune donation pour le moment.
                 </p>
               )}
@@ -2276,23 +2276,23 @@ function PlanningTV() {
 
           {/* HAYOM YOM */}
           {hayomYom && (
-            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "30%", padding: "1.8vh 1.4vw" }}>
+            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "27%", padding: "1.5vh 1.4vw" }}>
               <p className="uppercase" style={LABEL}>
                 Aujourd’hui, c’est le jour…
               </p>
-              <div className="mt-[0.5vh] flex items-baseline justify-between gap-3">
-                <h3 style={{ fontSize: "2.1vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#F3F6FC" }}>
+              <div className="mt-[0.4vh] flex items-baseline justify-between gap-3">
+                <h3 style={{ fontSize: "1.9vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#F3F6FC" }}>
                   Hayom Yom
                 </h3>
-                <span className="shrink-0" style={{ fontSize: "1.2vh", color: "#9FB0CF", fontWeight: 500 }}>
+                <span className="shrink-0" style={{ fontSize: "1.15vh", color: "#9FB0CF", fontWeight: 500 }}>
                   {hayomYom.hebrewDate}
                 </span>
               </div>
-              <div className="mt-[0.8vh] min-h-0 flex-1 overflow-hidden">
+              <div className="mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
                 <FitText
                   text={hayomYom.fr}
                   className="whitespace-pre-line"
-                  style={{ fontSize: "1.6vh", lineHeight: 1.55, color: "#DBE7FB", fontWeight: 400 }}
+                  style={{ fontSize: "1.5vh", lineHeight: 1.55, color: "#DBE7FB", fontWeight: 400 }}
                 />
               </div>
             </article>
