@@ -873,7 +873,7 @@ function loadWx(){
   const F = {pluie:[63,90], bruine:[51,70], forte:[65,100], orage:[95,100], brouillard:[45,70], neige:[73,90], nuages:[3,95], soleil:[0,5]}[q];
   if (F) return applyWx(F[0], F[1]);
   /* DÉMO temporaire demandée : pluie forcée le 2 octobre 2026 */
-  if (new Date().toDateString() === new Date(2026,9,2).toDateString()) return applyWx(63, 90);
+  if (new Date().toDateString() === new Date(2026,9,2).toDateString()) return applyWx(95, 100);
   fetch('https://api.open-meteo.com/v1/forecast?latitude=48.885&longitude=2.269&current=weather_code,cloud_cover&timezone=Europe%2FParis')
   .then(r => r.json()).then(d => d.current && applyWx(d.current.weather_code, d.current.cloud_cover)).catch(() => {}); }
 setTimeout(loadWx, 1500); setInterval(loadWx, 30*60*1000);
