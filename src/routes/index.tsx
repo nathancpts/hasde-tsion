@@ -2299,8 +2299,8 @@ function PlanningTV() {
       </div>
     </main>
   );
-  );
 }
+
 
 function LivePortalBox({ big: allowed, children }: { big: boolean; children: React.ReactNode }) {
   const slotRef = useRef<HTMLDivElement>(null);
