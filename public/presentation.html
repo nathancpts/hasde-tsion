@@ -65,7 +65,7 @@ svg{flex-shrink:0}
 .nav.solid::after{opacity:0}
 .nav.hide{transform:translateY(-110%)}
 .nav.solid{padding-block:14px}
-.nav.solid::before{content:"";position:absolute;left:0;right:0;top:0;bottom:-40px;z-index:-1;background:linear-gradient(rgba(5,13,32,.55),rgba(5,13,32,.25) 60%,rgba(5,13,32,0));backdrop-filter:blur(14px);-webkit-mask-image:linear-gradient(#000 45%,transparent);mask-image:linear-gradient(#000 45%,transparent)}
+.nav.solid::before{content:none}
 .brand{display:flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:800;font-size:1.2rem;letter-spacing:.01em;color:#fff;text-shadow:0 1px 12px rgba(5,13,32,.5)}
 .logo{width:40px;height:40px;display:block;filter:drop-shadow(0 1px 6px rgba(5,13,32,.5))}
 .links{display:flex;gap:4px;margin-left:auto;font-family:var(--f-display);font-size:.85rem;font-weight:500}
@@ -902,10 +902,10 @@ function applyWx(code, cover){ showWxNow(code);
     const seq=[1,.35,.7,0,.45,0];
     let k=0;
     (function fr(){ cx.clearRect(0,0,W,H); const o=seq[k]; if(o){
-        const g = cx.createRadialGradient(x,y,0,x,y,r);
-        g.addColorStop(0,`rgba(232,240,255,${(o*.8).toFixed(2)})`);
-        g.addColorStop(.45,`rgba(205,220,255,${(o*.35).toFixed(2)})`);
-        g.addColorStop(1,'rgba(205,220,255,0)');
+        const g = cx.createLinearGradient(0,0,0,H);
+        g.addColorStop(0,`rgba(235,242,255,${(o*.42).toFixed(2)})`);
+        g.addColorStop(.6,`rgba(215,228,255,${(o*.22).toFixed(2)})`);
+        g.addColorStop(1,`rgba(215,228,255,${(o*.08).toFixed(2)})`);
         cx.fillStyle=g; cx.fillRect(0,0,W,H); }
       if(++k<seq.length) setTimeout(fr,55); else cx.clearRect(0,0,W,H); })(); }
   (function next(){ setTimeout(()=>{ strike(); if(Math.random()<.25) setTimeout(strike,420); next(); }, 3000+Math.random()*6000); })();
