@@ -138,13 +138,13 @@ svg{flex-shrink:0}
 .now-btn i{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.8s infinite}
 .arc-wrap{flex:1;position:relative;min-height:0;margin-top:10px}
 .arc-wrap svg.scene{position:absolute;left:0;top:0;width:100%;overflow:visible;display:block}
-.sky-above{position:absolute;left:-360px;right:-360px;top:-420px;overflow:hidden;pointer-events:none}
+.sky-above{position:absolute;z-index:1;left:-360px;right:-360px;top:-420px;overflow:hidden;pointer-events:none}
 .sky-above > *{position:absolute;left:360px;top:420px}
 .clouds{position:absolute;inset:0;--cr:255;--cg:255;--cb:255;--ca:.4;will-change:transform}
 .cloud{position:absolute;border-radius:50%;filter:blur(22px);will-change:transform;
   background:radial-gradient(ellipse at 35% 60%,rgba(var(--cr),var(--cg),var(--cb),var(--ca)) 0%,rgba(var(--cr),var(--cg),var(--cb),calc(var(--ca)*.5)) 40%,transparent 70%);animation:drift var(--t,50s) ease-in-out infinite alternate}
 @keyframes drift{to{transform:translateX(60px)}}
-.wx{position:absolute;left:-30vw;right:-30vw;top:-300px;bottom:-40px;pointer-events:none;z-index:2;opacity:0;transition:opacity 2s}
+.wx{position:absolute;left:-30vw;right:-30vw;top:-300px;bottom:-40px;pointer-events:none;z-index:0;opacity:0;transition:opacity 2s}
 .wx-fog{background:linear-gradient(to top,rgba(205,214,226,.85),rgba(205,214,226,.45) 45%,rgba(205,214,226,.15) 80%,transparent);filter:blur(8px);animation:fogm 40s ease-in-out infinite alternate}
 @keyframes fogm{to{transform:translateX(4vw)}}
 .wx-rain{background-image:repeating-linear-gradient(102deg,transparent 0 9px,rgba(200,220,255,.35) 9px 10px,transparent 10px 23px),repeating-linear-gradient(98deg,transparent 0 15px,rgba(220,232,255,.25) 15px 16px,transparent 16px 37px);background-size:240px 180px,330px 260px;animation:rainf .5s linear infinite}
@@ -844,11 +844,11 @@ function applyWx(code, cover){
   const rain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code), heavy = [65,67,82,95,96,99].includes(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
   const c = Math.max(cover/100, rain||snow ? .8 : 0, fog ? .6 : 0);
-  on('grey', (c > .5 ? (c-.5)*1.4 : 0).toFixed(2)); on('fog', fog ? 1 : 0); on('rain', rain ? (heavy ? 1 : .6) : 0); on('snow', snow ? 1 : 0);
+  on('grey', (c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); on('rain', rain ? (heavy ? 1 : .6) : 0); on('snow', snow ? 1 : 0);
   const fl = $('[data-wx="flash"]'); if (fl) fl.style.display = storm ? '' : 'none';
   const n = Math.round(4 + c*14), cl = $('[data-clouds]');
   if (cl) cl.innerHTML = Array.from({length:n}, (_,i) => `<i class="cloud" style="left:${(i*97/n + Math.random()*6).toFixed(1)}%;top:${(Math.random()*40).toFixed(0)}%;width:${(340+Math.random()*360).toFixed(0)}px;height:${(80+Math.random()*70).toFixed(0)}px;--t:${(40+Math.random()*30).toFixed(0)}s;animation-delay:${-i*7}s;filter:blur(${c>.6?30:22}px)"></i>`).join('');
-  const sv = $('[data-suncv]'), sn = $('[data-sun]'); const dim = c > .85 ? .25 : c > .6 ? .6 : 1;
+  const sv = $('[data-suncv]'), sn = $('[data-sun]'); const dim = c > .85 ? .8 : c > .6 ? .9 : 1;
   if (sv) sv.style.opacity = dim; if (sn) sn.style.filter = dim < 1 ? `opacity(${dim})` : '';
 }
 function loadWx(){ fetch('https://api.open-meteo.com/v1/forecast?latitude=48.885&longitude=2.269&current=weather_code,cloud_cover&timezone=Europe%2FParis')
