@@ -538,7 +538,7 @@ export function TVSky({
           </defs>
           <rect x="-400" y={arc ? arc.h * 0.78 : 78} width="3000" height={arc ? arc.h * 0.22 + 150 : 100} fill="url(#tvground)" />
           <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
-          <path ref={doneRef} fill="none" stroke="#f0d689" strokeWidth="2" strokeLinecap="round" />
+          <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         {/* nuages */}
         <div
