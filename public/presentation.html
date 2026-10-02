@@ -149,7 +149,6 @@ svg{flex-shrink:0}
 @keyframes fogm{to{transform:translateX(4vw)}}
 .wx-rain{width:calc(100% + 60vw);height:calc(100% + 740px)}
 .wx-snow{width:calc(100% + 60vw);height:calc(100% + 740px)}
-.ev>canvas.ev-snow{position:absolute;left:0;right:0;top:0;width:100%;height:10px;pointer-events:none;z-index:5;opacity:.72}
 .wx-grey{background:radial-gradient(28% 18% at 12% 18%,rgba(120,130,145,.9),transparent 70%),radial-gradient(34% 20% at 40% 10%,rgba(105,115,130,.95),transparent 70%),radial-gradient(30% 22% at 70% 22%,rgba(125,135,150,.9),transparent 70%),radial-gradient(30% 18% at 92% 12%,rgba(110,120,135,.9),transparent 70%),radial-gradient(40% 16% at 25% 40%,rgba(140,150,162,.7),transparent 70%),radial-gradient(45% 16% at 75% 42%,rgba(135,145,158,.7),transparent 70%),linear-gradient(rgba(85,95,110,.7),rgba(110,120,135,.35) 60%,transparent);filter:blur(18px);animation:fogm 60s ease-in-out infinite alternate}
 .wx-flash{opacity:1!important;width:calc(100% + 60vw);height:calc(100% + 740px);z-index:2}
 @keyframes flash{0%,93%,100%{opacity:0}94%{opacity:.7}95%{opacity:0}96%{opacity:.5}}
@@ -867,7 +866,7 @@ function applyWx(code, cover){ showWxNow(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
   const c = Math.max(cover/100, rain||snow ? .8 : 0, fog ? .6 : 0);
   on('grey', (rain||snow ? .75 : c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); const light = [51,53,56,61,80].includes(code); on('rain', rain ? (heavy ? 1 : light ? .35 : .65) : 0); RAIN = rain ? (heavy ? 1 : light ? .3 : .6) : 0; on('rain', RAIN ? 1 : 0); on('snow', snow ? 1 : 0); SNOW = snow ? 1 : 0;
-  const evb = $('[data-events]'); if (evb) { evb.classList.toggle('wet', rain); evb.classList.toggle('snowy', snow); }
+  const evb = $('[data-events]'); if (evb) { evb.classList.toggle('wet', rain); }
   const fl = $('[data-wx="flash"]'); if (fl) fl.style.display = storm ? '' : 'none';
   const n = Math.round(4 + c*14 + (rain||snow ? 8 : 0)), cl = $('[data-clouds]');
   if (cl) cl.innerHTML = Array.from({length:n}, (_,i) => `<i class="cloud" style="left:${(i*97/n + Math.random()*6).toFixed(1)}%;top:${(Math.random()*40).toFixed(0)}%;width:${(340+Math.random()*360).toFixed(0)}px;height:${(80+Math.random()*70).toFixed(0)}px;--t:${(40+Math.random()*30).toFixed(0)}s;animation-delay:${-i*7}s;filter:blur(${c>.6?30:22}px)"></i>`).join('');
@@ -876,7 +875,7 @@ function applyWx(code, cover){ showWxNow(code);
   if (sv) sv.style.opacity = dim; if (sn) sn.style.filter = dim < 1 ? `opacity(${dim})` : '';
 }
 
-/* neige réaliste : flocons aléatoires en profondeur + accumulation sur les cartes */
+/* neige réaliste : flocons aléatoires en profondeur */
 let SNOW = 0;
 (function(){ const cv = $('[data-wx="snow"]'); if (!cv) return; const cx = cv.getContext('2d'), RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
   let W=0,H=0,F=[],last=0,wind=0,windT=0; const R=Math.random;
@@ -893,23 +892,6 @@ let SNOW = 0;
       if(f.halo){ cx.globalAlpha=.12; cx.drawImage(s,x-s.width*1.3,f.y-s.width*1.3,s.width*2.6,s.width*2.6); } }
     cx.globalAlpha=1; const g=cx.createLinearGradient(0,H*.8,0,H); g.addColorStop(0,'rgba(240,245,255,0)'); g.addColorStop(1,'rgba(240,245,255,.12)'); cx.fillStyle=g; cx.fillRect(0,H*.8,W,H*.2); }
   requestAnimationFrame(frame); addEventListener('resize',()=>{W=0;});
-  /* fine pellicule de neige, discrète et irrégulière */
-  const ST=new WeakMap();
-  function card(ev){ let c=ev.querySelector(':scope>canvas.ev-snow'); if(!c){ c=document.createElement('canvas'); c.className='ev-snow'; ev.appendChild(c); }
-    let s=ST.get(ev); if(!s){ s={h:0,goal:0,max:1.2+R()*1.4,next:2+R()*5,p:[R()*6,R()*6],f:[3+R()*3,8+R()*5]}; ST.set(ev,s); } return [c,s]; }
-  let lt=0; function acc(t){ requestAnimationFrame(acc); const dt=Math.min(.1,(t-(lt||t))/1000); lt=t; const box=$('[data-events]'); if(!box) return;
-    box.querySelectorAll('.ev').forEach(ev=>{ if(!SNOW){ const c=ev.querySelector(':scope>canvas.ev-snow'); if(c) c.remove(); ST.delete(ev); return; }
-      const [c,s]=card(ev); const w=c.clientWidth, H=10; if(c.width!==w){ c.width=w; c.height=H; }
-      s.next-=dt; if(s.next<=0 && s.goal<s.max){ s.next=3+R()*6; s.goal=Math.min(s.max,s.goal+.15+R()*.3); }
-      s.h+=(s.goal-s.h)*Math.min(1,dt*.7);
-      const g=c.getContext('2d'); g.clearRect(0,0,w,H); if(s.h<.12) return;
-      g.beginPath(); g.moveTo(0,0);
-      for(let x=0;x<=w;x+=2){ const u=x/w; const y=s.h*(.74+.15*Math.sin(u*s.f[0]+s.p[0])+.08*Math.sin(u*s.f[1]+s.p[1])); g.lineTo(x,Math.max(.35,y)); }
-      g.lineTo(w,0); g.closePath();
-      const gr=g.createLinearGradient(0,0,0,4); gr.addColorStop(0,'rgba(255,255,255,.9)'); gr.addColorStop(1,'rgba(220,234,248,.38)');
-      g.fillStyle=gr; g.fill();
-      g.strokeStyle='rgba(255,255,255,.7)'; g.lineWidth=.6; g.stroke(); }); }
-  requestAnimationFrame(acc);
 })();
 /* orage : petits flashs lumineux discrets, de temps en temps */
 (function(){ const cv = $('[data-wx="flash"]'); if (!cv) return; const cx = cv.getContext('2d');
