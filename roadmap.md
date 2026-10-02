@@ -7,3 +7,4 @@
 - [x] Intégrer Hayom Yom depuis l'APK : lecture quotidienne bilingue, navigation par jour et affichage TV
 - [ ] Étendre le cycle des parashot (Shemot → Vayiqra → …) avant janvier 2027 : après Vayehi (26/12), le calcul retombe sur Chela'h Lekha au lieu de Shemot (2/01/2027)
 - [x] Recréer intégralement le microsite Hasdefy dans une page Chants interne et ajouter un aperçu Chants sur l’accueil du site normal
+- [x] Mettre à jour les propositions de don : 26 €, 52 €, 126 € et 260 €
