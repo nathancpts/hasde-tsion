@@ -234,6 +234,18 @@ svg{flex-shrink:0}
 .chant-row .play{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(240,214,137,.45);color:var(--gold-soft);transition:background .3s,color .3s}
 .chant-row:hover .play{background:var(--gold-soft);color:var(--night)}
 
+/* ---------- le kotel en direct ---------- */
+.kotel{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center}
+.kotel-copy h2{font-size:clamp(2rem,4.4vw,4rem);font-weight:800;letter-spacing:-.03em;margin-top:18px}
+.kotel-copy p{margin:18px 0 0;color:var(--ice);opacity:.86;line-height:1.7;max-width:56ch}
+.kotel-copy h3{font-family:var(--f-display);font-size:.72rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);margin:34px 0 0}
+.kotel-live{position:relative;border-radius:28px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,rgba(90,154,230,.14),rgba(10,26,61,.55));aspect-ratio:16/10;box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
+.kotel-live video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0b1c3a}
+.kotel-live .badge{position:absolute;left:16px;top:16px;z-index:3;display:inline-flex;align-items:center;gap:9px;font-family:var(--f-display);font-size:.7rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:rgba(5,13,32,.55);border:1px solid rgba(240,214,137,.4);border-radius:999px;padding:9px 16px;backdrop-filter:blur(10px)}
+.kotel-live .badge i{width:8px;height:8px;border-radius:50%;background:#ff4d4d;animation:pulse 1.8s infinite}
+.kotel-live .status{position:absolute;inset:0;z-index:2;display:grid;place-items:center;font-family:var(--f-display);color:var(--muted);font-size:.85rem;letter-spacing:.1em;background:#0b1c3a}
+.kotel-live .shield{position:absolute;inset:0;z-index:4;touch-action:none}
+
 /* ---------- étude ---------- */
 .study{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,5vw,80px)}
 .parasha-title{font-size:clamp(2.6rem,6vw,6rem);font-weight:900;letter-spacing:-.04em}
@@ -293,7 +305,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
 @media (max-width:1100px){
   .events{grid-template-columns:repeat(3,minmax(0,1fr))}
   .acts{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .study,.give,.info,.hero-bottom,.chants-shell{grid-template-columns:minmax(0,1fr)}
+  .study,.give,.info,.hero-bottom,.chants-shell,.kotel{grid-template-columns:minmax(0,1fr)}
   .hayom{position:relative;top:0}.next{justify-self:start}.cta-wrap{justify-self:start}
   .links{display:none}
 }
@@ -419,6 +431,77 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
       </div>
     </div>
   </section>
+
+  <section class="sec" id="kotel" aria-labelledby="kotel-title">
+    <div class="kotel">
+      <div class="kotel-copy">
+        <span class="label">Jérusalem · Le Mur Occidental</span>
+        <h2 class="words" id="kotel-title">Le Mur des Lamentations, en direct.</h2>
+        <p>Le Mur des Lamentations — le Kotel en hébreu, ou Mur Occidental — est le lieu le plus saint du judaïsme, où les fidèles viennent prier. C'est un vestige de l'ancien mur de soutènement qui entourait l'esplanade du Second Temple de Jérusalem, détruit par les Romains en l'an 70 après J.-C.</p>
+        <h3>Pourquoi « des Lamentations » ?</h3>
+        <p>Ce nom a été donné par la tradition chrétienne car, pendant des siècles, les Juifs s'y rassemblaient pour pleurer la destruction de leur Temple et l'exil du peuple juif. Les fidèles y prient traditionnellement pour sa reconstruction et la venue du Messie. Les Juifs préfèrent l'appeler le Kotel, le Mur Occidental : pour eux, c'est le dernier témoin matériel subsistant de la présence divine et de la grandeur du Temple de Jérusalem.</p>
+        <h3>Les rituels et la pratique</h3>
+        <p>Le site est ouvert 24h/24 et attire des pèlerins du monde entier. Les fidèles s'y inclinent, touchent les pierres anciennes et récitent leurs prières. Une tradition très populaire consiste à écrire un vœu ou une prière sur un petit papier et à l'insérer entre les interstices des pierres du mur. La grande place de prière est divisée en deux zones distinctes par une barrière : une partie plus vaste pour les hommes et une autre pour les femmes.</p>
+        <h3>Un lieu saint pour les trois religions</h3>
+        <p>Le Kotel se trouve juste en contrebas de l'Esplanade des Mosquées (le Mont du Temple), qui abrite le Dôme du Rocher et la mosquée Al-Aqsa, troisième lieu saint de l'islam — où le mur est appelé al-Buraq. Ce quartier de la Vieille Ville de Jérusalem est ainsi un carrefour hautement symbolique et sensible pour les trois religions monothéistes.</p>
+      </div>
+      <div class="kotel-live" data-kotel-live>
+        <span class="badge"><i></i>Live · Jérusalem</span>
+        <video data-kotel-video muted playsinline autoplay disablePictureInPicture controls="false" tabIndex="-1" aria-label="Live du Kotel"></video>
+        <div class="status" data-kotel-status>Connexion au live…</div>
+        <div class="shield" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  /* Live du Kotel — HLS sans contrôles, démarré quand la section devient visible */
+  (function(){
+    const wrap = document.querySelector('[data-kotel-live]');
+    if (!wrap) return;
+    const video = wrap.querySelector('[data-kotel-video]');
+    const status = wrap.querySelector('[data-kotel-status]');
+    const shield = wrap.querySelector('.shield');
+    const SRC = '/api/public/kotel';
+    let hls = null, started = false, lastTime = -1, stalls = 0, retryTimer = null, scriptTag = null;
+    const show = txt => { if (status) { status.textContent = txt; status.style.display = txt ? 'grid' : 'none'; } };
+    const retry = () => { if (retryTimer) return; show('Reconnexion au live…'); retryTimer = setTimeout(() => { retryTimer = null; start(); }, 3000); };
+    function start(){
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        if (hls) { hls.destroy(); hls = null; }
+        video.src = SRC; video.play().catch(() => {});
+      } else {
+        if (hls) { hls.destroy(); hls = null; }
+        if (window.Hls && window.Hls.isSupported()) { attach(); return; }
+        if (scriptTag) return;
+        scriptTag = document.createElement('script');
+        scriptTag.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js';
+        scriptTag.onload = attach;
+        scriptTag.onerror = () => show('Live momentanément indisponible');
+        document.head.appendChild(scriptTag);
+      }
+    }
+    function attach(){
+      if (!window.Hls || !window.Hls.isSupported()) { show('Live momentanément indisponible'); return; }
+      hls = new Hls({ liveDurationInfinity:true, liveSyncDurationCount:4, maxBufferLength:30, manifestLoadingMaxRetry:3, levelLoadingMaxRetry:3, fragLoadingMaxRetry:4 });
+      hls.loadSource(SRC); hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+      hls.on(Hls.Events.ERROR, (e, data) => { if (!data.fatal) return; hls.destroy(); hls = null; retry(); });
+    }
+    video.addEventListener('playing', () => { stalls = 0; show(''); });
+    video.addEventListener('error', retry);
+    if (shield) ['click','contextmenu','dblclick','touchstart'].forEach(ev => shield.addEventListener(ev, e => e.preventDefault(), {passive:false}));
+    setInterval(() => {
+      if (video.paused) { video.play().catch(() => {}); return; }
+      if (video.readyState < 2 || video.currentTime === lastTime) stalls += 1; else stalls = 0;
+      lastTime = video.currentTime;
+      if (stalls >= 4) { stalls = 0; retry(); }
+    }, 7000);
+    new IntersectionObserver((entries, io) => {
+      if (entries.some(en => en.isIntersecting) && !started) { started = true; start(); io.disconnect(); }
+    }, { rootMargin: '400px' }).observe(wrap);
+  })();
+  </script>
 
   <section class="sec" id="etude">
     <div class="study">
