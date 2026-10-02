@@ -151,7 +151,7 @@ svg{flex-shrink:0}
 .wx-snow{background-image:radial-gradient(2.5px 2.5px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 90px 120px,#fff,transparent),radial-gradient(3px 3px at 160px 70px,#fff,transparent),radial-gradient(2px 2px at 60px 180px,#fff,transparent);background-size:200px 200px;animation:snowf 8s linear infinite}
 @keyframes snowf{to{background-position:40px 200px}}
 .wx-grey{background:radial-gradient(28% 18% at 12% 18%,rgba(120,130,145,.9),transparent 70%),radial-gradient(34% 20% at 40% 10%,rgba(105,115,130,.95),transparent 70%),radial-gradient(30% 22% at 70% 22%,rgba(125,135,150,.9),transparent 70%),radial-gradient(30% 18% at 92% 12%,rgba(110,120,135,.9),transparent 70%),radial-gradient(40% 16% at 25% 40%,rgba(140,150,162,.7),transparent 70%),radial-gradient(45% 16% at 75% 42%,rgba(135,145,158,.7),transparent 70%),linear-gradient(rgba(85,95,110,.7),rgba(110,120,135,.35) 60%,transparent);filter:blur(18px);animation:fogm 60s ease-in-out infinite alternate}
-.wx-flash{opacity:1!important}
+.wx-flash{opacity:1!important;width:calc(100% + 60vw);height:calc(100% + 340px);z-index:2}
 @keyframes flash{0%,93%,100%{opacity:0}94%{opacity:.7}95%{opacity:0}96%{opacity:.5}}
 .wx-tag{position:absolute;right:clamp(16px,4vw,56px);bottom:14px;z-index:5;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .sun{width:0;height:0;will-change:transform}
@@ -800,7 +800,7 @@ let lastP = 0;
 function setDay(p){
   if (!G) buildScene(); lastP = p;
   const stk = $('.day-stick'); stk.style.setProperty('--ft', (clamp(1 - p / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb', (clamp((p - .84) / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb2', (clamp((p - .84) / .16) * 560).toFixed(0) + 'px');
-  { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); $$('[data-haze], [data-refl], [data-wx], [data-scene], [data-rail], [data-moon]').forEach(el => el.style.setProperty('--fade', ((1 - sm(e)) * (1 - sm(f))).toFixed(3))); }
+  { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); $$('[data-haze], [data-refl], [data-wx], [data-scene], [data-rail], [data-moon]').forEach(el => el.style.setProperty('--fade', ((1 - sm(e)) * (1 - sm(f))).toFixed(3))); $$('[data-wx]').forEach(el => el.style.setProperty('--fade', (1 - sm(f)).toFixed(3))); }
   const n0 = nowM(), m = n0 + Math.max(0, D1 - n0) * p, s = sunAt(m);
   const warm = clamp(1 - Math.max(s.alt, 0) / .4);
   const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;                 // 0 au-dessus de l'horizon → 1 bien en dessous
@@ -866,13 +866,13 @@ function applyWx(code, cover){ showWxNow(code);
     out.push({pts,w}); }
   function strike(){ if (cv.style.display==='none' || !sceneOn) return;
     const W = cv.width = cv.clientWidth, H = cv.height = cv.clientHeight; const bolts=[];
-    seg(W*(.15+Math.random()*.7), -10, (Math.random()-.5)*.4, H*(.45+Math.random()*.4), 2.6, 0, bolts);
+    seg(W*(.3+Math.random()*.4), 300, (Math.random()-.5)*.4, (H-300)*(.45+Math.random()*.35), 3.2, 0, bolts);
     let k=0; const seq=[1,0,.8,0,.5,.3,.15,0];
     (function fr(){ cx.clearRect(0,0,W,H); const o=seq[k]; if(o){ cx.fillStyle=`rgba(220,230,255,${(o*.18).toFixed(2)})`; cx.fillRect(0,0,W,H);
         cx.lineCap='round'; cx.lineJoin='round'; cx.shadowColor='rgba(170,200,255,.95)'; cx.shadowBlur=22;
         for(const b of bolts){ cx.strokeStyle=`rgba(255,255,255,${o})`; cx.lineWidth=b.w; cx.beginPath(); b.pts.forEach(([x,y],i)=>i?cx.lineTo(x,y):cx.moveTo(x,y)); cx.stroke(); } }
       if(++k<seq.length) setTimeout(fr,60); else cx.clearRect(0,0,W,H); })(); }
-  (function next(){ setTimeout(()=>{ strike(); if(Math.random()<.35) setTimeout(strike,500); next(); }, 3500+Math.random()*6000); })();
+  (function next(){ setTimeout(()=>{ strike(); if(Math.random()<.35) setTimeout(strike,500); next(); }, 2500+Math.random()*4500); })();
 })();
 /* pluie réaliste sur canvas : gouttes fines, longueurs et vitesses variées, densité selon l'intensité */
 let RAIN = 0;
