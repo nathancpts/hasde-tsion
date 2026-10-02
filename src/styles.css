@@ -655,7 +655,6 @@ select:focus-visible {
   isolation: isolate;
   background:
     radial-gradient(900px 600px at 15% -10%, color-mix(in oklab, var(--chant-accent) 55%, transparent), transparent 70%),
-    radial-gradient(700px 500px at 95% 20%, color-mix(in oklab, var(--chant-gold) 10%, transparent), transparent 70%),
     var(--chant-night);
   font-family: "Inter", system-ui, sans-serif;
 }
