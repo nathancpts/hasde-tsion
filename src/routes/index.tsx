@@ -2275,6 +2275,60 @@ function PlanningTV() {
           )}
         </aside>
       </div>
+
+      {liveOpen && typeof document !== "undefined" && createPortal(
+        <div
+          className="fixed inset-0 z-[9000] flex items-center justify-center"
+          style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
+          onClick={() => setLiveOpen(false)}
+        >
+          <div
+            className="relative"
+            style={{
+              width: "min(86vw, 152vh)",
+              aspectRatio: "16 / 9",
+              borderRadius: 22,
+              overflow: "hidden",
+              border: "1px solid rgba(212,175,55,0.55)",
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.75)",
+              background: "#0A1128",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {isShabbatNow ? (
+              <>
+                <img src={kotelShabbat} alt="Kotel — Shabbat Shalom" className="absolute inset-0 w-full h-full object-cover" width={1920} height={1088} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center" style={{ background: "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)" }}>
+                  <p className="font-hebrew leading-none" dir="rtl" style={{ fontSize: "7vh", color: GOLD_LOCAL, fontWeight: 700, textShadow: "0 4px 24px rgba(0,0,0,0.55)" }}>
+                    שבת שלום
+                  </p>
+                  <p className="uppercase mt-[1.2vh]" style={{ fontSize: "1.5vh", letterSpacing: "0.5em", color: "rgba(255,255,255,0.9)", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}>
+                    Shabbat Shalom
+                  </p>
+                </div>
+              </>
+            ) : (
+              <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
+            )}
+            <div className="absolute top-[2vh] left-[1.4vw] inline-flex items-center gap-[0.5vw] px-[1vw] py-[0.8vh] rounded-full" style={{ background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", backdropFilter: "blur(8px)" }}>
+              <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+              <span className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC" }}>
+                Live · Le Kotel
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setLiveOpen(false)}
+              aria-label="Fermer le live"
+              className="absolute top-[2vh] right-[1.4vw] flex items-center justify-center rounded-full transition-opacity duration-300 hover:opacity-90"
+              style={{ width: "4.2vh", height: "4.2vh", background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", color: "white", backdropFilter: "blur(8px)" }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
     </main>
   );
 }
