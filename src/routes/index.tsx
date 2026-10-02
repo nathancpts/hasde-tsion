@@ -1,6 +1,7 @@
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice, isAppPath } from "@/lib/tv-detect";
+import { TVSky, type TVSkyEvent } from "@/components/TVSky";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
@@ -2056,6 +2057,25 @@ function PlanningTV() {
   const HEADING_FONT_LOCAL = "'Montserrat', 'Gotham', system-ui, sans-serif";
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
   const GOLD_LOCAL = "#D4AF37";
+  const GLASS: React.CSSProperties = {
+    background: "linear-gradient(160deg, rgba(90,154,230,.16), rgba(10,26,61,.55))",
+    border: "1px solid rgba(219,231,251,.14)",
+    borderRadius: "24px",
+    backdropFilter: "blur(16px)",
+    color: "#f3f6fc",
+  };
+  const LABEL: React.CSSProperties = {
+    fontSize: "1.05vh",
+    letterSpacing: "0.4em",
+    color: "#F0D689",
+    fontWeight: 700,
+    fontFamily: HEADING_FONT_LOCAL,
+  };
+  const tvSunrise = todayTimes.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
+  const tvSunset = todayTimes.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
+  const tvEvents: TVSkyEvent[] = todayTimes.map((t) => ({ label: t.label, value: t.value }));
+  const tvGreeting: [string, string] | null = dow === 5 || dow === 6 ? ["Chabbat Chalom", "שבת שלום"] : null;
+
 
   return (
     <main
