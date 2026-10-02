@@ -913,15 +913,20 @@ function applyWx(code, cover){ showWxNow(code);
 /* pluie réaliste sur canvas : gouttes fines, longueurs et vitesses variées, densité selon l'intensité */
 let RAIN = 0;
 (function(){ const cv = $('[data-wx="rain"]'); if (!cv) return; const cx = cv.getContext('2d'); let drops = [], W = 0, H = 0;
+  const rnd = (a, b) => a + Math.random() * (b - a);
   function size(){ W = cv.width = cv.clientWidth; H = cv.height = cv.clientHeight; }
-  function mk(){ const z = Math.random(); return {x:Math.random()*W, y:Math.random()*H, z, l:8 + z*22, v:(9 + z*14)}; }
+  function mk(){ const z = Math.random();
+    return { x:Math.random()*W, y:Math.random()*H, z,
+      l: rnd(6, 34) * (.55 + z*.75), v: rnd(7, 26) * (.7 + z*.6),
+      w: rnd(.4, 1.6), a: rnd(.05, .32), sl: rnd(.05, .2), ph: Math.random()*6.28 };
+  }
   (function loop(){ requestAnimationFrame(loop); if (!RAIN || !sceneOn) { if (drops.length){ cx.clearRect(0,0,W,H); drops = []; } return; }
     if (cv.clientWidth !== W || cv.clientHeight !== H) size();
     const want = Math.round(W * H / 9000 * RAIN); while (drops.length < want) drops.push(mk()); drops.length = Math.min(drops.length, want);
     cx.clearRect(0,0,W,H); cx.lineCap = 'round';
-    for (const d of drops){ d.y += d.v; d.x -= d.v * .12; if (d.y > H){ d.y = -d.l; d.x = Math.random()*W; }
-      cx.strokeStyle = `rgba(210,225,245,${(.08 + d.z*.22).toFixed(2)})`; cx.lineWidth = .6 + d.z*.7;
-      cx.beginPath(); cx.moveTo(d.x, d.y); cx.lineTo(d.x + d.l*.12, d.y - d.l); cx.stroke(); }
+    for (const d of drops){ d.y += d.v; d.x -= d.v * d.sl + Math.sin(d.ph + d.y*.01)*.3; if (d.y > H){ d.y = -d.l - rnd(0, 40); d.x = Math.random()*W; }
+      cx.strokeStyle = `rgba(205,222,246,${d.a.toFixed(2)})`; cx.lineWidth = d.w;
+      cx.beginPath(); cx.moveTo(d.x, d.y); cx.lineTo(d.x + d.l*d.sl, d.y - d.l); cx.stroke(); }
   })();
 })();
 function loadWx(){
