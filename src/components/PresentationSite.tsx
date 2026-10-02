@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchZmanim } from "@/lib/jewish-calendar";
+import { fetchLiveWeek, fetchZmanim } from "@/lib/jewish-calendar";
 
 /**
  * Site de présentation (PC ≥ 768 px). Le fichier fourni est affiché tel quel
@@ -19,8 +19,9 @@ export function PresentationSite() {
     let done = false;
     const go = () => { if (!done) { done = true; setReady(true); } };
     const timer = setTimeout(go, 3000);
-    fetchZmanim(new Date())
-      .then((z) => {
+    const today = new Date();
+    Promise.all([fetchZmanim(today), today.getDay() === 5 ? fetchLiveWeek(today).catch(() => null) : Promise.resolve(null)])
+      .then(([z, w]) => {
         const get = (l: string) => z.times.find((t) => t.label === l)?.value;
         const sunset = get("Sheqyia");
         (window as unknown as { __HT_LIVE__?: unknown }).__HT_LIVE__ = {
@@ -29,6 +30,7 @@ export function PresentationSite() {
           minha: minus(sunset, 40),
           arvit: get("Sortie des étoiles"),
           rtam: get("Nuit de R. Tam"),
+          candles: today.getDay() === 5 ? (w?.vendredi.candleLighting || minus(sunset, 18)) : undefined,
         };
       })
       .catch(() => {})
