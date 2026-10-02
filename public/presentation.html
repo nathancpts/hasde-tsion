@@ -336,6 +336,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
       <span class="label" style="color:var(--muted)" data-hebdate></span>
     </div>
     <div class="clock" data-clock aria-label="Heure actuelle">18:36</div>
+    <div class="wxnow label" data-wxnow aria-live="polite" style="margin-top:6px;color:var(--ice);font-size:clamp(.95rem,1.6vw,1.25rem);letter-spacing:.08em"></div>
     <div class="hero-date"><span class="label" style="color:var(--ice)" data-date></span><span class="he" lang="he" dir="rtl" data-hebfull></span></div>
     <div class="hero-bottom">
       <h1 class="words">La maison de <em>prière</em> et d'étude de Hasdé Tsion.</h1>
@@ -840,7 +841,10 @@ function setDay(p){
 }
 addEventListener('resize', () => { buildScene(); setDay(lastP); });
 /* ===== Météo réelle de Neuilly-sur-Seine (Open-Meteo) ===== */
-function applyWx(code, cover){
+let WXT = null;
+function wxLabel(c){ return c>=95?'Orage':[71,73,75,77,85,86].includes(c)?'Neige':[65,67,82].includes(c)?'Forte pluie':[51,53,55,56,57].includes(c)?'Bruine':[61,63,66,80,81].includes(c)?'Pluie':[45,48].includes(c)?'Brouillard':c===3?'Couvert':c>=1?'Partiellement nuageux':'Ensoleillé'; }
+function showWxNow(code){ const e = $('[data-wxnow]'); if (!e) return; e.dataset.code = code; e.textContent = 'Actuellement · ' + wxLabel(code) + (WXT != null ? ' · ' + Math.round(WXT) + ' °C' : ''); }
+function applyWx(code, cover){ showWxNow(code);
   const on = (k,v) => { const e = $(`[data-wx="${k}"]`); if (e) e.style.opacity = v; };
   const rain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code), heavy = [65,67,82,95,96,99].includes(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
@@ -871,6 +875,7 @@ let RAIN = 0;
 function loadWx(){
   let q = ''; try { q = new URLSearchParams((window.parent||window).location.search).get('meteo') || ''; } catch(e){}
   const F = {pluie:[63,90], bruine:[51,70], forte:[65,100], orage:[95,100], brouillard:[45,70], neige:[73,90], nuages:[3,95], soleil:[0,5]}[q];
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=48.885&longitude=2.269&current=temperature_2m&timezone=Europe%2FParis').then(r => r.json()).then(d => { if (d.current){ WXT = d.current.temperature_2m; const e = $('[data-wxnow]'); if (e && e.dataset.code) showWxNow(+e.dataset.code); } }).catch(() => {});
   if (F) return applyWx(F[0], F[1]);
   /* DÉMO temporaire demandée : pluie forcée le 2 octobre 2026 */
   if (new Date().toDateString() === new Date(2026,9,2).toDateString()) return applyWx(95, 100);
