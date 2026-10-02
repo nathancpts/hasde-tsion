@@ -810,7 +810,7 @@ let lastP = 0;
 function setDay(p){
   if (!G) buildScene(); lastP = p;
   const stk = $('.day-stick'); stk.style.setProperty('--ft', (clamp(1 - p / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb', (clamp((p - .84) / .16) * 520).toFixed(0) + 'px'); stk.style.setProperty('--fb2', (clamp((p - .84) / .16) * 560).toFixed(0) + 'px');
-  { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); $$('[data-haze], [data-refl], [data-wx], [data-scene], [data-rail], [data-moon]').forEach(el => el.style.setProperty('--fade', ((1 - sm(e)) * (1 - sm(f))).toFixed(3))); $$('[data-wx]').forEach(el => el.style.setProperty('--fade', (1 - sm(f)).toFixed(3))); }
+  { const e = clamp(1 - p / .16), f = clamp((p - .84) / .16), sm = v => v * v * (3 - 2 * v); $('[data-above]').style.opacity = (1 - sm(e)) * (1 - sm(f)); $$('[data-haze], [data-refl], [data-wx], [data-scene], [data-rail], [data-moon]').forEach(el => el.style.setProperty('--fade', ((1 - sm(e)) * (1 - sm(f))).toFixed(3))); }
   const n0 = nowM(), m = n0 + Math.max(0, D1 - n0) * p, s = sunAt(m);
   const warm = clamp(1 - Math.max(s.alt, 0) / .4);
   const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;                 // 0 au-dessus de l'horizon → 1 bien en dessous
@@ -876,7 +876,7 @@ function applyWx(code, cover){ showWxNow(code);
     out.push({pts,w}); }
   function strike(){ if (cv.style.display==='none' || !sceneOn) return;
     const W = cv.width = cv.clientWidth, H = cv.height = cv.clientHeight; const bolts=[];
-    seg(W*(.3+Math.random()*.4), 300, (Math.random()-.5)*.4, (H-300)*(.45+Math.random()*.35), 3.2, 0, bolts);
+    seg(W*(.3+Math.random()*.4), 0, (Math.random()-.5)*.4, H*(.6+Math.random()*.25), 3.2, 0, bolts);
     let k=0; const seq=[1,0,.8,0,.5,.3,.15,0];
     (function fr(){ cx.clearRect(0,0,W,H); const o=seq[k]; if(o){ cx.fillStyle=`rgba(220,230,255,${(o*.18).toFixed(2)})`; cx.fillRect(0,0,W,H);
         cx.lineCap='round'; cx.lineJoin='round'; cx.shadowColor='rgba(170,200,255,.95)'; cx.shadowBlur=22;
