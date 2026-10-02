@@ -116,7 +116,7 @@ export function ChantsPage() {
     <main className="chants-page min-h-[100dvh] bg-chant-night text-chant-ink">
       <SiteChrome />
 
-      <section className="mx-auto max-w-7xl px-4 pb-12 pt-32 sm:px-8 lg:px-12 lg:pt-40">
+      <section className="mx-auto max-w-[1720px] px-4 pb-12 pt-32 sm:px-8 lg:px-12 lg:pt-40">
         <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">Hasdé Tsion · 5787 — 2026</p>
         <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
@@ -131,7 +131,7 @@ export function ChantsPage() {
       </section>
 
       <section className="sticky top-0 z-20 border-y border-chant-line bg-chant-night/95 px-4 py-4 backdrop-blur-xl sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl space-y-3">
+        <div className="mx-auto max-w-[1720px] space-y-3">
           <label className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-chant-line bg-chant-panel px-4 py-3">
             <Search className="size-5 text-chant-gold" />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Chercher un chant, un auteur, un mot…" className="min-w-0 bg-transparent text-sm text-chant-ink outline-none placeholder:text-chant-muted" />
@@ -154,10 +154,10 @@ export function ChantsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-8 lg:px-12">
+      <section className="mx-auto max-w-[1720px] px-4 py-10 sm:px-8 lg:px-12">
         <p className="mb-5 text-sm font-semibold text-chant-muted">{filtered.length} chant{filtered.length > 1 ? "s" : ""} affiché{filtered.length > 1 ? "s" : ""}</p>
         {filtered.length ? (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {filtered.map((song) => (
               <article key={song.number} className="flex min-h-80 flex-col border border-chant-line bg-chant-panel p-5 transition-colors hover:border-chant-gold/70">
                 <div className="flex items-start justify-between gap-4">
@@ -188,7 +188,7 @@ export function ChantsPage() {
 
       {!query && occasion === "all" && rite === "all" && (
         <>
-          <section className="mx-auto max-w-7xl px-4 py-12 sm:px-8 lg:px-12">
+          <section className="mx-auto max-w-[1720px] px-4 py-12 sm:px-8 lg:px-12">
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">L’album de référence</p>
             <div className="mt-5 grid gap-6 lg:grid-cols-2">
               <div className="space-y-4">
@@ -211,7 +211,7 @@ export function ChantsPage() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-7xl px-4 pb-24 pt-10 sm:px-8 lg:px-12">
+          <section className="mx-auto max-w-[1720px] px-4 pb-24 pt-10 sm:px-8 lg:px-12">
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">Où écouter les mélodies</p>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <a href="https://www.youtube.com/@hibbathapiyut" target="_blank" rel="noopener noreferrer" className="border border-chant-line bg-chant-panel p-6 transition-colors hover:border-chant-gold"><Music2 className="text-chant-gold" /><strong className="mt-5 block font-display text-xl">La chaîne Hibat HaPiyut</strong><span className="mt-2 block text-sm text-chant-muted">Les piyoutim dans leur mélodie traditionnelle, texte hébreu à l’écran.</span></a>
