@@ -147,8 +147,7 @@ svg{flex-shrink:0}
 .wx{position:absolute;-webkit-mask-image:linear-gradient(#000 calc(var(--fade,1)*100%),transparent);left:-30vw;right:-30vw;top:-300px;bottom:-40px;pointer-events:none;z-index:0;opacity:0;transition:opacity 2s}
 .wx-fog{background:linear-gradient(to top,rgba(205,214,226,.85),rgba(205,214,226,.45) 45%,rgba(205,214,226,.15) 80%,transparent);filter:blur(8px);animation:fogm 40s ease-in-out infinite alternate}
 @keyframes fogm{to{transform:translateX(4vw)}}
-.wx-rain{background-image:repeating-linear-gradient(102deg,transparent 0 9px,rgba(200,220,255,.35) 9px 10px,transparent 10px 23px),repeating-linear-gradient(98deg,transparent 0 15px,rgba(220,232,255,.25) 15px 16px,transparent 16px 37px);background-size:240px 180px,330px 260px;animation:rainf .5s linear infinite}
-@keyframes rainf{to{background-position:-30px 180px,-40px 260px}}
+.wx-rain{width:calc(100% + 60vw);height:calc(100% + 340px)}
 .wx-snow{background-image:radial-gradient(2.5px 2.5px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 90px 120px,#fff,transparent),radial-gradient(3px 3px at 160px 70px,#fff,transparent),radial-gradient(2px 2px at 60px 180px,#fff,transparent);background-size:200px 200px;animation:snowf 8s linear infinite}
 @keyframes snowf{to{background-position:40px 200px}}
 .wx-grey{background:rgba(70,82,100,.45);mix-blend-mode:multiply}
@@ -379,7 +378,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
         <div class="haze" data-haze></div>
         <div class="sun-refl" data-refl></div>
         <div class="moon" data-moon></div>
-        <div class="wx wx-grey" data-wx="grey"></div><div class="wx wx-fog" data-wx="fog"></div><div class="wx wx-rain" data-wx="rain"></div><div class="wx wx-snow" data-wx="snow"></div><div class="wx wx-flash" data-wx="flash" style="opacity:0;transition:none"></div>
+        <div class="wx wx-grey" data-wx="grey"></div><div class="wx wx-fog" data-wx="fog"></div><canvas class="wx wx-rain" data-wx="rain"></canvas><div class="wx wx-snow" data-wx="snow"></div><div class="wx wx-flash" data-wx="flash" style="opacity:0;transition:none"></div>
         <div class="rail" data-rail></div>
         <div class="events" data-events></div>
       </div>
@@ -846,13 +845,29 @@ function applyWx(code, cover){
   const rain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code), heavy = [65,67,82,95,96,99].includes(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
   const c = Math.max(cover/100, rain||snow ? .8 : 0, fog ? .6 : 0);
-  on('grey', (c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); const light = [51,53,56,61,80].includes(code); on('rain', rain ? (heavy ? 1 : light ? .35 : .65) : 0); const rn = $('[data-wx="rain"]'); if (rn) rn.style.animationDuration = heavy ? '.35s' : light ? '.8s' : '.5s'; on('snow', snow ? 1 : 0);
+  on('grey', (rain||snow ? .75 : c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); const light = [51,53,56,61,80].includes(code); on('rain', rain ? (heavy ? 1 : light ? .35 : .65) : 0); RAIN = rain ? (heavy ? 1 : light ? .3 : .6) : 0; on('rain', RAIN ? 1 : 0); on('snow', snow ? 1 : 0);
   const fl = $('[data-wx="flash"]'); if (fl) fl.style.display = storm ? '' : 'none';
-  const n = Math.round(4 + c*14), cl = $('[data-clouds]');
+  const n = Math.round(4 + c*14 + (rain||snow ? 8 : 0)), cl = $('[data-clouds]');
   if (cl) cl.innerHTML = Array.from({length:n}, (_,i) => `<i class="cloud" style="left:${(i*97/n + Math.random()*6).toFixed(1)}%;top:${(Math.random()*40).toFixed(0)}%;width:${(340+Math.random()*360).toFixed(0)}px;height:${(80+Math.random()*70).toFixed(0)}px;--t:${(40+Math.random()*30).toFixed(0)}s;animation-delay:${-i*7}s;filter:blur(${c>.6?30:22}px)"></i>`).join('');
-  const sv = $('[data-suncv]'), sn = $('[data-sun]'); const dim = c > .85 ? .8 : c > .6 ? .9 : 1;
+  const sv = $('[data-suncv]'), sn = $('[data-sun]'); const dim = rain||snow ? .55 : c > .85 ? .8 : c > .6 ? .9 : 1;
+  if (cl) cl.style.filter = rain||snow||c > .8 ? 'brightness(.72) saturate(.5)' : '';
   if (sv) sv.style.opacity = dim; if (sn) sn.style.filter = dim < 1 ? `opacity(${dim})` : '';
 }
+
+/* pluie réaliste sur canvas : gouttes fines, longueurs et vitesses variées, densité selon l'intensité */
+let RAIN = 0;
+(function(){ const cv = $('[data-wx="rain"]'); if (!cv) return; const cx = cv.getContext('2d'); let drops = [], W = 0, H = 0;
+  function size(){ W = cv.width = cv.clientWidth; H = cv.height = cv.clientHeight; }
+  function mk(){ const z = Math.random(); return {x:Math.random()*W, y:Math.random()*H, z, l:8 + z*22, v:(9 + z*14)}; }
+  (function loop(){ requestAnimationFrame(loop); if (!RAIN || !sceneOn) { if (drops.length){ cx.clearRect(0,0,W,H); drops = []; } return; }
+    if (cv.clientWidth !== W || cv.clientHeight !== H) size();
+    const want = Math.round(W * H / 9000 * RAIN); while (drops.length < want) drops.push(mk()); drops.length = Math.min(drops.length, want);
+    cx.clearRect(0,0,W,H); cx.lineCap = 'round';
+    for (const d of drops){ d.y += d.v; d.x -= d.v * .12; if (d.y > H){ d.y = -d.l; d.x = Math.random()*W; }
+      cx.strokeStyle = `rgba(210,225,245,${(.08 + d.z*.22).toFixed(2)})`; cx.lineWidth = .6 + d.z*.7;
+      cx.beginPath(); cx.moveTo(d.x, d.y); cx.lineTo(d.x + d.l*.12, d.y - d.l); cx.stroke(); }
+  })();
+})();
 function loadWx(){
   let q = ''; try { q = new URLSearchParams((window.parent||window).location.search).get('meteo') || ''; } catch(e){}
   const F = {pluie:[63,90], bruine:[51,70], forte:[65,100], orage:[95,100], brouillard:[45,70], neige:[73,90], nuages:[3,95], soleil:[0,5]}[q];
