@@ -639,13 +639,13 @@ export function TVSky({
                   borderRadius: 18,
                   padding: "1.5vh 1.1vw",
                   minWidth: 0,
-                  background: cur ? "linear-gradient(135deg, rgba(240,214,137,.26), rgba(214,178,74,.10))" : "rgba(5,13,32,.45)",
-                  border: `1px solid ${cur ? "rgba(240,214,137,.55)" : "rgba(219,231,251,.12)"}`,
+                  background: cur ? "linear-gradient(135deg, rgba(240,214,137,.18), rgba(214,178,74,.06))" : "rgba(5,13,32,.22)",
+                  border: `1px solid ${cur ? "rgba(240,214,137,.45)" : "rgba(219,231,251,.22)"}`,
                   backdropFilter: "blur(6px)",
                   WebkitBackdropFilter: "blur(6px)",
                   transform: cur ? "translateY(-8px)" : "none",
                   transition: "background .5s, border-color .5s, transform .5s",
-                  boxShadow: cur ? "0 12px 40px rgba(0,0,0,.28)" : "none",
+                  boxShadow: cur ? "0 12px 40px rgba(0,0,0,.18)" : "none",
                 }}
               >
                 <span
