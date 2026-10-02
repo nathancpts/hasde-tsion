@@ -508,13 +508,13 @@ try { const L = window.parent && window.parent.__HT_LIVE__; if (L) {
 /* ===== Icônes ===== */
 const P = {
   star:'<circle cx="12" cy="12" r="10.5"/><path d="M12 4.5 18.5 16h-13zM12 19.5 5.5 8h13z"/>',
-  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  clock:'<path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5z"/><path d="M12 6v14"/><path d="M6.5 8.5h3M6.5 11h3M14.5 8.5h3M14.5 11h3"/>',
   arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
-  wine:'<path d="M8 3h8l-.5 6a3.5 3.5 0 0 1-7 0zM12 12.5V20M8.5 21h7"/>',
-  sukkah:'<path d="M3 9h18M4 9v11M20 9v11M3 20h18M5 9l2-4M9 9l2-4M13 9l2-4M17 9l2-4"/>',
-  scroll:'<rect x="4" y="3" width="4" height="18" rx="2"/><rect x="16" y="3" width="4" height="18" rx="2"/><path d="M8 6h8M8 18h8"/>',
-  kids:'<circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="8" r="2"/><path d="M4 20v-3a4 4 0 0 1 8 0v3M13 20v-2.5a3 3 0 0 1 6 0V20"/>',
-  hands:'<path d="M12 21V11M12 11 8 4.5 6 6l2.5 7M12 11l4-6.5L18 6l-2.5 7M6 13l-1.5 5 4 3h7l4-3-1.5-5"/>'
+  wine:'<path d="M7 3h10v4a5 5 0 0 1-10 0z"/><path d="M7.5 6h9"/><path d="M12 12v6M8 21h8M9.5 18h5"/>',
+  sukkah:'<path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M5 8.5V21M19 8.5V21M3 21h18"/><path d="M9.5 21v-6h5v6"/><path d="M6 5.5l1.5-2M11 5l1-2M16 5.5l1.5-2"/>',
+  scroll:'<path d="M6 2v20M18 2v20"/><rect x="4.5" y="5" width="3" height="14" rx="1.5"/><rect x="16.5" y="5" width="3" height="14" rx="1.5"/><path d="M7.5 7h9v10h-9"/><path d="M10 10h4M10 12.5h4M10 15h3"/>',
+  kids:'<circle cx="8" cy="6" r="2.2"/><circle cx="16" cy="8" r="1.8"/><path d="M8 8.5v6M5 11l3-1.5 3 1.5M6 20l2-5.5 2 5.5"/><path d="M16 10v4.5M13.5 12.5 16 11l2.5 1.5M14.5 20l1.5-5.5 1.5 5.5"/><path d="M19.5 3.5a1.5 1.8 0 1 1 0 .01M19.5 5.3 18.5 10"/>',
+  hands:'<path d="M12 20.5s-7-4.3-7-9.2A3.8 3.8 0 0 1 12 9a3.8 3.8 0 0 1 7 2.3c0 4.9-7 9.2-7 9.2z"/><path d="M12 6V2M9 4.5 7.5 2.5M15 4.5l1.5-2"/>'
 };
 const ic = (k,s=20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[k]}</svg>`;
 document.querySelectorAll('[data-ic]').forEach(e => e.outerHTML = ic(e.dataset.ic, +e.dataset.s || 20));
@@ -587,7 +587,7 @@ $('[data-events]').innerHTML = DATA.events.map(e =>
 $('[data-blocks]').innerHTML = DATA.blocs.map(([h,p]) => `<div class="reveal"><h3>${h}</h3><p>${p}</p></div>`).join('');
 $$('[data-hayom]').forEach(e => e.textContent = DATA.hayom);
 $('[data-acts]').innerHTML = DATA.acts.map(([i,h,p]) =>
-  `<a class="act" href="${HA}" target="_blank" rel="noopener" data-cursor><span class="i">${ic(i,24)}</span><span class="go">${ic('arrow',18)}</span><h3>${h}</h3><p>${p}</p></a>`).join('');
+  `<a class="act" href="${HA}" target="_blank" rel="noopener" data-cursor><span class="i">${ic(i,30)}</span><span class="go">${ic('arrow',18)}</span><h3>${h}</h3><p>${p}</p></a>`).join('');
 const iso = x => `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
 let hebShort; try { hebShort = new Intl.DateTimeFormat('fr-FR-u-ca-hebrew',{day:'numeric',month:'long'}); } catch(e){}
 const days = Array.from({length:7},(_,i) => { const x = new Date(); x.setDate(x.getDate()+i); return x; });
