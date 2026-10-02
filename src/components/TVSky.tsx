@@ -498,10 +498,6 @@ export function TVSky({
   const visible = evMin.filter((e) => e.min > m - 1).slice(0, 5);
   const curIdx = evMin.findIndex((e) => e.min >= m);
   const rf = (min: number) => clamp((min - D0) / (D1 - D0)) * 100;
-  const inLabel = (min: number) => {
-    const d = Math.max(0, Math.round(min - m));
-    return d >= 60 ? `dans ${Math.floor(d / 60)}h${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
-  };
   const hhmm = fmt(m);
   const ticks: { left: string; label: string }[] = [];
   for (let t = D0; t <= D1; t += 180) ticks.push({ left: `${rf(t)}%`, label: `${String(t / 60).padStart(2, "0")} h` });
@@ -636,33 +632,33 @@ export function TVSky({
                 key={`${e.label}-${e.value}`}
                 style={{
                   position: "relative",
-                  borderRadius: 14,
-                  padding: "1.5vh 1.1vw",
+                  borderRadius: 18,
+                  padding: "14px 16px 16px",
                   minWidth: 0,
-                  background: cur ? "rgba(219,231,251,.28)" : "rgba(5,13,32,.58)",
-                  border: `1px solid ${cur ? "rgba(240,214,137,.72)" : "rgba(219,231,251,.3)"}`,
-                  backdropFilter: "blur(7px) saturate(115%)",
-                  transform: cur ? "translateY(-8px)" : "none",
+                  background: cur ? "linear-gradient(135deg,rgba(240,214,137,.26),rgba(214,178,74,.1))" : "rgba(5,13,32,.45)",
+                  border: `1px solid ${cur ? "rgba(240,214,137,.55)" : "rgba(219,231,251,.18)"}`,
+                  backdropFilter: "blur(5px)",
+                  transform: cur ? "translateY(-10px)" : "none",
                   transition: "background .5s, border-color .5s, transform .5s",
-                  boxShadow: cur ? "inset 0 1px 0 rgba(255,255,255,.2), 0 12px 40px rgba(0,0,0,.14)" : "inset 0 1px 0 rgba(255,255,255,.08)",
+                  boxShadow: "none",
                 }}
               >
                 <span
                   className="flex items-center justify-between"
-                  style={{ fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase", color: "#9FB0CF" }}
+                  style={{ fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase", color: cur ? "#F0D689" : "#9FB0CF" }}
                 >
                   {kindOf(e.label)}
                     {cur && (
-                    <span style={{ fontSize: "0.9vh", letterSpacing: "0.08em", padding: "0.3vh 0.6vw", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "none", fontWeight: 700, whiteSpace: "nowrap" }}>
-                      {inLabel(e.min)}
+                    <span style={{ fontSize: "0.9vh", letterSpacing: "0.14em", padding: "3px 7px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "lowercase", fontWeight: 700, whiteSpace: "nowrap" }}>
+                      prochain
                     </span>
                   )}
                 </span>
-                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "0.8vh", gap: "0.5vw", fontFamily: MONT, fontSize: "1.7vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap" }}>
-                  <span style={{ fontSize: e.label.length > 15 ? "1.45vh" : "inherit" }}>{e.label}</span>
+                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "8px", gap: "0.5vw", fontFamily: MONT, fontSize: "1.7vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{e.label}</span>
                   {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.5vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
-                <div style={{ marginTop: "0.5vh", fontFamily: MONT, fontWeight: 800, fontSize: "2.8vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: cur ? "#F0D689" : "#F3F6FC" }}>
+                <div style={{ marginTop: "6px", fontFamily: MONT, fontWeight: 800, fontSize: "2.8vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: "#F3F6FC" }}>
                   {e.value}
                 </div>
               </div>
