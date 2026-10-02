@@ -635,10 +635,10 @@ export function TVSky({
                   borderRadius: 18,
                   padding: "14px 16px 16px",
                   minWidth: 0,
-                  background: cur ? "linear-gradient(135deg,rgba(240,214,137,.26),rgba(214,178,74,.1))" : "rgba(5,13,32,.45)",
-                  border: `1px solid ${cur ? "rgba(240,214,137,.55)" : "rgba(219,231,251,.18)"}`,
-                  backdropFilter: "blur(5px)",
-                  transform: cur ? "translateY(-10px)" : "none",
+                  background: cur ? "linear-gradient(135deg, rgba(80,82,78,.82), rgba(53,61,70,.9))" : "rgba(5,13,32,.82)",
+                  border: `1px solid ${cur ? "rgba(240,214,137,.62)" : "rgba(219,231,251,.14)"}`,
+                  backdropFilter: "blur(3px)",
+                  transform: cur ? "translateY(-8px)" : "none",
                   transition: "background .5s, border-color .5s, transform .5s",
                   boxShadow: "none",
                 }}
@@ -649,8 +649,8 @@ export function TVSky({
                 >
                   {kindOf(e.label)}
                     {cur && (
-                    <span style={{ fontSize: "0.9vh", letterSpacing: "0.14em", padding: "3px 7px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "lowercase", fontWeight: 700, whiteSpace: "nowrap" }}>
-                      prochain
+                    <span style={{ fontSize: "0.82vh", letterSpacing: "0.08em", padding: "3px 8px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "uppercase", fontWeight: 800, whiteSpace: "nowrap" }}>
+                      Prochain
                     </span>
                   )}
                 </span>
