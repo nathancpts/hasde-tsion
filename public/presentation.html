@@ -234,6 +234,18 @@ svg{flex-shrink:0}
 .chant-row .play{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(240,214,137,.45);color:var(--gold-soft);transition:background .3s,color .3s}
 .chant-row:hover .play{background:var(--gold-soft);color:var(--night)}
 
+/* ---------- le kotel en direct ---------- */
+.kotel{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center}
+.kotel-copy h2{font-size:clamp(2rem,4.4vw,4rem);font-weight:800;letter-spacing:-.03em;margin-top:18px}
+.kotel-copy p{margin:18px 0 0;color:var(--ice);opacity:.86;line-height:1.7;max-width:56ch}
+.kotel-copy h3{font-family:var(--f-display);font-size:.72rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);margin:34px 0 0}
+.kotel-live{position:relative;border-radius:28px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,rgba(90,154,230,.14),rgba(10,26,61,.55));aspect-ratio:16/10;box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
+.kotel-live video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0b1c3a}
+.kotel-live .badge{position:absolute;left:16px;top:16px;z-index:3;display:inline-flex;align-items:center;gap:9px;font-family:var(--f-display);font-size:.7rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:rgba(5,13,32,.55);border:1px solid rgba(240,214,137,.4);border-radius:999px;padding:9px 16px;backdrop-filter:blur(10px)}
+.kotel-live .badge i{width:8px;height:8px;border-radius:50%;background:#ff4d4d;animation:pulse 1.8s infinite}
+.kotel-live .status{position:absolute;inset:0;z-index:2;display:grid;place-items:center;font-family:var(--f-display);color:var(--muted);font-size:.85rem;letter-spacing:.1em;background:#0b1c3a}
+.kotel-live .shield{position:absolute;inset:0;z-index:4;touch-action:none}
+
 /* ---------- étude ---------- */
 .study{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,5vw,80px)}
 .parasha-title{font-size:clamp(2.6rem,6vw,6rem);font-weight:900;letter-spacing:-.04em}
