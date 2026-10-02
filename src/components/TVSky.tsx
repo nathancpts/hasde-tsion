@@ -493,12 +493,12 @@ export function TVSky({
 
   /* --- rendu --- */
   const evMin = useMemo(() => events.map((e) => ({ ...e, min: toM(e.value) })), [events]);
-  const visible = evMin.filter((e) => e.min > m - 1).slice(0, 6);
+  const visible = evMin.filter((e) => e.min > m - 1).slice(0, 5);
   const curIdx = evMin.findIndex((e) => e.min >= m);
   const rf = (min: number) => clamp((min - D0) / (D1 - D0)) * 100;
   const inLabel = (min: number) => {
-    const d = Math.round(min - m);
-    return d >= 60 ? `dans ${Math.floor(d / 60)} h ${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
+    const d = Math.max(0, Math.round(min - m));
+    return d >= 60 ? `dans ${Math.floor(d / 60)}h${String(d % 60).padStart(2, "0")}` : `dans ${d} min`;
   };
   const hhmm = fmt(m);
   const ticks: { left: string; label: string }[] = [];
@@ -660,17 +660,17 @@ export function TVSky({
                   style={{ fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase", color: "#9FB0CF" }}
                 >
                   {kindOf(e.label)}
-                  {cur && (
-                    <span style={{ fontSize: "0.95vh", letterSpacing: "0.1em", padding: "0.35vh 0.7vw", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "none", fontWeight: 700 }}>
+                    {cur && (
+                    <span style={{ fontSize: "0.9vh", letterSpacing: "0.08em", padding: "0.3vh 0.6vw", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "none", fontWeight: 700, whiteSpace: "nowrap" }}>
                       {inLabel(e.min)}
                     </span>
                   )}
                 </span>
-                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "0.8vh", gap: "0.6vw", fontFamily: MONT, fontSize: "2vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
+                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "0.8vh", gap: "0.5vw", fontFamily: MONT, fontSize: "1.7vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{e.label}</span>
-                  {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.8vh", fontWeight: 500 }}>{he}</span>}
+                  {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.5vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
-                <div style={{ marginTop: "0.5vh", fontFamily: MONT, fontWeight: 800, fontSize: "3.2vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: cur ? "#F0D689" : "#F3F6FC" }}>
+                <div style={{ marginTop: "0.5vh", fontFamily: MONT, fontWeight: 800, fontSize: "2.8vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: cur ? "#F0D689" : "#F3F6FC" }}>
                   {e.value}
                 </div>
               </div>
