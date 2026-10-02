@@ -101,6 +101,7 @@ export function TVSky({
   greeting,
   dateFr,
   dateHe,
+  contentRight = "0px",
 }: {
   logoUrl?: string;
   sunrise: string;
@@ -109,6 +110,7 @@ export function TVSky({
   greeting?: [string, string] | null;
   dateFr?: string;
   dateHe?: string;
+  contentRight?: string;
 }) {
   const SR = useMemo(() => toM(sunrise || "07:43"), [sunrise]);
   const SS = useMemo(() => toM(sunset || "19:32"), [sunset]);
@@ -307,7 +309,7 @@ export function TVSky({
     const measure = () => {
       const w = el.clientWidth, h = Math.max(160, el.clientHeight);
       if (w < 10 || h < 10) return;
-      G.current = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.86 };
+      G.current = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.62 };
       setArc({ w, h });
       const scv = suncvRef.current;
       if (scv) {
@@ -581,7 +583,7 @@ export function TVSky({
       </div>
 
       {/* en-tête : logo, horloge, phase, météo */}
-      <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between" style={{ padding: "2.6vh 2vw 0", textShadow: "0 2px 18px rgba(5,13,32,.55)" }}>
+      <div className="absolute left-0 top-0 z-10 flex items-start justify-between" style={{ right: contentRight, padding: "2.6vh 2vw 0", textShadow: "0 2px 18px rgba(5,13,32,.55)" }}>
         <div>
           {logoUrl && (
             <div className="flex items-center" style={{ gap: "0.8vw" }}>
@@ -630,7 +632,7 @@ export function TVSky({
       </div>
 
       {/* cartes horaires — uniquement les horaires à venir */}
-      <div className="absolute inset-x-0 bottom-0 z-10" style={{ padding: "0 2vw 2.6vh" }}>
+      <div className="absolute left-0 bottom-0 z-10" style={{ right: contentRight, padding: "0 2vw 2.6vh" }}>
         <div
           className="grid"
           style={{ gridTemplateColumns: `repeat(${Math.max(1, cards.length)}, minmax(0,1fr))`, gap: "10px" }}
