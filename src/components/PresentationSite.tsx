@@ -42,7 +42,7 @@ export function PresentationSite() {
     <div style={{ position: "fixed", inset: 0, background: "#050d20", zIndex: 40 }}>
       {ready && (
         <iframe
-          src="/presentation.html"
+          src={"/presentation.html" + (typeof window !== "undefined" ? window.location.hash : "")}
           title="Hasdé Tsion"
           style={{ border: 0, width: "100%", height: "100%", display: "block" }}
         />
