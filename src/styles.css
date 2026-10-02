@@ -708,9 +708,9 @@ select:focus-visible {
 .chants-page .chant-lyr { color: var(--chant-ice); border-color: var(--chant-line); }
 
 /* ===== TV — scène du ciel refondue ===== */
-.tv-clock { display: flex; margin-top: 1vh; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 900; font-size: 9vh; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tv-clock { text-shadow: none; display: flex; margin-top: 1vh; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 900; font-size: 9vh; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .tv-clock .d { display: inline-block; overflow: hidden; height: 1.06em; }
-.tv-clock .d span { display: block; height: 1.06em; line-height: 1.06; background: linear-gradient(180deg, #ffffff 0%, #e9f0fb 60%, #c9d8f3 100%); -webkit-background-clip: text; background-clip: text; color: transparent; animation: tv-digit 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.tv-clock .d span { display: block; height: 1.06em; line-height: 1.06; color: #ffffff; text-shadow: none; animation: tv-digit 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
 .tv-clock .sep { color: #f0d689; padding: 0 0.06em; }
 @keyframes tv-digit { from { transform: translateY(105%); } to { transform: none; } }
 .tv-star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: tv-twinkle 3s ease-in-out infinite; }
@@ -723,3 +723,4 @@ select:focus-visible {
 .tv-mk.cur { transform: scale(1.7); box-shadow: 0 0 0 6px rgba(240, 214, 137, 0.18); }
 .tv-now { position: absolute; top: -44px; height: 38px; width: 1px; background: linear-gradient(#ff8a5b, rgba(255, 138, 91, 0)); transform: translateX(-50%); opacity: 0; transition: opacity 0.4s; }
 .tv-now b { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-family: 'Montserrat', system-ui, sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #ffb08f; white-space: nowrap; }
+.tv-clock, .tv-clock * { text-shadow: none !important; }

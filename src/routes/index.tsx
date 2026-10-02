@@ -2058,10 +2058,10 @@ function PlanningTV() {
   const BODY_FONT_LOCAL = "'Inter', system-ui, sans-serif";
   const GOLD_LOCAL = "#D4AF37";
   const GLASS: React.CSSProperties = {
-    background: "linear-gradient(160deg, rgba(90,154,230,.16), rgba(10,26,61,.55))",
-    border: "1px solid rgba(219,231,251,.14)",
+    background: "rgba(5,13,32,.30)",
+    border: "1px solid rgba(219,231,251,.22)",
     borderRadius: "24px",
-    backdropFilter: "blur(16px)",
+    backdropFilter: "blur(6px)",
     color: "#f3f6fc",
   };
   const LABEL: React.CSSProperties = {
@@ -2082,11 +2082,9 @@ function PlanningTV() {
       className="tv-mode relative isolate h-screen w-screen overflow-hidden"
       style={{ fontFamily: BODY_FONT_LOCAL, background: "linear-gradient(160deg,#0a1a3d 0%,#071230 55%,#050d20 100%)" }}
     >
-      <div className="relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
-
-        {/* ─── GAUCHE — la journée : ciel, soleil/lune, météo, horaires en bas ─── */}
-        <section className="relative min-h-0 min-w-0 overflow-hidden">
+      <div className="absolute inset-0 z-0">
           <TVSky
+            contentRight="37.6%"
             logoUrl={logo}
             sunrise={tvSunrise}
             sunset={tvSunset}
@@ -2095,11 +2093,14 @@ function PlanningTV() {
             dateFr={dateStr}
             dateHe={dateHeStr}
           />
+      </div>
+      <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
+        <section className="relative min-h-0 min-w-0">
           <button
             type="button"
             onClick={toggleFs}
             aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
-            className="absolute bottom-[2vh] right-[1.2vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
+            className="pointer-events-auto absolute bottom-[2vh] right-[1.2vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
             style={{
               width: "3.4vh", height: "3.4vh",
               background: "rgba(5,13,32,.45)", border: "1px solid rgba(219,231,251,.3)",
@@ -2116,13 +2117,10 @@ function PlanningTV() {
 
         {/* ─── DROITE — live, parasha, communauté, Hayom Yom ─── */}
         <aside
-          className="relative z-20 flex min-h-0 flex-col"
+          className="pointer-events-auto relative z-20 flex min-h-0 flex-col"
           style={{
             padding: "2.6vh 1.4vw 2.6vh 1vw",
             gap: "1.6vh",
-            background: "linear-gradient(180deg, rgba(5,13,32,.30), rgba(5,13,32,.60))",
-            borderLeft: "1px solid rgba(219,231,251,.10)",
-            boxShadow: "inset 40px 0 80px -60px rgba(0,0,0,.8)",
           }}
         >
           {/* LIVE — le Kotel */}
@@ -2197,11 +2195,11 @@ function PlanningTV() {
             <div className="relative mt-[1vh] min-h-0 flex-1 overflow-hidden">
               <div
                 className="pointer-events-none absolute inset-x-0 top-0 z-10"
-                style={{ height: "2.4vh", background: "linear-gradient(rgba(10,22,50,1), rgba(10,22,50,0))" }}
+                style={{ height: "2.4vh", background: "transparent" }}
               />
               <div
                 className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
-                style={{ height: "2.4vh", background: "linear-gradient(rgba(10,22,50,0), rgba(10,22,50,1))" }}
+                style={{ height: "2.4vh", background: "transparent" }}
               />
               <div className="tv-marquee-track">
                 {pc.intro && (
