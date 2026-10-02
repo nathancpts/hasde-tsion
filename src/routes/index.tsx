@@ -1933,7 +1933,7 @@ function PlanningTV() {
     (dow === 6 && (exitMin == null || nowMin < exitMin));
   const pc = useParashaContent();
   const hayomYom = getHayomYom(now);
-  const spotlight = false;
+  const [liveOpen, setLiveOpen] = useState(false);
 
   // Le même lecteur reste monté pendant tout le cycle pour éviter un écran noir au retour.
 
@@ -2123,57 +2123,35 @@ function PlanningTV() {
             gap: "1.6vh",
           }}
         >
-          {/* LIVE — le Kotel */}
-          <div className="shrink-0">
-            <LivePortalBox big={!isShabbatNow}>
-              {isShabbatNow ? (
-                <>
-                  <img
-                    src={kotelShabbat}
-                    alt="Kotel — Shabbat Shalom"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    width={1920}
-                    height={1088}
-                  />
-                  <div
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center"
-                    style={{ background: "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)" }}
-                  >
-                    <p
-                      className="font-hebrew leading-none"
-                      dir="rtl"
-                      style={{ fontSize: "5.2vh", color: GOLD_LOCAL, fontWeight: 700, textShadow: "0 4px 24px rgba(0,0,0,0.55)", letterSpacing: "0.02em" }}
-                    >
-                      שבת שלום
-                    </p>
-                    <p
-                      className="uppercase mt-[1vh]"
-                      style={{ fontSize: "1.2vh", letterSpacing: "0.5em", color: "rgba(255,255,255,0.9)", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}
-                    >
-                      Shabbat Shalom
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0"
-                    style={{ overflow: "hidden", borderRadius: "18px", clipPath: "inset(0 round 18px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
-                  >
-                    <KotelLive className="absolute inset-0 w-full h-full" radius={spotlight ? 22 : 18} />
-                  </div>
-                  <div
-                    className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full"
-                    style={{ background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", backdropFilter: "blur(8px)", boxShadow: "0 4px 14px rgba(10,17,40,0.35)" }}
-                  >
-                    <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-                    <span className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC" }}>
-                      Live · Le Kotel
-                    </span>
-                  </div>
-                </>
-              )}
-            </LivePortalBox>
+          {/* LIVE — bouton pour afficher le Kotel en grand */}
+          <div className="shrink-0 flex items-center" style={{ ...GLASS, gap: "1vw", padding: "1.7vh 1.4vw" }}>
+            <span className="inline-block rounded-full shrink-0" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+            <div className="min-w-0 flex-1">
+              <p className="uppercase truncate" style={{ fontSize: "1.3vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC", fontFamily: HEADING_FONT_LOCAL }}>
+                Live · Le Kotel
+              </p>
+              <p className="truncate" style={{ fontSize: "1.15vh", color: "#9FB0CF", marginTop: "0.3vh" }}>
+                Le Mur des Lamentations, en direct de Jérusalem
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setLiveOpen(true)}
+              className="shrink-0 rounded-full transition-all duration-300 hover:brightness-110"
+              style={{
+                padding: "1.1vh 1.5vw",
+                fontSize: "1.25vh",
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                color: "#0A1128",
+                background: `linear-gradient(135deg, ${GOLD_LOCAL} 0%, #E8C97A 100%)`,
+                border: "1px solid rgba(255,255,255,0.35)",
+                boxShadow: "0 4px 18px rgba(212,175,55,0.35)",
+                fontFamily: HEADING_FONT_LOCAL,
+              }}
+            >
+              AFFICHER EN GRAND
+            </button>
           </div>
 
           {/* PARASHA — défilement doux */}
