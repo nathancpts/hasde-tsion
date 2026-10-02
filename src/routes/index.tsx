@@ -2334,66 +2334,6 @@ function PlanningTV() {
 }
 
 
-function LivePortalBox({ big: allowed, children }: { big: boolean; children: React.ReactNode }) {
-  const slotRef = useRef<HTMLDivElement>(null);
-  const [rect, setRect] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
-  const [vp, setVp] = useState({ w: 1920, h: 1080 });
-  const [open, setOpen] = useState(false);
-  const big = open && allowed;
-  useEffect(() => {
-    const measure = () => {
-      const el = slotRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      setRect({ l: r.left, t: r.top, w: r.width, h: r.height });
-      setVp({ w: window.innerWidth, h: window.innerHeight });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (slotRef.current) ro.observe(slotRef.current);
-    window.addEventListener("resize", measure);
-    const id = window.setInterval(measure, 2000);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); window.clearInterval(id); };
-  }, []);
-  const bw = Math.min(vp.w * 0.86, vp.h * 0.86 * (16 / 9));
-  const bh = bw * (9 / 16);
-  const box = big
-    ? { l: (vp.w - bw) / 2, t: (vp.h - bh) / 2, w: bw, h: bh }
-    : rect;
-  return (
-    <>
-      <div ref={slotRef} className="relative w-full shrink-0" style={{ aspectRatio: "16 / 9" }} />
-      {box && rect && rect.w > 0 && rect.h > 0 && typeof document !== "undefined" && createPortal(
-        <>
-          <div
-            aria-hidden="true"
-            onClick={() => setOpen(false)}
-            style={{
-              position: "fixed", inset: 0, zIndex: 9000,
-              background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)",
-              opacity: big ? 1 : 0, pointerEvents: big ? "auto" : "none", transition: "opacity 700ms ease",
-            }}
-          />
-          <div
-            onClick={() => setOpen((v) => !v)}
-            style={{
-              position: "fixed", left: box.l, top: box.t, width: box.w, height: box.h,
-              zIndex: 9001, overflow: "hidden", cursor: "pointer",
-              borderRadius: big ? 22 : 16,
-              border: big ? "1px solid rgba(212,175,55,0.55)" : "1px solid transparent",
-              boxShadow: big ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0,0,0,0.05)",
-              background: big ? "#0A1128" : "#FFFFFF",
-              transition: "left 700ms ease, top 700ms ease, width 700ms ease, height 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
-            }}
-          >
-            {children}
-          </div>
-        </>,
-        document.body,
-      )}
-    </>
-  );
-}
 
 function ZmanimRowTV({
   label,
