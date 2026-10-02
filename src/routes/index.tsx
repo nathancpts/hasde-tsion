@@ -2154,6 +2154,40 @@ function PlanningTV() {
             </button>
           </div>
 
+          {/* COMMUNAUTÉ — donateurs de la Séouda */}
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "22%", padding: "1.5vh 1.4vw" }}>
+            <p className="uppercase" style={LABEL}>
+              Communauté
+            </p>
+            <h3 className="mt-[0.4vh]" style={{ fontSize: "1.7vh", fontWeight: 600, color: "#DBE7FB" }}>
+              La Séouda est offerte par
+            </h3>
+            <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
+              {DONATIONS_REPAS.length > 0 ? (
+                DONATIONS_REPAS.map((d, i) => (
+                  <div
+                    key={`tvdon-${i}`}
+                    className="flex items-baseline justify-between gap-[1vw]"
+                    style={{ padding: "0.4vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
+                  >
+                    <span className="min-w-0 truncate" style={{ fontSize: "1.6vh", fontWeight: 600, color: "#F3F6FC" }}>
+                      {d.donateur}
+                    </span>
+                    {d.dedicace && (
+                      <span className="shrink-0 truncate" style={{ fontSize: "1.25vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
+                        {d.dedicace}
+                      </span>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p style={{ padding: "0.4vh 0", fontSize: "1.4vh", fontStyle: "italic", color: "#9FB0CF" }}>
+                  Aucune donation pour le moment.
+                </p>
+              )}
+            </div>
+          </article>
+
           {/* PARASHA — défilement doux */}
           <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
             <p className="uppercase" style={LABEL}>
@@ -2213,40 +2247,6 @@ function PlanningTV() {
                   </div>
                 ))}
               </div>
-            </div>
-          </article>
-
-          {/* COMMUNAUTÉ — donateurs de la Séouda */}
-          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "22%", padding: "1.5vh 1.4vw" }}>
-            <p className="uppercase" style={LABEL}>
-              Communauté
-            </p>
-            <h3 className="mt-[0.4vh]" style={{ fontSize: "1.7vh", fontWeight: 600, color: "#DBE7FB" }}>
-              La Séouda est offerte par
-            </h3>
-            <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
-              {DONATIONS_REPAS.length > 0 ? (
-                DONATIONS_REPAS.map((d, i) => (
-                  <div
-                    key={`tvdon-${i}`}
-                    className="flex items-baseline justify-between gap-[1vw]"
-                    style={{ padding: "0.4vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
-                  >
-                    <span className="min-w-0 truncate" style={{ fontSize: "1.6vh", fontWeight: 600, color: "#F3F6FC" }}>
-                      {d.donateur}
-                    </span>
-                    {d.dedicace && (
-                      <span className="shrink-0 truncate" style={{ fontSize: "1.25vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
-                        {d.dedicace}
-                      </span>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p style={{ padding: "0.4vh 0", fontSize: "1.4vh", fontStyle: "italic", color: "#9FB0CF" }}>
-                  Aucune donation pour le moment.
-                </p>
-              )}
             </div>
           </article>
 

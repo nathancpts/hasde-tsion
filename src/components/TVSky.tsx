@@ -527,8 +527,8 @@ export function TVSky({
         <canvas ref={flashRef} className="absolute inset-0 h-full w-full" style={{ display: wx?.storm ? "" : "none" }} />
       </div>
 
-      {/* zone du soleil */}
-      <div ref={arcRef} className="absolute inset-0">
+      {/* zone du soleil — sur TV, limitée à la zone gauche pour ne pas passer sous les cartes de droite */}
+      <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
         <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="tvground" x1="0" y1="0" x2="0" y2="1">
