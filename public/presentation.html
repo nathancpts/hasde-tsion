@@ -892,7 +892,7 @@ function choreo(){
   // navigation : cache au scroll descendant, fond flouté, lien actif
   const nav = $('.nav'); let last = 0;
   const onS = y => { nav.classList.toggle('solid', y > 40); nav.classList.toggle('hide', y > last && y > 300); last = y;
-    $$('.links a').forEach(a => { const s = $(a.getAttribute('href')); if (!s) return; const r = s.getBoundingClientRect(); a.classList.toggle('on', r.top < innerHeight*.4 && r.bottom > innerHeight*.4); }); };
+    $$('.links a').forEach(a => { const href = a.getAttribute('href'); if (!href || !href.startsWith('#')) return; const s = $(href); if (!s) return; const r = s.getBoundingClientRect(); a.classList.toggle('on', r.top < innerHeight*.4 && r.bottom > innerHeight*.4); }); };
   if (lenis) lenis.on('scroll', e => onS(e.scroll)); else addEventListener('scroll', () => onS(scrollY), {passive:true});
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
 }
