@@ -138,7 +138,7 @@ svg{flex-shrink:0}
 .now-btn i{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.8s infinite}
 .arc-wrap{flex:1;position:relative;min-height:0;margin-top:10px}
 .arc-wrap svg.scene{position:absolute;left:0;top:0;width:100%;overflow:visible;display:block}
-.sky-above{position:absolute;left:-360px;right:-360px;top:-420px;overflow:hidden;pointer-events:none}
+.sky-above{position:absolute;z-index:1;left:-360px;right:-360px;top:-420px;overflow:hidden;pointer-events:none}
 .sky-above > *{position:absolute;left:360px;top:420px}
 .clouds{position:absolute;inset:0;--cr:255;--cg:255;--cb:255;--ca:.4;will-change:transform}
 .cloud{position:absolute;border-radius:50%;filter:blur(22px);will-change:transform;
@@ -844,7 +844,7 @@ function applyWx(code, cover){
   const rain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code), heavy = [65,67,82,95,96,99].includes(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
   const c = Math.max(cover/100, rain||snow ? .8 : 0, fog ? .6 : 0);
-  on('grey', (c > .5 ? (c-.5)*1.4 : 0).toFixed(2)); on('fog', fog ? 1 : 0); on('rain', rain ? (heavy ? 1 : .6) : 0); on('snow', snow ? 1 : 0);
+  on('grey', (c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); on('rain', rain ? (heavy ? 1 : .6) : 0); on('snow', snow ? 1 : 0);
   const fl = $('[data-wx="flash"]'); if (fl) fl.style.display = storm ? '' : 'none';
   const n = Math.round(4 + c*14), cl = $('[data-clouds]');
   if (cl) cl.innerHTML = Array.from({length:n}, (_,i) => `<i class="cloud" style="left:${(i*97/n + Math.random()*6).toFixed(1)}%;top:${(Math.random()*40).toFixed(0)}%;width:${(340+Math.random()*360).toFixed(0)}px;height:${(80+Math.random()*70).toFixed(0)}px;--t:${(40+Math.random()*30).toFixed(0)}s;animation-delay:${-i*7}s;filter:blur(${c>.6?30:22}px)"></i>`).join('');
