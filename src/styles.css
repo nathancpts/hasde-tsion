@@ -651,7 +651,8 @@ select:focus-visible {
 
 /* Page Chants — même direction « Nuit bleue » que l'accueil */
 .chants-page { position: relative; isolation: isolate; background: transparent; font-family: "Inter", system-ui, sans-serif; }
-.chants-page > section, .chants-page > [role="dialog"] { position: relative; z-index: 2; }
+.chants-page > section:not(.sticky) { position: relative; z-index: 2; }
+.chants-page > section.sticky { z-index: 20; }
 .chants-page > [role="dialog"] { position: fixed; z-index: 60; }
 .site-bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .site-grain { position: fixed; inset: -50%; z-index: 1; pointer-events: none; opacity: .07;
