@@ -171,11 +171,12 @@ export function ChantsPage() {
                   {song.occasions.map((item) => <span key={item} className="border border-chant-line px-2 py-1 text-[10px] font-semibold text-chant-ice">{item}</span>)}
                   <span className="border border-chant-line px-2 py-1 text-[10px] font-semibold text-chant-muted">{song.rite}</span>
                 </div>
-                <div className="mt-auto grid grid-cols-[minmax(0,1fr)_auto] gap-2 pt-6">
+                <div className="mt-auto flex flex-wrap gap-2 pt-6">
                   <Button onClick={() => openSong(song)} className="bg-chant-gold text-chant-night"><Play /> Karaoké</Button>
-                  <Button asChild variant="ghost" size="icon" className="border border-chant-line text-chant-ink">
-                    <a href={song.youtubeUrl || song.spotifyUrl} target="_blank" rel="noopener noreferrer" aria-label={`Écouter ${song.title}`}><ExternalLink /></a>
-                  </Button>
+                  {song.youtubeUrl && <a href={song.youtubeUrl} target="_blank" rel="noopener noreferrer" className="chant-svc chant-yt">YouTube</a>}
+                  {song.spotifyUrl && <a href={song.spotifyUrl} target="_blank" rel="noopener noreferrer" className="chant-svc chant-sp">Spotify</a>}
+                  {song.appleMusicUrl && <a href={song.appleMusicUrl} target="_blank" rel="noopener noreferrer" className="chant-svc chant-am">Apple Music</a>}
+                  <button type="button" onClick={() => openSong(song)} className="chant-svc chant-lyr"><BookOpen className="size-3.5" /> Paroles</button>
                 </div>
               </article>
             ))}
