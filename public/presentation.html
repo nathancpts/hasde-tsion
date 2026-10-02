@@ -177,6 +177,22 @@ svg{flex-shrink:0}
 .ev .he{color:var(--muted);font-size:1rem}
 .ev .t{font-family:var(--f-display);font-weight:800;font-size:1.7rem;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:6px}
 .ev .tag{display:inline-block;margin-top:10px;font-family:var(--f-display);font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:999px;color:var(--muted);border:1px solid var(--line)}
+.wet .ev{background:linear-gradient(180deg,rgba(150,180,220,.10),rgba(5,13,32,.58));border-color:rgba(170,200,240,.28);box-shadow:inset 0 1px 0 rgba(220,235,255,.25)}
+.wet .ev::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;opacity:.9;
+background:
+radial-gradient(3px 4px at 12% 22%,rgba(230,240,255,.75),rgba(230,240,255,.15) 60%,transparent 70%),
+radial-gradient(2px 3px at 34% 70%,rgba(230,240,255,.6),transparent 70%),
+radial-gradient(4px 5px at 58% 30%,rgba(230,240,255,.7),rgba(230,240,255,.12) 60%,transparent 70%),
+radial-gradient(2px 2px at 76% 62%,rgba(230,240,255,.6),transparent 70%),
+radial-gradient(3px 4px at 90% 18%,rgba(230,240,255,.65),transparent 70%),
+radial-gradient(2px 3px at 46% 88%,rgba(230,240,255,.5),transparent 70%),
+linear-gradient(180deg,transparent 0,rgba(220,235,255,.55) 45%,rgba(230,240,255,.9) 50%,transparent 52%) 22% 0/2px 26px no-repeat,
+linear-gradient(180deg,transparent 0,rgba(220,235,255,.55) 45%,rgba(230,240,255,.9) 50%,transparent 52%) 68% 0/2px 22px no-repeat,
+linear-gradient(180deg,transparent 0,rgba(220,235,255,.5) 45%,rgba(230,240,255,.85) 50%,transparent 52%) 86% 0/2px 18px no-repeat;
+animation:drip 5.5s linear infinite;animation-delay:calc(var(--i,0)*-1.3s)}
+@keyframes drip{0%{background-position:12% 22%,34% 70%,58% 30%,76% 62%,90% 18%,46% 88%,22% -30px,68% -60px,86% -90px}
+100%{background-position:12% 22%,34% 70%,58% 30%,76% 62%,90% 18%,46% 88%,22% 220px,68% 200px,86% 230px}}
+@media (prefers-reduced-motion:reduce){.wet .ev::before{animation:none}}
 .ev.past{opacity:.38}
 .ev.cur{background:linear-gradient(135deg,rgba(240,214,137,.26),rgba(214,178,74,.1));border-color:rgba(240,214,137,.55);transform:translateY(-10px)}
 .ev.cur .k{color:var(--gold-soft)}.ev.cur .nx{display:inline-block}
@@ -860,6 +876,7 @@ function applyWx(code, cover){ showWxNow(code);
   const snow = [71,73,75,77,85,86].includes(code), fog = [45,48].includes(code), storm = code >= 95;
   const c = Math.max(cover/100, rain||snow ? .8 : 0, fog ? .6 : 0);
   on('grey', (rain||snow ? .75 : c > .5 ? (c-.5)*.9 : 0).toFixed(2)); on('fog', fog ? 1 : 0); const light = [51,53,56,61,80].includes(code); on('rain', rain ? (heavy ? 1 : light ? .35 : .65) : 0); RAIN = rain ? (heavy ? 1 : light ? .3 : .6) : 0; on('rain', RAIN ? 1 : 0); on('snow', snow ? 1 : 0);
+  const evb = $('[data-events]'); if (evb) evb.classList.toggle('wet', rain);
   const fl = $('[data-wx="flash"]'); if (fl) fl.style.display = storm ? '' : 'none';
   const n = Math.round(4 + c*14 + (rain||snow ? 8 : 0)), cl = $('[data-clouds]');
   if (cl) cl.innerHTML = Array.from({length:n}, (_,i) => `<i class="cloud" style="left:${(i*97/n + Math.random()*6).toFixed(1)}%;top:${(Math.random()*40).toFixed(0)}%;width:${(340+Math.random()*360).toFixed(0)}px;height:${(80+Math.random()*70).toFixed(0)}px;--t:${(40+Math.random()*30).toFixed(0)}s;animation-delay:${-i*7}s;filter:blur(${c>.6?30:22}px)"></i>`).join('');
