@@ -708,9 +708,9 @@ select:focus-visible {
 .chants-page .chant-lyr { color: var(--chant-ice); border-color: var(--chant-line); }
 
 /* ===== TV — scène du ciel refondue ===== */
-.tv-clock { display: flex; margin-top: 1vh; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 900; font-size: 9vh; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tv-clock { filter: drop-shadow(0 4px 18px rgba(5,13,32,.3)); text-shadow: none; display: flex; margin-top: 1vh; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 900; font-size: 9vh; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .tv-clock .d { display: inline-block; overflow: hidden; height: 1.06em; }
-.tv-clock .d span { display: block; height: 1.06em; line-height: 1.06; color: #ffffff; text-shadow: 0 4px 30px rgba(5,13,32,.35); animation: tv-digit 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.tv-clock .d span { display: block; height: 1.06em; line-height: 1.06; color: #ffffff; text-shadow: none; animation: tv-digit 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
 .tv-clock .sep { color: #f0d689; padding: 0 0.06em; }
 @keyframes tv-digit { from { transform: translateY(105%); } to { transform: none; } }
 .tv-star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: tv-twinkle 3s ease-in-out infinite; }
