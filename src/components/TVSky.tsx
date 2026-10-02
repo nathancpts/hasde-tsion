@@ -636,16 +636,15 @@ export function TVSky({
                 key={`${e.label}-${e.value}`}
                 style={{
                   position: "relative",
-                  borderRadius: 18,
+                  borderRadius: 14,
                   padding: "1.5vh 1.1vw",
                   minWidth: 0,
-                  background: cur ? "linear-gradient(135deg, rgba(240,214,137,.22), rgba(214,178,74,.10))" : "rgba(5,13,32,.52)",
-                  border: `1px solid ${cur ? "rgba(240,214,137,.5)" : "rgba(219,231,251,.26)"}`,
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
+                  background: cur ? "rgba(219,231,251,.28)" : "rgba(5,13,32,.58)",
+                  border: `1px solid ${cur ? "rgba(240,214,137,.72)" : "rgba(219,231,251,.3)"}`,
+                  backdropFilter: "blur(7px) saturate(115%)",
                   transform: cur ? "translateY(-8px)" : "none",
                   transition: "background .5s, border-color .5s, transform .5s",
-                  boxShadow: cur ? "0 12px 40px rgba(0,0,0,.18)" : "none",
+                  boxShadow: cur ? "inset 0 1px 0 rgba(255,255,255,.2), 0 12px 40px rgba(0,0,0,.14)" : "inset 0 1px 0 rgba(255,255,255,.08)",
                 }}
               >
                 <span
@@ -659,8 +658,8 @@ export function TVSky({
                     </span>
                   )}
                 </span>
-                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "0.8vh", gap: "0.5vw", fontFamily: MONT, fontSize: "1.7vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{e.label}</span>
+                <strong className="flex items-baseline" style={{ display: "flex", marginTop: "0.8vh", gap: "0.5vw", fontFamily: MONT, fontSize: "1.7vh", fontWeight: 700, color: "#fff", whiteSpace: "nowrap" }}>
+                  <span style={{ fontSize: e.label.length > 15 ? "1.45vh" : "inherit" }}>{e.label}</span>
                   {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.5vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
                 <div style={{ marginTop: "0.5vh", fontFamily: MONT, fontWeight: 800, fontSize: "2.8vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: cur ? "#F0D689" : "#F3F6FC" }}>
