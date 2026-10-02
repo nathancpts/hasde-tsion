@@ -13,6 +13,7 @@ import { Route as TvRouteImport } from './routes/tv'
 import { Route as TextesRouteImport } from './routes/textes'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as HayomYomRouteImport } from './routes/hayom-yom'
+import { Route as ChantsRouteImport } from './routes/chants'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -42,6 +43,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const HayomYomRoute = HayomYomRouteImport.update({
   id: '/hayom-yom',
   path: '/hayom-yom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChantsRoute = ChantsRouteImport.update({
+  id: '/chants',
+  path: '/chants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/chants': typeof ChantsRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/chants': typeof ChantsRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/chants': typeof ChantsRoute
   '/hayom-yom': typeof HayomYomRoute
   '/reset-password': typeof ResetPasswordRoute
   '/textes': typeof TextesRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/chants'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/chants'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/app'
     | '/auth'
+    | '/chants'
     | '/hayom-yom'
     | '/reset-password'
     | '/textes'
@@ -198,6 +210,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
+  ChantsRoute: typeof ChantsRoute
   HayomYomRoute: typeof HayomYomRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TextesRoute: typeof TextesRoute
@@ -236,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/hayom-yom'
       fullPath: '/hayom-yom'
       preLoaderRoute: typeof HayomYomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chants': {
+      id: '/chants'
+      path: '/chants'
+      fullPath: '/chants'
+      preLoaderRoute: typeof ChantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AppRoute: AppRoute,
   AuthRoute: AuthRoute,
+  ChantsRoute: ChantsRoute,
   HayomYomRoute: HayomYomRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TextesRoute: TextesRoute,

@@ -6,4 +6,4 @@
 - [x] Fiabiliser la détection des TV Android et bloquer toutes les fenêtres d'installation/notification sur télé
 - [x] Intégrer Hayom Yom depuis l'APK : lecture quotidienne bilingue, navigation par jour et affichage TV
 - [ ] Étendre le cycle des parashot (Shemot → Vayiqra → …) avant janvier 2027 : après Vayehi (26/12), le calcul retombe sur Chela'h Lekha au lieu de Shemot (2/01/2027)
-- [ ] Recréer intégralement le microsite Hasdefy dans une page Chants interne et ajouter un aperçu Chants sur l’accueil du site normal
+- [x] Recréer intégralement le microsite Hasdefy dans une page Chants interne et ajouter un aperçu Chants sur l’accueil du site normal
