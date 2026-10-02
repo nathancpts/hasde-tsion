@@ -699,3 +699,20 @@ select:focus-visible {
 .chants-page .chant-sp { color: #5ee08f; border-color: rgba(30,215,96,.45); }
 .chants-page .chant-am { color: #c9b6ff; border-color: rgba(170,140,255,.45); }
 .chants-page .chant-lyr { color: var(--chant-ice); border-color: var(--chant-line); }
+
+/* ===== TV — scène du ciel refondue ===== */
+.tv-clock { display: flex; margin-top: 1vh; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 900; font-size: 9vh; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tv-clock .d { display: inline-block; overflow: hidden; height: 1.06em; }
+.tv-clock .d span { display: block; height: 1.06em; line-height: 1.06; background: linear-gradient(180deg, #ffffff 0%, #e9f0fb 60%, #c9d8f3 100%); -webkit-background-clip: text; background-clip: text; color: transparent; animation: tv-digit 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.tv-clock .sep { color: #f0d689; padding: 0 0.06em; }
+@keyframes tv-digit { from { transform: translateY(105%); } to { transform: none; } }
+.tv-star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: tv-twinkle 3s ease-in-out infinite; }
+@keyframes tv-twinkle { 50% { opacity: 0.15; transform: scale(0.6); } }
+.tv-cloud { position: absolute; border-radius: 50%; will-change: transform; background: radial-gradient(ellipse at 35% 60%, rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), var(--ca, 0.4)) 0%, rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), calc(var(--ca, 0.4) * 0.5)) 40%, transparent 70%); animation: tv-drift var(--t, 50s) ease-in-out infinite alternate; }
+@keyframes tv-drift { to { transform: translateX(60px); } }
+@keyframes tv-fog { to { transform: translateX(4vw); } }
+.tv-tick { position: absolute; top: 0; transform: translateX(-50%); font-family: 'Montserrat', system-ui, sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; color: rgba(219, 231, 251, 0.75); }
+.tv-mk { position: absolute; top: -22px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: #050d20; border: 2px solid #f0d689; transition: transform 0.4s, background 0.4s; }
+.tv-mk.cur { transform: scale(1.7); box-shadow: 0 0 0 6px rgba(240, 214, 137, 0.18); }
+.tv-now { position: absolute; top: -44px; height: 38px; width: 1px; background: linear-gradient(#ff8a5b, rgba(255, 138, 91, 0)); transform: translateX(-50%); opacity: 0; transition: opacity 0.4s; }
+.tv-now b { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-family: 'Montserrat', system-ui, sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #ffb08f; white-space: nowrap; }
