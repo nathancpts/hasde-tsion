@@ -1933,7 +1933,7 @@ function PlanningTV() {
     (dow === 6 && (exitMin == null || nowMin < exitMin));
   const pc = useParashaContent();
   const hayomYom = getHayomYom(now);
-  const spotlight = false;
+  const [liveOpen, setLiveOpen] = useState(false);
 
   // Le même lecteur reste monté pendant tout le cycle pour éviter un écran noir au retour.
 
@@ -2123,57 +2123,35 @@ function PlanningTV() {
             gap: "1.6vh",
           }}
         >
-          {/* LIVE — le Kotel */}
-          <div className="shrink-0">
-            <LivePortalBox big={!isShabbatNow}>
-              {isShabbatNow ? (
-                <>
-                  <img
-                    src={kotelShabbat}
-                    alt="Kotel — Shabbat Shalom"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    width={1920}
-                    height={1088}
-                  />
-                  <div
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center"
-                    style={{ background: "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)" }}
-                  >
-                    <p
-                      className="font-hebrew leading-none"
-                      dir="rtl"
-                      style={{ fontSize: "5.2vh", color: GOLD_LOCAL, fontWeight: 700, textShadow: "0 4px 24px rgba(0,0,0,0.55)", letterSpacing: "0.02em" }}
-                    >
-                      שבת שלום
-                    </p>
-                    <p
-                      className="uppercase mt-[1vh]"
-                      style={{ fontSize: "1.2vh", letterSpacing: "0.5em", color: "rgba(255,255,255,0.9)", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}
-                    >
-                      Shabbat Shalom
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0"
-                    style={{ overflow: "hidden", borderRadius: "18px", clipPath: "inset(0 round 18px)", contain: "paint", zIndex: 0, background: "#FFFFFF" }}
-                  >
-                    <KotelLive className="absolute inset-0 w-full h-full" radius={spotlight ? 22 : 18} />
-                  </div>
-                  <div
-                    className="absolute top-[1vh] left-[1vh] inline-flex items-center gap-[0.5vw] px-[0.9vw] py-[0.5vh] rounded-full"
-                    style={{ background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", backdropFilter: "blur(8px)", boxShadow: "0 4px 14px rgba(10,17,40,0.35)" }}
-                  >
-                    <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
-                    <span className="uppercase" style={{ fontSize: "1.05vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC" }}>
-                      Live · Le Kotel
-                    </span>
-                  </div>
-                </>
-              )}
-            </LivePortalBox>
+          {/* LIVE — bouton pour afficher le Kotel en grand */}
+          <div className="shrink-0 flex items-center" style={{ ...GLASS, gap: "1vw", padding: "1.7vh 1.4vw" }}>
+            <span className="inline-block rounded-full shrink-0" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+            <div className="min-w-0 flex-1">
+              <p className="uppercase truncate" style={{ fontSize: "1.3vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC", fontFamily: HEADING_FONT_LOCAL }}>
+                Live · Le Kotel
+              </p>
+              <p className="truncate" style={{ fontSize: "1.15vh", color: "#9FB0CF", marginTop: "0.3vh" }}>
+                Le Mur des Lamentations, en direct de Jérusalem
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setLiveOpen(true)}
+              className="shrink-0 rounded-full transition-all duration-300 hover:brightness-110"
+              style={{
+                padding: "1.1vh 1.5vw",
+                fontSize: "1.25vh",
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                color: "#0A1128",
+                background: `linear-gradient(135deg, ${GOLD_LOCAL} 0%, #E8C97A 100%)`,
+                border: "1px solid rgba(255,255,255,0.35)",
+                boxShadow: "0 4px 18px rgba(212,175,55,0.35)",
+                fontFamily: HEADING_FONT_LOCAL,
+              }}
+            >
+              AFFICHER EN GRAND
+            </button>
           </div>
 
           {/* PARASHA — défilement doux */}
@@ -2297,71 +2275,65 @@ function PlanningTV() {
           )}
         </aside>
       </div>
+
+      {liveOpen && typeof document !== "undefined" && createPortal(
+        <div
+          className="fixed inset-0 z-[9000] flex items-center justify-center"
+          style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
+          onClick={() => setLiveOpen(false)}
+        >
+          <div
+            className="relative"
+            style={{
+              width: "min(86vw, 152vh)",
+              aspectRatio: "16 / 9",
+              borderRadius: 22,
+              overflow: "hidden",
+              border: "1px solid rgba(212,175,55,0.55)",
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.75)",
+              background: "#0A1128",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {isShabbatNow ? (
+              <>
+                <img src={kotelShabbat} alt="Kotel — Shabbat Shalom" className="absolute inset-0 w-full h-full object-cover" width={1920} height={1088} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center" style={{ background: "linear-gradient(180deg, rgba(10,17,40,0.15) 0%, rgba(10,17,40,0.55) 100%)" }}>
+                  <p className="font-hebrew leading-none" dir="rtl" style={{ fontSize: "7vh", color: GOLD_LOCAL, fontWeight: 700, textShadow: "0 4px 24px rgba(0,0,0,0.55)" }}>
+                    שבת שלום
+                  </p>
+                  <p className="uppercase mt-[1.2vh]" style={{ fontSize: "1.5vh", letterSpacing: "0.5em", color: "rgba(255,255,255,0.9)", fontFamily: HEADING_FONT_LOCAL, fontWeight: 600 }}>
+                    Shabbat Shalom
+                  </p>
+                </div>
+              </>
+            ) : (
+              <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
+            )}
+            <div className="absolute top-[2vh] left-[1.4vw] z-30 inline-flex items-center gap-[0.5vw] px-[1vw] py-[0.8vh] rounded-full" style={{ background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", backdropFilter: "blur(8px)" }}>
+              <span className="inline-block rounded-full" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
+              <span className="uppercase" style={{ fontSize: "1.1vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC" }}>
+                Live · Le Kotel
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setLiveOpen(false)}
+              aria-label="Fermer le live"
+              className="absolute top-[2vh] right-[1.4vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-300 hover:opacity-90"
+              style={{ width: "4.2vh", height: "4.2vh", background: "rgba(5,13,32,.55)", border: "1px solid rgba(219,231,251,.3)", color: "white", backdropFilter: "blur(8px)" }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
     </main>
   );
 }
 
 
-function LivePortalBox({ big: allowed, children }: { big: boolean; children: React.ReactNode }) {
-  const slotRef = useRef<HTMLDivElement>(null);
-  const [rect, setRect] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
-  const [vp, setVp] = useState({ w: 1920, h: 1080 });
-  const [open, setOpen] = useState(false);
-  const big = open && allowed;
-  useEffect(() => {
-    const measure = () => {
-      const el = slotRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      setRect({ l: r.left, t: r.top, w: r.width, h: r.height });
-      setVp({ w: window.innerWidth, h: window.innerHeight });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (slotRef.current) ro.observe(slotRef.current);
-    window.addEventListener("resize", measure);
-    const id = window.setInterval(measure, 2000);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); window.clearInterval(id); };
-  }, []);
-  const bw = Math.min(vp.w * 0.86, vp.h * 0.86 * (16 / 9));
-  const bh = bw * (9 / 16);
-  const box = big
-    ? { l: (vp.w - bw) / 2, t: (vp.h - bh) / 2, w: bw, h: bh }
-    : rect;
-  return (
-    <>
-      <div ref={slotRef} className="relative w-full shrink-0" style={{ aspectRatio: "16 / 9" }} />
-      {box && rect && rect.w > 0 && rect.h > 0 && typeof document !== "undefined" && createPortal(
-        <>
-          <div
-            aria-hidden="true"
-            onClick={() => setOpen(false)}
-            style={{
-              position: "fixed", inset: 0, zIndex: 9000,
-              background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)",
-              opacity: big ? 1 : 0, pointerEvents: big ? "auto" : "none", transition: "opacity 700ms ease",
-            }}
-          />
-          <div
-            onClick={() => setOpen((v) => !v)}
-            style={{
-              position: "fixed", left: box.l, top: box.t, width: box.w, height: box.h,
-              zIndex: 9001, overflow: "hidden", cursor: "pointer",
-              borderRadius: big ? 22 : 16,
-              border: big ? "1px solid rgba(212,175,55,0.55)" : "1px solid transparent",
-              boxShadow: big ? "0 40px 120px -30px rgba(0,0,0,0.75)" : "0 4px 20px rgba(0,0,0,0.05)",
-              background: big ? "#0A1128" : "#FFFFFF",
-              transition: "left 700ms ease, top 700ms ease, width 700ms ease, height 700ms ease, border-radius 700ms ease, box-shadow 700ms ease",
-            }}
-          >
-            {children}
-          </div>
-        </>,
-        document.body,
-      )}
-    </>
-  );
-}
 
 function ZmanimRowTV({
   label,
