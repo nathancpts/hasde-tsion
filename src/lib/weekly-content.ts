@@ -31,16 +31,12 @@ export const PARASHA_BLOCS: ParashaBloc[] = _current.blocs;
 
 // Date (lundi) de la semaine pour laquelle ces donateurs sont valables.
 // Format YYYY-MM-DD. Dès le lundi suivant, la liste se vide automatiquement.
-const DONATIONS_WEEK_MONDAY = "2026-09-14";
+const DONATIONS_WEEK_MONDAY = "2026-09-28";
 
 const _DONATIONS_RAW: Donation[] = [
-  { donateur: "Serge Lipovetzky" },
-  { donateur: "Sidney Broutinovski" },
-  { donateur: "Mickael Sfedj" },
-  { donateur: "Niddam Avram" },
-  { donateur: "Bellity Sacha" },
-  { donateur: "Krief Stéphane" },
-  { donateur: "Hakoune Paul" },
+  { donateur: "Eric Rozanes" },
+  { donateur: "Anthony Azria" },
+  { donateur: "Setti Rudy" },
 ];
 
 function currentMondayISO(now = new Date()): string {
