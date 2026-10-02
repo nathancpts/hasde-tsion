@@ -256,7 +256,7 @@ export function TVSky({
       const sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
       const glowA = (0.55 * clamp(s.alt + 0.35) * (1 - below * 0.5)).toFixed(3);
       if (skyRef.current) {
-        skyRef.current.style.background = `radial-gradient(60% 45% at ${sxp}% ${syp}%, rgba(255,${Math.round(240 - warm * 60)},${Math.round(200 - warm * 120)},${glowA}), transparent 65%), linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.ground}) ${(hp + 22).toFixed(1)}%, rgb(${pal.ground}) 100%)`;
+        skyRef.current.style.background = `radial-gradient(60% 45% at ${sxp}% ${syp}%, rgba(255,${Math.round(240 - warm * 60)},${Math.round(200 - warm * 120)},${glowA}), transparent 65%), linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.hor}) 100%)`;
       }
       if (hazeRef.current) {
         hazeRef.current.style.background = `linear-gradient(to top, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},0) 0%, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},${pal.haze[3]}) 55%, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},0) 100%)`;
@@ -530,15 +530,6 @@ export function TVSky({
       {/* zone du soleil — sur TV, limitée à la zone gauche pour ne pas passer sous les cartes de droite */}
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
         <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="tvground" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="rgba(5,13,32,0)" />
-              <stop offset=".3" stopColor="rgba(5,13,32,.55)" />
-              <stop offset=".6" stopColor="rgba(5,13,32,.6)" />
-              <stop offset="1" stopColor="rgba(5,13,32,0)" />
-            </linearGradient>
-          </defs>
-          <rect x="-400" y={arc ? arc.h * 0.78 : 78} width="3000" height={arc ? arc.h * 0.22 + 150 : 100} fill="url(#tvground)" />
           <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
