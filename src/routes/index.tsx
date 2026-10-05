@@ -2030,7 +2030,6 @@ function PlanningTV() {
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
-  const isWeekend = dow === 5 || dow === 6;
   const rawToday = zmanim?.times ?? [];
   const tzeitToday = rawToday.find((t) => t.label === "Sortie des étoiles")?.value;
   const weekdayTimes = [
