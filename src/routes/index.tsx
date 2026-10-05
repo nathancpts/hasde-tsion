@@ -1527,7 +1527,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
               <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-[#1f4ea8] to-[#0F3D7A]">
                 <div className="flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  <span className="text-[11px] uppercase tracking-[0.2em] text-white font-semibold">Live · Hasdé Tsion</span>
+                  <span className="text-[11px] uppercase tracking-[0.2em] text-white font-semibold">Live · Le Kotel</span>
                 </div>
               </div>
               <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
@@ -1863,7 +1863,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           </a>
 
           <footer className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground pt-4">
-            בס״ד · Hasdé Tsion
+            בס״ד
           </footer>
         </div>
       </div>

@@ -342,7 +342,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
 
 <div class="site">
   <nav class="nav" aria-label="Navigation">
-    <a class="brand" href="#top" data-cursor><img class="logo" src="/logo-hasde.png" alt="" width="40" height="40">Hasdé Tsion</a>
+    <a class="brand" href="#top" data-cursor><img class="logo" src="/logo-hasde.png" alt="Hasdé Tsion" width="40" height="40"></a>
     <div class="links">
       <a href="#etude">Étude</a><a href="/chants" target="_top" data-cursor>Chants</a><a href="#communaute">Communauté</a><a href="/promesses" target="_top" data-cursor>Promesses</a>
     </div>
@@ -535,7 +535,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
         <p class="seouda">La Séouda est offerte par… aucune dédicace pour le moment.</p>
       </div>
       <div class="cta-wrap">
-        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1-256 0"/></defs><text><textPath href="#circ">Tsédaka · צדקה · Faire un don · Hasdé Tsion · </textPath></text></svg>
+        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1-256 0"/></defs><text><textPath href="#circ">Tsédaka · צדקה · Faire un don · </textPath></text></svg>
         <a class="big-cta magnet" href="https://www.helloasso.com/associations/hassidim-de-sion" target="_blank" rel="noopener" data-cursor><small>Donner</small><b data-amtcta>52 €</b><small>via HelloAsso ↗</small></a>
       </div>
     </div>
@@ -553,7 +553,6 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
   </section>
 
   <footer>
-    <div class="wordmark" aria-hidden="true">Hasdé Tsion</div>
     <div class="foot"><span>Association Hassidim de Sion · 50 rue du Bois de Boulogne, 92200 Neuilly-sur-Seine</span><span data-hebdate3></span></div>
   </footer>
 </div>
@@ -1106,7 +1105,6 @@ function choreo(){
       b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); gsap.to(b, {x:(e.clientX - r.left - r.width/2)*.35, y:(e.clientY - r.top - r.height/2)*.35, duration:.6, ease:'power3.out'}); });
       b.addEventListener('pointerleave', () => gsap.to(b, {x:0, y:0, duration:1.2, ease:'elastic.out(1,.4)'}));
     });
-    gsap.from('.wordmark', {yPercent:60, duration:1.6, ease:'expo.out', scrollTrigger:{trigger:'footer', start:'top 90%'}});
     return () => { window.dayST = null; };
   });
   mm.add('(max-width: 767px), (prefers-reduced-motion: reduce)', () => {

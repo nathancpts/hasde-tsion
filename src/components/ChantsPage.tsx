@@ -117,7 +117,7 @@ export function ChantsPage() {
       <SiteChrome />
 
       <section className="mx-auto max-w-[1720px] px-4 pb-12 pt-32 sm:px-8 lg:px-12 lg:pt-40">
-        <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">Hasdé Tsion · 5787 — 2026</p>
+        <p className="text-xs font-bold uppercase tracking-[0.26em] text-chant-gold">5787 — 2026</p>
         <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
             <p lang="he" dir="rtl" className="font-hebrew text-3xl text-chant-ice sm:text-5xl">שִׂמְחַת תּוֹרָה</p>
