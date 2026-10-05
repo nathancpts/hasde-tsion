@@ -23,7 +23,7 @@ const heOf = (l: string) => { const k = l.toLowerCase(); const hit = Object.keys
 const kindOf = (l: string) =>
   /allum|entrée|sortie|chabbat/i.test(l) ? "Chabbat"
   : /chaharit|chah'arit|shaharit|minha|arvit|plag|néila|neila/i.test(l) ? "Office"
-  : /lever|chekia|sheq|coucher|nuit|étoiles|etoiles/i.test(l) ? "Zman"
+  : /lever|hanetz|limite|chema|shema|tefila|hatsot|midi|chekia|sheq|coucher|nuit|étoiles|etoiles|aube|alot/i.test(l) ? "Zman"
   : "Horaire";
 
 function wxLabel(c: number) {
@@ -556,7 +556,7 @@ export function TVSky({
         <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", pointerEvents: "none" }} />
         <div ref={reflRef} className="absolute" style={{ width: "110px", height: "150px", marginLeft: "-55px", borderRadius: "50%", background: "radial-gradient(ellipse at 50% 0%, rgba(255,205,130,.6), transparent 70%)", filter: "blur(9px)", opacity: 0, pointerEvents: "none" }} />
         {/* rail horaire */}
-        <div ref={railRef} className="absolute left-0 right-0" style={{ pointerEvents: "none", zIndex: 2 }}>
+        <div ref={railRef} className="absolute left-0 right-0" style={{ pointerEvents: "none", zIndex: 2, display: "none" }}>
           {ticks.map((t) => (
             <span key={t.label} className="tv-tick" style={{ left: t.left }}>{t.label}</span>
           ))}
@@ -644,8 +644,8 @@ export function TVSky({
                 }}
               >
                 <span
-                  className="flex items-center justify-between"
-                  style={{ fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase", color: cur ? "#F0D689" : "#9FB0CF" }}
+                  className="flex flex-wrap items-center justify-between"
+                  style={{ gap: "6px", fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur ? "#F0D689" : "#9FB0CF" }}
                 >
                   {kindOf(e.label)}
                     {cur && (
