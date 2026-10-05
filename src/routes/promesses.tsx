@@ -39,7 +39,7 @@ function PromessesPage() {
         src="/promesses.html?embed=1"
         title="Promesses de dons Hasdé Tsion"
         scrolling="no"
-        style={{ height: h, colorScheme: "normal" }}
+        style={{ height: h, colorScheme: "dark" }}
         className="relative z-[1] block w-full border-0 bg-transparent"
       />
     </main>
