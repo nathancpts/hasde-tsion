@@ -74,7 +74,7 @@ export function SiteChrome() {
       <div aria-hidden="true" className="site-grain" />
       <nav className={"site-nav" + (solid ? " solid" : "")} aria-label="Navigation">
         <a className="site-brand" href="/">
-          <img src="/logo-hasde.png" alt="Hasdé Tsion" width={40} height={40} />
+          <img src="/logo-hasde.png" alt="Hasdé Tsion" width={58} height={58} />
         </a>
         <div className="site-links">
           <a href="/#etude">Étude</a>
