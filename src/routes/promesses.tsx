@@ -34,7 +34,7 @@ function PromessesPage() {
   }, []);
   return (
     <main className="chants-page min-h-[100dvh] bg-chant-night text-chant-ink">
-      <SiteChrome />
+      <SiteChrome active="promesses" />
       <iframe
         src="/promesses.html?embed=1"
         title="Promesses de dons Hasdé Tsion"
