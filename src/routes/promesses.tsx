@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { SiteChrome } from "@/components/SiteChrome";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/promesses")({
@@ -21,11 +23,25 @@ export const Route = createFileRoute("/promesses")({
 });
 
 function PromessesPage() {
+  const [h, setH] = useState(1600);
+  useEffect(() => {
+    const on = (e: MessageEvent) => {
+      const v = e.data?.promessesHeight;
+      if (typeof v === "number" && v > 0) setH(v);
+    };
+    window.addEventListener("message", on);
+    return () => window.removeEventListener("message", on);
+  }, []);
   return (
-    <iframe
-      src="/promesses.html"
-      title="Promesses de dons Hasdé Tsion"
-      className="block h-dvh w-full border-0 bg-background"
-    />
+    <main className="chants-page min-h-[100dvh] bg-chant-night text-chant-ink">
+      <SiteChrome active="promesses" />
+      <iframe
+        src="/promesses.html?embed=1"
+        title="Promesses de dons Hasdé Tsion"
+        scrolling="no"
+        style={{ height: h, colorScheme: "dark" }}
+        className="relative z-[1] block w-full border-0 bg-transparent"
+      />
+    </main>
   );
 }
