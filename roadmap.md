@@ -9,3 +9,4 @@
 - [x] Recréer intégralement le microsite Hasdefy dans une page Chants interne et ajouter un aperçu Chants sur l’accueil du site normal
 - [x] Mettre à jour les propositions de don : 26 €, 52 €, 126 € et 260 €
 - [x] Ajouter un onglet Promesses ouvrant la campagne Birkat Hachana 5787 sur le site et dans l’application
+- [x] Dynamiser et élargir la page Promesses sur ordinateur et mobile
