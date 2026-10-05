@@ -13,6 +13,28 @@ function minus(hm: string | undefined, n: number) {
   return `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
 }
 
+const HEBREW_LABELS: Record<string, string> = {
+  "Hatzot Laïla": "חצות לילה",
+  "Alot haShahar": "עלות השחר",
+  "Misheyakir / Tefilin": "משיכיר",
+  "Hanetz haHama": "הנץ החמה",
+  "Limite Shema M\"A": "סוף זמן שמע מג״א",
+  "Limite Shema GR\"A": "סוף זמן שמע גר״א",
+  "Limite Tefila M\"A": "סוף זמן תפילה מג״א",
+  "Limite Tefila GR\"A": "סוף זמן תפילה גר״א",
+  Hatzot: "חצות",
+  "Minha Guedola": "מנחה גדולה",
+  Minha: "מנחה",
+  "Plag haMinha": "פלג המנחה",
+  Sheqyia: "שקיעה",
+  "Sortie des étoiles": "צאת הכוכבים",
+  "Nuit de R. Tam": "רבנו תם",
+};
+
+function eventKind(label: string) {
+  return /minha|chah|arvit/i.test(label) ? "Office" : /chabbat|bougies|entrée|sortie/i.test(label) ? "Chabbat" : "Zman";
+}
+
 export function PresentationSite() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
@@ -25,6 +47,12 @@ export function PresentationSite() {
         const get = (l: string) => z.times.find((t) => t.label === l)?.value;
         const sunset = get("Sheqyia");
         (window as unknown as { __HT_LIVE__?: unknown }).__HT_LIVE__ = {
+          events: z.times.map((time) => ({
+            k: eventKind(time.label),
+            n: time.label,
+            he: HEBREW_LABELS[time.label] ?? "",
+            t: time.value,
+          })),
           sunrise: get("Hanetz haHama"),
           sunset,
           minha: minus(sunset, 40),

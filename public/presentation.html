@@ -591,6 +591,7 @@ const DATA = {
 };
 /* Vraies données Hasdé Tsion transmises par l'application (si disponibles) */
 try { const L = window.parent && window.parent.__HT_LIVE__; if (L) {
+  if (Array.isArray(L.events) && L.events.length) DATA.events = L.events;
   const E = DATA.events, set = (n,t) => { const e = E.find(x => x.n === n); if (e && t) { e.t = t; delete e.ex; } };
   set("Lever du soleil", L.sunrise); set("Minha", L.minha); set("Sheqyia", L.sunset); set("Arvit", L.arvit); set("Nuit de R. Tam", L.rtam);
   if (L.sunrise) DATA.sunrise = L.sunrise; if (L.sunset) DATA.sunset = L.sunset;
