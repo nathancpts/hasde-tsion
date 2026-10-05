@@ -303,7 +303,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
 
 /* ---------- responsive (le vrai mobile = web app Lovable) ---------- */
 @media (max-width:1100px){
-  .events{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .events{grid-template-columns:repeat(6,minmax(0,1fr))}
   .acts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .study,.give,.info,.hero-bottom,.chants-shell,.kotel{grid-template-columns:minmax(0,1fr)}
   .hayom{position:relative;top:0}.next{justify-self:start}.cta-wrap{justify-self:start}
@@ -935,8 +935,15 @@ function setDay(p){
   // textes et cartes
   $('[data-dtime]').textContent = fmt(m);
   $('[data-dphase]').textContent = sunPhase(m);
-  const evs = $$('[data-events] .ev'), curIdx = evs.findIndex(e => +e.dataset.t >= m);
-  evs.forEach((e,i) => { e.classList.toggle('past', +e.dataset.t < m - 1); e.style.display = +e.dataset.t < m - 1 ? 'none' : ''; e.classList.toggle('cur', i === curIdx); });
+  const evs = $$('[data-events] .ev');
+  const upcoming = evs.filter(e => +e.dataset.t >= m - 1);
+  evs.forEach(e => {
+    const visibleIndex = upcoming.indexOf(e);
+    const show = visibleIndex >= 0 && visibleIndex < 6;
+    e.classList.toggle('past', +e.dataset.t < m - 1);
+    e.style.display = show ? '' : 'none';
+    e.classList.toggle('cur', visibleIndex === 0);
+  });
   $$('[data-rail] .mk').forEach((k,i) => { k.classList.toggle('done', +k.dataset.t < m); k.style.display = +k.dataset.t < m ? 'none' : ''; k.classList.toggle('cur', i === curIdx); });
 }
 addEventListener('resize', () => { buildScene(); setDay(lastP); });
