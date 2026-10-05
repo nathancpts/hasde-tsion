@@ -14,7 +14,7 @@ const D0 = 6 * 60;
 const D1 = 21 * 60 + 30;
 
 const HE: Record<string, string> = {
-  minha: "מנחה", arvit: "ערבית", chaharit: "שחרית", "chah'arit": "שחרית", shaharit: "שחרית",
+  minha: "מנחה", arvit: "ערבית", chaharit: "שחרית", "chah'arit": "שחרית", "cha’harit": "שחרית", shaharit: "שחרית",
   "plag hamin'ha": "פלג המנחה", "plag haminha": "פלג המנחה", neila: "נעילה", "néila": "נעילה",
   "lever du soleil": "הנץ", chekia: "שקיעה", sheqyia: "שקיעה", "nuit de r. tam": "רבנו תם",
   allumage: "הדלקת נרות", "allumer les bougies": "הדלקת נרות", entrée: "כניסה", sortie: "יציאה",
@@ -22,7 +22,7 @@ const HE: Record<string, string> = {
 const heOf = (l: string) => { const k = l.toLowerCase(); const hit = Object.keys(HE).find((key) => k.startsWith(key)); return hit ? HE[hit] : ""; };
 const kindOf = (l: string) =>
   /allum|entrée|sortie|chabbat/i.test(l) ? "Chabbat"
-  : /chaharit|chah'arit|shaharit|minha|arvit|plag|néila|neila/i.test(l) ? "Office"
+  : /chaharit|chah['’]arit|shaharit|minha|arvit|plag|néila|neila/i.test(l) ? "Office"
   : /lever|hanetz|limite|chema|shema|tefila|hatsot|midi|chekia|sheq|coucher|nuit|étoiles|etoiles|aube|alot/i.test(l) ? "Zman"
   : "Horaire";
 
@@ -502,7 +502,7 @@ export function TVSky({
   const ticks: { left: string; label: string }[] = [];
   for (let t = D0; t <= D1; t += 180) ticks.push({ left: `${rf(t)}%`, label: `${String(t / 60).padStart(2, "0")} h` });
 
-  const cards = visible.length > 0 ? visible : evMin.length > 0 ? [{ ...evMin[0], min: evMin[0].min }] : [];
+  const cards = visible;
 
   return (
     <div ref={rootRef} className="relative h-full w-full overflow-hidden" style={{ background: "#050d20" }}>

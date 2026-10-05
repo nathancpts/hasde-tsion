@@ -2030,18 +2030,34 @@ function PlanningTV() {
   const bullets = (pointsBloc?.puces ?? []).slice(0, 4);
 
   // Column 2 — TODAY's zmanim + countdown, like mobile
-  const isWeekend = dow === 5 || dow === 6;
   const rawToday = zmanim?.times ?? [];
   const tzeitToday = rawToday.find((t) => t.label === "Sortie des étoiles")?.value;
-  const todayTimes = [
+  const weekdayTimes = [
     ...rawToday.filter((t) =>
-      isWeekend || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
+      zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label)
     ),
     // Arvit en semaine : à la sortie des étoiles, si aucun horaire d'Arvit n'est fourni
-    ...(!rawToday.some((t) => /arvit/i.test(t.label)) && tzeitToday && !isWeekend
+    ...(!rawToday.some((t) => /arvit/i.test(t.label)) && tzeitToday
       ? [{ label: "Arvit", value: tzeitToday }]
       : []),
-  ].sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
+  ];
+  const fridayMinha = rawToday.find((t) => t.label === "Minha")?.value
+    ?? vTimes.find((t) => t.label === "Minha")?.value;
+  const saturdayMinha = rawToday.find((t) => t.label === "Minha")?.value
+    ?? sTimes.find((t) => t.label.startsWith("Minha"))?.value;
+  const todayTimes = (dow === 5
+    ? [
+        ...(fridayMinha ? [{ label: "Minha", value: fridayMinha }] : []),
+        ...(entryTime ? [{ label: "Entrée de Chabbat", value: entryTime }] : []),
+      ]
+    : dow === 6
+      ? [
+          { label: "Cha’harit samedi", value: "09:15" },
+          ...(saturdayMinha ? [{ label: "Minha samedi", value: saturdayMinha }] : []),
+          ...(exitTime ? [{ label: "Sortie de Chabbat", value: exitTime }] : []),
+        ]
+      : weekdayTimes
+  ).sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
 
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
@@ -2078,8 +2094,8 @@ function PlanningTV() {
     fontWeight: 700,
     fontFamily: HEADING_FONT_LOCAL,
   };
-  const tvSunrise = todayTimes.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
-  const tvSunset = todayTimes.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
+  const tvSunrise = rawToday.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
+  const tvSunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
   const tvEvents: TVSkyEvent[] = todayTimes.map((t) => ({ label: t.label, value: t.value }));
   const tvGreeting: [string, string] | null = dow === 5 || dow === 6 ? ["Chabbat Chalom", "שבת שלום"] : null;
 
