@@ -81,6 +81,7 @@ export function SiteChrome() {
           <a href="/#etude">Étude</a>
           <a href="/chants" className="on" aria-current="page">Chants</a>
           <a href="/#communaute">Communauté</a>
+          <a href="/promesses">Promesses</a>
         </div>
         <a className="site-tv" href="/TV"><i />Mode TV</a>
       </nav>
