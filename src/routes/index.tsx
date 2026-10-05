@@ -23,7 +23,6 @@ import KotelLive from "@/components/KotelLive";
 import { TVAppQrPopup } from "@/components/TVAppQrPopup";
 import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
-import { MobileSky } from "@/components/MobileSky";
 
 const logo = logoAsset.url;
 
@@ -1227,6 +1226,7 @@ function MobileGlassNav() {
 
 function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live: LiveWeek | null; chabad: ChabadWeek | null; zmanim: Zmanim | null; dayOffset: number; setDayOffset: (n: number) => void }) {
   const now = useClock();
+  const time = now ? now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
 
   const pc = useParashaContent();
   const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
@@ -1340,36 +1340,13 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     };
   }, []);
 
-  const mobileNextEvent = (() => {
-    if (dayOffset !== 0 || isShabbatDay) return null;
-    const nowMin = now ? now.getHours() * 60 + now.getMinutes() : 0;
-    const upcoming = (zmanim?.times ?? [])
-      .map((item) => {
-        const match = item.value.match(/^(\d{1,2}):(\d{2})/);
-        return { ...item, min: match ? Number(match[1]) * 60 + Number(match[2]) : null };
-      })
-      .filter((item) => item.min != null && item.min > nowMin);
-    const next = upcoming[0];
-    if (!next || next.min == null) return null;
-    const diff = next.min - nowMin;
-    const hours = Math.floor(diff / 60);
-    const minutes = diff % 60;
-    return {
-      label: next.label,
-      remaining: hours > 0 ? `dans ${hours}h${minutes.toString().padStart(2, "0")}` : `dans ${minutes} min`,
-    };
-  })();
-
-  const mobileSunrise = zmanim?.times.find((item) => /lever|hanetz/i.test(item.label))?.value ?? "07:43";
-  const mobileSunset = zmanim?.times.find((item) => /chekia|sheq|coucher/i.test(item.label))?.value ?? "19:32";
-  const mobileDateLabel = selectedDate.toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
 
 
   return (
-    <main className="mobile-app mobile-scroll-root relative isolate min-h-[100dvh] w-full overflow-x-clip text-foreground">
-      {/* Ciel vivant, repris du langage visuel du site */}
+    <main className="mobile-scroll-root relative isolate min-h-[100dvh] w-full text-foreground overflow-x-clip" style={{ background: "#F2F4F8" }}>
+      {/* Blue gradient hero zone — animated en vague */}
       <div
-        className="relative w-full overflow-hidden select-none"
+        className="btn-blue-animated relative w-full overflow-hidden select-none"
         style={{
           paddingTop: "calc(env(safe-area-inset-top) + 0.25rem)",
           touchAction: "pan-y",
@@ -1392,7 +1369,18 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
           }
         }}
       >
-        <div className="relative z-10 mx-auto max-w-md px-5 pb-10">
+        {/* Fondu doux depuis la couleur solide de la status bar vers le dégradé animé */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0"
+          style={{
+            height: "calc(env(safe-area-inset-top) + 80px)",
+            background: "linear-gradient(180deg, #1f4ea8 0%, rgba(31,78,168,0.6) 55%, rgba(31,78,168,0) 100%)",
+          }}
+        />
+        {/* Fondu bas supprimé */}
+
+        <div className="max-w-md mx-auto px-5 pb-24">
           {/* Header */}
           <header id="accueil" className="flex items-center justify-end scroll-mt-24">
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
@@ -1419,15 +1407,47 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             })}
           </div>
 
-          <div key={dayOffset} className="mt-2 animate-fade-in">
-            <MobileSky
-              sunrise={mobileSunrise}
-              sunset={mobileSunset}
-              dayLabel={isShabbatDay ? heroLabel : DAY_FULL[selectedDow]}
-              dateLabel={isShabbatDay ? heroHeb : mobileDateLabel}
-              nextEvent={isShabbatDay ? { label: heroLabel, remaining: heroTime } : mobileNextEvent}
-            />
+          {/* Hero number */}
+          <div key={dayOffset} className="mt-8 text-center animate-fade-in">
+            <div className="font-display text-[88px] font-bold text-white leading-none tabular-nums drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+              {isShabbatDay ? heroTime : time}
+            </div>
             {isShabbatDay && <HeroCountdown targetTime={heroTime} selectedDay={selectedDay} />}
+            <p className="mt-1 text-[13px] text-white/90 font-medium">
+              {isShabbatDay ? heroLabel : DAY_FULL[selectedDow]}
+            </p>
+            {isShabbatDay && (
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/70 mt-1">{heroHeb}</p>
+            )}
+            {!isShabbatDay && dayOffset === 0 && (() => {
+              const times = zmanim?.times ?? [];
+              if (times.length === 0) return null;
+              const toMin = (hm: string) => {
+                const m = hm.match(/^(\d{1,2}):(\d{2})/);
+                if (!m) return null;
+                return Number(m[1]) * 60 + Number(m[2]);
+              };
+              const nowMin = now ? now.getHours() * 60 + now.getMinutes() : 0;
+              const upcoming = times
+                .map((t) => ({ ...t, min: toMin(t.value) }))
+                .filter((t) => t.min != null && t.min! > nowMin);
+              const next = upcoming[0];
+              if (!next || next.min == null) return null;
+              const diff = next.min - nowMin;
+              const h = Math.floor(diff / 60);
+              const m = diff % 60;
+              const remaining = h > 0
+                ? `dans ${h}h${m.toString().padStart(2, "0")}`
+                : `dans ${m} min`;
+              return (
+                <div className="mt-5 inline-flex items-center gap-4 px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-md border-2 border-white/60">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-white/80">Prochain</span>
+                  <span className="text-[13px] font-semibold text-white">{next.label}</span>
+                  <span className="text-[12px] text-white/90 tabular-nums">· {remaining}</span>
+                </div>
+              );
+            })()}
+
           </div>
 
 
@@ -1459,13 +1479,13 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
       {/* White surface */}
       <div
-        className="mobile-app__content relative -mt-5 rounded-t-[28px] pt-6 pb-32"
+        className="relative -mt-6 rounded-t-[28px] bg-[#F2F4F8] pt-6 pb-32 shadow-[0_-8px_24px_rgba(0,0,0,0.08)]"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 7rem)" }}
       >
         <div className="max-w-md mx-auto px-4 space-y-4">
           {/* Section heading + tabs */}
           <div className="flex items-center justify-between gap-3 px-1">
-            <h2 className="font-display text-2xl font-bold text-white">Cette semaine</h2>
+            <h2 className="font-display text-2xl font-bold text-foreground">Cette semaine</h2>
             <Link
               to="/compte"
               className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#1f4ea8] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_3px_10px_rgba(31,78,168,0.35)] active:scale-[0.97] transition"
@@ -1475,7 +1495,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             </Link>
           </div>
 
-          <div className="mobile-app__tabs inline-flex w-full rounded-full p-1">
+          <div className="inline-flex w-full rounded-full bg-white p-1 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
             {([
               { id: "horaires", label: "Accueil" },
               { id: "etude", label: "Étude" },
