@@ -2265,12 +2265,19 @@ function PlanningTV() {
                   {hayomYom.hebrewDate}
                 </span>
               </div>
-              <div className="mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
-                <FitText
-                  text={hayomYom.fr}
-                  className="whitespace-pre-line"
-                  style={{ fontSize: "1.5vh", lineHeight: 1.55, color: "#DBE7FB", fontWeight: 400 }}
-                />
+              <div className="relative mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
+                <div className="tv-marquee-track">
+                  {[0, 1].map((n) => (
+                    <div
+                      key={`hy-${n}`}
+                      className="tv-marquee-block"
+                      aria-hidden={n === 1 ? true : undefined}
+                      style={{ fontSize: "1.55vh", lineHeight: 1.7, color: "#DBE7FB", whiteSpace: "pre-line" }}
+                    >
+                      {hayomYom.fr}
+                    </div>
+                  ))}
+                </div>
               </div>
             </article>
           )}
@@ -2399,30 +2406,3 @@ function toMinTop(hm: string): number | null {
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
-/** Réduit automatiquement la taille du texte pour qu'il tienne entièrement dans son cadre (jamais tronqué). */
-function FitText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
-  const ref = useRef<HTMLParagraphElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    const box = el?.parentElement;
-    if (!el || !box) return;
-    const fit = () => {
-      el.textContent = text;
-      el.style.fontSize = "";
-      const base = parseFloat(getComputedStyle(el).fontSize);
-      let lo = 6, hi = base;
-      if (el.scrollHeight <= box.clientHeight + 1) return;
-      for (let i = 0; i < 14; i++) {
-        const mid = (lo + hi) / 2;
-        el.style.fontSize = mid + "px";
-        if (el.scrollHeight <= box.clientHeight + 1) lo = mid; else hi = mid;
-      }
-      el.style.fontSize = lo + "px";
-    };
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(box);
-    return () => ro.disconnect();
-  }, [text]);
-  return <p ref={ref} className={className} style={style}>{text}</p>;
-}
