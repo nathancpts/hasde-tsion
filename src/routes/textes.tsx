@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, X } from "lucide-react";
-import logoAsset from "@/assets/logo-hasde-2026.png.asset.json";
+import logoAsset from "@/assets/logo-hasde.png.asset.json";
 
 const logo = logoAsset.url;
 
