@@ -502,7 +502,7 @@ export function TVSky({
   const ticks: { left: string; label: string }[] = [];
   for (let t = D0; t <= D1; t += 180) ticks.push({ left: `${rf(t)}%`, label: `${String(t / 60).padStart(2, "0")} h` });
 
-  const cards = visible.length > 0 ? visible : evMin.length > 0 ? [{ ...evMin[0], min: evMin[0].min }] : [];
+  const cards = visible;
 
   return (
     <div ref={rootRef} className="relative h-full w-full overflow-hidden" style={{ background: "#050d20" }}>
