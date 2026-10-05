@@ -1555,11 +1555,11 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                     .map((t) => (
                     <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
                       <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
-                      <span className="font-display font-bold tabular-nums text-lg text-white">{t.value}</span>
+                      <span className="font-display font-bold tabular-nums text-lg text-foreground">{t.value}</span>
                     </div>
                   ))}
                   {(!zmanim || zmanim.times.length === 0) && (
-                    <p className="text-[12px] text-white/55 italic text-center py-6">
+                    <p className="text-[12px] text-muted-foreground italic text-center py-6">
                       {zmanim ? "Horaires non disponibles." : "Chargement…"}
                     </p>
                   )}
