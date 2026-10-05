@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/logo-hasde.png.asset.json";
+import logoAsset from "@/assets/logo-hasde-2026.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { getCommunityMinha } from "@/lib/zmanim-overrides";
@@ -1394,7 +1394,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
       >
         <div className="relative z-10 mx-auto max-w-md px-5 pb-10">
           {/* Header */}
-          <header id="accueil" className="flex items-center justify-end scroll-mt-24">
+          <header id="accueil" className="flex items-center justify-between scroll-mt-24">
+            <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto object-contain" />
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
