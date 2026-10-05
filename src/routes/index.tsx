@@ -1508,7 +1508,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 className={`min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold transition-colors ${
                   sectionTab === t.id
                     ? "btn-blue-animated text-white"
-                    : "text-white/65"
+                    : "text-foreground/60"
                 }`}
               >
                 {t.label}
@@ -1516,15 +1516,15 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             ))}
             <Link
               to="/promesses"
-              className="min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold text-center text-white/65 transition-colors"
+              className="min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold text-center text-foreground/60 transition-colors"
             >
               Promesses
             </Link>
           </div>
 
           {sectionTab === "horaires" && (
-            <article className="mobile-app__card overflow-hidden rounded-2xl">
-              <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
+            <article className="rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] bg-black">
+              <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-[#1f4ea8] to-[#0F3D7A]">
                 <div className="flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                   <span className="text-[11px] uppercase tracking-[0.2em] text-white font-semibold">Live · Hasdé Tsion</span>
@@ -1540,12 +1540,12 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
             <div className="space-y-3">
 
               {/* Daily Zmanim (jours hors Vendredi/Chabbat) */}
-              <article className="mobile-app__card rounded-2xl p-4">
+              <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
                 <div className="text-center mb-3">
                   <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#1f4ea8]">
                     {dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : DAY_FULL[selectedDow]}
                   </p>
-                  <p className="font-display text-base font-bold text-white capitalize mt-0.5">
+                  <p className="font-display text-base font-bold text-foreground capitalize mt-0.5">
                     {zmanim?.date ?? selectedDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
                   </p>
                 </div>
@@ -1553,8 +1553,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                   {(zmanim?.times ?? [])
                     .filter((t) => isShabbatDay || zmanim?.specialSchedule ? true : !/entr[ée]|sortie|bougies|havdal|fin du chabbat/i.test(t.label))
                     .map((t) => (
-                    <div key={t.label} className="mobile-app__time-row flex items-center justify-between gap-3 rounded-xl px-3 py-2">
-                      <span className="text-[12px] uppercase tracking-[0.1em] text-white/70 font-medium">{t.label}</span>
+                    <div key={t.label} className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-[#F8FAFC]">
+                      <span className="text-[12px] uppercase tracking-[0.1em] text-foreground/70 font-medium">{t.label}</span>
                       <span className="font-display font-bold tabular-nums text-lg text-white">{t.value}</span>
                     </div>
                   ))}
