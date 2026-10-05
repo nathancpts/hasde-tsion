@@ -10,3 +10,4 @@
 - [x] Mettre à jour les propositions de don : 26 €, 52 €, 126 € et 260 €
 - [x] Ajouter un onglet Promesses ouvrant la campagne Birkat Hachana 5787 sur le site et dans l’application
 - [x] Garder les horaires de la journée sur une seule ligne et révéler les suivants au fil du temps
+- [x] Tester le nouveau logo sur le site, l’application, la TV et les icônes d’installation

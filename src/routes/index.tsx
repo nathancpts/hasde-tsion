@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/logo-hasde.png.asset.json";
+import logoAsset from "@/assets/logo-hasde-2026.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { getCommunityMinha } from "@/lib/zmanim-overrides";
