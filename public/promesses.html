@@ -425,7 +425,7 @@ boot();
 <script>
 if(document.documentElement.classList.contains('embed')){
   const post=()=>parent.postMessage({promessesHeight:document.documentElement.scrollHeight},'*');
-  new ResizeObserver(post).observe(document.body);addEventListener('load',post);post();
+  new ResizeObserver(post).observe(document.body);addEventListener('load',post);post();setInterval(post,1000);
   document.querySelectorAll('a[href="/"]').forEach(a=>a.target='_top');
 }
 </script>
