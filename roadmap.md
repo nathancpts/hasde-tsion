@@ -8,3 +8,4 @@
 - [ ] Étendre le cycle des parashot (Shemot → Vayiqra → …) avant janvier 2027 : après Vayehi (26/12), le calcul retombe sur Chela'h Lekha au lieu de Shemot (2/01/2027)
 - [x] Recréer intégralement le microsite Hasdefy dans une page Chants interne et ajouter un aperçu Chants sur l’accueil du site normal
 - [x] Mettre à jour les propositions de don : 26 €, 52 €, 126 € et 260 €
+- [x] Ajouter un onglet Promesses ouvrant la campagne Birkat Hachana 5787 sur le site et dans l’application
