@@ -1394,7 +1394,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
       >
         <div className="relative z-10 mx-auto max-w-md px-5 pb-10">
           {/* Header */}
-          <header id="accueil" className="flex items-center justify-end scroll-mt-24">
+          <header id="accueil" className="flex items-center justify-between scroll-mt-24">
+            <img src={logo} alt="Hasdé Tsion" className="h-14 w-auto object-contain" />
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80">בס״ד</p>
           </header>
 
