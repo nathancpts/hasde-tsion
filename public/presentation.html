@@ -944,7 +944,12 @@ function setDay(p){
     e.style.display = show ? '' : 'none';
     e.classList.toggle('cur', visibleIndex === 0);
   });
-  $$('[data-rail] .mk').forEach((k,i) => { k.classList.toggle('done', +k.dataset.t < m); k.style.display = +k.dataset.t < m ? 'none' : ''; k.classList.toggle('cur', i === curIdx); });
+  $$('[data-rail] .mk').forEach(k => {
+    const passed = +k.dataset.t < m;
+    k.classList.toggle('done', passed);
+    k.style.display = passed ? 'none' : '';
+    k.classList.toggle('cur', !passed && +k.dataset.t === +(upcoming[0]?.dataset.t ?? -1));
+  });
 }
 addEventListener('resize', () => { buildScene(); setDay(lastP); });
 /* ===== Météo réelle de Neuilly-sur-Seine (Open-Meteo) ===== */
