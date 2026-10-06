@@ -111,6 +111,12 @@ function AdminPage() {
     } catch {
       /* ignore */
     }
+    try {
+      const res = await loadPledges({});
+      setPledges(res.pledges);
+    } catch {
+      /* ignore */
+    }
     const { data: pc } = await supabase
       .from("parasha_content")
       .select("id, nom, nom_he, intro, blocs")
