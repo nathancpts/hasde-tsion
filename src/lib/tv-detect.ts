@@ -60,3 +60,18 @@ export function isTVDevice(): boolean {
 export function isAppPath(): boolean {
   return typeof window !== "undefined" && window.location.pathname.toLowerCase().startsWith("/app");
 }
+
+/** Téléphone (Android/iPhone) ou application installée : toujours la web app, quelle que soit la largeur. */
+export function isPhoneDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (window.matchMedia("(display-mode: standalone)").matches || (navigator as any).standalone) return true;
+    const ua = navigator.userAgent || "";
+    if (/iPhone|iPod|Android.+Mobile|Mobile.+Android|Windows Phone/i.test(ua)) return true;
+    const uaData = (navigator as any).userAgentData;
+    if (uaData?.mobile) return true;
+    const short = Math.min(window.screen.width, window.screen.height);
+    if (window.matchMedia("(pointer: coarse)").matches && short < 600) return true;
+  } catch { /* ignore */ }
+  return false;
+}
