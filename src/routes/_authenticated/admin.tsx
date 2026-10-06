@@ -78,6 +78,8 @@ function AdminPage() {
   const navigate = useNavigate();
   const sendNow = useServerFn(sendAnnouncementNow);
   const loadStats = useServerFn(getAdminStats);
+  const loadPledges = useServerFn(getAdminPledges);
+  const removePledge = useServerFn(deletePledge);
 
   const [checking, setChecking] = useState(true);
   const [tab, setTab] = useState<"envoyer" | "parasha" | "historique" | "membres">("envoyer");
