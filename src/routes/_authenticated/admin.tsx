@@ -334,6 +334,7 @@ function AdminPage() {
             [
               ["envoyer", "Envoyer", Bell],
               ["parasha", "Parasha", BookOpen],
+              ["promesses", "Promesses", Gift],
               ["historique", "Historique", History],
               ["membres", "Membres", Users],
             ] as const
