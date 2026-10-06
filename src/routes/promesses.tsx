@@ -29,7 +29,7 @@ function PromessesPage() {
   useEffect(() => {
     const on = (e: MessageEvent) => {
       const v = e.data?.promessesHeight;
-      if (typeof v === "number" && v > 0) setH(v);
+      if (typeof v === "number" && v > 0) { setH(v); setReady(true); }
     };
     let raf = 0;
     const send = () => {
@@ -44,11 +44,13 @@ function PromessesPage() {
     window.addEventListener("scroll", send, { passive: true });
     window.addEventListener("resize", send);
     const t = setInterval(send, 500);
+    const fb = setTimeout(() => setReady(true), 1200);
     return () => {
       window.removeEventListener("message", on);
       window.removeEventListener("scroll", send);
       window.removeEventListener("resize", send);
       clearInterval(t);
+      clearTimeout(fb);
     };
   }, []);
   return (
@@ -59,12 +61,11 @@ function PromessesPage() {
         src="/promesses.html?embed=1"
         title="Promesses de dons Hasdé Tsion"
         scrolling="no"
-        onLoad={() => setReady(true)}
         style={{
           height: h,
           colorScheme: "dark",
           opacity: ready ? 1 : 0,
-          transition: "opacity .9s cubic-bezier(.16,1,.3,1), height .6s cubic-bezier(.16,1,.3,1)",
+          transition: "opacity .9s cubic-bezier(.16,1,.3,1)",
         }}
         className="relative z-[1] block w-full border-0 bg-transparent"
       />
