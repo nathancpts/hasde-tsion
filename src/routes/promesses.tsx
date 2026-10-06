@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Lenis from "lenis";
 import { SiteChrome } from "@/components/SiteChrome";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -30,7 +31,14 @@ function PromessesPage() {
     const on = (e: MessageEvent) => {
       const v = e.data?.promessesHeight;
       if (typeof v === "number" && v > 0) { setH(v); setReady(true); }
+      const dy = e.data?.promessesWheel;
+      if (typeof dy === "number") lenis?.scrollTo(lenis.targetScroll + dy * 0.9);
     };
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const lenis = reduce ? null : new Lenis({ duration: 1.25, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, wheelMultiplier: 0.9, touchMultiplier: 1.4 });
+    let lraf = 0;
+    const loop = (t: number) => { lenis?.raf(t); lraf = requestAnimationFrame(loop); };
+    if (lenis) { lraf = requestAnimationFrame(loop); lenis.on("scroll", () => send()); }
     let raf = 0;
     const send = () => {
       cancelAnimationFrame(raf);
@@ -51,6 +59,8 @@ function PromessesPage() {
       window.removeEventListener("resize", send);
       clearInterval(t);
       clearTimeout(fb);
+      cancelAnimationFrame(lraf);
+      lenis?.destroy();
     };
   }, []);
   return (

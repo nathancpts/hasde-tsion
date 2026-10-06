@@ -427,6 +427,7 @@ if(document.documentElement.classList.contains('embed')){
   const post=()=>parent.postMessage({promessesHeight:document.documentElement.scrollHeight},'*');
   new ResizeObserver(post).observe(document.body);addEventListener('load',post);post();setInterval(post,1000);
   document.querySelectorAll('a[href="/"]').forEach(a=>a.target='_top');
+  addEventListener('wheel',e=>{if(e.ctrlKey)return;e.preventDefault();parent.postMessage({promessesWheel:e.deltaMode===1?e.deltaY*16:e.deltaY},'*');},{passive:false});
 }
 /* Révélation au défilement, même rendu que l'accueil (montée 50px, 1.2s, expo-out) */
 (function(){
