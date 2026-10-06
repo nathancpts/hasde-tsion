@@ -10,6 +10,10 @@ export const Route = createFileRoute("/textes")({
     meta: [
       { title: "Textes & Prières — Hasdé Tsion" },
       { name: "description", content: "Siddour complet, Tehilim, parasha, omer, qaddish — version Ashkénaze et Mizra'hi." },
+      { property: "og:title", content: "Textes & Prières — Hasdé Tsion" },
+      { property: "og:description", content: "Siddour, Tehilim et prières en versions Ashkénaze et Mizra’hi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: TextesPage,

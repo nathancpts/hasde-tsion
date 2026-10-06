@@ -104,7 +104,7 @@ function AuthPage() {
           backdropFilter: "blur(20px) saturate(160%)",
         }}
       >
-        <img src="/app-icon-192.png" alt="" className="h-14 w-14 mx-auto mb-3 rounded-2xl" />
+        <img src="/__l5e/assets-v1/c7560a28-d102-4434-b627-28a67a44a80b/app-icon-192-gold.png" alt="" className="h-14 w-14 mx-auto mb-3 rounded-2xl" />
         <h1 className="font-display text-2xl font-bold text-[#0a2a6b] text-center">
           {checkEmail ? "Vérifiez vos e-mails" : mode === "signin" ? "Connexion" : "Créer un compte"}
         </h1>

@@ -574,7 +574,7 @@ export function TVSky({
         <div>
           {logoUrl && (
             <div className="flex items-center" style={{ gap: "1vw" }}>
-              <img src={logoUrl} alt="Hasdé Tsion" style={{ height: "9.5vh", width: "9.5vh", objectFit: "cover", borderRadius: "50%", background: "#fff", border: "2px solid rgba(240,214,137,.75)", boxShadow: "0 4px 22px rgba(5,13,32,.45)" }} />
+              <img src={logoUrl} alt="Hasdé Tsion" className="tv-brand-logo" />
             </div>
           )}
           <p className="uppercase" style={{ marginTop: "1.4vh", fontFamily: MONT, fontSize: "1.1vh", fontWeight: 700, letterSpacing: "0.32em", color: "#F0D689" }}>
