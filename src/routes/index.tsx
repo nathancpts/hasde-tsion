@@ -203,7 +203,7 @@ function TVFrameShell() {
         onClick={() => { try { localStorage.removeItem("ht-tv"); } catch {} }}
         title="Quitter le mode TV"
         aria-label="Quitter le mode TV"
-        style={{ position: "fixed", top: 12, right: 52, zIndex: 5, height: 28, padding: "0 12px", borderRadius: 999, display: "flex", alignItems: "center", fontSize: 12, fontWeight: 600, letterSpacing: ".04em", color: "rgba(255,255,255,.9)", background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)", textDecoration: "none", backdropFilter: "blur(6px)" }}
+        style={{ position: "fixed", bottom: 2, left: "50%", transform: "translateX(-50%)", zIndex: 5, height: 18, padding: "0 12px", borderRadius: 999, display: "flex", alignItems: "center", fontSize: 11, fontWeight: 600, letterSpacing: ".04em", color: "rgba(255,255,255,.9)", background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)", textDecoration: "none", backdropFilter: "blur(6px)" }}
       >
         Quitter le mode TV
       </a>
@@ -2095,6 +2095,13 @@ function PlanningTV() {
     fontWeight: 700,
     fontFamily: HEADING_FONT_LOCAL,
   };
+  const TV_TITLE: React.CSSProperties = {
+    fontSize: "2.6vh",
+    fontFamily: HEADING_FONT_LOCAL,
+    fontWeight: 800,
+    color: GLASS.color,
+    letterSpacing: 0,
+  };
   const tvSunrise = rawToday.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
   const tvSunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
   const tvEvents: TVSkyEvent[] = todayTimes.map((t) => ({ label: t.label, value: t.value }));
@@ -2124,9 +2131,9 @@ function PlanningTV() {
             type="button"
             onClick={toggleFs}
             aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
-            className="pointer-events-auto absolute bottom-[2vh] right-[1.2vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
+            className="pointer-events-auto fixed bottom-[0.3vh] right-[0.4vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
             style={{
-              width: "3.4vh", height: "3.4vh",
+              width: "2vh", height: "2vh",
               background: "rgba(5,13,32,.45)", border: "1px solid rgba(219,231,251,.3)",
               color: "white", opacity: isFs ? 0.1 : 0.5, backdropFilter: "blur(8px)",
             }}
@@ -2183,7 +2190,7 @@ function PlanningTV() {
             <p className="uppercase" style={LABEL}>
               Communauté
             </p>
-            <h3 className="mt-[0.4vh]" style={{ fontSize: "1.7vh", fontWeight: 600, color: "#DBE7FB" }}>
+            <h3 className="mt-[0.4vh]" style={TV_TITLE}>
               La Séouda est offerte par
             </h3>
             <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
@@ -2220,7 +2227,7 @@ function PlanningTV() {
             <div className="mt-[0.6vh] flex items-baseline justify-between gap-[1vw]">
               <h1
                 className="min-w-0 truncate"
-                style={{ fontSize: "2.6vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 800, color: "#F3F6FC", letterSpacing: "-0.01em" }}
+                style={TV_TITLE}
               >
                 {parashaFr}
               </h1>
@@ -2237,7 +2244,7 @@ function PlanningTV() {
                 className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
                 style={{ height: "2.4vh", background: "transparent" }}
               />
-              <div className="tv-marquee-track">
+              <AutoScrollLoop speed={20} className="h-full">
                 {pc.intro && (
                   <p style={{ marginTop: "0.6vh", fontSize: "1.45vh", lineHeight: 1.65, color: "#9FB0CF", fontStyle: "italic", whiteSpace: "pre-line" }}>
                     {pc.intro}
@@ -2270,7 +2277,7 @@ function PlanningTV() {
                     )}
                   </div>
                 ))}
-              </div>
+              </AutoScrollLoop>
             </div>
           </article>
 
@@ -2281,7 +2288,7 @@ function PlanningTV() {
                 Aujourd’hui, c’est le jour…
               </p>
               <div className="mt-[0.4vh] flex items-baseline justify-between gap-3">
-                <h3 style={{ fontSize: "1.9vh", fontFamily: HEADING_FONT_LOCAL, fontWeight: 700, color: "#F3F6FC" }}>
+                <h3 style={TV_TITLE}>
                   Hayom Yom
                 </h3>
                 <span className="shrink-0" style={{ fontSize: "1.15vh", color: "#9FB0CF", fontWeight: 500 }}>
@@ -2289,18 +2296,13 @@ function PlanningTV() {
                 </span>
               </div>
               <div className="relative mt-[0.6vh] min-h-0 flex-1 overflow-hidden">
-                <div className="tv-marquee-track">
-                  {[0, 1].map((n) => (
+                <AutoScrollLoop speed={20} className="h-full">
                     <div
-                      key={`hy-${n}`}
-                      className="tv-marquee-block"
-                      aria-hidden={n === 1 ? true : undefined}
                       style={{ fontSize: "1.55vh", lineHeight: 1.7, color: "#DBE7FB", whiteSpace: "pre-line" }}
                     >
                       {hayomYom.fr}
                     </div>
-                  ))}
-                </div>
+                </AutoScrollLoop>
               </div>
             </article>
           )}

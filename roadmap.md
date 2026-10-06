@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] TV : commandes en bas, horaires alignés, titres uniformes et même vitesse de défilement Parasha/Hayom Yom
+
 - [x] Réduire et affiner les gros boutons (ESIDDUR, Faire un don)
 - [x] Cohérence globale : un style unique (forme pilule, même taille et même typographie) pour tous les boutons — eSiddur, Faire un don, Participer à la séouda, Réserver sur HelloAsso
 - [x] Parasha du Chabbat Souccot 2026 (pas de paracha) + Chemini Atseret (3/10) + Bereshit et cycle hebdomadaire jusqu'au 26/12/2026 dans src/lib/parashot.ts
