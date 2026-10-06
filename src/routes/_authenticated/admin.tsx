@@ -141,7 +141,7 @@ function AdminPage() {
       setPIntro("");
       setPBlocs(toEdit(DEFAULT_PARASHA_CONTENT.blocs as any[]));
     }
-  }, [loadStats]);
+  }, [loadStats, loadPledges]);
 
   const saveParasha = async () => {
     setPBusy(true);
@@ -398,7 +398,7 @@ function AdminPage() {
             </div>
 
         {tab === "envoyer" && (
-          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)] space-y-3">
+          <section className="rounded-3xl bg-white p-5 md:p-7 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)] space-y-3">
             <div>
               <Label className="text-[11px] text-[#0a2a6b]">Titre</Label>
               <Input
@@ -489,7 +489,7 @@ function AdminPage() {
         )}
 
         {tab === "parasha" && (
-          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)] space-y-4">
+          <section className="rounded-3xl bg-white p-5 md:p-7 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)] space-y-4">
             <p className="text-xs text-muted-foreground">
               Ce texte remplace la parasha affichée sur le site et sur la TV. Laissez vide pour
               revenir au texte automatique.
@@ -598,7 +598,7 @@ function AdminPage() {
         )}
 
         {tab === "historique" && (
-          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+          <section className="rounded-3xl bg-white p-5 md:p-7 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)]">
             {sentRows.length === 0 ? (
               <p className="text-xs text-muted-foreground">Aucune notification envoyée.</p>
             ) : (
@@ -630,7 +630,7 @@ function AdminPage() {
         )}
 
         {tab === "membres" && (
-          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+          <section className="rounded-3xl bg-white p-5 md:p-7 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)]">
             {!stats || stats.list.length === 0 ? (
               <p className="text-xs text-muted-foreground">Aucun membre inscrit.</p>
             ) : (
@@ -651,15 +651,15 @@ function AdminPage() {
         )}
 
         {tab === "promesses" && (
-          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+          <section className="rounded-3xl bg-white p-5 md:p-7 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)]">
             {pledges.length === 0 ? (
               <p className="text-xs text-muted-foreground">Aucune promesse enregistrée pour le moment.</p>
             ) : (
-              <ul className="space-y-3">
+              <ul className="grid gap-3 lg:grid-cols-2">
                 {pledges.map((p) => (
-                  <li key={p.id} className="rounded-xl bg-[#F1F5F9] px-3 py-2.5">
+                  <li key={p.id} className="rounded-2xl border border-[#0a2a6b]/8 bg-[#F8FAFC] p-4 space-y-1">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-semibold text-[#0a2a6b]">{p.name}</p>
+                      <p className="font-display text-base font-bold text-[#0a2a6b]">{p.name}</p>
                       <button
                         onClick={async () => {
                           const res = await removePledge({ data: { id: p.id } });
@@ -704,6 +704,8 @@ function AdminPage() {
             )}
           </section>
         )}
+          </div>
+        </div>
       </div>
     </main>
   );
