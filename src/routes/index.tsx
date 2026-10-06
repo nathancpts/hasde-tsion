@@ -1884,7 +1884,7 @@ function PlanningTV() {
   const chabad = useChabad();
   const [dayOffset, setDayOffset] = useState(0);
   const zmanim = useZmanim(null, dayOffset);
-  const { toggle: toggleFs, isFs } = useKiosk();
+  useKiosk();
   const shabbatZ = useShabbatZmanim(null);
 
   const isPdfMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pdf") === "1";
@@ -2126,25 +2126,7 @@ function PlanningTV() {
           />
       </div>
       <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
-        <section className="relative min-h-0 min-w-0">
-          <button
-            type="button"
-            onClick={toggleFs}
-            aria-label={isFs ? "Quitter le plein écran" : "Passer en plein écran"}
-            className="pointer-events-auto fixed bottom-[0.3vh] right-[0.4vw] z-30 flex items-center justify-center rounded-full transition-opacity duration-500 hover:opacity-90"
-            style={{
-              width: "2vh", height: "2vh",
-              background: "rgba(5,13,32,.45)", border: "1px solid rgba(219,231,251,.3)",
-              color: "white", opacity: isFs ? 0.1 : 0.5, backdropFilter: "blur(8px)",
-            }}
-          >
-            {isFs ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 3 9 9 3 9" /><polyline points="15 21 15 15 21 15" /><polyline points="3 15 9 15 9 21" /><polyline points="21 9 15 9 15 3" /></svg>
-            ) : (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="4 14 10 14 10 20" /><polyline points="20 10 14 10 14 4" /><line x1="14" y1="10" x2="21" y2="3" /><line x1="3" y1="21" x2="10" y2="14" /><line x1="14" y1="4" x2="21" y2="10" /><line x1="10" y1="20" x2="3" y2="14" /></svg>
-            )}
-          </button>
-        </section>
+        <section className="relative min-h-0 min-w-0" />
 
         {/* ─── DROITE — live, parasha, communauté, Hayom Yom ─── */}
         <aside
