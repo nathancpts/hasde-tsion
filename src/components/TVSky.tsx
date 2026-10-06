@@ -621,7 +621,7 @@ export function TVSky({
       <div className="absolute left-0 bottom-0 z-10" style={{ right: contentRight, padding: "0 2vw 2.6vh" }}>
         <div
           className="grid"
-          style={{ gridTemplateColumns: `repeat(${Math.max(1, cards.length)}, minmax(0,1fr))`, gap: "10px" }}
+          style={{ gridTemplateColumns: `repeat(${Math.max(1, cards.length)}, minmax(0,1fr))`, columnGap: "10px", rowGap: 0 }}
         >
           {cards.map((e, i) => {
             const cur = i === 0 && visible.length > 0;
@@ -631,13 +631,16 @@ export function TVSky({
                 key={`${e.label}-${e.value}`}
                 style={{
                   position: "relative",
+                  display: "grid",
+                  gridRow: "span 3",
+                  gridTemplateRows: "subgrid",
                   borderRadius: 18,
                   padding: "14px 16px 16px",
                   minWidth: 0,
                   background: cur ? "rgba(5,13,32,.30)" : "rgba(5,13,32,.30)",
                   border: `1px solid ${cur ? "rgba(240,214,137,.62)" : "rgba(219,231,251,.14)"}`,
                   backdropFilter: "blur(3px)",
-                  transform: cur ? "translateY(-8px)" : "none",
+                  transform: "none",
                   transition: "background .5s, border-color .5s, transform .5s",
                   boxShadow: "none",
                 }}
