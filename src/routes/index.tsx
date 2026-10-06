@@ -2167,8 +2167,9 @@ function PlanningTV() {
             </button>
           </div>
 
-          {/* COMMUNAUTÉ — donateurs de la Séouda */}
-          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0 1 auto", maxHeight: "22%", padding: "1.5vh 1.4vw" }}>
+          {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
+          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 1 auto", maxHeight: "22%" }}>
+          <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.5vh 1.4vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
             </p>
@@ -2200,6 +2201,13 @@ function PlanningTV() {
               )}
             </div>
           </article>
+          <div className="relative overflow-hidden" style={{ ...GLASS, flex: "0 0 auto", aspectRatio: "16 / 9", width: "42%", padding: 0, borderRadius: 22 }}>
+            <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
+            <span className="absolute left-[0.8vh] top-[0.8vh] flex items-center gap-[0.5vh] rounded-full uppercase" style={{ background: "rgba(5,13,32,.6)", padding: "0.3vh 0.8vh", fontSize: "1.1vh", fontWeight: 700, letterSpacing: "0.2em", color: "#F3F6FC" }}>
+              <span style={{ width: "0.8vh", height: "0.8vh", borderRadius: 99, background: "#ef4444" }} /> Live
+            </span>
+          </div>
+          </div>
 
           {/* PARASHA — défilement doux */}
           <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
