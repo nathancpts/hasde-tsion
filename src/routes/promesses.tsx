@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteChrome } from "@/components/SiteChrome";
+import { submitPledge } from "@/lib/promesses.functions";
 
 export const Route = createFileRoute("/promesses")({
   head: () => ({
