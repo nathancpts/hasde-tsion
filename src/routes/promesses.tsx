@@ -99,18 +99,34 @@ function Lines({ items }: { items: string[] }) {
 function PromessesPage() {
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const form = e.currentTarget;
+    const d = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    setError(null);
     if (!d.name?.trim()) return setError("Merci d'indiquer votre nom.");
     if (!d.phone?.trim() && !d.email?.trim())
       return setError("Merci d'indiquer un téléphone ou un e-mail pour que nous puissions vous recontacter.");
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      setError("Le registre des promesses n'est pas encore connecté. Merci de réessayer un peu plus tard.");
-    }, 400);
+    const res = await submitPledge({
+      data: {
+        name: d.name.trim(),
+        honoree: d.honoree?.trim() || undefined,
+        phone: d.phone?.trim() || undefined,
+        email: d.email?.trim() || undefined,
+        schedule: d.schedule?.trim() || undefined,
+        intention: d.intention?.trim() || undefined,
+      },
+    });
+    setSending(false);
+    if (res.ok) {
+      setSent(true);
+      form.reset();
+    } else {
+      setError(res.error);
+    }
   };
 
   return (
