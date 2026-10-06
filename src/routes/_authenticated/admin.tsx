@@ -24,6 +24,7 @@ import {
   Users,
   Smartphone,
   History,
+  Gift,
 } from "lucide-react";
 import { DEFAULT_PARASHA_CONTENT } from "@/lib/parasha-content";
 
