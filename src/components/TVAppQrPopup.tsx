@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 
-const APP_URL = "https://hasde-tsion.com/APP";
-const INTERVAL = 15 * 60 * 1000;
-const DURATION = 45 * 1000;
+const APP_URL = "https://hasde-tsion.com/APP?install=1";
+const INTERVAL = 10 * 60 * 1000;
+const DURATION = 30 * 1000;
 
-/** Toutes les 15 min sur l'écran TV, invite à installer l'application via un QR code. */
+/** Toutes les 10 min (30 s) sur l'écran TV, invite à installer l'application via un QR code. */
 export function TVAppQrPopup() {
   const [open, setOpen] = useState(false);
   const [qr, setQr] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export function TVAppQrPopup() {
             Installez l’application sur votre téléphone
           </h2>
           <p style={{ fontSize: "2.2vh", color: "#DBE7FB", marginTop: "2vh", lineHeight: 1.5 }}>
-            Scannez le QR code : horaires, parasha, chants et notifications de la communauté, toujours avec vous.
+            Scannez le QR code : sur Android elle s’installe directement, sur iPhone les étapes s’affichent. Horaires, parasha, chants et notifications de la communauté, toujours avec vous.
           </p>
           <p style={{ fontSize: "1.8vh", color: "#9FB0CF", marginTop: "2vh" }}>hasde-tsion.com/APP</p>
         </div>
