@@ -7,8 +7,8 @@
   "background_color": "#1a1a3a",
   "theme_color": "#1a1a3a",
   "icons": [
-    { "src": "/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/app-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/__l5e/assets-v1/c7560a28-d102-4434-b627-28a67a44a80b/app-icon-192-gold.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/__l5e/assets-v1/3c11ef2a-083e-4734-b9ad-492513c42644/app-icon-512-gold.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/__l5e/assets-v1/5f47dba5-4b30-45c4-8669-344bb8fa7ea3/app-icon-maskable-512-gold.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

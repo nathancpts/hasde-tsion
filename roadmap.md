@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Remplacer le logo partout par le logo doré fourni, sans modifier le favicon
+
 - [x] TV : commandes en bas, horaires alignés, titres uniformes et même vitesse de défilement Parasha/Hayom Yom
 
 - [x] Réduire et affiner les gros boutons (ESIDDUR, Faire un don)
