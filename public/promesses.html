@@ -428,6 +428,28 @@ if(document.documentElement.classList.contains('embed')){
   new ResizeObserver(post).observe(document.body);addEventListener('load',post);post();setInterval(post,1000);
   document.querySelectorAll('a[href="/"]').forEach(a=>a.target='_top');
 }
+/* Révélation au défilement, même rendu que l'accueil (montée 50px, 1.2s, expo-out) */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const st=document.createElement('style');
+  st.textContent='.fade{animation:none!important}.rv{opacity:0;transform:translateY(50px);transition:opacity 1.2s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1);will-change:opacity,transform}.rv.in{opacity:1;transform:none}';
+  document.head.appendChild(st);
+  const SEL='.notice,.hero,.figure,.panel-g,.card,.thanks';
+  let top=0,vh=innerHeight,embed=document.documentElement.classList.contains('embed');
+  const check=()=>{
+    document.querySelectorAll(SEL).forEach((el,i)=>{
+      if(el.classList.contains('in'))return;
+      if(!el.classList.contains('rv')){el.classList.add('rv');}
+      const r=el.getBoundingClientRect();
+      const y=(embed?top:0)+r.top;
+      if(y<vh*0.9){el.style.transitionDelay=(Math.min(i,4)*0.08)+'s';requestAnimationFrame(()=>el.classList.add('in'));}
+    });
+  };
+  addEventListener('message',e=>{const d=e.data;if(d&&typeof d.pTop==='number'){top=d.pTop;vh=d.vh;check();}});
+  addEventListener('scroll',check,{passive:true});
+  new MutationObserver(check).observe(document.body,{childList:true,subtree:true});
+  check();setTimeout(check,300);
+})();
 </script>
 </body>
 </html>
