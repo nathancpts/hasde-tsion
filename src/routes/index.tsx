@@ -26,6 +26,7 @@ import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
 const logo = logoAsset.url;
+const logoBleu = logoBleuAsset.url;
 
 
 
