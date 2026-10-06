@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SiteChrome } from "@/components/SiteChrome";
 import { createFileRoute } from "@tanstack/react-router";
 
