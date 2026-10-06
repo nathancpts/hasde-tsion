@@ -2126,7 +2126,8 @@ function PlanningTV() {
           />
       </div>
       <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
-        <section className="relative min-h-0 min-w-0">
+        <section className="relative min-h-0 min-w-0" />
+        </section>
 
         {/* ─── DROITE — live, parasha, communauté, Hayom Yom ─── */}
         <aside
