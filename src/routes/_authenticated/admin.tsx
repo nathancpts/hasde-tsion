@@ -301,66 +301,101 @@ function AdminPage() {
   const pending = rows.filter((r) => !r.sent_at);
   const sentRows = rows.filter((r) => r.sent_at);
 
+  const tabs = [
+    ["envoyer", "Notifications", Bell, pending.length || null],
+    ["promesses", "Promesses de don", Gift, pledges.length || null],
+    ["parasha", "Parasha", BookOpen, null],
+    ["historique", "Historique", History, null],
+    ["membres", "Membres", Users, null],
+  ] as const;
+  const tabTitle: Record<typeof tab, [string, string]> = {
+    envoyer: ["Notifications", "Envoyez ou programmez un message vers tous les appareils inscrits."],
+    promesses: ["Promesses de don", "Les promesses reçues via la page Promesses, à recontacter directement."],
+    parasha: ["Parasha de la semaine", "Remplacez le texte affiché sur le site et sur la TV."],
+    historique: ["Historique", "Les notifications déjà envoyées."],
+    membres: ["Membres", "Les comptes inscrits sur l'application."],
+  };
+  const statCards = [
+    ["Membres", stats?.members ?? "—", Users],
+    ["Appareils", stats?.devices ?? "—", Smartphone],
+    ["Promesses", pledges.length, Gift],
+    ["Envoyées", sentRows.length, Send],
+  ] as const;
+
   return (
-    <main className="min-h-screen bg-[#F8F9FA] pb-16">
+    <main className="min-h-screen bg-[#F4F6FA] pb-20 [&_input]:rounded-xl [&_input]:border-[#0a2a6b]/12 [&_input]:bg-[#F8FAFC] [&_textarea]:rounded-xl [&_textarea]:border-[#0a2a6b]/12 [&_textarea]:bg-[#F8FAFC] [&_input:focus-visible]:ring-[#1f4ea8]/30 [&_textarea:focus-visible]:ring-[#1f4ea8]/30">
       <Toaster />
       <header
-        className="px-5 pt-6 pb-16 text-white"
-        style={{ background: "linear-gradient(160deg,#0a2a6b 0%,#1f4ea8 100%)" }}
+        className="text-white"
+        style={{ background: "radial-gradient(120% 140% at 0% 0%,#1f4ea8 0%,#0a2a6b 55%,#061a45 100%)" }}
       >
-        <Link to="/compte" className="inline-flex items-center gap-2 text-white/85 text-sm">
-          <ArrowLeft className="h-4 w-4" /> Mon compte
-        </Link>
-        <h1 className="font-display text-3xl font-bold mt-6">Administration</h1>
-        <p className="text-white/75 text-sm mt-1">Notifications de la communauté</p>
+        <div className="mx-auto max-w-6xl px-5 pt-6 pb-24">
+          <div className="flex items-center justify-between">
+            <Link
+              to="/compte"
+              className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-sm text-white/90 backdrop-blur transition hover:bg-white/20"
+            >
+              <ArrowLeft className="h-4 w-4" /> Mon compte
+            </Link>
+            <span className="rounded-full border border-[#d4b26a]/50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[#e9d29a]">
+              Admin
+            </span>
+          </div>
+          <h1 className="font-display text-3xl md:text-4xl font-bold mt-8">Administration</h1>
+          <p className="text-white/70 text-sm mt-1.5">Hasdé Tsion · tableau de bord</p>
+        </div>
       </header>
 
-      <div className="px-4 -mt-10 space-y-4 max-w-2xl mx-auto">
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-white p-4 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
-            <div className="flex items-center gap-2 text-[#1f4ea8]">
-              <Users className="h-4 w-4" />
-              <span className="text-[11px] uppercase tracking-wider">Membres</span>
-            </div>
-            <p className="font-display text-2xl font-bold text-[#0a2a6b] mt-1">
-              {stats?.members ?? "—"}
-            </p>
-          </div>
-          <div className="rounded-2xl bg-white p-4 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
-            <div className="flex items-center gap-2 text-[#1f4ea8]">
-              <Smartphone className="h-4 w-4" />
-              <span className="text-[11px] uppercase tracking-wider">Appareils</span>
-            </div>
-            <p className="font-display text-2xl font-bold text-[#0a2a6b] mt-1">
-              {stats?.devices ?? "—"}
-            </p>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-1.5 rounded-2xl bg-white p-1.5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
-          {(
-            [
-              ["envoyer", "Envoyer", Bell],
-              ["parasha", "Parasha", BookOpen],
-              ["promesses", "Promesses de don", Gift],
-              ["historique", "Historique", History],
-              ["membres", "Membres", Users],
-            ] as const
-          ).map(([key, label, Icon]) => (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              className={`flex-1 flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-colors duration-300 border-0 outline-none appearance-none ${
-                tab === key ? "bg-[#0a2a6b] text-white" : "text-[#0a2a6b]/70"
-              }`}
+      <div className="mx-auto max-w-6xl px-4 -mt-16 space-y-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {statCards.map(([label, value, Icon]) => (
+            <div
+              key={label}
+              className="rounded-2xl bg-white p-4 md:p-5 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.25)]"
             >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
-            </button>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] uppercase tracking-wider text-[#0a2a6b]/60">{label}</span>
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#1f4ea8]/10 text-[#1f4ea8]">
+                  <Icon className="h-4 w-4" />
+                </span>
+              </div>
+              <p className="font-display text-3xl font-bold text-[#0a2a6b] mt-2">{value}</p>
+            </div>
           ))}
         </div>
+
+        <div className="grid gap-5 md:grid-cols-[230px_1fr] items-start">
+          <nav className="flex md:flex-col gap-1 overflow-x-auto rounded-2xl bg-white p-1.5 ring-1 ring-[#0a2a6b]/5 shadow-[0_10px_30px_-12px_rgba(10,42,107,0.18)] md:sticky md:top-4">
+            {tabs.map(([key, label, Icon, badge]) => (
+              <button
+                key={key}
+                onClick={() => setTab(key)}
+                className={`shrink-0 flex items-center gap-2.5 whitespace-nowrap rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${
+                  tab === key
+                    ? "bg-[#0a2a6b] text-white shadow-sm"
+                    : "text-[#0a2a6b]/75 hover:bg-[#0a2a6b]/5"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                <span className="flex-1 text-left">{label}</span>
+                {badge ? (
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                      tab === key ? "bg-white/20 text-white" : "bg-[#d4b26a]/20 text-[#8a6a1f]"
+                    }`}
+                  >
+                    {badge}
+                  </span>
+                ) : null}
+              </button>
+            ))}
+          </nav>
+
+          <div className="space-y-4 min-w-0">
+            <div className="px-1">
+              <h2 className="font-display text-xl font-bold text-[#0a2a6b]">{tabTitle[tab][0]}</h2>
+              <p className="text-sm text-[#0a2a6b]/60">{tabTitle[tab][1]}</p>
+            </div>
 
         {tab === "envoyer" && (
           <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)] space-y-3">
