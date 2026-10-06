@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteChrome } from "@/components/SiteChrome";
+import { submitPledge } from "@/lib/promesses.functions";
 
 export const Route = createFileRoute("/promesses")({
   head: () => ({
@@ -98,18 +99,34 @@ function Lines({ items }: { items: string[] }) {
 function PromessesPage() {
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const form = e.currentTarget;
+    const d = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    setError(null);
     if (!d.name?.trim()) return setError("Merci d'indiquer votre nom.");
     if (!d.phone?.trim() && !d.email?.trim())
       return setError("Merci d'indiquer un téléphone ou un e-mail pour que nous puissions vous recontacter.");
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      setError("Le registre des promesses n'est pas encore connecté. Merci de réessayer un peu plus tard.");
-    }, 400);
+    const res = await submitPledge({
+      data: {
+        name: d.name.trim(),
+        honoree: d.honoree?.trim() || undefined,
+        phone: d.phone?.trim() || undefined,
+        email: d.email?.trim() || undefined,
+        schedule: d.schedule?.trim() || undefined,
+        intention: d.intention?.trim() || undefined,
+      },
+    });
+    setSending(false);
+    if (res.ok) {
+      setSent(true);
+      form.reset();
+    } else {
+      setError(res.error);
+    }
   };
 
   return (
@@ -206,14 +223,26 @@ function PromessesPage() {
                 <label className="block text-sm font-semibold">Intention particulière <span className="font-normal text-chant-muted">· facultatif</span>
                   <textarea name="intention" rows={3} placeholder="Refoua chelema, zivoug, réussite d'un enfant, élévation de l'âme…" className={`${field} mt-2`} />
                 </label>
-                <button type="submit" disabled={sending} className="w-full rounded-full bg-chant-gold py-3.5 font-bold text-chant-night transition hover:brightness-110 disabled:opacity-60">
-                  {sending ? "Enregistrement…" : "Enregistrer ma promesse"}
-                </button>
-                <p className="text-xs text-chant-muted">Aucune donnée bancaire n'est demandée.<br />Vos informations restent réservées à l'administration de la synagogue.</p>
-                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-chant-muted"><span className="h-px flex-1 bg-chant-line" />ou<span className="h-px flex-1 bg-chant-line" /></div>
-                <a href={HELLOASSO} target="_blank" rel="noopener" className="block w-full rounded-full border border-chant-line py-3.5 text-center font-bold transition hover:border-chant-gold">
-                  Régler dès maintenant sur HelloAsso ↗
-                </a>
+                {sent ? (
+                  <div role="status" className="rounded-2xl border border-chant-gold/50 bg-chant-gold/10 px-4 py-4 text-sm leading-relaxed">
+                    <b className="text-chant-gold">Votre promesse est enregistrée, merci !</b>
+                    <p className="mt-1 text-chant-ice">Votre nom sera prononcé à l'ouverture du Hekhal. Nous vous recontacterons pour convenir du règlement.</p>
+                    <button type="button" onClick={() => setSent(false)} className="mt-3 font-semibold text-chant-gold underline underline-offset-4">
+                      Faire une autre promesse
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button type="submit" disabled={sending} className="w-full rounded-full bg-chant-gold py-3.5 font-bold text-chant-night transition hover:brightness-110 disabled:opacity-60">
+                      {sending ? "Enregistrement…" : "Enregistrer ma promesse"}
+                    </button>
+                    <p className="text-xs text-chant-muted">Aucune donnée bancaire n'est demandée.<br />Vos informations restent réservées à l'administration de la synagogue.</p>
+                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-chant-muted"><span className="h-px flex-1 bg-chant-line" />ou<span className="h-px flex-1 bg-chant-line" /></div>
+                    <a href={HELLOASSO} target="_blank" rel="noopener" className="block w-full rounded-full border border-chant-line py-3.5 text-center font-bold transition hover:border-chant-gold">
+                      Régler dès maintenant sur HelloAsso ↗
+                    </a>
+                  </>
+                )}
               </form>
             </aside>
           </Reveal>

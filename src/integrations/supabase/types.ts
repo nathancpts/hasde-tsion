@@ -143,6 +143,42 @@ export type Database = {
         }
         Relationships: []
       }
+      promise_pledges: {
+        Row: {
+          created_at: string
+          email: string | null
+          honoree: string | null
+          id: string
+          intention: string | null
+          name: string
+          phone: string | null
+          schedule: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          honoree?: string | null
+          id?: string
+          intention?: string | null
+          name: string
+          phone?: string | null
+          schedule?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          honoree?: string | null
+          id?: string
+          intention?: string | null
+          name?: string
+          phone?: string | null
+          schedule?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       push_log: {
         Row: {
           key: string
