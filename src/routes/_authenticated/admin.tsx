@@ -100,6 +100,7 @@ function AdminPage() {
     devices: number;
     list: { id: string; first_name: string | null; last_name: string | null; created_at: string }[];
   } | null>(null);
+  const [pledges, setPledges] = useState<PledgeRow[]>([]);
 
   const refresh = useCallback(async () => {
     const { data } = await supabase
