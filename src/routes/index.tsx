@@ -2118,7 +2118,7 @@ function PlanningTV() {
       <div className="absolute inset-0 z-0">
           <TVSky
             contentRight="37.6%"
-            logoUrl={logo}
+            logoUrl={logoBleu}
             sunrise={tvSunrise}
             sunset={tvSunset}
             events={tvEvents}
