@@ -82,7 +82,7 @@ function AdminPage() {
   const removePledge = useServerFn(deletePledge);
 
   const [checking, setChecking] = useState(true);
-  const [tab, setTab] = useState<"envoyer" | "parasha" | "historique" | "membres">("envoyer");
+  const [tab, setTab] = useState<"envoyer" | "parasha" | "promesses" | "historique" | "membres">("envoyer");
   const [pRowId, setPRowId] = useState<string | null>(null);
   const [pNom, setPNom] = useState("");
   const [pNomHe, setPNomHe] = useState("");
