@@ -344,7 +344,7 @@ function AdminPage() {
             [
               ["envoyer", "Envoyer", Bell],
               ["parasha", "Parasha", BookOpen],
-              ["promesses", "Promesses", Gift],
+              ["promesses", "Promesses de don", Gift],
               ["historique", "Historique", History],
               ["membres", "Membres", Users],
             ] as const
@@ -645,6 +645,19 @@ function AdminPage() {
                     <p className="text-[11px] text-muted-foreground mt-0.5">
                       {[p.phone, p.email].filter(Boolean).join(" · ") || "Coordonnées non fournies"}
                     </p>
+                    {(p.phone || p.email) && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {p.phone && (
+                          <a href={`tel:${p.phone.replace(/\s/g, "")}`} className="rounded-full bg-[#0a2a6b] px-3 py-1 text-[11px] font-semibold text-white">Appeler</a>
+                        )}
+                        {p.phone && (
+                          <a href={`https://wa.me/${p.phone.replace(/\D/g, "").replace(/^0/, "33")}`} target="_blank" rel="noopener" className="rounded-full bg-[#16a34a] px-3 py-1 text-[11px] font-semibold text-white">WhatsApp</a>
+                        )}
+                        {p.email && (
+                          <a href={`mailto:${p.email}?subject=${encodeURIComponent("Votre promesse de don – Hasdé Tsion")}`} className="rounded-full border border-[#0a2a6b] px-3 py-1 text-[11px] font-semibold text-[#0a2a6b]">E-mail</a>
+                        )}
+                      </div>
+                    )}
                     {p.schedule && <p className="text-[11px] text-muted-foreground">Règlement : {p.schedule}</p>}
                     {p.intention && <p className="text-[11px] text-foreground/80 mt-0.5 italic">« {p.intention} »</p>}
                     <p className="text-[10px] text-muted-foreground mt-1">
