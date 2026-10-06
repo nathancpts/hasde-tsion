@@ -21,7 +21,7 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
     let W = 0, H = 0, raf = 0;
     const mouse = { x: 0.5, y: 0.3, tx: 0.5, ty: 0.3 };
     const size = () => {
-      const r = Math.min(devicePixelRatio || 1, 1.5) * 0.5;
+      const r = 0.3;
       W = c.width = Math.max(1, innerWidth * r);
       H = c.height = Math.max(1, innerHeight * r);
     };
@@ -35,7 +35,11 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
       { c: [63, 127, 220], r: 0.45, sx: 0.00014, sy: 0.0001, ox: 0.5, oy: 0.8, a: 0.42 },
       { c: [240, 214, 137], r: 0.3, sx: 0.00009, sy: 0.00012, ox: 0.7, oy: 0.7, a: 0.18 },
     ];
+    let last = 0;
     const draw = (t: number) => {
+      if (!RM) raf = requestAnimationFrame(draw);
+      if (document.hidden || t - last < 33) return;
+      last = t;
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       cx.globalCompositeOperation = "source-over";
@@ -58,7 +62,6 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
       g.addColorStop(1, "rgba(0,0,0,0)");
       cx.fillStyle = g;
       cx.fillRect(0, 0, W, H);
-      if (!RM) raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
     return () => {

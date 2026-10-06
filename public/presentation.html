@@ -720,7 +720,7 @@ $$('.words').forEach(h => {
 /* ===== Fond vivant (canvas) ===== */
 const cv = $('#bg'), cx = cv.getContext('2d');
 let W, H, mouse = {x:.5, y:.3, tx:.5, ty:.3};
-function size(){ const r = Math.min(devicePixelRatio || 1, 1.5) * .5; W = cv.width = Math.max(1, innerWidth * r); H = cv.height = Math.max(1, innerHeight * r); }
+function size(){ const r = .3; W = cv.width = Math.max(1, innerWidth * r); H = cv.height = Math.max(1, innerHeight * r); }
 size(); addEventListener('resize', size);
 addEventListener('pointermove', e => { mouse.tx = e.clientX / innerWidth; mouse.ty = e.clientY / innerHeight; });
 const blobs = [
@@ -729,7 +729,10 @@ const blobs = [
   {c:[63,127,220], r:.45, sx:.00014, sy:.0001, ox:.5, oy:.8},
   {c:[240,214,137], r:.3, sx:.00009, sy:.00012, ox:.7, oy:.7, a:.18}
 ];
+let bgLast = 0;
 function draw(t){
+  if (!RM) requestAnimationFrame(draw);
+  if (document.hidden || t - bgLast < 33) return; bgLast = t;
   mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
   cx.globalCompositeOperation = 'source-over';
   cx.fillStyle = '#050d20'; cx.fillRect(0,0,W,H);
@@ -741,7 +744,6 @@ function draw(t){
   });
   const mx = mouse.x*W, my = mouse.y*H, mr = .35*Math.max(W,H), g = cx.createRadialGradient(mx,my,0,mx,my,mr);
   g.addColorStop(0,'rgba(140,190,255,.28)'); g.addColorStop(1,'rgba(0,0,0,0)'); cx.fillStyle = g; cx.fillRect(0,0,W,H);
-  if (!RM) requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
 
@@ -836,7 +838,7 @@ function buildScene(){
 /* ---- soleil photoréaliste : canvas en fusion additive (surexposition, halo, glare, étoile de diffraction, reflets d'objectif, frange chromatique) ---- */
 const scv = $('[data-suncv]'), sctx = scv.getContext('2d');
 let SUN = null, sceneOn = false, DPR = 1;
-function sizeSunCanvas(){ const ab = $('[data-above]'); DPR = Math.min(devicePixelRatio || 1, 1.5);
+function sizeSunCanvas(){ const ab = $('[data-above]'); DPR = Math.min(devicePixelRatio || 1, 1.25);
   scv.width = Math.max(1, Math.round(ab.clientWidth * DPR)); scv.height = Math.max(1, Math.round(ab.clientHeight * DPR)); }
 function rg(x, y, r, stops){ const g = sctx.createRadialGradient(x, y, 0, x, y, r); stops.forEach(([o, c]) => g.addColorStop(o, c)); return g; }
 function fillR(x, y, r){ sctx.fillRect(x - r, y - r, r * 2, r * 2); }
@@ -893,7 +895,8 @@ function drawSun(t){
     fillR(gx, gy, r); });
   c.globalCompositeOperation = 'source-over';
 }
-(function sunLoop(t){ if (sceneOn && !RM) drawSun(t); requestAnimationFrame(sunLoop); })(0);
+let sunLast = 0;
+(function sunLoop(t){ requestAnimationFrame(sunLoop); if (sceneOn && !RM && !document.hidden && t - sunLast >= 30){ sunLast = t; drawSun(t); } })(0);
 new IntersectionObserver(es => es.forEach(e => { sceneOn = e.isIntersecting; if (sceneOn) drawSun(performance.now()); }), {threshold:0}).observe($('.day-stick'));
 let lastP = 0;
 function setDay(p){
@@ -1007,7 +1010,7 @@ let RAIN = 0;
   function frame(t){
     requestAnimationFrame(frame); if (document.hidden || t - last < 30) return; const dt = Math.min(60, t - last); last = t;
     const box = $('[data-events]'); if (!box || !box.classList.contains('wet') || !RAIN) { if (box) box.querySelectorAll('canvas.ev-water').forEach(c => c.remove()); return; }
-    box.querySelectorAll(':scope>.ev').forEach(ev => { const o = setup(ev), dpr = Math.min(2, devicePixelRatio||1), W = ev.clientWidth, H = ev.clientHeight;
+    box.querySelectorAll(':scope>.ev').forEach(ev => { const o = setup(ev), dpr = Math.min(1.25, devicePixelRatio||1), W = ev.clientWidth, H = ev.clientHeight;
       if (o.w !== W || o.h !== H){ o.w = W; o.h = H; o.cv.width = W*dpr; o.cv.height = H*dpr; o.cx.setTransform(dpr,0,0,dpr,0,0); }
       const max = Math.round(8 + RAIN*16);
       if (t > o.next && o.d.length < max){ o.d.push({x:Math.random()*W, y:Math.random()*H, r:1 + Math.random()*2 + (Math.random()<.15 ? 1.5 : 0), v:0, p:Math.random()*3000}); o.next = t + 150 + Math.random()*(1400 - RAIN*900); }
