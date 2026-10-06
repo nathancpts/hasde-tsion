@@ -1516,12 +1516,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
                 {t.label}
               </button>
             ))}
-            <Link
-              to="/promesses"
-              className="min-w-0 flex-1 px-0.5 py-2 rounded-full text-[11px] font-semibold text-center text-foreground/60 transition-colors"
-            >
-              Promesses
-            </Link>
           </div>
 
           {sectionTab === "horaires" && (
