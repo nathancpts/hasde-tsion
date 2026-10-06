@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChantsRouteImport } from './routes/chants'
+import { Route as CommunauteRouteImport } from './routes/communaute'
 import { Route as HayomYomRouteImport } from './routes/hayom-yom'
 import { Route as PromessesRouteImport } from './routes/promesses'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -48,6 +49,11 @@ const AuthRoute = AuthRouteImport.update({
 const ChantsRoute = ChantsRouteImport.update({
   id: '/chants',
   path: '/chants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunauteRoute = CommunauteRouteImport.update({
+  id: '/communaute',
+  path: '/communaute',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HayomYomRoute = HayomYomRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/chants': typeof ChantsRoute
+  '/communaute': typeof CommunauteRoute
   '/hayom-yom': typeof HayomYomRoute
   '/promesses': typeof PromessesRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/chants': typeof ChantsRoute
+  '/communaute': typeof CommunauteRoute
   '/hayom-yom': typeof HayomYomRoute
   '/promesses': typeof PromessesRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/chants': typeof ChantsRoute
+  '/communaute': typeof CommunauteRoute
   '/hayom-yom': typeof HayomYomRoute
   '/promesses': typeof PromessesRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/chants'
+    | '/communaute'
     | '/hayom-yom'
     | '/promesses'
     | '/reset-password'
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/chants'
+    | '/communaute'
     | '/hayom-yom'
     | '/promesses'
     | '/reset-password'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/chants'
+    | '/communaute'
     | '/hayom-yom'
     | '/promesses'
     | '/reset-password'
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
   ChantsRoute: typeof ChantsRoute
+  CommunauteRoute: typeof CommunauteRoute
   HayomYomRoute: typeof HayomYomRoute
   PromessesRoute: typeof PromessesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -269,6 +282,13 @@ declare module '@tanstack/react-router' {
       path: '/chants'
       fullPath: '/chants'
       preLoaderRoute: typeof ChantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/communaute': {
+      id: '/communaute'
+      path: '/communaute'
+      fullPath: '/communaute'
+      preLoaderRoute: typeof CommunauteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hayom-yom': {
@@ -370,6 +390,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   AuthRoute: AuthRoute,
   ChantsRoute: ChantsRoute,
+  CommunauteRoute: CommunauteRoute,
   HayomYomRoute: HayomYomRoute,
   PromessesRoute: PromessesRoute,
   ResetPasswordRoute: ResetPasswordRoute,

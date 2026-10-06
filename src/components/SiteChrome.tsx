@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /** En-tête + fond vivant identiques au site de présentation (public/presentation.html). */
-export function SiteChrome({ active = "chants" }: { active?: "chants" | "promesses" }) {
+export function SiteChrome({ active = "chants" }: { active?: "chants" | "promesses" | "communaute" }) {
   const cv = useRef<HTMLCanvasElement>(null);
   const [solid, setSolid] = useState(false);
 
@@ -79,7 +79,7 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
         <div className="site-links">
           <a href="/#etude">Étude</a>
           <a href="/chants" className={active === "chants" ? "on" : undefined} aria-current={active === "chants" ? "page" : undefined}>Chants</a>
-          <a href="/#communaute">Communauté</a>
+          <a href="/communaute" className={active === "communaute" ? "on" : undefined} aria-current={active === "communaute" ? "page" : undefined}>Communauté</a>
           <a href="/promesses" className={active === "promesses" ? "on" : undefined} aria-current={active === "promesses" ? "page" : undefined}>Promesses</a>
         </div>
         <a className="site-tv" href="/TV"><i />Mode TV</a>
