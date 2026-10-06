@@ -40,3 +40,54 @@ export const submitPledge = createServerFn({ method: "POST" })
       return { ok: false as const, error: "Enregistrement impossible pour le moment, merci de réessayer." };
     }
   });
+
+export type PledgeRow = {
+  id: string;
+  name: string;
+  honoree: string | null;
+  phone: string | null;
+  email: string | null;
+  schedule: string | null;
+  intention: string | null;
+  status: string;
+  created_at: string;
+};
+
+export const getAdminPledges = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (error || !data) throw new Response("Forbidden", { status: 403 });
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error: readError } = await supabaseAdmin
+      .from("promise_pledges")
+      .select("id, name, honoree, phone, email, schedule, intention, status, created_at")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (readError) {
+      console.error("[promesses] admin read failed:", readError.message);
+      return { pledges: [] as PledgeRow[] };
+    }
+    return { pledges: (rows ?? []) as PledgeRow[] };
+  });
+
+export const deletePledge = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string }) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { data: isAdmin, error } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (error || !isAdmin) throw new Response("Forbidden", { status: 403 });
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: delError } = await supabaseAdmin.from("promise_pledges").delete().eq("id", data.id);
+    if (delError) {
+      console.error("[promesses] delete failed:", delError.message);
+      return { ok: false as const };
+    }
+    return { ok: true as const };
+  });
