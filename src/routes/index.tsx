@@ -1,6 +1,6 @@
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { isTVDevice, isAppPath } from "@/lib/tv-detect";
+import { isTVDevice, isAppPath, isPhoneDevice } from "@/lib/tv-detect";
 import { TVSky, type TVSkyEvent } from "@/components/TVSky";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -530,7 +530,7 @@ function useShowPresentation(): boolean {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setShow(mq.matches && !isTVDevice() && !isAppPath());
+    const update = () => setShow(mq.matches && !isTVDevice() && !isAppPath() && !isPhoneDevice());
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
@@ -542,7 +542,7 @@ function useIsTV(): boolean | null {
   const [isTV, setIsTV] = useState<boolean | null>(null);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsTV(isTVDevice() || (mq.matches && !isAppPath()));
+    const update = () => setIsTV(isTVDevice() || (mq.matches && !isAppPath() && !isPhoneDevice()));
     update();
     mq.addEventListener("change", update);
     window.addEventListener("resize", update);
