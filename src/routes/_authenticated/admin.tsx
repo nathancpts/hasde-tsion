@@ -603,6 +603,48 @@ function AdminPage() {
             )}
           </section>
         )}
+
+        {tab === "promesses" && (
+          <section className="rounded-2xl bg-white p-5 shadow-[0_2px_10px_rgba(10,42,107,0.08)]">
+            {pledges.length === 0 ? (
+              <p className="text-xs text-muted-foreground">Aucune promesse enregistrée pour le moment.</p>
+            ) : (
+              <ul className="space-y-3">
+                {pledges.map((p) => (
+                  <li key={p.id} className="rounded-xl bg-[#F1F5F9] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-semibold text-[#0a2a6b]">{p.name}</p>
+                      <button
+                        onClick={async () => {
+                          const res = await removePledge({ data: { id: p.id } });
+                          if (res.ok) {
+                            toast.success("Promesse supprimée");
+                            setPledges((prev) => prev.filter((x) => x.id !== p.id));
+                          } else {
+                            toast.error("Suppression impossible");
+                          }
+                        }}
+                        className="p-1 rounded-lg text-red-600"
+                        title="Supprimer"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    {p.honoree && <p className="text-xs text-foreground/80 mt-0.5">À citer : {p.honoree}</p>}
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      {[p.phone, p.email].filter(Boolean).join(" · ") || "Coordonnées non fournies"}
+                    </p>
+                    {p.schedule && <p className="text-[11px] text-muted-foreground">Règlement : {p.schedule}</p>}
+                    {p.intention && <p className="text-[11px] text-foreground/80 mt-0.5 italic">« {p.intention} »</p>}
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      {new Date(p.created_at).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
       </div>
     </main>
   );
