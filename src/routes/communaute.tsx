@@ -104,9 +104,20 @@ function CommunautePage() {
                   <p className="italic text-chant-muted">Aucune dédicace pour le moment.</p>
                 ) : (
                   DONATIONS_REPAS.map((d, i) => (
-                    <div key={i} className="flex items-baseline justify-between gap-4 border-t border-dashed border-chant-line py-3 first:border-t-0">
-                      <span className="text-lg font-semibold">{d.donateur}</span>
-                      {d.dedicace && <span className="text-sm italic text-chant-muted">{d.dedicace}</span>}
+                    <div key={i} className="border-t border-dashed border-chant-line py-4 first:border-t-0">
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <span className="text-lg font-semibold">{d.donateur}</span>
+                        {d.occasion && <span className="text-sm text-chant-muted">{d.occasion}</span>}
+                      </div>
+                      {d.dedicace && <p className="mt-1 text-sm italic text-chant-muted">{d.dedicace}</p>}
+                      {d.dedicaceHe && <p className="mt-2 text-base leading-snug text-chant-gold" dir="rtl">{d.dedicaceHe}</p>}
+                      {d.details && d.details.length > 0 && (
+                        <ul className="mt-2 space-y-1">
+                          {d.details.map((line, j) => (
+                            <li key={j} className="text-sm text-chant-muted">{line}</li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   ))
                 )}
