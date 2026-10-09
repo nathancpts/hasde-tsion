@@ -1,5 +1,5 @@
 import { getCaljTimes } from "./calj.functions";
-import { getOverride, getCommunityMinha, getCommunitySchedule } from "./zmanim-overrides";
+import { getOverride, getCommunityMinha, getCommunitySchedule, getCommunityTime } from "./zmanim-overrides";
 import { getYahrtzeits, frenchHebMonth } from "./yahrtzeits";
 import { getCurrentParasha, getHolidayParasha } from "./parashot";
 
@@ -265,14 +265,15 @@ function timeOnly(iso: string, tz: string = DEFAULT_LOC.tzid): string {
 
 export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<LiveWeek> {
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
-  const friday = nextDow(now, 5);
+  const friday = now.getDay() === 6 ? new Date(now) : nextDow(now, 5);
+  if (now.getDay() === 6) friday.setDate(friday.getDate() - 1);
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
 
   const caljWeek = loc ? null : await getCaljTimes({ data: { date: ymd(now) } }).catch(() => null);
   const caljShab = caljWeek?.shabbat?.date === ymd(saturday) ? caljWeek.shabbat : null;
 
-  const start = ymd(now);
+  const start = ymd(friday < now ? friday : now);
   const endDate = new Date(now);
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
@@ -366,7 +367,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       daf: dafFri ? `Daf Yomi · ${dafFri.hebrew ?? dafFri.title}` : "—",
       omer: omerNum,
       tehilim: tehilimForHebDay(convFri.hd),
-      candleLighting: caljShab?.candles || getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
+      candleLighting: getCommunityTime(ymd(friday), "Entrée de Chabbat") || caljShab?.candles || getOverride(ymd(friday))?.candleLighting || (candle ? timeOnly(candle.date) : null),
       hd: convFri.hd,
       hm: convFri.hm,
       yahrtzeits: getYahrtzeits(convFri.hd, convFri.hm),
@@ -376,7 +377,7 @@ export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<Liv
       heb: convSat.hebrew,
       daf: dafSat ? `Daf Yomi · ${dafSat.hebrew ?? dafSat.title}` : "—",
       tehilim: tehilimForHebDay(convSat.hd),
-      havdalah: caljShab?.havdalah || getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
+      havdalah: getCommunityTime(ymd(saturday), "Sortie de Chabbat") || caljShab?.havdalah || getOverride(ymd(saturday))?.havdalah || (havdal ? timeOnly(havdal.date) : null),
       hd: convSat.hd,
       hm: convSat.hm,
       yahrtzeits: getYahrtzeits(convSat.hd, convSat.hm),
