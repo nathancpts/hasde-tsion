@@ -2212,7 +2212,7 @@ function PlanningTV() {
           </div>
 
           {/* PARASHA — défilement doux */}
-          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
+          <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1.6 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>
             <p className="uppercase" style={LABEL}>
               Étude · Parasha
             </p>
@@ -2275,7 +2275,7 @@ function PlanningTV() {
 
           {/* HAYOM YOM */}
           {hayomYom && (
-            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1 1 0", minHeight: "22%", padding: "1.5vh 1.4vw" }}>
+            <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "0.75 1 0", minHeight: "18%", padding: "1.5vh 1.4vw" }}>
               <p className="uppercase" style={LABEL}>
                 Aujourd’hui, c’est le jour…
               </p>
