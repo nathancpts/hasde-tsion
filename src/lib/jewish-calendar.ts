@@ -265,14 +265,15 @@ function timeOnly(iso: string, tz: string = DEFAULT_LOC.tzid): string {
 
 export async function fetchLiveWeek(now = new Date(), loc?: GeoLoc): Promise<LiveWeek> {
   const LOC = { ...DEFAULT_LOC, ...(loc ?? {}) };
-  const friday = nextDow(now, 5);
+  const friday = now.getDay() === 6 ? new Date(now) : nextDow(now, 5);
+  if (now.getDay() === 6) friday.setDate(friday.getDate() - 1);
   const saturday = new Date(friday);
   saturday.setDate(saturday.getDate() + 1);
 
   const caljWeek = loc ? null : await getCaljTimes({ data: { date: ymd(now) } }).catch(() => null);
   const caljShab = caljWeek?.shabbat?.date === ymd(saturday) ? caljWeek.shabbat : null;
 
-  const start = ymd(now);
+  const start = ymd(friday < now ? friday : now);
   const endDate = new Date(now);
   endDate.setDate(endDate.getDate() + 14);
   const end = ymd(endDate);
