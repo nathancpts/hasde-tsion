@@ -20,6 +20,7 @@ import { getHayomYom } from "@/lib/hayom-yom";
 import CommunitySection from "@/components/community/CommunitySection";
 import SouccotMenu from "@/components/SouccotMenu";
 import SimhatTorahEvent from "@/components/SimhatTorahEvent";
+import MazalTovEydel from "@/components/MazalTovEydel";
 import KotelLive from "@/components/KotelLive";
 import { TVAppQrPopup } from "@/components/TVAppQrPopup";
 import MobileChants from "@/components/MobileChants";
