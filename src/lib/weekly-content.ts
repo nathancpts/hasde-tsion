@@ -35,10 +35,17 @@ const DONATIONS_WEEK_MONDAY = "2026-10-05";
 
 const _DONATIONS_RAW: Donation[] = [
   {
-    donateur: "Famille Benamran Rafael",
-    occasion: "Parachat Bereshit",
-    dedicace: "Offre toutes les Séoudot de ce Chabbat",
-    details: ["Que D. te comble, mon Frère, d'amour ✨"],
+    donateur: "Rafael Benamran",
+    occasion: "Chabbat Beréchit",
+    dedicace: "Offre généreusement l'ensemble des Séoudot de ce Chabbat ✨",
+    dedicaceHe:
+      "יְהִי רָצוֹן שֶׁהַקָּדוֹשׁ בָּרוּךְ הוּא יְבָרֵךְ אֶת רָפָאֵל וְאֶת כָּל בְּנֵי מִשְׁפַּחְתּוֹ, בִּבְרָכָה וְהַצְלָחָה, בְּרִיאוּת, פַּרְנָסָה בְּרֶוַח וְנַחַת מִכָּל יוֹצְאֵי חֲלָצָיו. שֶׁיִּזְכֶּה תָּמִיד לַעֲשׂוֹת מִצְווֹת וּמַעֲשִׂים טוֹבִים מִתּוֹךְ שִׂמְחָה, וְשֶׁכָּל הַבְּרָכוֹת יָבֹאוּ עָלָיו וְעַל בֵּיתוֹ לְטוֹבָה וְלִבְרָכָה.",
+    details: [
+      "Séouda du samedi matin",
+      "Pièce montée 🎂",
+      "Séouda du samedi midi",
+      "Mazal Tov et Chabbat Chalom à tous ! ✨",
+    ],
   },
 ];
 
