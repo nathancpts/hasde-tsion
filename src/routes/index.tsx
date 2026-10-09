@@ -10,7 +10,7 @@ import logoAsset from "@/assets/logo-hasde.png.asset.json";
 import logoBleuAsset from "@/assets/logo-hasde-bleu.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
-import { getCommunityMinha } from "@/lib/zmanim-overrides";
+import { getCommunityMinha, getCommunityTime, getCommunitySchedule } from "@/lib/zmanim-overrides";
 import { frenchHebMonth } from "@/lib/yahrtzeits";
 
 import { fetchChabadShabbat, type ChabadWeek } from "@/lib/chabad.functions";
@@ -427,8 +427,9 @@ function useChabad() {
 
   const today = new Date().toISOString().slice(0, 10);
   const current = weeks?.find((w) => w.satDate >= today) ?? weeks?.[0] ?? null;
-  const candle = live?.vendredi.candleLighting ?? current?.candle ?? null;
-  const havdalah = live?.samedi.havdalah ?? current?.havdalah ?? null;
+  const dates = nextFridaySaturday();
+  const candle = getCommunityTime(dateKey(dates.friday), "Entrée de Chabbat") ?? live?.vendredi.candleLighting ?? current?.candle ?? null;
+  const havdalah = getCommunityTime(dateKey(dates.saturday), "Sortie de Chabbat") ?? live?.samedi.havdalah ?? current?.havdalah ?? null;
   if (!candle || !havdalah) return null;
   return { friDate: current?.friDate ?? "", satDate: current?.satDate ?? "", candle, havdalah };
 }
@@ -454,7 +455,7 @@ function useZmanim(loc: StoredLoc, dayOffset: number = 0) {
 
 function nextFridaySaturday(now = new Date()): { friday: Date; saturday: Date } {
   const d = new Date(now);
-  const diff = (5 - d.getDay() + 7) % 7;
+  const diff = d.getDay() === 6 ? -1 : (5 - d.getDay() + 7) % 7;
   const friday = new Date(d);
   friday.setDate(d.getDate() + diff);
   const saturday = new Date(friday);
@@ -490,10 +491,11 @@ function useShabbatZmanim(loc: StoredLoc) {
 
 
 // Date du prochain vendredi (aujourd'hui si vendredi) au format YYYY-MM-DD
-function fridayKey(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7));
+function dateKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function fridayKey(): string {
+  return dateKey(nextFridaySaturday().friday);
 }
 // Horaire de Minha du vendredi fixé manuellement par la communauté (prioritaire)
 function getFridayMinhaOverride(): string | null {
@@ -1262,13 +1264,14 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
-  const sMinha = subtractMinutes(sSheqyia, 40);
+  const saturdayKey = dateKey(nextFridaySaturday().saturday);
+  const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
     if (t.label.startsWith("Minha") && sMinha) return { ...t, value: sMinha };
-    if (t.label === "Chaharit") return { ...t, value: "09:15" };
+    if (t.label === "Chaharit") return { ...t, value: getCommunityTime(saturdayKey, "Chaharit") ?? "09:15" };
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
@@ -1978,13 +1981,14 @@ function PlanningTV() {
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
   const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
-  const sMinha = subtractMinutes(sSheqyia, 40);
+  const saturdayKey = dateKey(nextFridaySaturday().saturday);
+  const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
     : week.samedi.times
   ).map((t) => {
     if (t.label.startsWith("Minha") && sMinha) return { ...t, value: sMinha };
-    if (t.label === "Chaharit") return { ...t, value: "09:15" };
+    if (t.label === "Chaharit") return { ...t, value: getCommunityTime(saturdayKey, "Chaharit") ?? "09:15" };
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
@@ -2042,7 +2046,7 @@ function PlanningTV() {
     ?? vTimes.find((t) => t.label === "Minha")?.value;
   const saturdayMinha = rawToday.find((t) => t.label === "Minha")?.value
     ?? sTimes.find((t) => t.label.startsWith("Minha"))?.value;
-  const todayTimes = (dow === 5
+  const todayTimes = (getCommunitySchedule(dateKey(now))?.times ?? (dow === 5
     ? [
         ...(fridayMinha ? [{ label: "Minha", value: fridayMinha }] : []),
         ...(entryTime ? [{ label: "Entrée de Chabbat", value: entryTime }] : []),
@@ -2053,7 +2057,7 @@ function PlanningTV() {
           ...(saturdayMinha ? [{ label: "Minha samedi", value: saturdayMinha }] : []),
           ...(exitTime ? [{ label: "Sortie de Chabbat", value: exitTime }] : []),
         ]
-      : weekdayTimes
+      : weekdayTimes)
   ).sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
 
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
