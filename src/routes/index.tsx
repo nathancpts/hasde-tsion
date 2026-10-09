@@ -1845,6 +1845,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
           {sectionTab === "communaute" && (
             <div className="space-y-5">
+              <MazalTovEydel />
               <SimhatTorahEvent />
               <SouccotMenu past={!souccotVisible} />
             </div>
