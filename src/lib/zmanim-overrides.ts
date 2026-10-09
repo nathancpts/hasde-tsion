@@ -119,6 +119,8 @@ export const ZMANIM_OVERRIDES: Record<string, DayOverride> = {
 // Prioritaire sur la règle « chekia − 40 min ».
 export const COMMUNITY_MINHA_OVERRIDES: Record<string, string> = {
   "2026-09-18": "19:30",
+  "2026-10-09": "18:50",
+  "2026-10-10": "18:30",
 };
 
 export function getCommunityMinha(ymd: string): string | null {
@@ -137,6 +139,19 @@ export type CommunitySchedule = {
 // Programmes exceptionnels : les horaires habituels reprennent automatiquement
 // dès le lendemain de chaque date indiquée.
 const COMMUNITY_SCHEDULES: Record<string, CommunitySchedule> = {
+  "2026-10-09": {
+    times: [
+      { label: "Minha", value: "18:50" },
+      { label: "Entrée de Chabbat", value: "18:57" },
+    ],
+  },
+  "2026-10-10": {
+    times: [
+      { label: "Chaharit", value: "09:00" },
+      { label: "Minha", value: "18:30" },
+      { label: "Sortie de Chabbat", value: "19:59" },
+    ],
+  },
   "2026-09-20": {
     times: [
       { label: "Minha", value: "15:00" },
@@ -159,4 +174,8 @@ const COMMUNITY_SCHEDULES: Record<string, CommunitySchedule> = {
 
 export function getCommunitySchedule(ymd: string): CommunitySchedule | null {
   return COMMUNITY_SCHEDULES[ymd] ?? null;
+}
+
+export function getCommunityTime(ymd: string, label: string): string | null {
+  return getCommunitySchedule(ymd)?.times.find(time => time.label === label)?.value ?? null;
 }
