@@ -112,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800;900&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "shortcut icon", type: "image/png", href: "/favicon.png" },
-      { rel: "apple-touch-icon", sizes: "180x180", href: "/__l5e/assets-v1/6e27716c-c65a-40a6-a6fd-a8d2641b1855/apple-touch-icon-gold.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/__l5e/assets-v1/fc60b3e6-ddf3-4e08-828f-1cd8d6af7df8/apple-touch-icon-white.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
