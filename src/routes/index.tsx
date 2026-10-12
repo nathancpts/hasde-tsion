@@ -6,8 +6,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/logo-hasde.png.asset.json";
-import logoBleuAsset from "@/assets/logo-hasde-bleu.png.asset.json";
+import logoAsset from "@/assets/logo-hasde-white.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { getCommunityMinha, getCommunityTime, getCommunitySchedule } from "@/lib/zmanim-overrides";
@@ -27,7 +26,6 @@ import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
 const logo = logoAsset.url;
-const logoBleu = logoBleuAsset.url;
 
 
 
@@ -640,7 +638,7 @@ function Header() {
         }}
       />
       <div className="relative flex items-center gap-4">
-        <img src={logo} alt="Hasdé Tsion" className="h-[14vh] w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]" />
+        <img src={logo} alt="Hasdé Tsion" className="h-[5.4vh] w-auto max-w-[30vw] object-contain" />
       </div>
 
       <div className="relative flex-1 flex justify-center">
@@ -2118,7 +2116,7 @@ function PlanningTV() {
       <div className="absolute inset-0 z-0">
           <TVSky
             contentRight="37.6%"
-            logoUrl={logoBleu}
+            logoUrl={logo}
             sunrise={tvSunrise}
             sunset={tvSunset}
             events={tvEvents}

@@ -19,8 +19,8 @@ self.addEventListener("push", (event) => {
   const title = payload.title || "Hasdé Tsion 🕍";
   const options = {
     body: payload.body || "",
-    icon: "/__l5e/assets-v1/c7560a28-d102-4434-b627-28a67a44a80b/app-icon-192-gold.png",
-    badge: "/__l5e/assets-v1/c7560a28-d102-4434-b627-28a67a44a80b/app-icon-192-gold.png",
+    icon: "/__l5e/assets-v1/2cd6a4d8-9ccf-47da-8b6b-d5f8ab6aa0e2/app-icon-192-white.png",
+    badge: "/__l5e/assets-v1/2cd6a4d8-9ccf-47da-8b6b-d5f8ab6aa0e2/app-icon-192-white.png",
     tag: payload.tag || undefined,
     data: { url: payload.url || "/" },
     vibrate: [120, 60, 120],
