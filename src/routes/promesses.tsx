@@ -153,7 +153,7 @@ function PromessesPage() {
             <h1 className="mt-2">Birkat Hachana 5787</h1>
             <p className="mt-5 text-lg text-chant-muted">La bénédiction de l'année, à chaque ouverture du Hekhal</p>
           </div>
-          <img src={logoAsset.url} alt="Hasdé Tsion" className="h-14 w-auto max-w-full shrink-0 object-contain md:h-16" />
+          <img src={logoAsset.url} alt="Hasdé Tsion" className="h-16 w-auto max-w-full shrink-0 object-contain md:h-20" />
         </Reveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">

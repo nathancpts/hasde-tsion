@@ -638,7 +638,7 @@ function Header() {
         }}
       />
       <div className="relative flex items-center gap-4">
-        <img src={logo} alt="Hasdé Tsion" className="h-[7vh] w-auto max-w-[24vw] object-contain" />
+        <img src={logo} alt="Hasdé Tsion" className="h-[8.5vh] w-auto max-w-[28vw] object-contain" />
       </div>
 
       <div className="relative flex-1 flex justify-center">

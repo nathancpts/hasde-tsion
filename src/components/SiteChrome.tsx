@@ -78,7 +78,7 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
       <div aria-hidden="true" className="site-grain" />
       <nav className={"site-nav" + (solid ? " solid" : "")} aria-label="Navigation">
         <a className="site-brand" href="/">
-          <img src={logoAsset.url} alt="Hasdé Tsion" width={74} height={54} />
+          <img src={logoAsset.url} alt="Hasdé Tsion" width={90} height={66} />
         </a>
         <div className="site-links">
           <a href="/#etude">Étude</a>
