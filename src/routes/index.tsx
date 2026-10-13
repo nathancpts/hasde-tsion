@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, MoonStar, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/logo-hasde-white.png.asset.json";
+import logoAsset from "@/assets/logo-50-emblem.png.asset.json";
 import kotelShabbat from "@/assets/kotel-shabbat.jpg";
 import { fetchLiveWeek, fetchZmanim, type LiveWeek, type Zmanim } from "@/lib/jewish-calendar";
 import { getCommunityMinha, getCommunityTime, getCommunitySchedule } from "@/lib/zmanim-overrides";
@@ -638,7 +638,7 @@ function Header() {
         }}
       />
       <div className="relative flex items-center gap-4">
-        <img src={logo} alt="Hasdé Tsion" className="h-[5.4vh] w-auto max-w-[30vw] object-contain" />
+        <img src={logo} alt="Hasdé Tsion" className="h-[7vh] w-auto max-w-[24vw] object-contain" />
       </div>
 
       <div className="relative flex-1 flex justify-center">
