@@ -45,7 +45,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:1.08;letter-sp
 .top{position:sticky;top:0;z-index:5;padding-top:env(safe-area-inset-top,0px);background:linear-gradient(180deg,rgba(5,13,32,.82),rgba(5,13,32,.34) 72%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:14px}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:17px}
-.brand img{width:160px;height:auto;object-fit:contain}
+.brand img{height:54px;width:auto;object-fit:contain}
 .chip{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0a1633;border-radius:999px;padding:7px 14px;font:700 13px var(--f-display);text-decoration:none}
 .chip::before{content:"";width:8px;height:8px;border-radius:50%;background:#e5484d}
 
@@ -61,7 +61,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:1.08;letter-sp
 .hero .he-title{text-align:left;font-size:clamp(26px,4.4vw,36px);color:var(--gold);margin:12px 0 2px}
 .hero h1{font-size:clamp(44px,6.4vw,96px)}
 .hero p.sub{color:var(--muted);font-size:18px;margin:14px 0 0;max-width:46ch}
-.logo{width:clamp(260px,24vw,380px);max-width:100%;aspect-ratio:1967/800;object-fit:contain;filter:drop-shadow(0 18px 46px rgba(0,0,0,.38))}
+.logo{width:clamp(200px,18vw,280px);max-width:100%;aspect-ratio:960/695;object-fit:contain;filter:drop-shadow(0 18px 46px rgba(0,0,0,.38))}
 
 /* Le chiffre */
 .figure{border:1px solid var(--line);border-radius:28px;padding:clamp(28px,3vw,44px);margin-bottom:clamp(28px,3vw,42px);
@@ -154,7 +154,7 @@ html.embed main{padding-top:90px}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><img src="/__l5e/assets-v1/92927bf8-e062-4450-aabb-d8bceb2c0269/logo-hasde-white.png" alt="Hasdé Tsion"></a>
+    <a class="brand" href="/"><img src="/__l5e/assets-v1/ddcfd4d3-e692-45b2-b961-e0bf57fb2755/logo-50-emblem.png" alt="Hasdé Tsion"></a>
     <a class="chip" href="/">Horaires</a>
   </div>
 </header>
@@ -175,7 +175,7 @@ html.embed main{padding-top:90px}
    Collez ici l'URL de l'application Web Google Apps Script (se termine par /exec). */
 const SCRIPT_URL = "";
 /* ===================== */
-const LOGO = "/__l5e/assets-v1/92927bf8-e062-4450-aabb-d8bceb2c0269/logo-hasde-white.png";
+const LOGO = "/__l5e/assets-v1/ddcfd4d3-e692-45b2-b961-e0bf57fb2755/logo-50-emblem.png";
 const BLESSING_HE = "מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ אַבְרָהָם יִצְחָק וְיַעֲקֹב, מֹשֶׁה וְאַהֲרֹן, דָּוִד וּשְׁלֹמֹה, הוּא יְבָרֵךְ אֶת כָּל הַנּוֹדְרִים וְהַנּוֹתְנִים לִצְדָקָה לְבֵית הַכְּנֶסֶת חַסְדֵּי צִיּוֹן. בִּשְׂכַר זֶה, הַקָּדוֹשׁ בָּרוּךְ הוּא יִשְׁמְרֵם וְיַצִּילֵם מִכָּל צָרָה וְצוּקָה וּמִכָּל נֶגַע וּמַחֲלָה, וְיִשְׁלַח בְּרָכָה וְהַצְלָחָה בְּכָל מַעֲשֵׂה יְדֵיהֶם, פַּרְנָסָה טוֹבָה וּבְרִיאוּת הַגּוּף, וְיִזְכּוּ לִרְאוֹת בָּנִים וּבְנֵי בָנִים עוֹסְקִים בַּתּוֹרָה וּבַמִּצְוֹת, וְתִהְיֶה לָהֶם שָׁנָה טוֹבָה וּמְתוּקָה. וְנֹאמַר אָמֵן.";
 const BLESSING_FR = "Que Celui qui a béni nos pères Avraham, Its'hak et Yaakov, Moché et Aharon, David et Chelomo, bénisse tous ceux qui promettent et donnent à la synagogue Hasdé Tsion. Par ce mérite, que le Saint, béni soit-Il, les garde de toute épreuve et de toute maladie, qu'Il envoie bénédiction et réussite dans toutes leurs entreprises, une parnassa abondante et une pleine santé, qu'ils voient leurs enfants et petits-enfants attachés à la Torah et aux mitsvot, et que cette année leur soit bonne et douce. Et disons Amen.";
 const DEFAULT_CAMPAIGNS = [{"slug": "birkat-hachana-5787", "title": "Birkat Hachana 5787", "titleHe": "בִּרְכַּת הַשָּׁנָה", "subtitle": "La bénédiction de l'année, à chaque ouverture du Hekhal", "intro": "En ce début d'année 5787, la communauté Hasdé Tsion vous invite à vous associer à la Birkat Hachana.\nVotre promesse fait vivre la synagogue tout au long de l'année.\nElle soutient les offices, l'étude de la Torah et l'entretien de notre maison.", "engagement": "À chaque ouverture du Hekhal, votre nom sera prononcé devant les Sifré Torah.\nNous appellerons sur vous et sur les vôtres la bénédiction, une parnassa large et une brioute complète.\nQue toutes vos entreprises soient couronnées de réussite.", "fixedAmount": 2600, "taxRate": 66, "cerfa": true, "deadlineNote": "Règlement possible jusqu'à Roch Hachana 5788.\nEn une fois ou en plusieurs fois, à votre convenance.", "helloasso": "https://www.helloasso.com/associations/hassidim-de-sion/evenements/birkat-hachana-5787", "active": true}];
