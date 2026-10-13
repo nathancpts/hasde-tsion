@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logoAsset from "@/assets/logo-hasde-white.png.asset.json";
+import logoAsset from "@/assets/logo-50-emblem.png.asset.json";
 
 /** En-tête + fond vivant identiques au site de présentation (public/presentation.html). */
 export function SiteChrome({ active = "chants" }: { active?: "chants" | "promesses" | "communaute" }) {
@@ -78,7 +78,7 @@ export function SiteChrome({ active = "chants" }: { active?: "chants" | "promess
       <div aria-hidden="true" className="site-grain" />
       <nav className={"site-nav" + (solid ? " solid" : "")} aria-label="Navigation">
         <a className="site-brand" href="/">
-          <img src={logoAsset.url} alt="Hasdé Tsion" width={190} height={40} />
+          <img src={logoAsset.url} alt="Hasdé Tsion" width={74} height={54} />
         </a>
         <div className="site-links">
           <a href="/#etude">Étude</a>
