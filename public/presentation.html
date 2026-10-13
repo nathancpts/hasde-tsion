@@ -528,7 +528,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
         <p class="lead" style="color:var(--ice);opacity:.8;margin-top:20px">Offices, étude, repas communautaires et activités des enfants. Paiement et reçu fiscal via HelloAsso.</p>
         <div class="amts" role="group" aria-label="Choisir un montant de don"><button type="button" data-amt="26" aria-pressed="false" data-cursor>26 €</button><button type="button" data-amt="52" aria-pressed="true" data-cursor>52 €</button><button type="button" data-amt="126" aria-pressed="false" data-cursor>126 €</button><button type="button" data-amt="260" aria-pressed="false" data-cursor>260 €</button><a href="/promesses" target="_top" data-cursor>Birkat Hachana · Promesses ↗</a></div>
         <p style="margin:14px 0 0;font-size:.85rem;color:var(--muted)" data-amtnote>Le montant se confirme sur HelloAsso.</p>
-        <p class="seouda">La Séouda est offerte par Rafael Benamran, qui offre généreusement l'ensemble des Séoudot de ce Chabbat Beréchit ✨ (Séouda du samedi matin, pièce montée, Séouda du samedi midi). Que D. te comble, mon Frère 💖</p>
+        <p class="seouda" data-until="2026-10-11">La Séouda est offerte par Rafael Benamran, qui offre généreusement l'ensemble des Séoudot de ce Chabbat Beréchit ✨ (Séouda du samedi matin, pièce montée, Séouda du samedi midi). Que D. te comble, mon Frère 💖</p>
       </div>
       <div class="cta-wrap">
         <svg class="ring" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150 150m-128 0a128 128 0 1 1 256 0a128 128 0 1 1-256 0"/></defs><text><textPath href="#circ">Tsédaka · צדקה · Faire un don · </textPath></text></svg>
@@ -1141,4 +1141,5 @@ choreo();
 setTimeout(() => $('.intro')?.remove(), 3000);
 </script>
 
+<script>document.querySelectorAll(".seouda[data-until]").forEach(function(e){var d=new Date(),k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(k>e.dataset.until)e.remove()})</script>
 </body></html>
