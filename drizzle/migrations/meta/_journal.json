@@ -15,6 +15,13 @@
       "when": 1792003784930,
       "tag": "0001_add_admin_sebbagh",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792004096463,
+      "tag": "0002_admin_email_jsebbagh",
+      "breakpoints": true
     }
   ]
 }
