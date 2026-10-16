@@ -1253,7 +1253,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    }));
+    });
+  const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
+  if (vArvit) vTimes.push({ label: "Arvit", value: vArvit });
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
