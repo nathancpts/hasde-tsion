@@ -1253,7 +1253,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    })) as { label: string; value: string }[];
+    })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
   if (vArvit) vTimes.push({ label: "Arvit", value: vArvit });
 
@@ -1276,7 +1276,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  })) as { label: string; value: string }[];
+  })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const sArvit = getCommunityTime(saturdayKey, "Arvit");
   if (sArvit) sTimes.push({ label: "Arvit", value: sArvit });
 
@@ -1980,7 +1980,7 @@ function PlanningTV() {
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    })) as { label: string; value: string }[];
+    })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
   if (vArvit) vTimes.push({ label: "Arvit", value: vArvit });
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
@@ -1998,7 +1998,7 @@ function PlanningTV() {
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  })) as { label: string; value: string }[];
+  })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const sArvit = getCommunityTime(saturdayKey, "Arvit");
   if (sArvit) sTimes.push({ label: "Arvit", value: sArvit });
 
