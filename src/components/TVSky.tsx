@@ -625,45 +625,66 @@ export function TVSky({
           className="grid"
           style={{ gridTemplateColumns: `repeat(${Math.max(1, cards.length)}, minmax(0,1fr))`, columnGap: "10px", rowGap: 0 }}
         >
+          {(() => {
+            const nToday = Math.min(visible.length, cards.length);
+            const nTom = cards.length - nToday;
+            const head = (txt: string, span: number, start: number) => (
+              <div key={txt} className="flex items-center" style={{ gridColumn: `${start} / span ${span}`, gridRow: 1, gap: "0.8vw", marginBottom: "1vh", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F0D689", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
+                <span style={{ whiteSpace: "nowrap" }}>{txt}</span>
+                <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(240,214,137,.55), transparent)" }} />
+              </div>
+            );
+            return [
+              nToday > 0 && nTom > 0 ? head("Aujourd'hui", nToday, 1) : null,
+              nTom > 0 ? head("Samedi · Chabbat", nTom, nToday + 1) : null,
+            ];
+          })()}
           {cards.map((e, i) => {
             const cur = i === 0 && visible.length > 0;
-            const office = kindOf(e.label) === "Office";
-            const he = heOf(e.label);
+            const raw = e.label.replace(/^Sam\.\s*/, "");
+            const [name0, ...rest] = raw.split(" · ");
+            const name = name0.replace(/^Entrée de Chabbat$/i, "Entrée").replace(/^Sortie de Chabbat$/i, "Sortie");
+            const note = rest.join(" · ");
+            const office = kindOf(name0) === "Office" || kindOf(e.label) === "Office";
+            const he = heOf(name0) || heOf(e.label);
             return (
               <div
                 key={`${e.label}-${e.value}`}
                 style={{
                   position: "relative",
                   display: "grid",
-                  gridRow: "span 3",
+                  gridRow: "2 / span 4",
+                  gridColumn: i + 1,
                   gridTemplateRows: "subgrid",
                   borderRadius: 18,
-                  padding: "14px 16px 16px",
+                  padding: "1.4vh 0.7vw 1.4vh",
                   minWidth: 0,
-                  background: cur ? "rgba(5,13,32,.30)" : "rgba(5,13,32,.30)",
-                  border: `1px solid ${cur ? "rgba(240,214,137,.62)" : "rgba(219,231,251,.14)"}`,
-                  backdropFilter: "blur(3px)",
-                  transform: "none",
-                  transition: "background .5s, border-color .5s, transform .5s",
-                  boxShadow: "none",
+                  background: cur ? "rgba(5,13,32,.48)" : "rgba(5,13,32,.34)",
+                  border: `1px solid ${cur ? "rgba(240,214,137,.75)" : "rgba(219,231,251,.16)"}`,
+                  backdropFilter: "blur(6px)",
+                  boxShadow: cur ? "0 0 0 1px rgba(240,214,137,.25), 0 10px 30px rgba(5,13,32,.35)" : "0 8px 24px rgba(5,13,32,.2)",
+                  transition: "background .5s, border-color .5s",
                 }}
               >
                 <span
-                  className="flex flex-wrap items-center justify-between"
-                  style={{ gap: "6px", fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur || office ? "#F0D689" : "#9FB0CF" }}
+                  className="flex items-center justify-between"
+                  style={{ gap: "6px", minWidth: 0, fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur || office ? "#F0D689" : "#9FB0CF" }}
                 >
-                  {kindOf(e.label)}
-                    {cur && (
-                    <span style={{ fontSize: "0.82vh", letterSpacing: "0.08em", padding: "3px 8px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", textTransform: "uppercase", fontWeight: 800, whiteSpace: "nowrap" }}>
+                  <span>{kindOf(name0)}</span>
+                  {cur && (
+                    <span style={{ position: "absolute", top: "-1vh", right: "0.6vw", fontSize: "0.82vh", letterSpacing: "0.08em", padding: "3px 8px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", fontWeight: 800, whiteSpace: "nowrap" }}>
                       Prochain
                     </span>
                   )}
                 </span>
-                <strong className="flex items-baseline" style={{ display: "flex", flexWrap: "wrap", marginTop: "8px", columnGap: "0.5vw", rowGap: "2px", fontFamily: MONT, fontSize: e.label.length > 12 ? "1.45vh" : "1.7vh", fontWeight: 700, color: office ? "#F0D689" : "#fff", lineHeight: 1.15 }}>
-                  <span>{e.label}</span>
-                  {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.4vh", fontWeight: 500 }}>{he}</span>}
+                <strong style={{ display: "block", marginTop: "0.9vh", minWidth: 0, fontFamily: MONT, fontSize: "1.75vh", fontWeight: 800, color: office ? "#F0D689" : "#fff", lineHeight: 1.15 }}>
+                  {name}
+                  {he && <span className="font-hebrew" dir="rtl" style={{ display: "block", textAlign: "left", marginTop: "0.3vh", color: "#9FB0CF", fontSize: "1.3vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
-                <div style={{ marginTop: "6px", fontFamily: MONT, fontWeight: 800, fontSize: "2.8vh", fontVariantNumeric: "tabular-nums", lineHeight: 1.1, color: "#F3F6FC" }}>
+                <span style={{ marginTop: "0.5vh", fontFamily: MONT, fontSize: "1.05vh", fontWeight: 500, color: "#C9D6EE", lineHeight: 1.25, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" } as React.CSSProperties}>
+                  {note}
+                </span>
+                <div style={{ marginTop: "1vh", alignSelf: "end", fontFamily: MONT, fontWeight: 800, fontSize: "2.5vh", letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums", lineHeight: 1, color: "#F3F6FC" }}>
                   {e.value}
                 </div>
               </div>
