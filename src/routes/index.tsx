@@ -1,4 +1,3 @@
-import { getCurrentParasha } from "@/lib/parashot";
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice, isAppPath, isPhoneDevice } from "@/lib/tv-detect";
@@ -2159,7 +2158,6 @@ function PlanningTV() {
             dateFr={dateStr}
             dateHe={dateHeStr}
             tomorrow={dow === 5 ? sTimes.filter((t) => /^\d{1,2}:\d{2}/.test(t.value)).map((t) => ({ label: `Sam. ${t.label.replace(/\s*samedi/i, "")}`, value: t.value })) : undefined}
-            parasha={[getCurrentParasha(now).nom, parashaHe ?? ""]}
           />
       </div>
       <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
