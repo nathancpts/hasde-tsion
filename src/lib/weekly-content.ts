@@ -31,21 +31,15 @@ export const PARASHA_BLOCS: ParashaBloc[] = _current.blocs;
 
 // Date (lundi) de la semaine pour laquelle ces donateurs sont valables.
 // Format YYYY-MM-DD. Dès le lundi suivant, la liste se vide automatiquement.
-const DONATIONS_WEEK_MONDAY = "2026-10-05";
+const DONATIONS_WEEK_MONDAY = "2026-10-12";
 
 const _DONATIONS_RAW: Donation[] = [
   {
-    donateur: "Rafael Benamran",
-    occasion: "Chabbat Beréchit",
-    dedicace: "Offre généreusement l'ensemble des Séoudot de ce Chabbat ✨",
-    dedicaceHe:
-      "יְהִי רָצוֹן שֶׁהַקָּדוֹשׁ בָּרוּךְ הוּא יְבָרֵךְ אֶת רָפָאֵל וְאֶת כָּל בְּנֵי מִשְׁפַּחְתּוֹ, בִּבְרָכָה וְהַצְלָחָה, בְּרִיאוּת, פַּרְנָסָה בְּרֶוַח וְנַחַת מִכָּל יוֹצְאֵי חֲלָצָיו. שֶׁיִּזְכֶּה תָּמִיד לַעֲשׂוֹת מִצְווֹת וּמַעֲשִׂים טוֹבִים מִתּוֹךְ שִׂמְחָה, וְשֶׁכָּל הַבְּרָכוֹת יָבֹאוּ עָלָיו וְעַל בֵּיתוֹ לְטוֹבָה וְלִבְרָכָה.",
-    details: [
-      "Séouda du samedi matin",
-      "Pièce montée 🎂",
-      "Séouda du samedi midi",
-      "Mazal Tov et Chabbat Chalom à tous ! ✨",
-    ],
+    donateur: "Famille Hattab Lionel",
+    occasion: "Parachat Noah",
+    dedicace: "Hazak, qui prend sur Elle la Parachat Noah ✨",
+    dedicaceHe: "רפואה שלמה",
+    details: ["Que D. te comble, mon Frère 💖"],
   },
 ];
 
