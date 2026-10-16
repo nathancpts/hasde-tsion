@@ -2194,27 +2194,27 @@ function PlanningTV() {
           </div>
 
           {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
-          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 1 auto", maxHeight: "22%" }}>
-          <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.5vh 1.4vw" }}>
+          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "27%" }}>
+          <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.4vh 1.2vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
             </p>
-            <h3 className="mt-[0.4vh]" style={TV_TITLE}>
+            <h3 className="mt-[0.3vh]" style={{ ...TV_TITLE, fontSize: "2.2vh", lineHeight: 1.15 }}>
               La Séouda est offerte par
             </h3>
-            <div className="mt-[0.4vh] min-h-0 flex-1 overflow-hidden">
+            <div className="mt-[0.5vh] min-h-0 flex-1 overflow-hidden">
               {DONATIONS_REPAS.length > 0 ? (
                 DONATIONS_REPAS.map((d, i) => (
                   <div
                     key={`tvdon-${i}`}
-                    className="flex items-baseline justify-between gap-[1vw]"
-                    style={{ padding: "0.4vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
+                    className="flex flex-col"
+                    style={{ padding: "0.3vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
                   >
-                    <span className="min-w-0 truncate" style={{ fontSize: "1.6vh", fontWeight: 600, color: "#F3F6FC" }}>
+                    <span style={{ fontSize: "1.7vh", fontWeight: 700, color: "#F3F6FC", lineHeight: 1.2 }}>
                       {d.donateur}
                     </span>
                     {d.dedicace && (
-                      <span className="shrink-0 truncate" style={{ fontSize: "1.25vh", fontStyle: "italic", color: "#9FB0CF", maxWidth: "55%" }}>
+                      <span style={{ fontSize: "1.35vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
                         {d.dedicace}
                       </span>
                     )}
@@ -2227,7 +2227,7 @@ function PlanningTV() {
               )}
             </div>
           </article>
-          <div className="relative overflow-hidden" style={{ ...GLASS, flex: "0 0 auto", aspectRatio: "16 / 9", width: "42%", padding: 0, borderRadius: 22 }}>
+          <div className="relative overflow-hidden" style={{ ...GLASS, flex: "0 0 auto", height: "100%", aspectRatio: "16 / 9", maxWidth: "50%", padding: 0, borderRadius: 22 }}>
             <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
             <span className="absolute left-[0.8vh] top-[0.8vh] flex items-center gap-[0.5vh] rounded-full uppercase" style={{ background: "rgba(5,13,32,.6)", padding: "0.3vh 0.8vh", fontSize: "1.1vh", fontWeight: 700, letterSpacing: "0.2em", color: "#F3F6FC" }}>
               <span style={{ width: "0.8vh", height: "0.8vh", borderRadius: 99, background: "#ef4444" }} /> Live
