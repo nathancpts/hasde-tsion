@@ -103,6 +103,8 @@ export function TVSky({
   dateHe,
   contentRight = "0px",
   tomorrow,
+  parashaFr,
+  parashaHe,
 }: {
   tomorrow?: TVSkyEvent[];
   logoUrl?: string;
@@ -113,6 +115,8 @@ export function TVSky({
   dateFr?: string;
   dateHe?: string;
   contentRight?: string;
+  parashaFr?: string;
+  parashaHe?: string;
 }) {
   const SR = useMemo(() => toM(sunrise || "07:43"), [sunrise]);
   const SS = useMemo(() => toM(sunset || "19:32"), [sunset]);
