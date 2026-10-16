@@ -604,6 +604,12 @@ export function TVSky({
               <span className="font-hebrew" dir="rtl" style={{ fontWeight: 600, opacity: 0.9 }}>{greeting[1]}</span>
             </div>
           )}
+          {parashaFr && (
+            <div className="flex items-baseline" style={{ marginTop: "0.6vh", gap: "0.7em", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F0D689", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
+              <span>Étude · Parasha {parashaFr}</span>
+              {parashaHe && <span className="font-hebrew" dir="rtl" style={{ fontSize: "1.5vh", letterSpacing: 0, fontWeight: 600 }}>{parashaHe}</span>}
+            </div>
+          )}
           {wx && (
             <div style={{ marginTop: "0.6vh", fontFamily: MONT, fontSize: "1.5vh", letterSpacing: "0.08em", color: "#DBE7FB", opacity: 0.9 }} aria-live="polite">
               Actuellement · {wxLabel(wx.code)}{wx.temp != null ? ` · ${Math.round(wx.temp)} °C` : ""}
@@ -695,12 +701,6 @@ export function TVSky({
             );
           })}
         </div>
-        {parashaFr && (
-          <div className="flex items-baseline justify-center" style={{ gap: "0.7em", marginTop: "1vh", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F0D689", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
-            <span>Étude · Parasha {parashaFr}</span>
-            {parashaHe && <span className="font-hebrew" dir="rtl" style={{ fontSize: "1.5vh", letterSpacing: 0, fontWeight: 600 }}>{parashaHe}</span>}
-          </div>
-        )}
       </div>
     </div>
   );
