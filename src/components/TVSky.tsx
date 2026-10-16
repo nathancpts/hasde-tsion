@@ -627,6 +627,7 @@ export function TVSky({
         >
           {cards.map((e, i) => {
             const cur = i === 0 && visible.length > 0;
+            const office = kindOf(e.label) === "Office";
             const he = heOf(e.label);
             return (
               <div
@@ -649,7 +650,7 @@ export function TVSky({
               >
                 <span
                   className="flex flex-wrap items-center justify-between"
-                  style={{ gap: "6px", fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur ? "#F0D689" : "#9FB0CF" }}
+                  style={{ gap: "6px", fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur || office ? "#F0D689" : "#9FB0CF" }}
                 >
                   {kindOf(e.label)}
                     {cur && (
@@ -658,7 +659,7 @@ export function TVSky({
                     </span>
                   )}
                 </span>
-                <strong className="flex items-baseline" style={{ display: "flex", flexWrap: "wrap", marginTop: "8px", columnGap: "0.5vw", rowGap: "2px", fontFamily: MONT, fontSize: e.label.length > 12 ? "1.45vh" : "1.7vh", fontWeight: 700, color: "#fff", lineHeight: 1.15 }}>
+                <strong className="flex items-baseline" style={{ display: "flex", flexWrap: "wrap", marginTop: "8px", columnGap: "0.5vw", rowGap: "2px", fontFamily: MONT, fontSize: e.label.length > 12 ? "1.45vh" : "1.7vh", fontWeight: 700, color: office ? "#F0D689" : "#fff", lineHeight: 1.15 }}>
                   <span>{e.label}</span>
                   {he && <span className="font-hebrew" dir="rtl" style={{ color: "#9FB0CF", fontSize: "1.4vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
