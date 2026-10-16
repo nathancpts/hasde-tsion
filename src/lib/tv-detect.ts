@@ -1,4 +1,4 @@
-const TV_UA = /SmartTV|SMART-TV|Tizen|Web0S|webOS|NetCast|HbbTV|BRAVIA|AFT[A-Z]|Android TV|GoogleTV|CrKey|AppleTV|Roku|Philips|Hisense|VIDAA|TitanOS|Large Screen|\bTV\b/i;
+const TV_UA = /SmartTV|SMART-TV|Tizen|Web0S|webOS|NetCast|HbbTV|BRAVIA|AFT[A-Z]|Android TV|GoogleTV|CrKey|AppleTV|Roku|Philips|Hisense|VIDAA|TitanOS|MiTV|MIBOX|MiBOX|Mi Box|Xiaomi.*TV|BrowseHere|Browse Here|AndroidTV|Large Screen|\bTV\b/i;
 
 /** Détecte un téléviseur / box TV (navigateur TV, écran large en paysage, ou ?tv=1). */
 export function isTVDevice(): boolean {
