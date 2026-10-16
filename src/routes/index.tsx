@@ -184,13 +184,20 @@ function TVFrameShell() {
     return () => { window.clearInterval(id); window.removeEventListener("message", onMsg); document.removeEventListener("fullscreenchange", sendState); };
   }, []);
   const onLoad = (which: "a" | "b") => {
-    // Nouveau cadre chargé : on l'affiche, puis on libère l'ancien.
-    setFrames((f) => {
-      if (f.active === which) return f;
-      return which === "a" ? { a: f.a, b: null, active: "a" } : { a: "", b: f.b, active: "b" };
-    });
-    const fs = !!document.fullscreenElement;
-    setTimeout(() => document.querySelectorAll("iframe").forEach((fr) => fr.contentWindow?.postMessage({ type: "ht-fs-state", fs }, "*")), 500);
+    // Nouveau cadre chargé : on attend qu'il soit entièrement dessiné (ciel, cartes,
+    // polices) avant de l'afficher, pour éviter un flash d'écran incomplet.
+    window.setTimeout(() => {
+      setFrames((f) => {
+        if (f.active === which) return f;
+        return which === "a" ? { a: f.a, b: f.b, active: "a" } : { a: f.a, b: f.b, active: "b" };
+      });
+      // L'ancien cadre n'est retiré qu'après la fin du fondu.
+      window.setTimeout(() => {
+        setFrames((f) => (f.active === "a" ? { ...f, b: null } : { ...f, a: "" }));
+      }, 1500);
+      const fs = !!document.fullscreenElement;
+      document.querySelectorAll("iframe").forEach((fr) => fr.contentWindow?.postMessage({ type: "ht-fs-state", fs }, "*"));
+    }, 6000);
   };
   const style = (on: boolean): React.CSSProperties => ({
     position: "fixed", inset: 0, width: "100vw", height: "100vh", border: 0,
