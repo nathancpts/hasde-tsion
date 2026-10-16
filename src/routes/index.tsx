@@ -2158,6 +2158,8 @@ function PlanningTV() {
             dateFr={dateStr}
             dateHe={dateHeStr}
             tomorrow={dow === 5 ? sTimes.filter((t) => /^\d{1,2}:\d{2}/.test(t.value)).map((t) => ({ label: `Sam. ${t.label.replace(/\s*samedi/i, "")}`, value: t.value })) : undefined}
+            parashaFr={pc.nom || live?.parasha.fr || week.parasha.fr}
+            parashaHe={live?.parasha.he ?? week.parasha.he}
           />
       </div>
       <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
