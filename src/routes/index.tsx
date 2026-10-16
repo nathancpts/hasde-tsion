@@ -2026,8 +2026,6 @@ function PlanningTV() {
   const heYearNum = parseInt(dateHeParts.find((p) => p.type === "year")?.value ?? "0", 10);
   const heWeekday = now.toLocaleDateString("he-u-ca-hebrew", { weekday: "long" });
   const dateHeStr = `${heWeekday}, ${heDay} ${heMonth} ${toGematria(heYearNum)}`;
-  const parashaFr = pc.nom || live?.parasha.fr || week.parasha.fr;
-  const parashaHe = live?.parasha.he ?? week.parasha.he;
 
   // Luxury palette
   const BG_DEEP = "#0A1128";
@@ -2251,17 +2249,6 @@ function PlanningTV() {
             <p className="uppercase" style={LABEL}>
               Étude · Parasha
             </p>
-            <div className="mt-[0.6vh] flex items-baseline justify-between gap-[1vw]">
-              <h1
-                className="min-w-0 truncate"
-                style={TV_TITLE}
-              >
-                {parashaFr}
-              </h1>
-              <span className="font-hebrew shrink-0 leading-none" dir="rtl" style={{ fontSize: "2.4vh", color: "#F0D689", fontWeight: 600 }}>
-                {parashaHe}
-              </span>
-            </div>
             <div className="relative mt-[1vh] min-h-0 flex-1 overflow-hidden">
               <div
                 className="pointer-events-none absolute inset-x-0 top-0 z-10"
