@@ -2073,6 +2073,11 @@ function PlanningTV() {
     ...(dow === 6 && exitTime ? [{ label: "Sortie de Chabbat", value: exitTime }] : []),
     ...rawToday.filter((t) => /chekia|sheq|coucher|sortie des [ée]toiles|tset|lever|chaharit|cha.harit/i.test(t.label)),
   ];
+  {
+    const sunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value
+      ?? vTimes.find((t) => /chekia/i.test(t.label))?.value;
+    if (sunset && !extraToday.some((t) => /chekia|sheq|coucher/i.test(t.label))) extraToday.push({ label: "Chekia", value: sunset });
+  }
   const norm = (s: string) => s.toLowerCase().replace(/samedi/g, "").replace(/[’'\s]/g, "");
   const merged = [...baseTodayTimes];
   for (const t of extraToday) {
