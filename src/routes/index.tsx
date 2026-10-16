@@ -2194,7 +2194,7 @@ function PlanningTV() {
           </div>
 
           {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
-          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "27%" }}>
+          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "17%" }}>
           <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.4vh 1.2vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
@@ -2210,11 +2210,11 @@ function PlanningTV() {
                     className="flex flex-col"
                     style={{ padding: "0.3vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
                   >
-                    <span style={{ fontSize: "1.7vh", fontWeight: 700, color: "#F3F6FC", lineHeight: 1.2 }}>
+                    <span style={{ fontSize: "2.1vh", fontWeight: 700, color: "#F3F6FC", lineHeight: 1.2 }}>
                       {d.donateur}
                     </span>
                     {d.dedicace && (
-                      <span style={{ fontSize: "1.35vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
+                      <span style={{ fontSize: "1.6vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
                         {d.dedicace}
                       </span>
                     )}
