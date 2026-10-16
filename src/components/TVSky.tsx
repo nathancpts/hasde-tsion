@@ -102,7 +102,9 @@ export function TVSky({
   dateFr,
   dateHe,
   contentRight = "0px",
+  parasha,
 }: {
+  parasha?: [string, string];
   logoUrl?: string;
   sunrise: string;
   sunset: string;
@@ -667,6 +669,13 @@ export function TVSky({
             );
           })}
         </div>
+        {parasha?.[0] && (
+          <div className="flex items-center" style={{ marginTop: "1.2vh", gap: "1vw", padding: "1.2vh 1.4vw", borderRadius: 18, background: "rgba(5,13,32,.30)", border: "1px solid rgba(219,231,251,.14)", backdropFilter: "blur(3px)" }}>
+            <span style={{ fontFamily: MONT, fontSize: "1.05vh", fontWeight: 700, letterSpacing: "0.4em", textTransform: "uppercase", color: "#F0D689" }}>Étude · Parasha</span>
+            <strong style={{ fontFamily: MONT, fontSize: "2.4vh", fontWeight: 800, color: "#F3F6FC" }}>{parasha[0]}</strong>
+            {parasha[1] && <span className="font-hebrew" dir="rtl" style={{ marginLeft: "auto", fontSize: "2.2vh", color: "#F0D689", fontWeight: 600 }}>{parasha[1]}</span>}
+          </div>
+        )}
       </div>
     </div>
   );
