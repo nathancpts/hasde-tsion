@@ -516,6 +516,7 @@ function subtractMinutes(time: string | null, minutes: number): string | null {
 }
 
 /** Trie une liste d'horaires "HH:MM" par ordre chronologique (les heures invalides vont à la fin). */
+const cmp = (a: { value: string }, b: { value: string }) => Number(a.value.slice(0, 2)) * 60 + Number(a.value.slice(3, 5)) - (Number(b.value.slice(0, 2)) * 60 + Number(b.value.slice(3, 5)));
 function sortByTime<T extends { value: string }>(list: T[]): T[] {
   const key = (v: string) => {
     const m = /^(\d{1,2}):(\d{2})/.exec(v);
@@ -1253,7 +1254,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    }));
+    })) as { label: string; value: string; tone?: "gold" | "red" }[];
+  const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
+  if (vArvit) { vTimes.push({ label: "Arvit", value: vArvit }); vTimes.sort(cmp); }
 
   const sDate = live?.samedi.date ?? week.samedi.date;
   const sHeb = live?.samedi.heb ?? week.samedi.heb;
@@ -1262,8 +1265,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
-  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const saturdayKey = dateKey(nextFridaySaturday().saturday);
+  const sSheqyia = getCommunityTime(saturdayKey, "Sheqyia") ?? pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
@@ -1274,7 +1277,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  }));
+  })) as { label: string; value: string; tone?: "gold" | "red" }[];
+  const sArvit = getCommunityTime(saturdayKey, "Arvit");
+  if (sArvit) { sTimes.push({ label: "Arvit", value: sArvit }); sTimes.sort(cmp); }
 
   // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
   const today = new Date();
@@ -1976,12 +1981,14 @@ function PlanningTV() {
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    }));
+    })) as { label: string; value: string; tone?: "gold" | "red" }[];
+  const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
+  if (vArvit) { vTimes.push({ label: "Arvit", value: vArvit }); vTimes.sort(cmp); }
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
-  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const saturdayKey = dateKey(nextFridaySaturday().saturday);
+  const sSheqyia = getCommunityTime(saturdayKey, "Sheqyia") ?? pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
@@ -1992,7 +1999,9 @@ function PlanningTV() {
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  }));
+  })) as { label: string; value: string; tone?: "gold" | "red" }[];
+  const sArvit = getCommunityTime(saturdayKey, "Arvit");
+  if (sArvit) { sTimes.push({ label: "Arvit", value: sArvit }); sTimes.sort(cmp); }
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
