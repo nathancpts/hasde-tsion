@@ -56,9 +56,15 @@ export function useVersionCheck(intervalMs = 5 * 60 * 1000) {
         // cela ferait sortir de fullscreen et casserait l'affichage TV.
         // On garde la nouvelle signature en mémoire et on rechargera dès
         // que l'utilisateur sortira du plein écran.
+        // En plein écran (TV), on recharge quand même, mais seulement pendant
+        // la nuit (2h–5h) pour ne pas couper l'affichage en journée : sans
+        // cela, la TV restait indéfiniment sur l'ancienne version.
         if (document.fullscreenElement) {
-          console.info("[version-check] new version detected, reload deferred (fullscreen active)");
-          return;
+          const h = new Date().getHours();
+          if (h < 2 || h >= 5) {
+            console.info("[version-check] new version detected, reload deferred to the night (fullscreen active)");
+            return;
+          }
         }
         console.info("[version-check] new version detected, reloading…");
         try {
