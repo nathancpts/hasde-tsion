@@ -642,10 +642,11 @@ export function TVSky({
           {cards.map((e, i) => {
             const cur = i === 0 && visible.length > 0;
             const raw = e.label.replace(/^Sam\.\s*/, "");
-            const [name, ...rest] = raw.split(" · ");
+            const [name0, ...rest] = raw.split(" · ");
+            const name = name0.replace(/^Entrée de Chabbat$/i, "Entrée").replace(/^Sortie de Chabbat$/i, "Sortie");
             const note = rest.join(" · ");
-            const office = kindOf(name) === "Office" || kindOf(e.label) === "Office";
-            const he = heOf(name) || heOf(e.label);
+            const office = kindOf(name0) === "Office" || kindOf(e.label) === "Office";
+            const he = heOf(name0) || heOf(e.label);
             return (
               <div
                 key={`${e.label}-${e.value}`}
@@ -656,7 +657,7 @@ export function TVSky({
                   gridColumn: i + 1,
                   gridTemplateRows: "subgrid",
                   borderRadius: 18,
-                  padding: "1.4vh 1vw 1.6vh",
+                  padding: "1.4vh 0.7vw 1.4vh",
                   minWidth: 0,
                   background: cur ? "rgba(5,13,32,.48)" : "rgba(5,13,32,.34)",
                   border: `1px solid ${cur ? "rgba(240,214,137,.75)" : "rgba(219,231,251,.16)"}`,
@@ -669,21 +670,21 @@ export function TVSky({
                   className="flex items-center justify-between"
                   style={{ gap: "6px", minWidth: 0, fontFamily: MONT, fontSize: "1vh", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: cur || office ? "#F0D689" : "#9FB0CF" }}
                 >
-                  <span>{kindOf(name)}</span>
+                  <span>{kindOf(name0)}</span>
                   {cur && (
-                    <span style={{ fontSize: "0.82vh", letterSpacing: "0.08em", padding: "3px 8px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", fontWeight: 800, whiteSpace: "nowrap" }}>
+                    <span style={{ position: "absolute", top: "-1vh", right: "0.6vw", fontSize: "0.82vh", letterSpacing: "0.08em", padding: "3px 8px", borderRadius: 999, background: "#F0D689", color: "#0a1a3d", fontWeight: 800, whiteSpace: "nowrap" }}>
                       Prochain
                     </span>
                   )}
                 </span>
                 <strong style={{ display: "block", marginTop: "0.9vh", minWidth: 0, fontFamily: MONT, fontSize: "1.75vh", fontWeight: 800, color: office ? "#F0D689" : "#fff", lineHeight: 1.15 }}>
                   {name}
-                  {he && <span className="font-hebrew" dir="rtl" style={{ display: "block", marginTop: "0.3vh", color: "#9FB0CF", fontSize: "1.3vh", fontWeight: 500 }}>{he}</span>}
+                  {he && <span className="font-hebrew" dir="rtl" style={{ display: "block", textAlign: "left", marginTop: "0.3vh", color: "#9FB0CF", fontSize: "1.3vh", fontWeight: 500 }}>{he}</span>}
                 </strong>
                 <span style={{ marginTop: "0.5vh", fontFamily: MONT, fontSize: "1.05vh", fontWeight: 500, color: "#C9D6EE", lineHeight: 1.25, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" } as React.CSSProperties}>
                   {note}
                 </span>
-                <div style={{ marginTop: "1vh", alignSelf: "end", fontFamily: MONT, fontWeight: 800, fontSize: "3vh", fontVariantNumeric: "tabular-nums", lineHeight: 1, color: "#F3F6FC" }}>
+                <div style={{ marginTop: "1vh", alignSelf: "end", fontFamily: MONT, fontWeight: 800, fontSize: "2.5vh", letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums", lineHeight: 1, color: "#F3F6FC" }}>
                   {e.value}
                 </div>
               </div>
