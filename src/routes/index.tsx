@@ -2075,7 +2075,8 @@ function PlanningTV() {
   ];
   {
     const sunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value
-      ?? vTimes.find((t) => /chekia/i.test(t.label))?.value;
+      ?? (dow === 6 ? sTimes.find((t) => /chekia/i.test(t.label))?.value : undefined)
+      ?? (dow === 5 && entryTime ? subtractMinutes(entryTime, -18) : undefined);
     if (sunset && !extraToday.some((t) => /chekia|sheq|coucher/i.test(t.label))) extraToday.push({ label: "Chekia", value: sunset });
   }
   const norm = (s: string) => s.toLowerCase().replace(/samedi/g, "").replace(/[’'\s]/g, "");
