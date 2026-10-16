@@ -701,12 +701,6 @@ export function TVSky({
             );
           })}
         </div>
-        {parashaFr && (
-          <div className="flex items-baseline justify-center" style={{ gap: "0.7em", marginTop: "1vh", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F0D689", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
-            <span>Étude · Parasha {parashaFr}</span>
-            {parashaHe && <span className="font-hebrew" dir="rtl" style={{ fontSize: "1.5vh", letterSpacing: 0, fontWeight: 600 }}>{parashaHe}</span>}
-          </div>
-        )}
       </div>
     </div>
   );
