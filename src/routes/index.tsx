@@ -348,25 +348,33 @@ function AutoScrollLoop({ children, speed = 20, className = "" }: { children: Re
     ro.observe(el); ro.observe(a);
     return () => ro.disconnect();
   }, []);
+  const track = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = ref.current, a = inner.current;
-    if (!el || !a || !loop) { if (el) el.scrollTop = 0; return; }
+    const el = ref.current, a = inner.current, tr = track.current;
+    if (!el || !a || !tr) return;
+    el.scrollTop = 0;
+    if (!loop) { tr.style.transform = "translate3d(0,0,0)"; return; }
+    // Défilement fluide : transform GPU au sous-pixel (scrollTop arrondit au pixel → saccades).
     let raf = 0, pos = 0, last = performance.now();
+    let h = a.offsetHeight;
+    const ro = new ResizeObserver(() => { h = a.offsetHeight; });
+    ro.observe(a);
     const tick = (t: number) => {
-      const dt = t - last; last = t;
-      const h = a.offsetHeight;
+      const dt = Math.min(t - last, 100); last = t;
       pos += speed * (dt / 1000);
       if (h > 0 && pos >= h) pos -= h;
-      el.scrollTop = pos;
+      tr.style.transform = `translate3d(0,${-pos}px,0)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
   }, [loop, speed]);
   return (
     <div ref={ref} className={`no-scrollbar overflow-hidden ${className}`}>
-      <div ref={inner}>{children}</div>
-      {loop && <div aria-hidden="true">{children}</div>}
+      <div ref={track} style={{ willChange: "transform", backfaceVisibility: "hidden" }}>
+        <div ref={inner}>{children}</div>
+        {loop && <div aria-hidden="true">{children}</div>}
+      </div>
     </div>
   );
 }
