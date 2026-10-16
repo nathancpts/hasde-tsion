@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchLiveWeek, fetchZmanim } from "@/lib/jewish-calendar";
+import { useParashaContent } from "@/lib/parasha-content";
+import { getCurrentParasha } from "@/lib/parashot";
 
 /**
  * Site de présentation (PC ≥ 768 px). Le fichier fourni est affiché tel quel
