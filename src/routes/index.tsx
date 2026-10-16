@@ -2264,7 +2264,7 @@ function PlanningTV() {
                 className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
                 style={{ height: "2.4vh", background: "transparent" }}
               />
-              <AutoScrollLoop speed={14} className="h-full">
+              <AutoScrollLoop speed={9} className="h-full">
                 {pc.intro && (
                   <p style={{ marginTop: "0.6vh", fontSize: "1.45vh", lineHeight: 1.65, color: "#9FB0CF", fontStyle: "italic", whiteSpace: "pre-line" }}>
                     {pc.intro}
