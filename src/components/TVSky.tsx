@@ -629,9 +629,9 @@ export function TVSky({
             const nToday = Math.min(visible.length, cards.length);
             const nTom = cards.length - nToday;
             const head = (txt: string, span: number, start: number) => (
-              <div key={txt} className="flex items-center" style={{ gridColumn: `${start} / span ${span}`, gridRow: 1, gap: "0.8vw", marginBottom: "1vh", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F0D689", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
+              <div key={txt} className="flex items-center" style={{ gridColumn: `${start} / span ${span}`, gridRow: 1, gap: "0.8vw", marginBottom: "1vh", fontFamily: MONT, fontSize: "1.15vh", fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color: "#F3F6FC", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
                 <span style={{ whiteSpace: "nowrap" }}>{txt}</span>
-                <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(240,214,137,.55), transparent)" }} />
+                <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(243,246,252,.55), transparent)" }} />
               </div>
             );
             return [
