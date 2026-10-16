@@ -1253,7 +1253,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    });
+    })) as { label: string; value: string }[];
   const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
   if (vArvit) vTimes.push({ label: "Arvit", value: vArvit });
 
@@ -1264,7 +1264,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
-  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
+  const sSheqyia = getCommunityTime(saturdayKey, "Sheqyia") ?? pickZman(shabbatZ.samedi, "Sheqyia");
   const saturdayKey = dateKey(nextFridaySaturday().saturday);
   const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
@@ -1276,7 +1276,9 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  }));
+  })) as { label: string; value: string }[];
+  const sArvit = getCommunityTime(saturdayKey, "Arvit");
+  if (sArvit) sTimes.push({ label: "Arvit", value: sArvit });
 
   // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
   const today = new Date();
