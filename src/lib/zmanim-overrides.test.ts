@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import { strict as assert } from "node:assert";
-import { getCommunityMinha, getCommunityTime, getCommunitySchedule } from "./zmanim-overrides";
+import { getCommunityMinha, getCommunityTime, getCommunitySchedule } from "./zmanim-overrides.ts";
 
 describe("Bereshit 9 et 10 octobre 2026", () => {
   test("Minha vendredi à 18:50", () => {
