@@ -1,3 +1,5 @@
+const TV_UA = /SmartTV|SMART-TV|Tizen|Web0S|webOS|NetCast|HbbTV|BRAVIA|AFT[A-Z]|Android TV|GoogleTV|CrKey|AppleTV|Roku|Philips|Hisense|VIDAA|TitanOS|Large Screen|\bTV\b/i;
+
 /** Détecte un téléviseur / box TV (navigateur TV, écran large en paysage, ou ?tv=1). */
 export function isTVDevice(): boolean {
   if (typeof window === "undefined") return false;
@@ -6,6 +8,7 @@ export function isTVDevice(): boolean {
   if (path.startsWith("/app")) return false;
   // Accueil « / » : toujours le site, sauf ?tv=1 explicite (cadre TV interne).
   if (path === "/" || path === "") {
+    if (TV_UA.test(navigator.userAgent || "")) return true;
     try { return new URLSearchParams(window.location.search).get("tv") === "1"; } catch { return false; }
   }
   try {
@@ -67,6 +70,7 @@ export function isPhoneDevice(): boolean {
   try {
     if (window.matchMedia("(display-mode: standalone)").matches || (navigator as any).standalone) return true;
     const ua = navigator.userAgent || "";
+    if (TV_UA.test(ua) || window.location.pathname.toLowerCase().startsWith("/tv")) return false;
     if (/iPhone|iPod|Android.+Mobile|Mobile.+Android|Windows Phone/i.test(ua)) return true;
     const uaData = (navigator as any).userAgentData;
     if (uaData?.mobile) return true;
