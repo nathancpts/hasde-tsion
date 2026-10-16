@@ -1,3 +1,4 @@
+import { getCurrentParasha } from "@/lib/parashot";
 import { PresentationSite } from "@/components/PresentationSite";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { isTVDevice, isAppPath, isPhoneDevice } from "@/lib/tv-detect";
@@ -2149,6 +2150,7 @@ function PlanningTV() {
             greeting={tvGreeting}
             dateFr={dateStr}
             dateHe={dateHeStr}
+            parasha={[getCurrentParasha(now).nom, parashaHe ?? ""]}
           />
       </div>
       <div className="pointer-events-none relative z-10 grid h-full w-full" style={{ gridTemplateColumns: "minmax(0,1.66fr) minmax(0,1fr)" }}>
