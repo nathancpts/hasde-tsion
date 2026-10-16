@@ -103,7 +103,9 @@ export function TVSky({
   dateHe,
   contentRight = "0px",
   parasha,
+  tomorrow,
 }: {
+  tomorrow?: TVSkyEvent[];
   parasha?: [string, string];
   logoUrl?: string;
   sunrise: string;
@@ -504,7 +506,7 @@ export function TVSky({
   const ticks: { left: string; label: string }[] = [];
   for (let t = D0; t <= D1; t += 180) ticks.push({ left: `${rf(t)}%`, label: `${String(t / 60).padStart(2, "0")} h` });
 
-  const cards = visible;
+  const cards = [...visible, ...(tomorrow ?? [])].slice(0, 9);
 
   return (
     <div ref={rootRef} className="relative h-full w-full overflow-hidden" style={{ background: "#050d20" }}>

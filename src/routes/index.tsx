@@ -2132,6 +2132,7 @@ function PlanningTV() {
   const tvSunrise = rawToday.find((t) => /lever/i.test(t.label))?.value ?? "07:43";
   const tvSunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value ?? "19:32";
   const tvEvents: TVSkyEvent[] = todayTimes.map((t) => ({ label: t.label, value: t.value }));
+  const noLive = (dow === 5 && now.getHours() >= 12) || dow === 6 || (dow === 0 && now.getHours() === 0 && now.getMinutes() < 1);
   const tvGreeting: [string, string] | null = dow === 5 || dow === 6 ? ["Chabbat Chalom", "שבת שלום"] : null;
 
 
@@ -2150,6 +2151,7 @@ function PlanningTV() {
             greeting={tvGreeting}
             dateFr={dateStr}
             dateHe={dateHeStr}
+            tomorrow={dow === 5 ? sTimes.filter((t) => /^\d{1,2}:\d{2}/.test(t.value)).map((t) => ({ label: `Sam. ${t.label.replace(/\s*samedi/i, "")}`, value: t.value })) : undefined}
             parasha={[getCurrentParasha(now).nom, parashaHe ?? ""]}
           />
       </div>
@@ -2164,8 +2166,8 @@ function PlanningTV() {
             gap: "1.6vh",
           }}
         >
-          {/* LIVE — bouton pour afficher le Kotel en grand */}
-          <div className="shrink-0 flex items-center" style={{ ...GLASS, gap: "1vw", padding: "1.7vh 1.4vw" }}>
+          {/* LIVE — masqué du vendredi 12h au dimanche 00h01 */}
+          {!noLive && <div className="shrink-0 flex items-center" style={{ ...GLASS, gap: "1vw", padding: "1.7vh 1.4vw" }}>
             <span className="inline-block rounded-full shrink-0" style={{ width: "0.9vh", height: "0.9vh", background: "#FF3B30", boxShadow: "0 0 8px #FF3B30" }} />
             <div className="min-w-0 flex-1">
               <p className="uppercase truncate" style={{ fontSize: "1.3vh", letterSpacing: "0.32em", fontWeight: 700, color: "#F3F6FC", fontFamily: HEADING_FONT_LOCAL }}>
@@ -2193,7 +2195,7 @@ function PlanningTV() {
             >
               AFFICHER EN GRAND
             </button>
-          </div>
+          </div>}
 
           {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
           <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "17%" }}>
@@ -2229,12 +2231,12 @@ function PlanningTV() {
               )}
             </div>
           </article>
-          <div className="relative overflow-hidden" style={{ ...GLASS, flex: "0 0 auto", height: "100%", aspectRatio: "16 / 9", maxWidth: "50%", padding: 0, borderRadius: 22 }}>
+          {!noLive && <div className="relative overflow-hidden" style={{ ...GLASS, flex: "0 0 auto", height: "100%", aspectRatio: "16 / 9", maxWidth: "50%", padding: 0, borderRadius: 22 }}>
             <KotelLive className="absolute inset-0 w-full h-full" radius={22} />
             <span className="absolute left-[0.8vh] top-[0.8vh] flex items-center gap-[0.5vh] rounded-full uppercase" style={{ background: "rgba(5,13,32,.6)", padding: "0.3vh 0.8vh", fontSize: "1.1vh", fontWeight: 700, letterSpacing: "0.2em", color: "#F3F6FC" }}>
               <span style={{ width: "0.8vh", height: "0.8vh", borderRadius: 99, background: "#ef4444" }} /> Live
             </span>
-          </div>
+          </div>}
           </div>
 
           {/* PARASHA — défilement doux */}
@@ -2328,7 +2330,7 @@ function PlanningTV() {
       </div>
 
       <TVAppQrPopup />
-      {liveOpen && typeof document !== "undefined" && createPortal(
+      {liveOpen && !noLive && typeof document !== "undefined" && createPortal(
         <div
           className="fixed inset-0 z-[9000] flex items-center justify-center"
           style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
