@@ -404,7 +404,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
   </section>
 
   <section class="sec" id="semaine">
-    <div class="sec-head"><div><span class="label" data-range>Cette semaine</span><h2 class="words">Un nouveau cycle de Torah commence</h2></div><p class="lead">Chabbat 10 octobre : après les fêtes de Tichri, la lecture reprend au tout début, avec la Parachat Bereshit.</p></div>
+    <div class="sec-head"><div><span class="label" data-range>Cette semaine</span><h2 class="words" data-parasha-heading>Un nouveau cycle de Torah commence</h2></div><p class="lead" data-parasha-lead>Chabbat 10 octobre : après les fêtes de Tichri, la lecture reprend au tout début, avec la Parachat Bereshit.</p></div>
     <div class="week-track" data-track></div>
     <div class="week-prog" aria-hidden="true"><span data-wprog></span></div>
   </section>
@@ -414,7 +414,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
   <section class="chants-preview" aria-labelledby="chants-title">
     <div class="chants-shell">
       <div class="chants-copy">
-        <span class="label">Chants · Parachat Bereshit</span>
+        <span class="label" data-parasha-label>Chants · Parachat Bereshit</span>
         <h2 class="words" id="chants-title">Les airs de la fête, réunis.</h2>
         <p>43 chants et piyoutim séfarades avec paroles en hébreu, phonétique, mélodies et mode karaoké.</p>
         <a class="chants-open magnet" href="/chants" target="_top" data-cursor>Ouvrir les 43 chants <span aria-hidden="true">↗</span></a>
@@ -503,7 +503,7 @@ footer{padding:80px clamp(16px,4vw,56px) 40px;overflow:hidden}
     <div class="study">
       <div>
         <span class="label">Étude · Parasha de la semaine</span>
-        <h2 class="parasha-title words" style="margin-top:18px">Parachat Bereshit</h2>
+        <h2 class="parasha-title words" data-parasha-title style="margin-top:18px">Parachat Bereshit</h2>
         <div class="blocks" data-blocks></div>
       </div>
       <aside class="hayom" data-tilt>
@@ -593,6 +593,7 @@ try { const L = window.parent && window.parent.__HT_LIVE__; if (L) {
   set("Lever du soleil", L.sunrise); set("Minha", L.minha); set("Sheqyia", L.sunset); set("Arvit", L.arvit); set("Nuit de R. Tam", L.rtam);
   if (L.sunrise) DATA.sunrise = L.sunrise; if (L.sunset) DATA.sunset = L.sunset;
   if (L.candles && !E.some(x => x.n === "Allumage")) E.push({k:"Chabbat", n:"Allumage", he:"הדלקת נרות", t:L.candles});
+  if (L.parasha) DATA.parasha = L.parasha;
   E.sort((a,b) => a.t.localeCompare(b.t));
 } } catch (e) {}
 /* Vendredi : allumage (secours : coucher − 18 min) et salutation de Chabbat */
@@ -681,7 +682,15 @@ function tick(){
 if (DATA.greet) $$('[data-greet]').forEach(e => { e.hidden = false; e.innerHTML = `<span>${DATA.greet[0]}</span><span class="he" lang="he" dir="rtl">${DATA.greet[1]}</span>`; });
 $('[data-events]').innerHTML = DATA.events.map(e =>
   `<div class="ev" data-t="${toM(e.t)}"><span class="k">${e.k}<span class="nx">prochain</span></span><strong>${e.n} <span class="he" lang="he" dir="rtl">${e.he}</span></strong><div class="t">${e.t}</div>${e.ex?'<span class="tag">exemple</span>':''}</div>`).join('');
+if (DATA.parasha && Array.isArray(DATA.parasha.blocs) && DATA.parasha.blocs.length) DATA.blocs = DATA.parasha.blocs;
 $('[data-blocks]').innerHTML = DATA.blocs.map(([h,p]) => `<div class="reveal"><h3>${h}</h3><p>${p}</p></div>`).join('');
+if (DATA.parasha) { const PP = DATA.parasha;
+  const pset = (sel, txt) => { const el = $(sel); if (el && txt) el.textContent = txt; };
+  pset('[data-parasha-title]', PP.titre);
+  pset('[data-parasha-heading]', PP.heading);
+  pset('[data-parasha-label]', PP.label);
+  pset('[data-parasha-lead]', PP.lead);
+}
 $$('[data-hayom]').forEach(e => e.textContent = DATA.hayom);
 $('[data-acts]').innerHTML = DATA.acts.map(([i,h,p]) =>
   `<a class="act" href="${HA}" target="_blank" rel="noopener" data-cursor><span class="i">${ic(i,30)}</span><span class="go">${ic('arrow',18)}</span><h3>${h}</h3><p>${p}</p></a>`).join('');
@@ -692,7 +701,8 @@ const dayInfo = x => DATA.fetes[iso(x)] || (x.getDay()===5 ? 'Entrée de Chabbat
 $('[data-track]').innerHTML = days.map((x,i) =>
   `<article class="wd${i?'':' today'}${DATA.fetes[iso(x)]?' fete':''}"><span class="d">${i ? x.toLocaleDateString('fr-FR',{weekday:'long'}) : "Aujourd'hui"}</span><span class="n">${x.getDate()}</span><span class="h">${hebShort?hebShort.format(x):''}</span><span class="e">${dayInfo(x) || '<span style="color:var(--muted);font-weight:600;font-size:1rem">Offices habituels</span>'}</span></article>`).join('');
 $('[data-range]').textContent = `Cette semaine · ${days[0].toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} – ${days[6].toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}`;
-const mq = ["Bereshit",'he:בְּרֵאשִׁית','o:Chabbat Chalom','he:שבת שלום','o:Nouvelle année de Torah','he:שנה חדשה בתורה'];
+const MP = DATA.parasha;
+const mq = MP ? [MP.nom, MP.he ? 'he:'+MP.he : 'o:'+MP.titre, 'o:Chabbat Chalom', 'he:שבת שלום'] : ["Bereshit",'he:בְּרֵאשִׁית','o:Chabbat Chalom','he:שבת שלום','o:Nouvelle année de Torah','he:שנה חדשה בתורה'];
 const mqHTML = mq.map(s => s.startsWith('he:') ? `<span class="he" lang="he" dir="rtl">${s.slice(3)}</span>` : s.startsWith('o:') ? `<span class="o">${s.slice(2)}</span>` : `<span>${s}</span>`).join('<b></b>') + '<b></b>';
 $('[data-marq]').innerHTML = mqHTML + mqHTML;
 $$('[data-route]').forEach(a => a.href = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(DATA.adresse));

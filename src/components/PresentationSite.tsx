@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchLiveWeek, fetchZmanim } from "@/lib/jewish-calendar";
+import { useParashaContent } from "@/lib/parasha-content";
+import { getCurrentParasha } from "@/lib/parashot";
 
 /**
  * Site de présentation (PC ≥ 768 px). Le fichier fourni est affiché tel quel
@@ -37,15 +39,27 @@ function eventKind(label: string) {
 
 export function PresentationSite() {
   const [ready, setReady] = useState(false);
+  const pc = useParashaContent();
   useEffect(() => {
     let done = false;
     const go = () => { if (!done) { done = true; setReady(true); } };
     const timer = setTimeout(go, 3000);
     const today = new Date();
-    Promise.all([fetchZmanim(today), today.getDay() === 5 ? fetchLiveWeek(today).catch(() => null) : Promise.resolve(null)])
+    Promise.all([fetchZmanim(today), fetchLiveWeek(today).catch(() => null)])
       .then(([z, w]) => {
         const get = (l: string) => z.times.find((t) => t.label === l)?.value;
         const sunset = get("Sheqyia");
+        // Parasha : même source que le mode TV (contenu hebdo + nom hébreu Hebcal).
+        const pEntry = getCurrentParasha();
+        const titre = pc.nom?.trim() || `Parachat ${pEntry.nom}`;
+        const sat = new Date(today);
+        sat.setDate(sat.getDate() + ((6 - sat.getDay() + 7) % 7));
+        const parashaBlocs: [string, string][] = pc.blocs.map((b) => [
+          b.titre,
+          b.puces?.length
+            ? `<ul style="margin:6px 0 0;padding-left:1.1rem;display:grid;gap:.45rem;text-align:left">${b.puces.map((li) => `<li>${li}</li>`).join("")}</ul>`
+            : (b.paragraphes ?? []).join("<br>"),
+        ]);
         (window as unknown as { __HT_LIVE__?: unknown }).__HT_LIVE__ = {
           events: z.times.map((time) => ({
             k: eventKind(time.label),
@@ -59,12 +73,21 @@ export function PresentationSite() {
           arvit: get("Sortie des étoiles"),
           rtam: get("Nuit de R. Tam"),
           candles: today.getDay() === 5 ? (w?.vendredi.candleLighting || minus(sunset, 18)) : undefined,
+          parasha: {
+            nom: pEntry.nom,
+            titre,
+            he: w?.parasha.he ?? "",
+            heading: `Parachat ${pEntry.nom}`,
+            lead: `Chabbat ${sat.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} : étude de la ${titre} — ${pEntry.reference}.`,
+            label: `Chants · ${titre}`,
+            blocs: parashaBlocs,
+          },
         };
       })
       .catch(() => {})
       .finally(go);
     return () => { clearTimeout(timer); done = true; };
-  }, []);
+  }, [pc]);
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "#050d20", zIndex: 40 }}>
