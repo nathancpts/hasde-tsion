@@ -2055,7 +2055,7 @@ function PlanningTV() {
     ?? vTimes.find((t) => t.label === "Minha")?.value;
   const saturdayMinha = rawToday.find((t) => t.label === "Minha")?.value
     ?? sTimes.find((t) => t.label.startsWith("Minha"))?.value;
-  const todayTimes = (getCommunitySchedule(dateKey(now))?.times ?? (dow === 5
+  const baseTodayTimes = (getCommunitySchedule(dateKey(now))?.times ?? (dow === 5
     ? [
         ...(fridayMinha ? [{ label: "Minha", value: fridayMinha }] : []),
         ...(entryTime ? [{ label: "Entrée de Chabbat", value: entryTime }] : []),
@@ -2066,8 +2066,25 @@ function PlanningTV() {
           ...(saturdayMinha ? [{ label: "Minha samedi", value: saturdayMinha }] : []),
           ...(exitTime ? [{ label: "Sortie de Chabbat", value: exitTime }] : []),
         ]
-      : weekdayTimes)
-  ).sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
+      : weekdayTimes));
+  // Compléter avec les autres horaires utiles du jour (sans doublons)
+  const extraToday: { label: string; value: string }[] = [
+    ...(dow === 5 && entryTime ? [{ label: "Entrée de Chabbat", value: entryTime }] : []),
+    ...(dow === 6 && exitTime ? [{ label: "Sortie de Chabbat", value: exitTime }] : []),
+    ...rawToday.filter((t) => /chekia|sheq|coucher|sortie des [ée]toiles|tset|lever|chaharit|cha.harit/i.test(t.label)),
+  ];
+  {
+    const sunset = rawToday.find((t) => /chekia|sheq|coucher/i.test(t.label))?.value
+      ?? (dow === 6 ? sTimes.find((t) => /chekia/i.test(t.label))?.value : undefined)
+      ?? (dow === 5 && entryTime ? subtractMinutes(entryTime, -18) : undefined);
+    if (sunset && !extraToday.some((t) => /chekia|sheq|coucher/i.test(t.label))) extraToday.push({ label: "Chekia", value: sunset });
+  }
+  const norm = (s: string) => s.toLowerCase().replace(/samedi/g, "").replace(/[’'\s]/g, "");
+  const merged = [...baseTodayTimes];
+  for (const t of extraToday) {
+    if (!merged.some((m) => norm(m.label) === norm(t.label) || (/entr/i.test(m.label) && /entr/i.test(t.label)) || (/sortie de/i.test(m.label) && /sortie de/i.test(t.label)))) merged.push(t);
+  }
+  const todayTimes = merged.sort((a, b) => (toMinTop(a.value) ?? 9999) - (toMinTop(b.value) ?? 9999));
 
   const todayDateLabel = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
