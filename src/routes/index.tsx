@@ -1980,12 +1980,14 @@ function PlanningTV() {
     .map((t) => {
       const ov = getFridayMinhaOverride();
       return t.label === "Minha" && ov ? { ...t, value: ov } : t;
-    }));
+    })) as { label: string; value: string }[];
+  const vArvit = getCommunityTime(dateKey(nextFridaySaturday().friday), "Arvit");
+  if (vArvit) vTimes.push({ label: "Arvit", value: vArvit });
   const sTefilin = pickZman(shabbatZ.samedi, "Misheyakir / Tefilin");
   const sShemaGRA = pickZman(shabbatZ.samedi, "Limite Shema GR\"A");
   const sShema = sTefilin && sShemaGRA ? `${sTefilin} | ${sShemaGRA}` : week.samedi.shema;
-  const sSheqyia = pickZman(shabbatZ.samedi, "Sheqyia");
   const saturdayKey = dateKey(nextFridaySaturday().saturday);
+  const sSheqyia = getCommunityTime(saturdayKey, "Sheqyia") ?? pickZman(shabbatZ.samedi, "Sheqyia");
   const sMinha = getCommunityMinha(saturdayKey) ?? subtractMinutes(sSheqyia, 40);
   const sTimes = sortByTime((chabad
     ? week.samedi.times.map((t) => t.label === "Fin du Chabbat" ? { ...t, value: chabad.havdalah } : t)
@@ -1996,7 +1998,9 @@ function PlanningTV() {
     if (t.label === "Chekia" && sSheqyia) return { ...t, value: sSheqyia };
     if (t.label === "Fin du Chabbat") return { ...t, label: "Sortie" };
     return t;
-  }));
+  })) as { label: string; value: string }[];
+  const sArvit = getCommunityTime(saturdayKey, "Arvit");
+  if (sArvit) sTimes.push({ label: "Arvit", value: sArvit });
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
