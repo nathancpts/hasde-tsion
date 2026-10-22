@@ -200,10 +200,10 @@ function TVFrameShell() {
   };
   const style = (on: boolean): React.CSSProperties => ({
     position: "fixed", inset: 0, width: "100vw", height: "100vh", border: 0,
-    opacity: on ? 1 : 0, zIndex: on ? 2 : 1, transition: "opacity 600ms ease",
+    visibility: on ? "visible" : "hidden", zIndex: on ? 2 : 1,
   });
   return (
-    <main style={{ position: "fixed", inset: 0, background: "#0A1128" }}>
+    <main className="tv-frame-shell" style={{ position: "fixed", inset: 0, background: "var(--chant-night)" }}>
       {frames.a && <iframe title="Hasdé Tsion TV" src={frames.a} style={style(frames.active === "a")} onLoad={() => onLoad("a")} allow="autoplay; fullscreen" />}
       {frames.b && <iframe title="Hasdé Tsion TV" src={frames.b} style={style(frames.active === "b")} onLoad={() => onLoad("b")} allow="autoplay; fullscreen" />}
       <a

@@ -725,3 +725,26 @@ select:focus-visible {
 .tv-now { position: absolute; top: -44px; height: 38px; width: 1px; background: linear-gradient(#ff8a5b, rgba(255, 138, 91, 0)); transform: translateX(-50%); opacity: 0; transition: opacity 0.4s; }
 .tv-now b { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-family: 'Montserrat', system-ui, sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #ffb08f; white-space: nowrap; }
 .tv-clock, .tv-clock * { text-shadow: none !important; }
+
+/* Android TV compositors cannot reliably blur animated canvas/video layers.
+   Solid-tinted panels preserve contrast without repeatedly sampling the sky. */
+.tv-mode [style*="backdrop-filter"],
+.tv-frame-shell [style*="backdrop-filter"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.tv-mode {
+  --tv-panel-surface: color-mix(in srgb, var(--chant-panel) 88%, transparent);
+}
+.tv-mode aside article,
+.tv-mode aside > div:first-child,
+.tv-mode [style*="grid-template-rows: subgrid"] {
+  background: var(--tv-panel-surface) !important;
+}
+.tv-mode .tv-cloud {
+  filter: none !important;
+  will-change: auto;
+}
+.tv-mode .tv-star {
+  animation: none;
+}
