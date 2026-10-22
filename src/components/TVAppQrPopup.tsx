@@ -29,7 +29,7 @@ export function TVAppQrPopup() {
   return (
     <div
       className="fixed inset-0 z-[9500] flex items-center justify-center"
-      style={{ background: "rgba(10,17,40,0.6)", backdropFilter: "blur(24px)" }}
+      style={{ background: "var(--chant-night)" }}
       onClick={() => setOpen(false)}
     >
       <div

@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Stabiliser l’affichage TV : limiter les couches graphiques et vérifier le renouvellement de l’écran.
+- [x] Stabiliser l’affichage TV : couches graphiques allégées, renouvellement vérifié en Full HD et 4K ; validation sur Xiaomi physique à confirmer.
 
 - [x] Remplacer le logo partout par le logo doré fourni, sans modifier le favicon
 
