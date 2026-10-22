@@ -675,7 +675,6 @@ export function TVSky({
                   minWidth: 0,
                   background: cur ? "rgba(5,13,32,.48)" : "rgba(5,13,32,.34)",
                   border: `1px solid ${cur ? "rgba(240,214,137,.75)" : "rgba(219,231,251,.16)"}`,
-                  backdropFilter: "blur(6px)",
                   boxShadow: cur ? "0 0 0 1px rgba(240,214,137,.25), 0 10px 30px rgba(5,13,32,.35)" : "0 8px 24px rgba(5,13,32,.2)",
                   transition: "background .5s, border-color .5s",
                 }}

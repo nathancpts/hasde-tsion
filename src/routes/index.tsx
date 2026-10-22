@@ -190,7 +190,7 @@ function TVFrameShell() {
         if (f.active === which) return f;
         return which === "a" ? { a: f.a, b: f.b, active: "a" } : { a: f.a, b: f.b, active: "b" };
       });
-      // L'ancien cadre n'est retiré qu'après la fin du fondu.
+      // Retirer l’ancien cadre après la bascule, sans mélanger les deux images.
       window.setTimeout(() => {
         setFrames((f) => (f.active === "a" ? { ...f, b: null } : { ...f, a: "" }));
       }, 1500);
@@ -211,7 +211,7 @@ function TVFrameShell() {
         onClick={() => { try { localStorage.removeItem("ht-tv"); } catch {} }}
         title="Quitter le mode TV"
         aria-label="Quitter le mode TV"
-        style={{ position: "fixed", bottom: 2, left: "50%", transform: "translateX(-50%)", zIndex: 5, height: 18, padding: "0 12px", borderRadius: 999, display: "flex", alignItems: "center", fontSize: 11, fontWeight: 600, letterSpacing: ".04em", color: "rgba(255,255,255,.9)", background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)", textDecoration: "none", backdropFilter: "blur(6px)" }}
+        style={{ position: "fixed", bottom: 2, left: "50%", transform: "translateX(-50%)", zIndex: 5, height: 18, padding: "0 12px", borderRadius: 999, display: "flex", alignItems: "center", fontSize: 11, fontWeight: 600, letterSpacing: ".04em", color: "rgba(255,255,255,.9)", background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)", textDecoration: "none" }}
       >
         Quitter le mode TV
       </a>
@@ -2124,7 +2124,6 @@ function PlanningTV() {
     background: "rgba(5,13,32,.30)",
     border: "1px solid rgba(219,231,251,.22)",
     borderRadius: "24px",
-    backdropFilter: "blur(6px)",
     color: "#f3f6fc",
   };
   const LABEL: React.CSSProperties = {
@@ -2335,7 +2334,7 @@ function PlanningTV() {
       {liveOpen && !noLive && typeof document !== "undefined" && createPortal(
         <div
           className="fixed inset-0 z-[9000] flex items-center justify-center"
-          style={{ background: "rgba(10,17,40,0.72)", backdropFilter: "blur(28px) saturate(130%)" }}
+          style={{ background: "var(--chant-night)" }}
           onClick={() => setLiveOpen(false)}
         >
           <div
