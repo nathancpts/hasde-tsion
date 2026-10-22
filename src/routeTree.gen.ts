@@ -23,6 +23,7 @@ import { Route as TvRouteImport } from './routes/tv'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
 import { Route as ApiPublicKotelRouteImport } from './routes/api/public/kotel'
+import { Route as ApiPublicTvRouteImport } from './routes/api/public/tv'
 import { Route as ApiPublicHooksParashaPushRouteImport } from './routes/api/public/hooks/parasha-push'
 import { Route as ApiPublicHooksSendScheduledRouteImport } from './routes/api/public/hooks/send-scheduled'
 import { Route as ApiPublicHooksShabbatPushRouteImport } from './routes/api/public/hooks/shabbat-push'
@@ -96,6 +97,11 @@ const ApiPublicKotelRoute = ApiPublicKotelRouteImport.update({
   path: '/api/public/kotel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTvRoute = ApiPublicTvRouteImport.update({
+  id: '/api/public/tv',
+  path: '/api/public/tv',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksParashaPushRoute =
   ApiPublicHooksParashaPushRouteImport.update({
     id: '/api/public/hooks/parasha-push',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/tv': typeof ApiPublicTvRoute
   '/api/public/hooks/parasha-push': typeof ApiPublicHooksParashaPushRoute
   '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/tv': typeof ApiPublicTvRoute
   '/api/public/hooks/parasha-push': typeof ApiPublicHooksParashaPushRoute
   '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/compte': typeof AuthenticatedCompteRoute
   '/api/public/kotel': typeof ApiPublicKotelRoute
+  '/api/public/tv': typeof ApiPublicTvRoute
   '/api/public/hooks/parasha-push': typeof ApiPublicHooksParashaPushRoute
   '/api/public/hooks/send-scheduled': typeof ApiPublicHooksSendScheduledRoute
   '/api/public/hooks/shabbat-push': typeof ApiPublicHooksShabbatPushRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/compte'
     | '/api/public/kotel'
+    | '/api/public/tv'
     | '/api/public/hooks/parasha-push'
     | '/api/public/hooks/send-scheduled'
     | '/api/public/hooks/shabbat-push'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/compte'
     | '/api/public/kotel'
+    | '/api/public/tv'
     | '/api/public/hooks/parasha-push'
     | '/api/public/hooks/send-scheduled'
     | '/api/public/hooks/shabbat-push'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/compte'
     | '/api/public/kotel'
+    | '/api/public/tv'
     | '/api/public/hooks/parasha-push'
     | '/api/public/hooks/send-scheduled'
     | '/api/public/hooks/shabbat-push'
@@ -242,6 +254,7 @@ export interface RootRouteChildren {
   TextesRoute: typeof TextesRoute
   TvRoute: typeof TvRoute
   ApiPublicKotelRoute: typeof ApiPublicKotelRoute
+  ApiPublicTvRoute: typeof ApiPublicTvRoute
   ApiPublicHooksParashaPushRoute: typeof ApiPublicHooksParashaPushRoute
   ApiPublicHooksSendScheduledRoute: typeof ApiPublicHooksSendScheduledRoute
   ApiPublicHooksShabbatPushRoute: typeof ApiPublicHooksShabbatPushRoute
@@ -347,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicKotelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/tv': {
+      id: '/api/public/tv'
+      path: '/api/public/tv'
+      fullPath: '/api/public/tv'
+      preLoaderRoute: typeof ApiPublicTvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/parasha-push': {
       id: '/api/public/hooks/parasha-push'
       path: '/api/public/hooks/parasha-push'
@@ -397,6 +417,7 @@ const rootRouteChildren: RootRouteChildren = {
   TextesRoute: TextesRoute,
   TvRoute: TvRoute,
   ApiPublicKotelRoute: ApiPublicKotelRoute,
+  ApiPublicTvRoute: ApiPublicTvRoute,
   ApiPublicHooksParashaPushRoute: ApiPublicHooksParashaPushRoute,
   ApiPublicHooksSendScheduledRoute: ApiPublicHooksSendScheduledRoute,
   ApiPublicHooksShabbatPushRoute: ApiPublicHooksShabbatPushRoute,
