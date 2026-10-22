@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Stabiliser l’affichage TV : limiter les couches graphiques et vérifier le renouvellement de l’écran.
+
 - [x] Remplacer le logo partout par le logo doré fourni, sans modifier le favicon
 
 - [x] TV : commandes en bas, horaires alignés, titres uniformes et même vitesse de défilement Parasha/Hayom Yom
