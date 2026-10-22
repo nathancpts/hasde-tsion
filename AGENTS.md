@@ -2,7 +2,8 @@
 
 - Keep date-specific community schedules in the shared zmanim overrides and apply them before external times in all views; this prevents published office times from being replaced by calculated defaults.
 
-- Use AutoScrollLoop with a shared pixels-per-second speed for TV Parasha and Hayom Yom, and CSS subgrid rows for time cards; this keeps reading speed and time alignment independent of content length.
+- Use AutoScrollLoop with independently configured pixels-per-second speeds for TV Parasha and Hayom Yom, and CSS subgrid rows for time cards; this preserves calm reading and aligned times independently of content length.
+- Keep TV panels free of backdrop filters, bound the sun canvas to Full HD at 30 fps, and swap refresh frames without opacity blending; Android TV compositors can produce black bands under oversized, overlapping filtered layers.
 
 - Keep the Hayom Yom corpus bundled in `src/data/hayom-yom.ts` and derive Hebrew dates with `Intl`; this preserves offline reading without reusing the APK's restricted date-conversion code.
 - Keep the Chants corpus bundled in `src/data/chants.json` and share it through `ChantsPage`; this preserves the complete first-party songbook independently of the former microsite.

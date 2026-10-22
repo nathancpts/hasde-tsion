@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Stabiliser l’affichage TV : couches graphiques allégées, renouvellement vérifié en Full HD et 4K ; validation sur Xiaomi physique à confirmer.
+
 - [x] Remplacer le logo partout par le logo doré fourni, sans modifier le favicon
 
 - [x] TV : commandes en bas, horaires alignés, titres uniformes et même vitesse de défilement Parasha/Hayom Yom

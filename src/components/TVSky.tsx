@@ -181,6 +181,7 @@ export function TVSky({
   useEffect(() => {
     let raf = 0;
     let lastSky = 0;
+    let lastSun = 0;
 
     const drawSun = (t: number) => {
       const scv = suncvRef.current;
@@ -193,7 +194,7 @@ export function TVSky({
       const S = SUN.current;
       if (!g || !S || S.below >= 1) return;
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const ox = g.W * 0.35, oy = g.H * 0.35;
+      const ox = 0, oy = 0;
       const x = S.x + ox, y = S.y + oy, w = S.warm, a = 1 - S.below, T = t / 1000;
       const breath = 1 + Math.sin(T * 0.7) * 0.03, flick = 1 + Math.sin(T * 9.1) * 0.012 + Math.sin(T * 13.7) * 0.008;
       const R0 = 27 * (1 + w * 0.35);
@@ -300,8 +301,10 @@ export function TVSky({
 
     updateSkyRef.current = updateSky;
     const loop = (t: number) => {
-      drawSun(t);
-      if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
+      if (!document.hidden) {
+        if (t - lastSun >= 1000 / 30) { lastSun = t; drawSun(t); }
+        if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -319,10 +322,11 @@ export function TVSky({
       setArc({ w, h });
       const scv = suncvRef.current;
       if (scv) {
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        // Keep the backing texture within Full HD even on 4K Android TVs.
+        const dpr = Math.min(1, 1920 / w, 1080 / h);
         (scv as HTMLCanvasElement & { _dpr?: number })._dpr = dpr;
-        scv.width = Math.max(1, Math.round(w * 1.7 * dpr));
-        scv.height = Math.max(1, Math.round(h * 1.7 * dpr));
+        scv.width = Math.max(1, Math.round(w * dpr));
+        scv.height = Math.max(1, Math.round(h * dpr));
       }
       const g = G.current;
       if (guideRef.current && g) {
@@ -524,8 +528,8 @@ export function TVSky({
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: wx?.grey ?? 0, transition: "opacity 2s" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent)", filter: "blur(8px)", opacity: wx?.fog ?? 0, transition: "opacity 2s", animation: "tv-fog 40s ease-in-out infinite alternate" }} />
-        <canvas ref={rainRef} className="absolute inset-0 h-full w-full" />
-        <canvas ref={snowRef} className="absolute inset-0 h-full w-full" />
+        <canvas ref={rainRef} className="absolute inset-0 h-full w-full" style={{ display: RAIN.current ? undefined : "none" }} />
+        <canvas ref={snowRef} className="absolute inset-0 h-full w-full" style={{ display: SNOW.current ? undefined : "none" }} />
         <canvas ref={flashRef} className="absolute inset-0 h-full w-full" style={{ display: wx?.storm ? "" : "none" }} />
       </div>
 
@@ -550,7 +554,7 @@ export function TVSky({
           ))}
         </div>
         {/* soleil photoréaliste */}
-        <canvas ref={suncvRef} className="absolute" style={{ left: "-35%", top: "-35%", width: "170%", height: "170%", opacity: wx?.dim ?? 1 }} />
+        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1 }} />
         {/* lune (phase réelle) */}
         <div
           ref={moonRef}
@@ -671,7 +675,6 @@ export function TVSky({
                   minWidth: 0,
                   background: cur ? "rgba(5,13,32,.48)" : "rgba(5,13,32,.34)",
                   border: `1px solid ${cur ? "rgba(240,214,137,.75)" : "rgba(219,231,251,.16)"}`,
-                  backdropFilter: "blur(6px)",
                   boxShadow: cur ? "0 0 0 1px rgba(240,214,137,.25), 0 10px 30px rgba(5,13,32,.35)" : "0 8px 24px rgba(5,13,32,.2)",
                   transition: "background .5s, border-color .5s",
                 }}
