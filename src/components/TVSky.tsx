@@ -266,7 +266,7 @@ export function TVSky({
       const sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
       const glowA = (0.55 * clamp(s.alt + 0.35) * (1 - below * 0.5)).toFixed(3);
       if (skyRef.current) {
-        skyRef.current.style.background = `radial-gradient(circle farthest-corner at ${sxp}% ${syp}%, rgba(255,${Math.round(240 - warm * 60)},${Math.round(200 - warm * 120)},${glowA}), transparent 38vw), linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.hor}) 100%)`;
+        skyRef.current.style.background = `linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.hor}) 100%)`;
       }
       if (hazeRef.current) {
         hazeRef.current.style.background = `linear-gradient(to top, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},0) 0%, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},${pal.haze[3]}) 55%, rgba(${pal.haze[0]},${pal.haze[1]},${pal.haze[2]},0) 100%)`;
