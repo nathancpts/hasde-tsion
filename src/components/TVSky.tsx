@@ -360,7 +360,7 @@ export function TVSky({
       const c = Math.max(cover / 100, rain || snow ? 0.8 : 0, fog ? 0.6 : 0);
       RAIN.current = rain ? (heavy ? 1 : light ? 0.3 : 0.6) : 0;
       SNOW.current = snow ? 1 : 0;
-      const dim = rain || snow ? 0.55 : c > 0.85 ? 0.8 : c > 0.6 ? 0.9 : 1;
+      const dim = rain || snow ? 0.8 : c > 0.85 ? 0.95 : 1;
       const n = Math.round(4 + c * 14 + (rain || snow ? 8 : 0));
       const clouds: Cloud[] = Array.from({ length: n }, (_, i) => ({
         l: (i * 97) / n + Math.random() * 6, t: Math.random() * 40, w: 340 + Math.random() * 360, h: 80 + Math.random() * 70,
@@ -558,7 +558,7 @@ export function TVSky({
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         {/* soleil photoréaliste */}
-        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1 }} />
+        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1, filter: "brightness(1.25)" }} />
         {/* lune (phase réelle) */}
         <div
           ref={moonRef}
