@@ -125,7 +125,6 @@ export function TVSky({
   srss.current = { SR, SS };
 
   const [m, setM] = useState(() => nowMF());
-  const [arc, setArc] = useState<{ w: number; h: number } | null>(null);
   const [wx, setWx] = useState<{ code: number; temp: number | null; grey: number; fog: number; dim: number; storm: boolean; clouds: Cloud[] } | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -140,8 +139,6 @@ export function TVSky({
   const reflRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
   const nowLineRef = useRef<HTMLSpanElement>(null);
-  const doneRef = useRef<SVGPathElement>(null);
-  const guideRef = useRef<SVGPathElement>(null);
   const rainRef = useRef<HTMLCanvasElement>(null);
   const snowRef = useRef<HTMLCanvasElement>(null);
   const flashRef = useRef<HTMLCanvasElement>(null);
@@ -255,12 +252,6 @@ export function TVSky({
       const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;
       SUN.current = { x: s.x, y: s.y, warm, alt: s.alt, below };
       setSunP({ x: s.x, y: s.y, warm, op: 1 - below });
-      if (s.sp > 0) {
-        const n = 90, k = Math.min(s.sp, 1);
-        let d = "";
-        for (let i = 0; i <= n; i++) { const q = sunAt(s0 + ((s1 - s0) * k * i) / n, g, s0, s1); d += (i ? " L" : "M") + q.x.toFixed(1) + "," + q.y.toFixed(1); }
-        doneRef.current?.setAttribute("d", d);
-      } else doneRef.current?.setAttribute("d", "");
       const { day, dusk } = skyFor(mNow, s0, s1);
       const pal = mixPal(day, dusk);
       const sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
