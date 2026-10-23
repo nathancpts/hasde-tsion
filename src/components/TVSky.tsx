@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import RealisticSun from "./RealisticSun";
 
 export interface TVSkyEvent {
   label: string;
@@ -132,6 +133,7 @@ export function TVSky({
   const skyRef = useRef<HTMLDivElement>(null);
   const starsRef = useRef<HTMLDivElement>(null);
   const suncvRef = useRef<HTMLCanvasElement>(null);
+  const [sunP, setSunP] = useState({ x: -999, y: -999, warm: 0, op: 0 });
   const moonRef = useRef<HTMLDivElement>(null);
   const cloudsRef = useRef<HTMLDivElement>(null);
   const hazeRef = useRef<HTMLDivElement>(null);
@@ -252,6 +254,7 @@ export function TVSky({
       const warm = clamp(1 - Math.max(s.alt, 0) / 0.4);
       const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;
       SUN.current = { x: s.x, y: s.y, warm, alt: s.alt, below };
+      setSunP({ x: s.x, y: s.y, warm, op: 1 - below });
       if (s.sp > 0) {
         const n = 90, k = Math.min(s.sp, 1);
         let d = "";
@@ -302,7 +305,7 @@ export function TVSky({
     updateSkyRef.current = updateSky;
     const loop = (t: number) => {
       if (!document.hidden) {
-        if (t - lastSun >= 1000 / 30) { lastSun = t; drawSun(t); }
+        void lastSun; void drawSun;
         if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
       }
       raf = requestAnimationFrame(loop);
@@ -526,7 +529,7 @@ export function TVSky({
       </div>
       {/* météo : voiles gris, brouillard, pluie, neige, éclairs */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: (wx?.grey ?? 0) * 0.2, transition: "opacity 2s" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: (wx?.grey ?? 0) * 0.13, transition: "opacity 2s" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent)", filter: "blur(8px)", opacity: wx?.fog ?? 0, transition: "opacity 2s", animation: "tv-fog 40s ease-in-out infinite alternate" }} />
         <canvas ref={rainRef} className="absolute inset-0 h-full w-full" style={{ display: RAIN.current ? undefined : "none" }} />
         <canvas ref={snowRef} className="absolute inset-0 h-full w-full" style={{ display: SNOW.current ? undefined : "none" }} />
@@ -558,7 +561,7 @@ export function TVSky({
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         {/* soleil photoréaliste */}
-        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1 }} />
+        <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
         {/* lune (phase réelle) */}
         <div
           ref={moonRef}
