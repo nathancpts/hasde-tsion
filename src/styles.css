@@ -742,7 +742,7 @@ select:focus-visible {
 .tv-mode .tv-cloud {
   filter: none !important;
   will-change: auto;
-  background: radial-gradient(ellipse at center,
+  background: radial-gradient(closest-side ellipse at center,
     rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), var(--ca, 0.4)) 0%,
     rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), calc(var(--ca, 0.4) * 0.35)) 35%,
     transparent 65%);
