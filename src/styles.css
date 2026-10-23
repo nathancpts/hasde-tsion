@@ -729,7 +729,7 @@ select:focus-visible {
 /* Android TV compositors cannot reliably blur animated canvas/video layers.
    Solid-tinted panels preserve contrast without repeatedly sampling the sky. */
 .tv-mode {
-  --tv-panel-surface: color-mix(in srgb, var(--chant-panel) 88%, transparent);
+  --tv-panel-surface: color-mix(in srgb, var(--chant-panel) 55%, transparent);
 }
 .tv-mode aside article,
 .tv-mode aside > div:first-child,
