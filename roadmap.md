@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Intégrer les nouveaux fichiers soleil, visibilité météo et couches, puis vérifier l’écran TV sans changer le reste.
+- [x] Intégrer les nouveaux fichiers soleil, visibilité météo et couches ; 5 tests réussis et écran TV vérifié sous pluie réelle et ciel dégagé simulé, sans erreur d’affichage.
 
 - [x] Stabiliser l’affichage TV : couches graphiques allégées, renouvellement vérifié en Full HD et 4K ; validation sur Xiaomi physique à confirmer.
 
