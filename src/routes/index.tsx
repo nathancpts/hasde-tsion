@@ -354,20 +354,27 @@ function AutoScrollLoop({ children, speed = 20, className = "" }: { children: Re
     if (!el || !a || !tr) return;
     el.scrollTop = 0;
     if (!loop) { tr.style.transform = "translate3d(0,0,0)"; return; }
-    // Défilement fluide : transform GPU au sous-pixel (scrollTop arrondit au pixel → saccades).
-    let raf = 0, pos = 0, last = performance.now();
-    let h = a.offsetHeight;
-    const ro = new ResizeObserver(() => { h = a.offsetHeight; });
-    ro.observe(a);
-    const tick = (t: number) => {
-      const dt = Math.min(t - last, 100); last = t;
-      pos += speed * (dt / 1000);
-      if (h > 0 && pos >= h) pos -= h;
-      tr.style.transform = `translate3d(0,${-pos}px,0)`;
-      raf = requestAnimationFrame(tick);
+    // Défilement sur le compositeur (Web Animations) : indépendant du thread JS,
+    // donc aucune saccade quand le soleil/météo ou React travaillent.
+    let anim: Animation | null = null;
+    let h = 0;
+    const start = () => {
+      const nh = a.offsetHeight;
+      if (nh <= 0 || nh === h) return;
+      const progress = anim && h ? ((anim.currentTime as number) || 0) / (h / speed * 1000) : 0;
+      h = nh;
+      anim?.cancel();
+      const duration = (h / speed) * 1000;
+      anim = tr.animate(
+        [{ transform: "translate3d(0,0,0)" }, { transform: `translate3d(0,${-h}px,0)` }],
+        { duration, iterations: Infinity, easing: "linear" },
+      );
+      anim.currentTime = (progress % 1) * duration;
     };
-    raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
+    start();
+    const ro = new ResizeObserver(start);
+    ro.observe(a);
+    return () => { anim?.cancel(); ro.disconnect(); };
   }, [loop, speed]);
   return (
     <div ref={ref} className={`no-scrollbar overflow-hidden ${className}`}>
