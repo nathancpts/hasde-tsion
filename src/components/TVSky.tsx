@@ -555,13 +555,16 @@ export function TVSky({
           <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", pointerEvents: "none" }} />
       </div>
       {/* zone du soleil — sur TV, limitée à la zone gauche pour ne pas passer sous les cartes de droite */}
+      {/* soleil : pleine largeur pour que son halo ne soit jamais coupé */}
+      <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
+        <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
+      </div>
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
         <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
           <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         {/* soleil photoréaliste */}
-        <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
         {/* lune (phase réelle) */}
         <div
           ref={moonRef}
