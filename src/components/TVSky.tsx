@@ -203,8 +203,8 @@ export function TVSky({
       const rg = (rx: number, ry: number, rr: number, stops: [number, string][]) => { const gr = c.createRadialGradient(rx, ry, 0, rx, ry, rr); stops.forEach(([o, col]) => gr.addColorStop(o, col)); return gr; };
       const fillR = (rx: number, ry: number, rr: number) => { c.fillRect(rx - rr, ry - rr, rr * 2, rr * 2); };
       c.globalCompositeOperation = "lighter";
-      c.fillStyle = rg(x, y, 620 * breath, [[0, rgba(255, 248, 226, 0.46 * a * (1 - w * 0.4))], [0.3, rgba(255, 238, 205, 0.16 * a)], [1, rgba(255, 220, 180, 0)]]); fillR(x, y, 620 * breath);
-      c.fillStyle = rg(x, y, 250 * breath, [[0, rgba(255, kG, kB, 0.6 * a)], [0.35, rgba(255, Math.round(kG * 0.82), Math.round(kB * 0.55), 0.24 * a)], [1, rgba(255, 140, 70, 0)]]); fillR(x, y, 250 * breath);
+      c.fillStyle = rg(x, y, 620 * breath, [[0, rgba(255, 250, 230, 0.75 * a)], [0.3, rgba(255, 240, 210, 0.3 * a)], [1, rgba(255, 220, 180, 0)]]); fillR(x, y, 620 * breath);
+      c.fillStyle = rg(x, y, 250 * breath, [[0, rgba(255, kG, kB, 0.85 * a)], [0.35, rgba(255, Math.round(kG * 0.82), Math.round(kB * 0.55), 0.24 * a)], [1, rgba(255, 140, 70, 0)]]); fillR(x, y, 250 * breath);
       c.save(); c.translate(x, y); c.scale(1, 0.022 + w * 0.01);
       c.fillStyle = rg(0, 0, 560, [[0, rgba(255, 252, 240, (0.55 + w * 0.35) * a * flick)], [0.5, rgba(255, 236, 200, 0.18 * a)], [1, rgba(255, 220, 170, 0)]]); fillR(0, 0, 560); c.restore();
       const NR = 36, Lr = (300 + w * 220) * breath, hw0 = 0.028;
@@ -231,7 +231,7 @@ export function TVSky({
       ([[ -fr, 0, 255, 0, 0 ], [0, 0, 0, Math.round(255 * (1 - w * 0.3)), 0], [fr, 0, 0, 0, Math.round(255 * (1 - w * 0.62))]] as [number, number, number, number, number][]).forEach(([dx, dy, r, gg, b]) => {
         c.fillStyle = rg(dx, dy, R0 * 1.55, [[0, rgba(r, gg, b, 0.95 * a)], [0.62, rgba(r, gg, b, 0.95 * a)], [0.75, rgba(r, gg, b, 0.35 * a)], [1, rgba(r, gg, b, 0)]]); fillR(dx, dy, R0 * 1.55);
       });
-      c.fillStyle = rg(0, 0, R0 * 2.6, [[0, rgba(255, 255, 250, 0.9 * a * (1 - w * 0.55))], [0.3, rgba(255, 250, 230, 0.5 * a * (1 - w * 0.4))], [1, rgba(255, kG, kB, 0)]]); fillR(0, 0, R0 * 2.6);
+      c.fillStyle = rg(0, 0, R0 * 2.6, [[0, rgba(255, 255, 252, a)], [0.3, rgba(255, 252, 238, 0.85 * a)], [1, rgba(255, kG, kB, 0)]]); fillR(0, 0, R0 * 2.6);
       c.restore();
       const cx0 = g.W / 2 + ox, cy0 = g.H / 2 + oy, vis = clamp(S.alt * 3) * a * (1 - w * 0.6);
       ([[1.3, 44, [120, 190, 255], 0.18, true], [1.65, 16, [255, 180, 120], 0.16, false], [2.05, 74, [150, 255, 200], 0.1, true], [2.5, 26, [200, 160, 255], 0.14, false], [3.0, 120, [255, 200, 140], 0.06, true]] as [number, number, number[], number, boolean][]).forEach(([k, r, col, al, ring]) => {
@@ -360,7 +360,7 @@ export function TVSky({
       const c = Math.max(cover / 100, rain || snow ? 0.8 : 0, fog ? 0.6 : 0);
       RAIN.current = rain ? (heavy ? 1 : light ? 0.3 : 0.6) : 0;
       SNOW.current = snow ? 1 : 0;
-      const dim = rain || snow ? 0.55 : c > 0.85 ? 0.8 : c > 0.6 ? 0.9 : 1;
+      const dim = rain || snow ? 0.8 : c > 0.85 ? 0.95 : 1;
       const n = Math.round(4 + c * 14 + (rain || snow ? 8 : 0));
       const clouds: Cloud[] = Array.from({ length: n }, (_, i) => ({
         l: (i * 97) / n + Math.random() * 6, t: Math.random() * 40, w: 340 + Math.random() * 360, h: 80 + Math.random() * 70,
