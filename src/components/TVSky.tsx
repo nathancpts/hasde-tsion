@@ -526,33 +526,37 @@ export function TVSky({
       </div>
       {/* météo : voiles gris, brouillard, pluie, neige, éclairs */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: (wx?.grey ?? 0) * 0.35, transition: "opacity 2s" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: (wx?.grey ?? 0) * 0.2, transition: "opacity 2s" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent)", filter: "blur(8px)", opacity: wx?.fog ?? 0, transition: "opacity 2s", animation: "tv-fog 40s ease-in-out infinite alternate" }} />
         <canvas ref={rainRef} className="absolute inset-0 h-full w-full" style={{ display: RAIN.current ? undefined : "none" }} />
         <canvas ref={snowRef} className="absolute inset-0 h-full w-full" style={{ display: SNOW.current ? undefined : "none" }} />
         <canvas ref={flashRef} className="absolute inset-0 h-full w-full" style={{ display: wx?.storm ? "" : "none" }} />
       </div>
 
+      {/* nuages + brume : pleine largeur (sinon une arête visible sous les cartes) */}
+      <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: "none" }}>
+        {/* nuages */}
+          <div
+            ref={cloudsRef}
+            className="absolute"
+            style={{ left: "-10%", right: "-10%", top: 0, bottom: "10%", pointerEvents: "none", filter: wx && wx.grey > 0.5 ? "brightness(.8) saturate(.6)" : "" }}
+          >
+            {(wx?.clouds ?? defaultClouds).map((c, i) => (
+              <i
+                key={i}
+                className="tv-cloud"
+                style={{ left: `${c.l}%`, top: `${c.t}%`, width: c.w, height: c.h, filter: `blur(${c.blur}px)`, animationDelay: `${c.delay}s`, ["--t" as string]: `${c.dur}s` } as React.CSSProperties}
+              />
+            ))}
+          </div>
+          <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", pointerEvents: "none" }} />
+      </div>
       {/* zone du soleil — sur TV, limitée à la zone gauche pour ne pas passer sous les cartes de droite */}
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
         <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
           <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
-        {/* nuages */}
-        <div
-          ref={cloudsRef}
-          className="absolute"
-          style={{ left: "-10%", right: "-10%", top: 0, bottom: "10%", pointerEvents: "none", filter: wx && wx.grey > 0.5 ? "brightness(.8) saturate(.6)" : "" }}
-        >
-          {(wx?.clouds ?? defaultClouds).map((c, i) => (
-            <i
-              key={i}
-              className="tv-cloud"
-              style={{ left: `${c.l}%`, top: `${c.t}%`, width: c.w, height: c.h, filter: `blur(${c.blur}px)`, animationDelay: `${c.delay}s`, ["--t" as string]: `${c.dur}s` } as React.CSSProperties}
-            />
-          ))}
-        </div>
         {/* soleil photoréaliste */}
         <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1 }} />
         {/* lune (phase réelle) */}
@@ -563,7 +567,6 @@ export function TVSky({
           dangerouslySetInnerHTML={{ __html: moon }}
         />
         {/* brume d'horizon + reflet */}
-        <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", pointerEvents: "none" }} />
         <div ref={reflRef} className="absolute" style={{ width: "110px", height: "150px", marginLeft: "-55px", borderRadius: "50%", background: "radial-gradient(ellipse at 50% 0%, rgba(255,205,130,.6), transparent 70%)", filter: "blur(9px)", opacity: 0, pointerEvents: "none" }} />
         {/* rail horaire */}
         <div ref={railRef} className="absolute left-0 right-0" style={{ pointerEvents: "none", zIndex: 2, display: "none" }}>
