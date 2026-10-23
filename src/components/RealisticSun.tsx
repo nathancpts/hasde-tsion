@@ -11,6 +11,8 @@ interface RealisticSunProps {
   warm?: number;
   /** 0 = ciel dégagé, 1 = couvert (pluie, orage…) */
   cloud?: number;
+  /** 1 = disque visible, 0 = caché derrière les nuages (clarté diffuse seulement) */
+  disc?: number;
   /** 0..1 : à baisser quand le soleil passe sous l'horizon */
   opacity?: number;
   lensFlare?: boolean;
@@ -22,22 +24,28 @@ interface RealisticSunProps {
  * au-dessus des nuages et sous les cartes. Le canvas couvre tout le parent.
  */
 export default function RealisticSun({
-  x, y, radius = 26, warm = 0, cloud = 0, opacity = 1, lensFlare = true, className,
+  x, y, radius = 26, warm = 0, cloud = 0, disc = 1, opacity = 1, lensFlare = true, className,
 }: RealisticSunProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   // les props changent souvent : on les garde dans une ref pour ne pas relancer la boucle
-  const props = useRef({ x, y, radius, warm, cloud, opacity, lensFlare });
-  props.current = { x, y, radius, warm, cloud, opacity, lensFlare };
+  const props = useRef({ x, y, radius, warm, cloud, disc, opacity, lensFlare });
+  props.current = { x, y, radius, warm, cloud, disc, opacity, lensFlare };
 
   useEffect(() => {
-    const canvas = ref.current!;
-    const ctx = canvas.getContext("2d")!;
-    const parent = canvas.parentElement!;
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const parent = canvas.parentElement;
+    if (!ctx || !parent) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let w = 0, h = 0, dpr = 1, raf = 0, last = 0, visible = true;
+    const weather = { cloud: props.current.cloud, disc: props.current.disc };
+    let transitionStart = 0;
+    let from = { ...weather };
+    let target = { ...weather };
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5, 1920 / Math.max(1, parent.clientWidth), 1080 / Math.max(1, parent.clientHeight));
       w = parent.clientWidth; h = parent.clientHeight;
       canvas.width = Math.max(1, Math.round(w * dpr));
       canvas.height = Math.max(1, Math.round(h * dpr));
@@ -48,13 +56,22 @@ export default function RealisticSun({
       if (!visible || document.hidden) return;
       if (now - last < 33) return; // ~30 images/s : largement suffisant et léger pour une TV
       last = now;
+      if (target.cloud !== props.current.cloud || target.disc !== props.current.disc) {
+        from = { ...weather };
+        target = { cloud: props.current.cloud, disc: props.current.disc };
+        transitionStart = now;
+      }
+      const progress = Math.min(1, (now - transitionStart) / 2000);
+      const ease = progress * progress * (3 - 2 * progress);
+      weather.cloud = from.cloud + (target.cloud - from.cloud) * ease;
+      weather.disc = from.disc + (target.disc - from.disc) * ease;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawSun(ctx, w, h, { ...props.current, time: now / 1000 });
+      drawSun(ctx, w, h, { ...props.current, ...weather, time: now / 1000 });
     };
 
     resize();
     const ro = new ResizeObserver(resize); ro.observe(parent);
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    const io = new IntersectionObserver(([e]) => { visible = e?.isIntersecting ?? false; });
     io.observe(canvas);
 
     if (reduced) { // mouvement réduit : une seule image fixe

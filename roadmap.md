@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Intégrer les nouveaux fichiers soleil, visibilité météo et couches ; 5 tests réussis et écran TV vérifié sous pluie réelle et ciel dégagé simulé, sans erreur d’affichage.
+
 - [x] Stabiliser l’affichage TV : couches graphiques allégées, renouvellement vérifié en Full HD et 4K ; validation sur Xiaomi physique à confirmer.
 
 - [x] Remplacer le logo partout par le logo doré fourni, sans modifier le favicon

@@ -15,6 +15,8 @@ export interface SunOptions {
   cloud?: number;
   /** 0..1, à baisser quand le soleil passe sous l'horizon */
   opacity?: number;
+  /** 1 = disque visible, 0 = soleil caché derrière les nuages (il ne reste qu'une clarté diffuse) */
+  disc?: number;
   /** reflets d'objectif le long de l'axe soleil → centre du canvas */
   lensFlare?: boolean;
   /** temps en secondes (fait vivre les rayons) */
@@ -39,13 +41,16 @@ function fillCircle(ctx: CanvasRenderingContext2D, x: number, y: number, r: numb
 
 export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: SunOptions): void {
   ctx.clearRect(0, 0, w, h);
-  const A = clamp(o.opacity ?? 1);
-  if (A <= 0.003) return;
+  const A0 = clamp(o.opacity ?? 1);
+  if (A0 <= 0.003) return;
 
+  const A = A0;
   const R = (o.radius ?? 26) * (1 + (o.warm ?? 0) * 0.35);
   const warm = clamp(o.warm ?? 0);
   const cloud = clamp(o.cloud ?? 0);
-  const clear = 1 - cloud * 0.85;              // netteté des détails (rayons, pointes, disque)
+  const D = clamp(o.disc ?? 1);
+  const clear = (1 - cloud * 0.85) * D;        // netteté des détails (rayons, pointes, disque)
+  const diffuse = mix(0.28, 1, D);             // la clarté diffuse reste un peu présente même sans disque
   const T = o.time;
   const { x, y } = o;
 
@@ -62,9 +67,9 @@ export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: 
   // 1. bloom atmosphérique (chute en ~1/r²) : le ciel blanchit autour du soleil, jamais de bague bleue
   const bloomR = R * 26 * breath;
   fillCircle(ctx, x, y, bloomR, radial(ctx, x, y, bloomR, [
-    [0.00, rgba(255, 250, 238, 0.60 * A)],
-    [0.04, rgba(255, 246, 224, 0.42 * A)],
-    [0.10, rgba(255, cG, cB, 0.20 * A)],
+    [0.00, rgba(255, 250, 238, 0.60 * A * diffuse)],
+    [0.04, rgba(255, 246, 224, 0.42 * A * diffuse)],
+    [0.10, rgba(255, cG, cB, 0.20 * A * diffuse)],
     [0.22, rgba(255, cG - 8, cB - 20, 0.085 * A)],
     [0.45, rgba(255, cG - 20, cB - 40, 0.028 * A)],
     [1.00, rgba(255, cG - 20, cB - 40, 0)],
@@ -73,7 +78,7 @@ export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: 
   // 2. couronne dorée
   const corR = R * 6.5 * breath;
   fillCircle(ctx, x, y, corR, radial(ctx, x, y, corR, [
-    [0.0, rgba(255, 252, 240, 0.85 * A)],
+    [0.0, rgba(255, 252, 240, 0.85 * A * diffuse)],
     [0.18, rgba(255, mix(236, 170, warm), mix(190, 90, warm), 0.45 * A * (0.6 + 0.4 * clear))],
     [0.55, rgba(255, mix(210, 130, warm), mix(150, 60, warm), 0.12 * A)],
     [1.0, rgba(255, 190, 110, 0)],
@@ -130,6 +135,7 @@ export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: 
   }
 
   // 5. traînée anamorphique horizontale (lentille) — s'étale sur l'horizon quand le soleil est bas
+  if (D > 0.4) {
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(1, 0.018 + warm * 0.012);
@@ -141,6 +147,7 @@ export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: 
   ]);
   ctx.fillRect(-sR, -sR, sR * 2, sR * 2);
   ctx.restore();
+  }
 
   // 6. pointes de diffraction (6 branches), qui tournent très lentement
   if (clear > 0.25) {
@@ -166,29 +173,31 @@ export function drawSun(ctx: CanvasRenderingContext2D, w: number, h: number, o: 
     }
   }
 
-  // 7. disque : cœur blanc incandescent, bord doré très doux (ni bague, ni bleu)
+  // 7. disque : cœur blanc incandescent, bord doré très doux (ni bague, ni bleu) — invisible quand le soleil est caché
+  if (D > 0.02) {
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(1, 1 - warm * 0.14); // aplati par la réfraction près de l'horizon
   const soft = mix(0.12, 0.55, cloud); // le bord devient flou par temps couvert
   const dR = R * (1.5 + cloud * 0.8);
   ctx.fillStyle = radial(ctx, 0, 0, dR, [
-    [0.0, rgba(255, 255, 253, 1 * A)],
-    [0.55 - soft * 0.4, rgba(255, 255, 250, 0.98 * A)],
-    [0.68, rgba(255, dG, dB, 0.72 * A * (1 - cloud * 0.4))],
-    [0.82, rgba(255, mix(236, 190, warm), mix(190, 110, warm), 0.28 * A)],
+    [0.0, rgba(255, 255, 253, 1 * A * D)],
+    [0.55 - soft * 0.4, rgba(255, 255, 250, 0.98 * A * D)],
+    [0.68, rgba(255, dG, dB, 0.72 * A * D * (1 - cloud * 0.4))],
+    [0.82, rgba(255, mix(236, 190, warm), mix(190, 110, warm), 0.28 * A * D)],
     [1.0, rgba(255, 220, 160, 0)],
   ]);
   ctx.fillRect(-dR, -dR, dR * 2, dR * 2);
   // surexposition : second noyau plus large, très doux
   const hR = R * 3.2;
   ctx.fillStyle = radial(ctx, 0, 0, hR, [
-    [0.0, rgba(255, 255, 250, 0.9 * A * (1 - warm * 0.5))],
-    [0.3, rgba(255, 250, 230, 0.45 * A)],
+    [0.0, rgba(255, 255, 250, 0.9 * A * D * (1 - warm * 0.5))],
+    [0.3, rgba(255, 250, 230, 0.45 * A * D)],
     [1.0, rgba(255, cG, cB, 0)],
   ]);
   ctx.fillRect(-hR, -hR, hR * 2, hR * 2);
   ctx.restore();
+  }
 
   // 8. reflets d'objectif chauds le long de l'axe (jamais bleus)
   if (o.lensFlare !== false && clear > 0.3) {
