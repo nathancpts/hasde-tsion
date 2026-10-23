@@ -558,7 +558,7 @@ export function TVSky({
           <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         {/* soleil photoréaliste */}
-        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1, filter: "brightness(1.25)" }} />
+        <canvas ref={suncvRef} className="absolute inset-0 h-full w-full" style={{ opacity: wx?.dim ?? 1 }} />
         {/* lune (phase réelle) */}
         <div
           ref={moonRef}
