@@ -313,7 +313,6 @@ export function TVSky({
       const w = el.clientWidth, h = Math.max(160, el.clientHeight);
       if (w < 10 || h < 10) return;
       G.current = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.62 };
-      setArc({ w, h });
       const scv = suncvRef.current;
       if (scv) {
         // Keep the backing texture within Full HD even on 4K Android TVs.
@@ -323,12 +322,6 @@ export function TVSky({
         scv.height = Math.max(1, Math.round(h * dpr));
       }
       const g = G.current;
-      if (guideRef.current && g) {
-        const { SR: s0, SS: s1 } = srss.current;
-        const pts: string[] = [];
-        for (let i = 0; i <= 120; i++) { const p = sunAt(s0 + ((s1 - s0) * i) / 120, g, s0, s1); pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`); }
-        guideRef.current.setAttribute("d", "M" + pts.join(" L"));
-      }
       if (hazeRef.current && g) hazeRef.current.style.top = `${g.HY - 110}px`;
       if (reflRef.current && g) reflRef.current.style.top = `${g.HY + 2}px`;
       if (railRef.current) railRef.current.style.top = `${h * 0.84}px`;
@@ -551,10 +544,6 @@ export function TVSky({
         <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
       </div>
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
-        <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
-          <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
-          <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
         {/* soleil photoréaliste */}
         {/* lune (phase réelle) */}
         <div
