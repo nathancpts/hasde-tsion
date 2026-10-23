@@ -125,7 +125,6 @@ export function TVSky({
   srss.current = { SR, SS };
 
   const [m, setM] = useState(() => nowMF());
-  const [arc, setArc] = useState<{ w: number; h: number } | null>(null);
   const [wx, setWx] = useState<{ code: number; temp: number | null; grey: number; fog: number; dim: number; storm: boolean; clouds: Cloud[] } | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -140,8 +139,6 @@ export function TVSky({
   const reflRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
   const nowLineRef = useRef<HTMLSpanElement>(null);
-  const doneRef = useRef<SVGPathElement>(null);
-  const guideRef = useRef<SVGPathElement>(null);
   const rainRef = useRef<HTMLCanvasElement>(null);
   const snowRef = useRef<HTMLCanvasElement>(null);
   const flashRef = useRef<HTMLCanvasElement>(null);
@@ -255,12 +252,6 @@ export function TVSky({
       const below = s.alt < 0 ? clamp(-s.alt * 4) : 0;
       SUN.current = { x: s.x, y: s.y, warm, alt: s.alt, below };
       setSunP({ x: s.x, y: s.y, warm, op: 1 - below });
-      if (s.sp > 0) {
-        const n = 90, k = Math.min(s.sp, 1);
-        let d = "";
-        for (let i = 0; i <= n; i++) { const q = sunAt(s0 + ((s1 - s0) * k * i) / n, g, s0, s1); d += (i ? " L" : "M") + q.x.toFixed(1) + "," + q.y.toFixed(1); }
-        doneRef.current?.setAttribute("d", d);
-      } else doneRef.current?.setAttribute("d", "");
       const { day, dusk } = skyFor(mNow, s0, s1);
       const pal = mixPal(day, dusk);
       const sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
@@ -322,7 +313,6 @@ export function TVSky({
       const w = el.clientWidth, h = Math.max(160, el.clientHeight);
       if (w < 10 || h < 10) return;
       G.current = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.62 };
-      setArc({ w, h });
       const scv = suncvRef.current;
       if (scv) {
         // Keep the backing texture within Full HD even on 4K Android TVs.
@@ -332,12 +322,6 @@ export function TVSky({
         scv.height = Math.max(1, Math.round(h * dpr));
       }
       const g = G.current;
-      if (guideRef.current && g) {
-        const { SR: s0, SS: s1 } = srss.current;
-        const pts: string[] = [];
-        for (let i = 0; i <= 120; i++) { const p = sunAt(s0 + ((s1 - s0) * i) / 120, g, s0, s1); pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`); }
-        guideRef.current.setAttribute("d", "M" + pts.join(" L"));
-      }
       if (hazeRef.current && g) hazeRef.current.style.top = `${g.HY - 110}px`;
       if (reflRef.current && g) reflRef.current.style.top = `${g.HY + 2}px`;
       if (railRef.current) railRef.current.style.top = `${h * 0.84}px`;
@@ -560,10 +544,6 @@ export function TVSky({
         <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
       </div>
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
-        <svg className="absolute inset-0 h-full w-full" viewBox={arc ? `0 0 ${arc.w} ${arc.h}` : "0 0 100 100"} preserveAspectRatio="none" aria-hidden="true">
-          <path ref={guideRef} fill="none" stroke="rgba(240,214,137,.30)" strokeWidth="1.2" strokeDasharray="4 8" />
-          <path ref={doneRef} fill="none" stroke="rgba(240,214,137,.55)" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
         {/* soleil photoréaliste */}
         {/* lune (phase réelle) */}
         <div
