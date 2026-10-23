@@ -208,7 +208,7 @@ export function TVSky({
       c.save(); c.translate(x, y); c.scale(1, 0.022 + w * 0.01);
       c.fillStyle = rg(0, 0, 560, [[0, rgba(255, 252, 240, (0.55 + w * 0.35) * a * flick)], [0.5, rgba(255, 236, 200, 0.18 * a)], [1, rgba(255, 220, 170, 0)]]); fillR(0, 0, 560); c.restore();
       const NR = 36, Lr = (300 + w * 220) * breath, hw0 = 0.028;
-      c.save(); c.translate(x, y); c.scale(1, 1 - w * 0.35);
+      c.save(); c.translate(x, y);
       c.fillStyle = rg(0, 0, Lr, [[0, rgba(255, 250, 232, 0.9)], [0.25, rgba(255, 244, 214, 0.45)], [1, rgba(255, 230, 190, 0)]]);
       for (let i = 0; i < NR; i++) {
         const ph = i * 2.399, ang = T * 0.035 + (i * Math.PI * 2) / NR + Math.sin(T * 0.27 + ph) * 0.03;
@@ -226,8 +226,8 @@ export function TVSky({
         const g2 = c.createLinearGradient(-L * 0.6, 0, L * 0.6, 0); g2.addColorStop(0, rgba(255, 240, 210, 0)); g2.addColorStop(0.5, rgba(255, 245, 220, 0.16 * a * (1 - w * 0.3))); g2.addColorStop(1, rgba(255, 240, 210, 0));
         c.fillStyle = g2; c.fillRect(-L * 0.6, -4, L * 1.2, 8); c.restore();
       }
-      c.save(); c.translate(x, y); c.scale(1, 1 - w * 0.16);
-      const fr = 1.6 + w * 1.2;
+      c.save(); c.translate(x, y);
+      const fr = 0.6;
       ([[ -fr, 0, 255, 0, 0 ], [0, 0, 0, Math.round(255 * (1 - w * 0.3)), 0], [fr, 0, 0, 0, Math.round(255 * (1 - w * 0.62))]] as [number, number, number, number, number][]).forEach(([dx, dy, r, gg, b]) => {
         c.fillStyle = rg(dx, dy, R0 * 1.55, [[0, rgba(r, gg, b, 0.95 * a)], [0.62, rgba(r, gg, b, 0.95 * a)], [0.75, rgba(r, gg, b, 0.35 * a)], [1, rgba(r, gg, b, 0)]]); fillR(dx, dy, R0 * 1.55);
       });
