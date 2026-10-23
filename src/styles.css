@@ -736,6 +736,9 @@ select:focus-visible {
 .tv-mode [style*="grid-template-rows: subgrid"] {
   background: var(--tv-panel-surface) !important;
 }
+.tv-mode aside > div.tv-row-plain {
+  background: transparent !important;
+}
 .tv-mode .tv-cloud {
   filter: none !important;
   will-change: auto;
