@@ -2210,7 +2210,7 @@ function PlanningTV() {
           </div>}
 
           {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
-          <div className="flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "17%" }}>
+          <div className="tv-row-plain flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "17%" }}>
           <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.4vh 1.2vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
