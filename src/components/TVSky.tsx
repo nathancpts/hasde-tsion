@@ -190,6 +190,7 @@ export function TVSky({
       setSunP({ x: s.x, y: s.y, warm, op: 1 - below });
       const { day, dusk } = skyFor(mNow, s0, s1);
       const pal = mixPal(day, dusk);
+      const hp = 78;
       if (skyRef.current) {
         skyRef.current.style.background = `linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.hor}) 100%)`;
       }
