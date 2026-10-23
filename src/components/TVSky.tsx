@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import RealisticSun from "./RealisticSun";
+import { sunWeather } from "@/lib/sun-weather";
 
 export interface TVSkyEvent {
   label: string;
@@ -131,12 +132,10 @@ export function TVSky({
   const arcRef = useRef<HTMLDivElement>(null);
   const skyRef = useRef<HTMLDivElement>(null);
   const starsRef = useRef<HTMLDivElement>(null);
-  const suncvRef = useRef<HTMLCanvasElement>(null);
   const [sunP, setSunP] = useState({ x: -999, y: -999, warm: 0, op: 0 });
   const moonRef = useRef<HTMLDivElement>(null);
   const cloudsRef = useRef<HTMLDivElement>(null);
   const hazeRef = useRef<HTMLDivElement>(null);
-  const reflRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
   const nowLineRef = useRef<HTMLSpanElement>(null);
   const rainRef = useRef<HTMLCanvasElement>(null);
@@ -176,73 +175,10 @@ export function TVSky({
     return () => window.clearInterval(id);
   }, []);
 
-  /* --- boucle d'animation : soleil (canvas, 60 fps) + ciel (toutes les 2 s) --- */
+  /* --- boucle d'animation : soleil (position toutes les 2 s) + ciel (toutes les 2 s) --- */
   useEffect(() => {
     let raf = 0;
     let lastSky = 0;
-    let lastSun = 0;
-
-    const drawSun = (t: number) => {
-      const scv = suncvRef.current;
-      const c = scv?.getContext("2d");
-      if (!scv || !c) return;
-      const dpr = (scv as HTMLCanvasElement & { _dpr?: number })._dpr || 1;
-      c.setTransform(1, 0, 0, 1, 0, 0);
-      c.clearRect(0, 0, scv.width, scv.height);
-      const g = G.current;
-      const S = SUN.current;
-      if (!g || !S || S.below >= 1) return;
-      c.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const ox = 0, oy = 0;
-      const x = S.x + ox, y = S.y + oy, w = S.warm, a = 1 - S.below, T = t / 1000;
-      const breath = 1 + Math.sin(T * 0.7) * 0.03, flick = 1 + Math.sin(T * 9.1) * 0.012 + Math.sin(T * 13.7) * 0.008;
-      const R0 = 27 * (1 + w * 0.35);
-      const kG = Math.round(236 - w * 96), kB = Math.round(188 - w * 150);
-      const rgba = (r: number, gg: number, b: number, al: number) => `rgba(${r},${gg},${b},${Math.max(0, Math.min(1, al)).toFixed(3)})`;
-      const rg = (rx: number, ry: number, rr: number, stops: [number, string][]) => { const gr = c.createRadialGradient(rx, ry, 0, rx, ry, rr); stops.forEach(([o, col]) => gr.addColorStop(o, col)); return gr; };
-      const fillR = (rx: number, ry: number, rr: number) => { c.fillRect(rx - rr, ry - rr, rr * 2, rr * 2); };
-      c.globalCompositeOperation = "lighter";
-      c.fillStyle = rg(x, y, 620 * breath, [[0, rgba(255, 250, 230, 0.75 * a)], [0.3, rgba(255, 240, 210, 0.3 * a)], [1, rgba(255, 220, 180, 0)]]); fillR(x, y, 620 * breath);
-      c.fillStyle = rg(x, y, 250 * breath, [[0, rgba(255, kG, kB, 0.85 * a)], [0.35, rgba(255, Math.round(kG * 0.82), Math.round(kB * 0.55), 0.24 * a)], [1, rgba(255, 140, 70, 0)]]); fillR(x, y, 250 * breath);
-      c.save(); c.translate(x, y); c.scale(1, 0.022 + w * 0.01);
-      c.fillStyle = rg(0, 0, 560, [[0, rgba(255, 252, 240, (0.55 + w * 0.35) * a * flick)], [0.5, rgba(255, 236, 200, 0.18 * a)], [1, rgba(255, 220, 170, 0)]]); fillR(0, 0, 560); c.restore();
-      const NR = 36, Lr = (300 + w * 220) * breath, hw0 = 0.028;
-      c.save(); c.translate(x, y);
-      c.fillStyle = rg(0, 0, Lr, [[0, rgba(255, 250, 232, 0.9)], [0.25, rgba(255, 244, 214, 0.45)], [1, rgba(255, 230, 190, 0)]]);
-      for (let i = 0; i < NR; i++) {
-        const ph = i * 2.399, ang = T * 0.035 + (i * Math.PI * 2) / NR + Math.sin(T * 0.27 + ph) * 0.03;
-        const len = Lr * (0.55 + 0.45 * (Math.sin(T * 0.9 + ph) * 0.5 + 0.5)) * (i % 3 === 0 ? 1.25 : 1);
-        const hw = hw0 * (0.7 + 0.6 * (Math.sin(T * 0.6 + ph * 1.3) * 0.5 + 0.5));
-        c.globalAlpha = (0.05 + 0.16 * (Math.sin(T * 1.3 + ph * 0.7) * 0.5 + 0.5)) * a * (1 - w * 0.35);
-        c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(ang - hw) * len, Math.sin(ang - hw) * len); c.lineTo(Math.cos(ang + hw) * len, Math.sin(ang + hw) * len); c.closePath(); c.fill();
-      }
-      c.globalAlpha = 1; c.restore();
-      const L = (175 - w * 80) * flick, rot = T * 0.05;
-      for (let i = 0; i < 3; i++) {
-        c.save(); c.translate(x, y); c.rotate(rot + (i * Math.PI) / 3);
-        const g1 = c.createLinearGradient(-L, 0, L, 0); g1.addColorStop(0, rgba(255, 250, 235, 0)); g1.addColorStop(0.5, rgba(255, 252, 240, 0.42 * a * (1 - w * 0.3))); g1.addColorStop(1, rgba(255, 250, 235, 0));
-        c.fillStyle = g1; c.fillRect(-L, -0.9, L * 2, 1.8);
-        const g2 = c.createLinearGradient(-L * 0.6, 0, L * 0.6, 0); g2.addColorStop(0, rgba(255, 240, 210, 0)); g2.addColorStop(0.5, rgba(255, 245, 220, 0.16 * a * (1 - w * 0.3))); g2.addColorStop(1, rgba(255, 240, 210, 0));
-        c.fillStyle = g2; c.fillRect(-L * 0.6, -4, L * 1.2, 8); c.restore();
-      }
-      c.save(); c.translate(x, y);
-      const fr = 0.6;
-      ([[ -fr, 0, 255, 0, 0 ], [0, 0, 0, Math.round(255 * (1 - w * 0.3)), 0], [fr, 0, 0, 0, Math.round(255 * (1 - w * 0.62))]] as [number, number, number, number, number][]).forEach(([dx, dy, r, gg, b]) => {
-        c.fillStyle = rg(dx, dy, R0 * 1.55, [[0, rgba(r, gg, b, 0.95 * a)], [0.62, rgba(r, gg, b, 0.95 * a)], [0.75, rgba(r, gg, b, 0.35 * a)], [1, rgba(r, gg, b, 0)]]); fillR(dx, dy, R0 * 1.55);
-      });
-      c.fillStyle = rg(0, 0, R0 * 2.6, [[0, rgba(255, 255, 252, a)], [0.3, rgba(255, 252, 238, 0.85 * a)], [1, rgba(255, kG, kB, 0)]]); fillR(0, 0, R0 * 2.6);
-      c.restore();
-      const cx0 = g.W / 2 + ox, cy0 = g.H / 2 + oy, vis = clamp(S.alt * 3) * a * (1 - w * 0.6);
-      ([[1.3, 44, [120, 190, 255], 0.18, true], [1.65, 16, [255, 180, 120], 0.16, false], [2.05, 74, [150, 255, 200], 0.1, true], [2.5, 26, [200, 160, 255], 0.14, false], [3.0, 120, [255, 200, 140], 0.06, true]] as [number, number, number[], number, boolean][]).forEach(([k, r, col, al, ring]) => {
-        const gx = x + (cx0 - x) * k, gy = y + (cy0 - y) * k;
-        c.fillStyle = ring
-          ? rg(gx, gy, r, [[0, rgba(col[0], col[1], col[2], 0)], [0.78, rgba(col[0], col[1], col[2], 0)], [0.9, rgba(col[0], col[1], col[2], al * vis)], [1, rgba(col[0], col[1], col[2], 0)]])
-          : rg(gx, gy, r, [[0, rgba(col[0], col[1], col[2], al * vis)], [1, rgba(col[0], col[1], col[2], 0)]]);
-        fillR(gx, gy, r);
-      });
-      c.globalCompositeOperation = "source-over";
-    };
-
     const updateSky = (mNow: number) => {
       const g = G.current;
       if (!g) return;
@@ -254,8 +190,6 @@ export function TVSky({
       setSunP({ x: s.x, y: s.y, warm, op: 1 - below });
       const { day, dusk } = skyFor(mNow, s0, s1);
       const pal = mixPal(day, dusk);
-      const sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
-      const glowA = (0.55 * clamp(s.alt + 0.35) * (1 - below * 0.5)).toFixed(3);
       if (skyRef.current) {
         skyRef.current.style.background = `linear-gradient(180deg, rgb(${pal.top}) 0%, rgb(${pal.mid}) ${(hp * 0.5).toFixed(1)}%, rgb(${pal.pink}) ${(hp * 0.86).toFixed(1)}%, rgb(${pal.hor}) ${hp}%, rgb(${pal.hor}) 100%)`;
       }
@@ -270,11 +204,6 @@ export function TVSky({
         cl.style.setProperty("--ca", String(pal.cloud[3]));
         const p = clamp((mNow - D0) / (D1 - D0));
         cl.style.transform = `translateX(${(-p * 120).toFixed(1)}px)`;
-      }
-      const near = clamp(1 - Math.abs(s.y - g.HY) / (g.H * 0.32)) * (1 - below);
-      if (reflRef.current) {
-        reflRef.current.style.left = `${s.x.toFixed(1)}px`;
-        reflRef.current.style.opacity = (near * (0.5 + warm * 0.5)).toFixed(3);
       }
       const nf = clamp(1 - day * 1.7 - dusk * 0.7);
       if (starsRef.current) starsRef.current.style.opacity = nf.toFixed(3);
@@ -296,7 +225,6 @@ export function TVSky({
     updateSkyRef.current = updateSky;
     const loop = (t: number) => {
       if (!document.hidden) {
-        void lastSun; void drawSun;
         if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
       }
       raf = requestAnimationFrame(loop);
@@ -313,17 +241,8 @@ export function TVSky({
       const w = el.clientWidth, h = Math.max(160, el.clientHeight);
       if (w < 10 || h < 10) return;
       G.current = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.62 };
-      const scv = suncvRef.current;
-      if (scv) {
-        // Keep the backing texture within Full HD even on 4K Android TVs.
-        const dpr = Math.min(1, 1920 / w, 1080 / h);
-        (scv as HTMLCanvasElement & { _dpr?: number })._dpr = dpr;
-        scv.width = Math.max(1, Math.round(w * dpr));
-        scv.height = Math.max(1, Math.round(h * dpr));
-      }
       const g = G.current;
       if (hazeRef.current && g) hazeRef.current.style.top = `${g.HY - 110}px`;
-      if (reflRef.current && g) reflRef.current.style.top = `${g.HY + 2}px`;
       if (railRef.current) railRef.current.style.top = `${h * 0.84}px`;
       updateSkyRef.current(nowMF());
     };
@@ -511,15 +430,6 @@ export function TVSky({
           <i key={i} className="tv-star" style={{ left: `${s.l}%`, top: `${s.t}%`, opacity: s.o, transform: `scale(${s.sc})`, animationDelay: `${s.d}s` }} />
         ))}
       </div>
-      {/* météo : voiles gris, brouillard, pluie, neige, éclairs */}
-      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: (wx?.grey ?? 0) * 0.13, transition: "opacity 2s" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent)", filter: "blur(8px)", opacity: wx?.fog ?? 0, transition: "opacity 2s", animation: "tv-fog 40s ease-in-out infinite alternate" }} />
-        <canvas ref={rainRef} className="absolute inset-0 h-full w-full" style={{ display: RAIN.current ? undefined : "none" }} />
-        <canvas ref={snowRef} className="absolute inset-0 h-full w-full" style={{ display: SNOW.current ? undefined : "none" }} />
-        <canvas ref={flashRef} className="absolute inset-0 h-full w-full" style={{ display: wx?.storm ? "" : "none" }} />
-      </div>
-
       {/* nuages + brume : pleine largeur (sinon une arête visible sous les cartes) */}
       <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: "none" }}>
         {/* nuages */}
@@ -536,12 +446,22 @@ export function TVSky({
               />
             ))}
           </div>
-          <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", pointerEvents: "none" }} />
+          <div ref={hazeRef} className="absolute" style={{ left: "-20vw", right: "-20vw", height: "160px", opacity: 0.1, pointerEvents: "none" }} />
       </div>
-      {/* zone du soleil — sur TV, limitée à la zone gauche pour ne pas passer sous les cartes de droite */}
+      {/* voile météo léger : plein écran, sous le soleil */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true" style={{ pointerEvents: "none" }}>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent)", opacity: Math.min(0.1, (wx?.grey ?? 0) * 0.13), transition: "opacity 2s" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent)", opacity: (wx?.fog ?? 0) * 0.1, transition: "opacity 2s" }} />
+      </div>
       {/* soleil : pleine largeur pour que son halo ne soit jamais coupé */}
       <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
-        <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} cloud={!wx ? 0 : wx.storm ? 0.8 : wx.dim < 0.9 ? 0.6 : wx.grey > 0 ? 0.3 : 0} />
+        <RealisticSun x={sunP.x} y={sunP.y} warm={sunP.warm} opacity={sunP.op} {...sunWeather(wx?.code ?? 0)} />
+      </div>
+      {/* particules devant le soleil, sous les horaires et les textes */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true" style={{ pointerEvents: "none" }}>
+        <canvas ref={rainRef} className="absolute inset-0 h-full w-full" style={{ display: RAIN.current ? undefined : "none" }} />
+        <canvas ref={snowRef} className="absolute inset-0 h-full w-full" style={{ display: SNOW.current ? undefined : "none" }} />
+        <canvas ref={flashRef} className="absolute inset-0 h-full w-full" style={{ display: wx?.storm ? "" : "none" }} />
       </div>
       <div ref={arcRef} className="absolute inset-0" style={{ right: contentRight }}>
         {/* soleil photoréaliste */}
@@ -552,8 +472,6 @@ export function TVSky({
           style={{ width: "10vh", height: "10vh", marginLeft: "-5vh", marginTop: "-5vh", opacity: 0, filter: "drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 34px rgba(126,181,246,.9)) brightness(1.25)" }}
           dangerouslySetInnerHTML={{ __html: moon }}
         />
-        {/* brume d'horizon + reflet */}
-        <div ref={reflRef} className="absolute" style={{ width: "110px", height: "150px", marginLeft: "-55px", borderRadius: "50%", background: "radial-gradient(ellipse at 50% 0%, rgba(255,205,130,.6), transparent 70%)", filter: "blur(9px)", opacity: 0, pointerEvents: "none" }} />
         {/* rail horaire */}
         <div ref={railRef} className="absolute left-0 right-0" style={{ pointerEvents: "none", zIndex: 2, display: "none" }}>
           {ticks.map((t) => (
