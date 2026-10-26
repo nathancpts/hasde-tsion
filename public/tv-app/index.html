@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hasdé Tsion — Écran TV</title>
+<script>
+/* Chargeur : lit version.json puis charge styles et scripts avec ?v=<version>,
+   pour que les télés récupèrent toujours la dernière version publiée (pas de vieux cache). */
+(function () {
+  var v = 'local';
+  function css(href) { var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href + '?v=' + v; document.head.appendChild(l); }
+  function js(src, cb) { var s = document.createElement('script'); s.src = src + '?v=' + v; s.onload = cb || null; document.body.appendChild(s); }
+  function start(cfg) {
+    window.TV_REMOTE = cfg || {}; v = String((cfg && cfg.version) || 'local'); window.TV_VERSION = v;
+    css('fonts.css'); css('styles.css');
+    var go = function () { js('vendor/hls.light.min.js', function () { js('app.js'); }); };
+    if (document.body) go(); else document.addEventListener('DOMContentLoaded', go);
+  }
+  fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(start).catch(function () { start(null); });
+})();
+</script>
+</head>
+<body>
+<!-- Reprise fidèle de src/components/TVSky.tsx et de la vue TV de src/routes/index.tsx -->
+<main id="stage" class="tv-mode">
+
+  <div class="sky-root">
+    <div id="skyBg" class="fill" style="background:#0a1a3d"></div>
+    <div id="stars" class="fill" style="opacity:0"></div>
+    <div class="fill wx" aria-hidden="true">
+      <div id="wxGrey" class="fill wx-grey" style="opacity:0"></div>
+      <div id="wxFog" class="fill wx-fog" style="opacity:0"></div>
+      <canvas id="rain" class="fill" style="display:none"></canvas>
+      <canvas id="snow" class="fill" style="display:none"></canvas>
+      <canvas id="flash" class="fill" style="display:none"></canvas>
+    </div>
+
+    <div id="arcZone" class="arc-zone">
+      <svg id="arcSvg" class="fill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path id="guide" fill="none" stroke="rgba(240,214,137,.30)" stroke-width="1.2" stroke-dasharray="4 8"/>
+        <path id="done" fill="none" stroke="rgba(240,214,137,.55)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div id="clouds" class="clouds"></div>
+      <canvas id="sun" class="fill"></canvas>
+      <div id="moon" class="moon" style="opacity:0"></div>
+      <div id="haze" class="haze"></div>
+      <div id="refl" class="refl" style="opacity:0"></div>
+    </div>
+
+    <div class="head">
+      <div>
+        <img id="logo" class="tv-brand-logo" alt="Hasdé Tsion" onerror="this.style.visibility='hidden'" src="https://hasde-tsion.com/__l5e/assets-v1/3db59315-8845-4b2b-b118-cd3f980efe66/logo-50-emblem.png">
+        <p class="h-eyebrow">La journée · horaires du jour</p>
+        <div id="clock" class="tv-clock" aria-label="Heure actuelle"></div>
+        <div id="phase" class="h-phase"></div>
+        <div id="greeting" class="h-greeting" hidden><span>Chabbat Chalom</span><span class="font-hebrew" dir="rtl">שבת שלום</span></div>
+        <div id="parasha" class="h-parasha" hidden><span id="parashaFr"></span><span id="parashaHe" class="font-hebrew" dir="rtl" hidden></span></div>
+        <div id="weather" class="h-weather" hidden></div>
+        <div id="status" class="h-status" hidden></div>
+      </div>
+      <div class="h-right">
+        <p id="dateFr" class="h-date"></p>
+        <p id="dateHe" class="h-date-he font-hebrew" dir="rtl"></p>
+        <p class="h-note">Horaires basés sur la position de Neuilly-sur-Seine.</p>
+      </div>
+    </div>
+
+    <div class="cards-wrap"><div id="cards" class="cards"></div></div>
+  </div>
+
+  <aside class="aside">
+    <div id="liveBar" class="glass live-bar">
+      <span class="live-dot"></span>
+      <div class="live-txt">
+        <p class="live-title">Live · Le Kotel</p>
+        <p class="live-sub">Le Mur des Lamentations, en direct de Jérusalem</p>
+      </div>
+      <span class="live-btn">AFFICHER EN GRAND</span>
+    </div>
+
+    <div class="community">
+      <article class="glass seouda">
+        <p class="label">Communauté</p>
+        <h3 class="tv-title seouda-title">La Séouda est offerte par</h3>
+        <div id="seoudaList" class="seouda-list"></div>
+      </article>
+      <div id="thumb" class="glass thumb">
+        <div id="player" class="player">
+          <video id="video" autoplay muted playsinline disablepictureinpicture tabindex="-1"></video>
+          <div id="playerMsg" class="player-msg">Connexion au live…</div>
+        </div>
+        <span class="thumb-badge"><span></span> Live</span>
+      </div>
+    </div>
+
+    <article class="glass etude">
+      <p class="label">Étude · Parasha</p>
+      <div class="loop-box"><div id="etudeLoop" class="loop-viewport"><div class="loop-track"><div class="loop-inner" id="etudeBody"></div></div></div></div>
+    </article>
+
+    <article id="hayom" class="glass hayom">
+      <p class="label">Aujourd’hui, c’est le jour…</p>
+      <div class="hayom-head"><h3 class="tv-title">Hayom Yom</h3><span id="hayomDate" class="hayom-date"></span></div>
+      <div class="loop-box hayom-box"><div id="hayomLoop" class="loop-viewport"><div class="loop-track"><div class="loop-inner" id="hayomBody"></div></div></div></div>
+    </article>
+  </aside>
+
+  <!-- Live en grand (touche OK) -->
+  <div id="bigLive" class="big-live" hidden>
+    <div id="bigFrame" class="big-frame">
+      <div id="bigShabbat" class="big-shabbat" hidden>
+        <img src="img/kotel-shabbat.jpg" alt="Kotel — Shabbat Shalom">
+        <div class="big-shabbat-txt"><p class="font-hebrew" dir="rtl">שבת שלום</p><p>Shabbat Shalom</p></div>
+      </div>
+      <div class="big-badge"><span></span><span>Live · Le Kotel</span></div>
+      <div class="big-close" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
