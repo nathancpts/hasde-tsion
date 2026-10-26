@@ -34,11 +34,25 @@
 
   /* ===== Échelle 1920×1080 + léger décalage anti-marquage ===== */
   var shift = { x: 0, y: 0 };
+  // Taille réellement visible : certaines WebView de TV annoncent une page de 1920 px
+  // mais n'en affichent que 960 (zoom ×2). On prend la plus petite des mesures disponibles.
+  function viewSize() {
+    var w = window.innerWidth || 1920, h = window.innerHeight || 1080;
+    var vv = window.visualViewport;
+    if (vv && vv.width > 0 && vv.height > 0) { w = Math.min(w, vv.width); h = Math.min(h, vv.height); }
+    var de = document.documentElement;
+    if (de && de.clientWidth > 0 && de.clientHeight > 0) { w = Math.min(w, de.clientWidth); h = Math.min(h, de.clientHeight); }
+    return { w: w, h: h };
+  }
   function fit() {
-    var w = window.innerWidth, h = window.innerHeight, s = Math.min(w / 1920, h / 1080);
+    var v = viewSize(), w = v.w, h = v.h, s = Math.min(w / 1920, h / 1080);
     stage.style.transform = 'translate(' + ((w - 1920 * s) / 2 + shift.x) + 'px,' + ((h - 1080 * s) / 2 + shift.y) + 'px) scale(' + s + ')';
   }
-  window.addEventListener('resize', fit); fit();
+  window.addEventListener('resize', fit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  setTimeout(fit, 500); setTimeout(fit, 3000);
+  fit();
 
   /* ===== Utilitaires (TVSky) ===== */
   var clamp = function (v, a, b) { if (a == null) a = 0; if (b == null) b = 1; return Math.max(a, Math.min(b, v)); };
