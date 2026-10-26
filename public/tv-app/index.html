@@ -30,24 +30,27 @@
   <div class="sky-root">
     <div id="skyBg" class="fill" style="background:#0a1a3d"></div>
     <div id="stars" class="fill" style="opacity:0"></div>
-    <div class="fill wx" aria-hidden="true">
+    <!-- nuages + brume : pleine largeur -->
+    <div class="fill" style="overflow:hidden;pointer-events:none">
+      <div id="clouds" class="clouds"></div>
+      <div id="haze" class="haze" style="opacity:.1"></div>
+    </div>
+    <!-- voile météo léger : plein écran, sous le soleil -->
+    <div class="fill" aria-hidden="true" style="overflow:hidden;pointer-events:none">
       <div id="wxGrey" class="fill wx-grey" style="opacity:0"></div>
       <div id="wxFog" class="fill wx-fog" style="opacity:0"></div>
+    </div>
+    <!-- soleil : pleine largeur pour que son halo ne soit jamais coupé -->
+    <div id="sunBox" class="fill" style="pointer-events:none"><canvas id="sun" class="fill"></canvas></div>
+    <!-- particules devant le soleil, sous les horaires et les textes -->
+    <div class="fill" aria-hidden="true" style="overflow:hidden;pointer-events:none">
       <canvas id="rain" class="fill" style="display:none"></canvas>
       <canvas id="snow" class="fill" style="display:none"></canvas>
       <canvas id="flash" class="fill" style="display:none"></canvas>
     </div>
 
     <div id="arcZone" class="arc-zone">
-      <svg id="arcSvg" class="fill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path id="guide" fill="none" stroke="rgba(240,214,137,.30)" stroke-width="1.2" stroke-dasharray="4 8"/>
-        <path id="done" fill="none" stroke="rgba(240,214,137,.55)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div id="clouds" class="clouds"></div>
-      <canvas id="sun" class="fill"></canvas>
       <div id="moon" class="moon" style="opacity:0"></div>
-      <div id="haze" class="haze"></div>
-      <div id="refl" class="refl" style="opacity:0"></div>
     </div>
 
     <div class="head">

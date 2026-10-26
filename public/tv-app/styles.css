@@ -1,6 +1,6 @@
 /* Reprise de la vue TV du site (src/routes/index.tsx, src/components/TVSky.tsx, src/styles.css).
    Le site travaille en vh/vw ; ici la scène fait 1920×1080 : 1vh = 10.8px, 1vw = 19.2px. */
-:root { --tv-panel-surface: rgba(10, 26, 61, .88); --gold: #F0D689; --mont: 'Montserrat', system-ui, sans-serif; }
+:root { --tv-panel-surface: rgba(10, 26, 61, .55); --gold: #F0D689; --mont: 'Montserrat', system-ui, sans-serif; }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; background: #050d20; cursor: none; -webkit-font-smoothing: antialiased; }
 p, h3 { margin: 0; }
@@ -20,14 +20,14 @@ ul { margin: 0; }
 .tv-star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; }
 .wx { overflow: hidden; }
 .wx-grey { background: linear-gradient(rgba(85,95,110,.7), rgba(110,120,135,.35) 60%, transparent); transition: opacity 2s; }
-.wx-fog { background: linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent); filter: blur(8px); transition: opacity 2s; animation: tv-fog 40s ease-in-out infinite alternate; }
+.wx-fog { background: linear-gradient(to top, rgba(205,214,226,.85), rgba(205,214,226,.45) 45%, rgba(205,214,226,.15) 80%, transparent); transition: opacity 2s; }
 @keyframes tv-fog { to { transform: translateX(76.8px); } }
 
 .arc-zone { position: absolute; left: 0; top: 0; bottom: 0; right: 37.6%; }
 .clouds { position: absolute; left: -10%; right: -10%; top: 0; bottom: 10%; pointer-events: none; }
 /* .tv-mode .tv-cloud du site : sans flou, dégradé plus doux */
 .tv-cloud { position: absolute; display: block; border-radius: 50%;
-  background: radial-gradient(ellipse at center,
+  background: radial-gradient(closest-side ellipse at center,
     rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), var(--ca, 0.4)) 0%,
     rgba(var(--cr, 255), var(--cg, 255), var(--cb, 255), calc(var(--ca, 0.4) * 0.35)) 35%,
     transparent 65%);

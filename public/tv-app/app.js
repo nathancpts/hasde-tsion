@@ -182,66 +182,135 @@
   }
   renderClouds(defaultClouds);
 
-  /* --- soleil photoréaliste (canvas) : copie de drawSun --- */
-  var scv = $('sun'), sctx = scv.getContext('2d'), sunDpr = 1;
-  function drawSun(t) {
-    var c = sctx; if (!c) return;
-    c.setTransform(1, 0, 0, 1, 0, 0);
-    c.clearRect(0, 0, scv.width, scv.height);
-    var g = G, S = SUN;
-    if (!g || !S || S.below >= 1) return;
-    c.setTransform(sunDpr, 0, 0, sunDpr, 0, 0);
-    var ox = 0, oy = 0;
-    var x = S.x + ox, y = S.y + oy, w = S.warm, a = 1 - S.below, T = t / 1000;
-    var breath = 1 + Math.sin(T * 0.7) * 0.03, flick = 1 + Math.sin(T * 9.1) * 0.012 + Math.sin(T * 13.7) * 0.008;
-    var R0 = 27 * (1 + w * 0.35);
-    var kG = Math.round(236 - w * 96), kB = Math.round(188 - w * 150);
-    var rgba = function (r, gg, b, al) { return 'rgba(' + r + ',' + gg + ',' + b + ',' + Math.max(0, Math.min(1, al)).toFixed(3) + ')'; };
-    var rg = function (rx, ry, rr, stops) { var gr = c.createRadialGradient(rx, ry, 0, rx, ry, rr); stops.forEach(function (s) { gr.addColorStop(s[0], s[1]); }); return gr; };
-    var fillR = function (rx, ry, rr) { c.fillRect(rx - rr, ry - rr, rr * 2, rr * 2); };
-    var i;
-    c.globalCompositeOperation = 'lighter';
-    c.fillStyle = rg(x, y, 620 * breath, [[0, rgba(255, 248, 226, 0.46 * a * (1 - w * 0.4))], [0.3, rgba(255, 238, 205, 0.16 * a)], [1, rgba(255, 220, 180, 0)]]); fillR(x, y, 620 * breath);
-    c.fillStyle = rg(x, y, 250 * breath, [[0, rgba(255, kG, kB, 0.6 * a)], [0.35, rgba(255, Math.round(kG * 0.82), Math.round(kB * 0.55), 0.24 * a)], [1, rgba(255, 140, 70, 0)]]); fillR(x, y, 250 * breath);
-    c.save(); c.translate(x, y); c.scale(1, 0.022 + w * 0.01);
-    c.fillStyle = rg(0, 0, 560, [[0, rgba(255, 252, 240, (0.55 + w * 0.35) * a * flick)], [0.5, rgba(255, 236, 200, 0.18 * a)], [1, rgba(255, 220, 170, 0)]]); fillR(0, 0, 560); c.restore();
-    var NR = 36, Lr = (300 + w * 220) * breath, hw0 = 0.028;
-    c.save(); c.translate(x, y); c.scale(1, 1 - w * 0.35);
-    c.fillStyle = rg(0, 0, Lr, [[0, rgba(255, 250, 232, 0.9)], [0.25, rgba(255, 244, 214, 0.45)], [1, rgba(255, 230, 190, 0)]]);
-    for (i = 0; i < NR; i++) {
-      var ph = i * 2.399, ang = T * 0.035 + (i * Math.PI * 2) / NR + Math.sin(T * 0.27 + ph) * 0.03;
-      var len = Lr * (0.55 + 0.45 * (Math.sin(T * 0.9 + ph) * 0.5 + 0.5)) * (i % 3 === 0 ? 1.25 : 1);
-      var hw = hw0 * (0.7 + 0.6 * (Math.sin(T * 0.6 + ph * 1.3) * 0.5 + 0.5));
-      c.globalAlpha = (0.05 + 0.16 * (Math.sin(T * 1.3 + ph * 0.7) * 0.5 + 0.5)) * a * (1 - w * 0.35);
-      c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(ang - hw) * len, Math.sin(ang - hw) * len); c.lineTo(Math.cos(ang + hw) * len, Math.sin(ang + hw) * len); c.closePath(); c.fill();
+  /* --- soleil réaliste : copie de src/components/sunRenderer.ts + RealisticSun.tsx --- */
+  var scv = $('sun'), sctx = scv.getContext('2d'), sunDpr = 1, sunW = 1920, sunH = 1080;
+  var SUNP = { x: -999, y: -999, warm: 0, op: 0 };
+  // météo du soleil (sun-weather.ts) avec transition douce de 2 s, comme RealisticSun
+  function sunWeather(code) {
+    if (code >= 95) return { cloud: 0.9, disc: 0 };
+    if (code >= 3) return { cloud: 0.8, disc: 0 };
+    if (code === 2) return { cloud: 0.5, disc: 0.35 };
+    if (code === 1) return { cloud: 0.2, disc: 0.85 };
+    return { cloud: 0, disc: 1 };
+  }
+  var sunWx = { cloud: 0, disc: 1 }, sunFrom = { cloud: 0, disc: 1 }, sunTarget = { cloud: 0, disc: 1 }, sunTrans = 0, sunWant = { cloud: 0, disc: 1 };
+  var mixv = function (a, b, t) { return a + (b - a) * t; };
+  var rgbaS = function (r, g, b, a) { return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',' + Math.round(b) + ',' + clamp(a).toFixed(4) + ')'; };
+  function radial(ctx, x, y, r, stops) { var g = ctx.createRadialGradient(x, y, 0, x, y, r); stops.forEach(function (s) { g.addColorStop(s[0], s[1]); }); return g; }
+  function fillCircle(ctx, x, y, r, style) { ctx.fillStyle = style; ctx.fillRect(x - r, y - r, r * 2, r * 2); }
+  function renderSun(ctx, w, h, o) {
+    ctx.clearRect(0, 0, w, h);
+    var A0 = clamp(o.opacity == null ? 1 : o.opacity);
+    if (A0 <= 0.003) return;
+    var A = A0, R = (o.radius || 26) * (1 + (o.warm || 0) * 0.35);
+    var warm = clamp(o.warm || 0), cloud = clamp(o.cloud || 0), D = clamp(o.disc == null ? 1 : o.disc);
+    var clear = (1 - cloud * 0.85) * D, diffuse = mixv(0.28, 1, D), T = o.time, x = o.x, y = o.y, i, g;
+    var cG = mixv(244, 150, warm), cB = mixv(214, 70, warm), dG = mixv(255, 214, warm), dB = mixv(250, 150, warm);
+    var breath = 1 + Math.sin(T * 0.7) * 0.025, flick = 1 + Math.sin(T * 9.1) * 0.01 + Math.sin(T * 13.7) * 0.006;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    // 1. bloom atmosphérique
+    var bloomR = R * 26 * breath;
+    fillCircle(ctx, x, y, bloomR, radial(ctx, x, y, bloomR, [
+      [0.00, rgbaS(255, 250, 238, 0.60 * A * diffuse)], [0.04, rgbaS(255, 246, 224, 0.42 * A * diffuse)],
+      [0.10, rgbaS(255, cG, cB, 0.20 * A * diffuse)], [0.22, rgbaS(255, cG - 8, cB - 20, 0.085 * A)],
+      [0.45, rgbaS(255, cG - 20, cB - 40, 0.028 * A)], [1.00, rgbaS(255, cG - 20, cB - 40, 0)]]));
+    // 2. couronne dorée
+    var corR = R * 6.5 * breath;
+    fillCircle(ctx, x, y, corR, radial(ctx, x, y, corR, [
+      [0.0, rgbaS(255, 252, 240, 0.85 * A * diffuse)],
+      [0.18, rgbaS(255, mixv(236, 170, warm), mixv(190, 90, warm), 0.45 * A * (0.6 + 0.4 * clear))],
+      [0.55, rgbaS(255, mixv(210, 130, warm), mixv(150, 60, warm), 0.12 * A)], [1.0, rgbaS(255, 190, 110, 0)]]));
+    // 3. grands faisceaux crépusculaires
+    if (clear > 0.1) {
+      var N = 7, L = R * 34;
+      for (i = 0; i < N; i++) {
+        var base = i * ((Math.PI * 2) / N) + T * 0.012 + Math.sin(i * 7.1) * 0.2;
+        var an = base + Math.sin(T * 0.23 + i * 1.9) * 0.05, hwb = 0.11 + 0.05 * Math.sin(T * 0.31 + i);
+        var al = (0.035 + 0.03 * (Math.sin(T * 0.5 + i * 2.2) * 0.5 + 0.5)) * A * clear * (1 - warm * 0.2);
+        g = ctx.createLinearGradient(x, y, x + Math.cos(an) * L, y + Math.sin(an) * L);
+        g.addColorStop(0, rgbaS(255, 246, 220, al)); g.addColorStop(1, rgbaS(255, 236, 200, 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x, y);
+        ctx.lineTo(x + Math.cos(an - hwb) * L, y + Math.sin(an - hwb) * L); ctx.lineTo(x + Math.cos(an + hwb) * L, y + Math.sin(an + hwb) * L);
+        ctx.closePath(); ctx.fill();
+      }
     }
-    c.globalAlpha = 1; c.restore();
-    var L = (175 - w * 80) * flick, rot = T * 0.05;
-    for (i = 0; i < 3; i++) {
-      c.save(); c.translate(x, y); c.rotate(rot + (i * Math.PI) / 3);
-      var g1 = c.createLinearGradient(-L, 0, L, 0); g1.addColorStop(0, rgba(255, 250, 235, 0)); g1.addColorStop(0.5, rgba(255, 252, 240, 0.42 * a * (1 - w * 0.3))); g1.addColorStop(1, rgba(255, 250, 235, 0));
-      c.fillStyle = g1; c.fillRect(-L, -0.9, L * 2, 1.8);
-      var g2 = c.createLinearGradient(-L * 0.6, 0, L * 0.6, 0); g2.addColorStop(0, rgba(255, 240, 210, 0)); g2.addColorStop(0.5, rgba(255, 245, 220, 0.16 * a * (1 - w * 0.3))); g2.addColorStop(1, rgba(255, 240, 210, 0));
-      c.fillStyle = g2; c.fillRect(-L * 0.6, -4, L * 1.2, 8); c.restore();
+    // 4. 48 rayons fins en mouvement
+    if (clear > 0.05) {
+      var NR = 48, Lr = R * (14 + warm * 6) * breath;
+      ctx.save(); ctx.translate(x, y); ctx.scale(1, 1 - warm * 0.35);
+      ctx.fillStyle = radial(ctx, 0, 0, Lr, [[0.0, rgbaS(255, 252, 238, 0.95)], [0.2, rgbaS(255, 244, 214, 0.5)], [1.0, rgbaS(255, 232, 190, 0)]]);
+      for (i = 0; i < NR; i++) {
+        var ph = i * 2.399963, ang = T * 0.03 + (i * Math.PI * 2) / NR + Math.sin(T * 0.27 + ph) * 0.03;
+        var len = Lr * (0.5 + 0.5 * (Math.sin(T * 0.9 + ph) * 0.5 + 0.5)) * (i % 4 === 0 ? 1.3 : 1);
+        var hw = 0.02 * (0.7 + 0.6 * (Math.sin(T * 0.6 + ph * 1.3) * 0.5 + 0.5));
+        ctx.globalAlpha = (0.05 + 0.15 * (Math.sin(T * 1.3 + ph * 0.7) * 0.5 + 0.5)) * A * clear * (1 - warm * 0.3);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(ang - hw) * len, Math.sin(ang - hw) * len); ctx.lineTo(Math.cos(ang + hw) * len, Math.sin(ang + hw) * len); ctx.closePath(); ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.restore();
     }
-    c.save(); c.translate(x, y); c.scale(1, 1 - w * 0.16);
-    var fr = 1.6 + w * 1.2;
-    [[-fr, 0, 255, 0, 0], [0, 0, 0, Math.round(255 * (1 - w * 0.3)), 0], [fr, 0, 0, 0, Math.round(255 * (1 - w * 0.62))]].forEach(function (q) {
-      var dx = q[0], dy = q[1], r = q[2], gg = q[3], b = q[4];
-      c.fillStyle = rg(dx, dy, R0 * 1.55, [[0, rgba(r, gg, b, 0.95 * a)], [0.62, rgba(r, gg, b, 0.95 * a)], [0.75, rgba(r, gg, b, 0.35 * a)], [1, rgba(r, gg, b, 0)]]); fillR(dx, dy, R0 * 1.55);
-    });
-    c.fillStyle = rg(0, 0, R0 * 2.6, [[0, rgba(255, 255, 250, 0.9 * a * (1 - w * 0.55))], [0.3, rgba(255, 250, 230, 0.5 * a * (1 - w * 0.4))], [1, rgba(255, kG, kB, 0)]]); fillR(0, 0, R0 * 2.6);
-    c.restore();
-    var cx0 = g.W / 2 + ox, cy0 = g.H / 2 + oy, vis = clamp(S.alt * 3) * a * (1 - w * 0.6);
-    [[1.3, 44, [120, 190, 255], 0.18, true], [1.65, 16, [255, 180, 120], 0.16, false], [2.05, 74, [150, 255, 200], 0.1, true], [2.5, 26, [200, 160, 255], 0.14, false], [3.0, 120, [255, 200, 140], 0.06, true]].forEach(function (q) {
-      var k = q[0], r = q[1], col = q[2], al = q[3], ring = q[4];
-      var gx = x + (cx0 - x) * k, gy = y + (cy0 - y) * k;
-      c.fillStyle = ring
-        ? rg(gx, gy, r, [[0, rgba(col[0], col[1], col[2], 0)], [0.78, rgba(col[0], col[1], col[2], 0)], [0.9, rgba(col[0], col[1], col[2], al * vis)], [1, rgba(col[0], col[1], col[2], 0)]])
-        : rg(gx, gy, r, [[0, rgba(col[0], col[1], col[2], al * vis)], [1, rgba(col[0], col[1], col[2], 0)]]);
-      fillR(gx, gy, r);
-    });
-    c.globalCompositeOperation = 'source-over';
+    // 5. traînée anamorphique horizontale
+    if (D > 0.4) {
+      ctx.save(); ctx.translate(x, y); ctx.scale(1, 0.018 + warm * 0.012);
+      var sR = R * (20 + warm * 8);
+      ctx.fillStyle = radial(ctx, 0, 0, sR, [[0.0, rgbaS(255, 252, 242, (0.5 + warm * 0.3) * A * flick * (0.5 + 0.5 * clear))], [0.45, rgbaS(255, 238, 205, 0.16 * A)], [1.0, rgbaS(255, 224, 175, 0)]]);
+      ctx.fillRect(-sR, -sR, sR * 2, sR * 2); ctx.restore();
+    }
+    // 6. pointes de diffraction
+    if (clear > 0.25) {
+      var Ls = R * (7.5 - warm * 3) * flick, rot = T * 0.045;
+      for (i = 0; i < 3; i++) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(rot + (i * Math.PI) / 3);
+        var g1 = ctx.createLinearGradient(-Ls, 0, Ls, 0);
+        g1.addColorStop(0, rgbaS(255, 250, 235, 0)); g1.addColorStop(0.5, rgbaS(255, 253, 244, 0.5 * A * clear)); g1.addColorStop(1, rgbaS(255, 250, 235, 0));
+        ctx.fillStyle = g1; ctx.fillRect(-Ls, -0.8, Ls * 2, 1.6);
+        var g2 = ctx.createLinearGradient(-Ls * 0.55, 0, Ls * 0.55, 0);
+        g2.addColorStop(0, rgbaS(255, 240, 210, 0)); g2.addColorStop(0.5, rgbaS(255, 246, 224, 0.17 * A * clear)); g2.addColorStop(1, rgbaS(255, 240, 210, 0));
+        ctx.fillStyle = g2; ctx.fillRect(-Ls * 0.55, -3.5, Ls * 1.1, 7); ctx.restore();
+      }
+    }
+    // 7. disque incandescent
+    if (D > 0.02) {
+      ctx.save(); ctx.translate(x, y); ctx.scale(1, 1 - warm * 0.14);
+      var soft = mixv(0.12, 0.55, cloud), dR = R * (1.5 + cloud * 0.8);
+      ctx.fillStyle = radial(ctx, 0, 0, dR, [
+        [0.0, rgbaS(255, 255, 253, 1 * A * D)], [0.55 - soft * 0.4, rgbaS(255, 255, 250, 0.98 * A * D)],
+        [0.68, rgbaS(255, dG, dB, 0.72 * A * D * (1 - cloud * 0.4))],
+        [0.82, rgbaS(255, mixv(236, 190, warm), mixv(190, 110, warm), 0.28 * A * D)], [1.0, rgbaS(255, 220, 160, 0)]]);
+      ctx.fillRect(-dR, -dR, dR * 2, dR * 2);
+      var hR = R * 3.2;
+      ctx.fillStyle = radial(ctx, 0, 0, hR, [[0.0, rgbaS(255, 255, 250, 0.9 * A * D * (1 - warm * 0.5))], [0.3, rgbaS(255, 250, 230, 0.45 * A * D)], [1.0, rgbaS(255, cG, cB, 0)]]);
+      ctx.fillRect(-hR, -hR, hR * 2, hR * 2); ctx.restore();
+    }
+    // 8. reflets d'objectif chauds
+    if (o.lensFlare !== false && clear > 0.3) {
+      var cx0 = w / 2, cy0 = h / 2, vis = A * clear * (1 - warm * 0.6);
+      [[1.25, R * 1.7, [255, 228, 175], 0.1, true], [1.65, R * 0.6, [255, 196, 140], 0.13, false], [2.1, R * 2.8, [255, 214, 165], 0.06, true], [2.6, R * 1.0, [255, 205, 150], 0.09, false], [3.1, R * 4.5, [255, 210, 160], 0.04, true]].forEach(function (q) {
+        var k = q[0], r = q[1], c = q[2], al2 = q[3], ring = q[4];
+        var gx = x + (cx0 - x) * k, gy = y + (cy0 - y) * k;
+        var gr = ring
+          ? radial(ctx, gx, gy, r, [[0, rgbaS(c[0], c[1], c[2], 0)], [0.78, rgbaS(c[0], c[1], c[2], 0)], [0.9, rgbaS(c[0], c[1], c[2], al2 * vis)], [1, rgbaS(c[0], c[1], c[2], 0)]])
+          : radial(ctx, gx, gy, r, [[0, rgbaS(c[0], c[1], c[2], al2 * vis)], [1, rgbaS(c[0], c[1], c[2], 0)]]);
+        fillCircle(ctx, gx, gy, r, gr);
+      });
+    }
+    ctx.restore();
+  }
+  function resizeSun() {
+    var box = $('sunBox'); sunW = box.clientWidth || 1920; sunH = box.clientHeight || 1080;
+    sunDpr = Math.min(window.devicePixelRatio || 1, 1.5, 1920 / Math.max(1, sunW), 1080 / Math.max(1, sunH));
+    scv.width = Math.max(1, Math.round(sunW * sunDpr)); scv.height = Math.max(1, Math.round(sunH * sunDpr));
+  }
+  function drawSun(now) {
+    if (!sctx) return;
+    if (sunTarget.cloud !== sunWant.cloud || sunTarget.disc !== sunWant.disc) {
+      sunFrom = { cloud: sunWx.cloud, disc: sunWx.disc }; sunTarget = { cloud: sunWant.cloud, disc: sunWant.disc }; sunTrans = now;
+    }
+    var pr = Math.min(1, (now - sunTrans) / 2000), ease = pr * pr * (3 - 2 * pr);
+    sunWx.cloud = sunFrom.cloud + (sunTarget.cloud - sunFrom.cloud) * ease;
+    sunWx.disc = sunFrom.disc + (sunTarget.disc - sunFrom.disc) * ease;
+    sctx.setTransform(sunDpr, 0, 0, sunDpr, 0, 0);
+    renderSun(sctx, sunW, sunH, { x: SUNP.x, y: SUNP.y, warm: SUNP.warm, opacity: SUNP.op, radius: 26, cloud: sunWx.cloud, disc: sunWx.disc, lensFlare: true, time: now / 1000 });
   }
 
   /* --- ciel : copie de updateSky --- */
@@ -251,24 +320,16 @@
     var warm = clamp(1 - Math.max(s.alt, 0) / 0.4);
     var below = s.alt < 0 ? clamp(-s.alt * 4) : 0;
     SUN = { x: s.x, y: s.y, warm: warm, alt: s.alt, below: below };
-    if (s.sp > 0) {
-      var n = 90, k = Math.min(s.sp, 1), d = '';
-      for (var i = 0; i <= n; i++) { var q = sunAt(s0 + ((s1 - s0) * k * i) / n, g, s0, s1); d += (i ? ' L' : 'M') + q.x.toFixed(1) + ',' + q.y.toFixed(1); }
-      $('done').setAttribute('d', d);
-    } else $('done').setAttribute('d', '');
+    SUNP = { x: s.x, y: s.y, warm: warm, op: 1 - below };
     var sk = skyFor(mNow, s0, s1), day = sk.day, dusk = sk.dusk;
-    var pal = mixPal(day, dusk);
-    var sxp = ((s.x / g.W) * 100).toFixed(1), syp = ((s.y / g.H) * 100).toFixed(1), hp = 78;
-    var glowA = (0.55 * clamp(s.alt + 0.35) * (1 - below * 0.5)).toFixed(3);
-    $('skyBg').style.background = 'radial-gradient(60% 45% at ' + sxp + '% ' + syp + '%, rgba(255,' + Math.round(240 - warm * 60) + ',' + Math.round(200 - warm * 120) + ',' + glowA + '), transparent 65%), linear-gradient(180deg, rgb(' + pal.top + ') 0%, rgb(' + pal.mid + ') ' + (hp * 0.5).toFixed(1) + '%, rgb(' + pal.pink + ') ' + (hp * 0.86).toFixed(1) + '%, rgb(' + pal.hor + ') ' + hp + '%, rgb(' + pal.hor + ') 100%)';
+    var pal = mixPal(day, dusk), hp = 78;
+    $('skyBg').style.background = 'linear-gradient(180deg, rgb(' + pal.top + ') 0%, rgb(' + pal.mid + ') ' + (hp * 0.5).toFixed(1) + '%, rgb(' + pal.pink + ') ' + (hp * 0.86).toFixed(1) + '%, rgb(' + pal.hor + ') ' + hp + '%, rgb(' + pal.hor + ') 100%)';
     var hz = pal.haze;
     $('haze').style.background = 'linear-gradient(to top, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 0%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',' + hz[3] + ') 55%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 100%)';
     var cl = $('clouds');
     cl.style.setProperty('--cr', String(pal.cloud[0])); cl.style.setProperty('--cg', String(pal.cloud[1]));
     cl.style.setProperty('--cb', String(pal.cloud[2])); cl.style.setProperty('--ca', String(pal.cloud[3]));
     cl.style.transform = 'translateX(' + (-clamp((mNow - D0) / (D1 - D0)) * 120).toFixed(1) + 'px)';
-    var near = clamp(1 - Math.abs(s.y - g.HY) / (g.H * 0.32)) * (1 - below);
-    var refl = $('refl'); refl.style.left = s.x.toFixed(1) + 'px'; refl.style.opacity = (near * (0.5 + warm * 0.5)).toFixed(3);
     var nf = clamp(1 - day * 1.7 - dusk * 0.7);
     $('stars').style.opacity = nf.toFixed(3);
     var nightLen = 1440 - s1 + s0;
@@ -285,16 +346,8 @@
     var z = $('arcZone'), w = z.clientWidth, h = Math.max(160, z.clientHeight);
     if (w < 10 || h < 10) return;
     G = { W: w, H: h, HY: h * 0.78, AMP: h * 0.78 * 0.62 };
-    $('arcSvg').setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    sunDpr = Math.min(1, 1920 / w, 1080 / h);
-    scv.width = Math.max(1, Math.round(w * sunDpr)); scv.height = Math.max(1, Math.round(h * sunDpr));
-    // Sur le site, l'arc en pointillés est tracé au montage avec les horaires par défaut (07:43 → 19:32),
-    // ce qui le décale de l'arc doré : on garde le même rendu.
-    var gs = toM('07:43'), ge = toM('19:32'), pts = [];
-    for (var i = 0; i <= 120; i++) { var p = sunAt(gs + ((ge - gs) * i) / 120, G, gs, ge); pts.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
-    $('guide').setAttribute('d', 'M' + pts.join(' L'));
+    resizeSun();
     $('haze').style.top = (G.HY - 110) + 'px';
-    $('refl').style.top = (G.HY + 2) + 'px';
     updateSky(nowMF());
   }
 
@@ -308,18 +361,18 @@
     RAIN = rain ? (heavy ? 1 : light ? 0.3 : 0.6) : 0;
     SNOW = snow ? 1 : 0;
     STORM = storm;
-    var dim = rain || snow ? 0.55 : c > 0.85 ? 0.8 : c > 0.6 ? 0.9 : 1;
+    var dim = rain || snow ? 0.8 : c > 0.85 ? 0.95 : 1;
     var n = Math.round(4 + c * 14 + (rain || snow ? 8 : 0)), clouds = [];
     for (var i = 0; i < n; i++) clouds.push({ l: (i * 97) / n + Math.random() * 6, t: Math.random() * 40, w: 340 + Math.random() * 360, h: 80 + Math.random() * 70, dur: 40 + Math.random() * 30, delay: -i * 7 });
     wx = { code: code, temp: temp, grey: rain || snow ? 0.75 : c > 0.5 ? (c - 0.5) * 0.9 : 0, fog: fog ? 1 : 0, dim: dim, storm: storm };
     renderClouds(clouds);
-    $('wxGrey').style.opacity = String(wx.grey);
-    $('wxFog').style.opacity = String(wx.fog);
+    $('wxGrey').style.opacity = String(Math.min(0.1, wx.grey * 0.13));
+    $('wxFog').style.opacity = String(wx.fog * 0.1);
+    sunWant = sunWeather(code);
     $('rain').style.display = RAIN ? '' : 'none';
     $('snow').style.display = SNOW ? '' : 'none';
     $('flash').style.display = storm ? '' : 'none';
     $('clouds').style.filter = wx.grey > 0.5 ? 'brightness(.8) saturate(.6)' : '';
-    scv.style.opacity = String(dim);
     var wEl = $('weather');
     wEl.textContent = 'Actuellement · ' + wxLabel(code) + (temp != null ? ' · ' + Math.round(temp) + ' °C' : '');
     wEl.hidden = false;
@@ -421,14 +474,21 @@
     this.speed = speed; this.pos = 0; this.h = 0; this.loop = false; this.clone = null;
   }
   AutoLoop.prototype.refresh = function () {
+    if (this.anim) { this.anim.cancel(); this.anim = null; }
     if (this.clone) { this.track.removeChild(this.clone); this.clone = null; }
     this.pos = 0; this.track.style.transform = 'translate3d(0,0,0)';
     this.h = this.inner.offsetHeight;
     this.loop = this.h > this.vp.clientHeight + 2;
-    if (this.loop) { this.clone = this.inner.cloneNode(true); this.clone.removeAttribute('id'); this.clone.setAttribute('aria-hidden', 'true'); this.track.appendChild(this.clone); }
+    if (!this.loop) return;
+    this.clone = this.inner.cloneNode(true); this.clone.removeAttribute('id'); this.clone.setAttribute('aria-hidden', 'true'); this.track.appendChild(this.clone);
+    // Défilement sur le compositeur (Web Animations) : aucune saccade quand le soleil ou la météo travaillent.
+    if (this.track.animate) {
+      this.anim = this.track.animate([{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(0,' + (-this.h) + 'px,0)' }],
+        { duration: (this.h / this.speed) * 1000, iterations: Infinity, easing: 'linear' });
+    }
   };
   AutoLoop.prototype.step = function (dt) {
-    if (!this.loop) return;
+    if (!this.loop || this.anim) return;
     this.pos += this.speed * (dt / 1000);
     if (this.h > 0 && this.pos >= this.h) this.pos -= this.h;
     this.track.style.transform = 'translate3d(0,' + (-this.pos) + 'px,0)';
