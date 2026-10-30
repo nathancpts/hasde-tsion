@@ -171,14 +171,72 @@
   })();
   $('moon').innerHTML = moonSVG(moonData(new Date()).phase);
 
+  /* --- nuages : dessinés une fois en image (volumes, ombre, bords fondus), puis simplement déplacés --- */
+  var cloudList = [], cloudTint = [255, 255, 255], cloudAlpha = 0.5;
+  function seeded(n) { var x = n * 9301 + 49297; return function () { x = (x * 9301 + 49297) % 233280; return x / 233280; }; }
+  var CLOUD_RES = 0.5; // dessinés à mi-résolution : invisible une fois flouté, et 4 fois moins de mémoire
+  function cloudPad(c) { return Math.round(c.h * 0.9); }
+  function drawCloud(cv, c, tint) {
+    var w = c.w, h = c.h, P = cloudPad(c), S = CLOUD_RES;
+    cv.width = Math.max(2, Math.round((w + P * 2) * S)); cv.height = Math.max(2, Math.round((h * 1.6 + P * 2) * S));
+    var g = cv.getContext('2d'); if (!g) return;
+    g.setTransform(S, 0, 0, S, 0, 0);
+    var R = seeded(c.seed), n = 7 + Math.floor(R() * 6), base = P + h * 1.45;
+    g.clearRect(0, 0, w + P * 2, h * 1.6 + P * 2);
+    try { g.filter = 'blur(' + Math.max(3, Math.round(h * 0.1 * S)) + 'px)'; } catch (e) {}
+    var puff = function (x, y, r, a) {
+      var gr = g.createRadialGradient(x, y - r * 0.25, 0, x, y, r);
+      gr.addColorStop(0, 'rgba(255,255,255,' + a + ')'); gr.addColorStop(0.55, 'rgba(255,255,255,' + (a * 0.85).toFixed(3) + ')');
+      gr.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+    };
+    // base allongée, puis boules qui forment le sommet (plus hautes au centre)
+    // base : ellipse continue + boules serrées (espacement < rayon : pas d'effet « perles »)
+    g.save(); g.translate(P + w / 2, base - h * 0.15); g.scale(1, 0.32);
+    var eb = g.createRadialGradient(0, 0, 0, 0, 0, w * 0.5);
+    eb.addColorStop(0, 'rgba(255,255,255,0.85)'); eb.addColorStop(0.7, 'rgba(255,255,255,0.6)'); eb.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = eb; g.beginPath(); g.arc(0, 0, w * 0.5, 0, Math.PI * 2); g.fill(); g.restore();
+    var rb = h * 0.36, nb = Math.max(3, Math.ceil((w * 0.7) / (rb * 0.8)));
+    for (var k = 0; k < nb; k++) puff(P + w * (0.15 + 0.7 * k / (nb - 1)), base - h * 0.2 + (R() - 0.5) * h * 0.06, rb * (0.9 + R() * 0.25), 0.7);
+    // sommet : quelques grosses boules qui se chevauchent largement, plus hautes au centre
+    n = Math.max(3, Math.min(n, Math.round(w / (h * 0.55))));
+    for (var i = 0; i < n; i++) {
+      var f = n === 1 ? 0.5 : i / (n - 1), bump = Math.sin(Math.PI * (0.12 + 0.76 * f));
+      var r = h * (0.3 + 0.32 * bump) * (0.85 + R() * 0.3);
+      puff(P + w * (0.16 + 0.68 * f) + (R() - 0.5) * w * 0.05, base - h * 0.28 - r * 0.5 - (R() - 0.3) * h * 0.1, r, 0.9);
+    }
+    try { g.filter = 'none'; } catch (e) {}
+    // volume : dessous légèrement ombré, puis teinte du moment (doré au coucher, bleuté la nuit)
+    g.globalCompositeOperation = 'source-atop';
+    var sh = g.createLinearGradient(0, P, 0, base + h * 0.2);
+    sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(0.6, 'rgba(120,135,165,0.10)'); sh.addColorStop(1, 'rgba(90,105,140,0.38)');
+    g.fillStyle = sh; g.fillRect(0, 0, w + P * 2, h * 1.6 + P * 2);
+    var white = tint[0] > 240 && tint[1] > 240 && tint[2] > 240;
+    if (!white) { g.fillStyle = 'rgba(' + tint[0] + ',' + tint[1] + ',' + tint[2] + ',0.55)'; g.fillRect(0, 0, w + P * 2, h * 1.6 + P * 2); }
+    g.globalCompositeOperation = 'source-over';
+  }
   function renderClouds(list) {
+    cloudList = list.map(function (c, i) { var o = {}; for (var k in c) o[k] = c[k]; o.seed = o.seed || (i + 1) * 7919 + Math.round(c.w); return o; });
     var box = $('clouds'); clear(box);
-    list.forEach(function (c) {
-      var i = el('i', 'tv-cloud');
-      i.style.left = c.l + '%'; i.style.top = c.t + '%'; i.style.width = c.w + 'px'; i.style.height = c.h + 'px';
-      i.style.animationDelay = c.delay + 's'; i.style.setProperty('--t', c.dur + 's');
-      box.appendChild(i);
+    cloudList.forEach(function (c) {
+      var cv = document.createElement('canvas'); cv.className = 'tv-cloud';
+      cv.style.left = c.l + '%'; cv.style.top = c.t + '%';
+      var P = cloudPad(c);
+      cv.style.width = (c.w + P * 2) + 'px'; cv.style.height = (c.h * 1.6 + P * 2) + 'px';
+      cv.style.marginLeft = (-P) + 'px'; cv.style.marginTop = (-P - c.h * 0.6) + 'px';
+      cv.style.animationDelay = c.delay + 's'; cv.style.setProperty('--t', c.dur + 's');
+      drawCloud(cv, c, cloudTint);
+      c.el = cv; box.appendChild(cv);
     });
+    box.style.opacity = String(Math.min(0.9, cloudAlpha * 1.1));
+  }
+  // Re-teinte seulement quand la couleur du ciel a vraiment changé (quelques fois par jour)
+  function tintClouds(rgb, alpha) {
+    cloudAlpha = alpha; $('clouds').style.opacity = String(Math.min(0.9, alpha * 1.1));
+    var d = Math.max(Math.abs(rgb[0] - cloudTint[0]), Math.abs(rgb[1] - cloudTint[1]), Math.abs(rgb[2] - cloudTint[2]));
+    if (d < 14) return;
+    cloudTint = rgb.slice(0, 3);
+    cloudList.forEach(function (c) { if (c.el) drawCloud(c.el, c, cloudTint); });
   }
   renderClouds(defaultClouds);
 
@@ -327,8 +385,7 @@
     var hz = pal.haze;
     $('haze').style.background = 'linear-gradient(to top, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 0%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',' + hz[3] + ') 55%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 100%)';
     var cl = $('clouds');
-    cl.style.setProperty('--cr', String(pal.cloud[0])); cl.style.setProperty('--cg', String(pal.cloud[1]));
-    cl.style.setProperty('--cb', String(pal.cloud[2])); cl.style.setProperty('--ca', String(pal.cloud[3]));
+    tintClouds(pal.cloud, pal.cloud[3]);
     cl.style.transform = 'translateX(' + (-clamp((mNow - D0) / (D1 - D0)) * 120).toFixed(1) + 'px)';
     var nf = clamp(1 - day * 1.7 - dusk * 0.7);
     $('stars').style.opacity = nf.toFixed(3);
@@ -497,8 +554,9 @@
 
   /* ===== Boucle d'animation unique (soleil 30 i/s, ciel toutes les 2 s, pluie, neige, défilements) ===== */
   var lastSun = 0, lastSky = 0, lastT = 0;
+  var NIGHT = false;
   function loop(t) {
-    if (!document.hidden) {
+    if (!document.hidden && !NIGHT) {
       var dt = Math.min(t - (lastT || t), 100); lastT = t;
       if (t - lastSun >= 1000 / CONFIG.sunFps) { lastSun = t; drawSun(t); }
       if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
@@ -729,6 +787,7 @@
     return (now.dow === 5 && entry != null && now.min >= entry) || (now.dow === 6 && (exit == null || now.min < exit));
   }
   function updateLive(now) {
+    if (NIGHT) return;
     var show = CONFIG.video && !noLiveAt(now);
     $('liveBar').hidden = !show; $('thumb').hidden = !show;
     if (show && !liveOn) { liveOn = true; setStatus('loading'); startLive(); }
@@ -811,6 +870,29 @@
   load(); loadWeather();
   setInterval(load, CONFIG.refreshMs);
   setInterval(loadWeather, CONFIG.weatherMs);
+
+  /* ===== Veille de nuit et allumage programmé ===== */
+  // Horaires réglables à distance dans version.json : "allumage": "09:00", "extinction": "01:00".
+  var R0 = window.TV_REMOTE || {};
+  var ON_AT = String(R0.allumage || '09:00'), OFF_AT = String(R0.extinction || '01:00');
+  window.tvNight = function (on) {
+    on = !!on;
+    if (on === NIGHT) return;
+    NIGHT = on;
+    $('night').hidden = !on;
+    if (on) { liveOn = false; teardown(); setBig(false); }
+    else location.reload();   // au réveil : écran rechargé, données fraîches
+  };
+  if (window.TVNative && window.TVNative.setSchedule) {
+    try { window.TVNative.setSchedule(ON_AT, OFF_AT); } catch (e) {}
+  } else {
+    // Sans l'appli (navigateur) : la page gère seule l'écran noir de nuit.
+    setInterval(function () {
+      var n = paris().min, on = toMinTop(ON_AT), off = toMinTop(OFF_AT);
+      if (on == null || off == null || on === off) return;
+      window.tvNight(off < on ? (n >= off && n < on) : (n >= off || n < on));
+    }, 30000);
+  }
 
   /* ===== Mise à jour à distance ===== */
   // Si version.json a changé sur le site, la télé recharge l'écran (nouveau design, corrections).
