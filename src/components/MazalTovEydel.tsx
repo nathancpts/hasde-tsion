@@ -1,21 +1,6 @@
-import mazalTovPoster from "@/assets/mazal-tov-eydel.png.asset.json";
-
 export default function MazalTovEydel() {
   return (
     <div className="space-y-3">
-      {/* Affiche */}
-      <article
-        className="rounded-3xl overflow-hidden bg-white"
-        style={{ boxShadow: "0 8px 24px rgba(31,78,168,0.18)" }}
-      >
-        <img
-          src={mazalTovPoster.url}
-          alt="Mazal Tov à la famille Benamran pour la naissance de leur fille Eydel"
-          className="w-full h-auto"
-          loading="lazy"
-        />
-      </article>
-
       {/* Message */}
       <article className="rounded-2xl bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
         <p className="font-display text-[13px] font-bold text-foreground leading-snug text-center">
