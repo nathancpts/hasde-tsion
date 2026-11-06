@@ -2217,7 +2217,7 @@ function PlanningTV() {
           </div>}
 
           {/* COMMUNAUTÉ — donateurs de la Séouda + petit live */}
-          <div className="tv-row-plain flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "17%" }}>
+          <div className="tv-row-plain flex min-h-0 gap-[1vw]" style={{ flex: "0 0 auto", height: "19%" }}>
           <article className="flex min-h-0 min-w-0 flex-1 flex-col" style={{ ...GLASS, padding: "1.4vh 1.2vw" }}>
             <p className="uppercase" style={LABEL}>
               Communauté
@@ -2227,22 +2227,38 @@ function PlanningTV() {
             </h3>
             <div className="mt-[0.5vh] min-h-0 flex-1 overflow-hidden">
               {DONATIONS_REPAS.length > 0 ? (
-                DONATIONS_REPAS.map((d, i) => (
-                  <div
-                    key={`tvdon-${i}`}
-                    className="flex flex-col"
-                    style={{ padding: "0.3vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
-                  >
-                    <span style={{ fontSize: "2.1vh", fontWeight: 700, color: "#F3F6FC", lineHeight: 1.2 }}>
-                      {d.donateur}
-                    </span>
-                    {d.dedicace && (
-                      <span style={{ fontSize: "1.6vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
-                        {d.dedicace}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: DONATIONS_REPAS.length >= 5 ? "1fr 1fr" : "1fr",
+                    columnGap: "1vw",
+                    alignContent: "start",
+                  }}
+                >
+                  {DONATIONS_REPAS.map((d, i) => (
+                    <div
+                      key={`tvdon-${i}`}
+                      className="flex flex-col"
+                      style={{ padding: "0.25vh 0", borderTop: i > 0 ? "1px dashed rgba(219,231,251,.14)" : "none" }}
+                    >
+                      <span
+                        style={{
+                          fontSize: DONATIONS_REPAS.length > 6 ? "1.5vh" : "2.1vh",
+                          fontWeight: 700,
+                          color: "#F3F6FC",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {d.donateur}
                       </span>
-                    )}
-                  </div>
-                ))
+                      {d.dedicace && (
+                        <span style={{ fontSize: "1.6vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
+                          {d.dedicace}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
               ) : (
                 <p style={{ padding: "0.4vh 0", fontSize: "1.4vh", fontStyle: "italic", color: "#9FB0CF" }}>
                   Aucune donation pour le moment.
