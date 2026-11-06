@@ -15,8 +15,9 @@
     weatherMs: 30 * 60 * 1000,     // comme TVSky : météo toutes les 30 min
     staleMs: 25 * 60 * 1000,
     sunFps: +(params.get('sunfps') || 30), // TVSky dessine le soleil à 30 i/s ; baisser à 15 si une télé peine
+    sunScale: 0.5,                  // soleil dessiné à mi-résolution : halos identiques, ~5 fois moins de calcul
     video: params.get('video') !== '0',
-    bigLiveMaxMs: 5 * 60 * 1000,
+    bigLiveMaxMs: 0,                // 0 = le live en grand reste affiché jusqu'à OK / Retour
     wx: params.get('wx'),           // test : ?wx=95 (orage), 63 (pluie), 73 (neige), 45 (brouillard)
     updateCheckMs: 5 * 60 * 1000    // vérifie toutes les 5 min si une nouvelle version a été publiée
   };
@@ -24,9 +25,11 @@
   (function (r) {
     if (!r) return;
     if (r.sunFps > 0 && !params.get('sunfps')) CONFIG.sunFps = +r.sunFps;
+    if (r.sunScale > 0 && r.sunScale <= 1) CONFIG.sunScale = +r.sunScale;
     if (r.video === false) CONFIG.video = false;
     if (r.refreshMinutes > 0) CONFIG.refreshMs = r.refreshMinutes * 60 * 1000;
     if (r.api) CONFIG.api = String(r.api);
+    if (r.liveGrandMinutes > 0) CONFIG.bigLiveMaxMs = r.liveGrandMinutes * 60 * 1000;
   })(window.TV_REMOTE);
 
   var $ = function (id) { return document.getElementById(id); };
@@ -356,7 +359,7 @@
   }
   function resizeSun() {
     var box = $('sunBox'); sunW = box.clientWidth || 1920; sunH = box.clientHeight || 1080;
-    sunDpr = Math.min(window.devicePixelRatio || 1, 1.5, 1920 / Math.max(1, sunW), 1080 / Math.max(1, sunH));
+    sunDpr = Math.min(window.devicePixelRatio || 1, 1.5, 1920 / Math.max(1, sunW), 1080 / Math.max(1, sunH)) * CONFIG.sunScale;
     scv.width = Math.max(1, Math.round(sunW * sunDpr)); scv.height = Math.max(1, Math.round(sunH * sunDpr));
   }
   function drawSun(now) {
@@ -372,6 +375,7 @@
   }
 
   /* --- ciel : copie de updateSky --- */
+  var lastSkyCss = '', lastHazeCss = '';
   function updateSky(mNow) {
     var g = G; if (!g) return;
     var s0 = SR, s1 = SS, s = sunAt(mNow, g, s0, s1);
@@ -381,9 +385,11 @@
     SUNP = { x: s.x, y: s.y, warm: warm, op: 1 - below };
     var sk = skyFor(mNow, s0, s1), day = sk.day, dusk = sk.dusk;
     var pal = mixPal(day, dusk), hp = 78;
-    $('skyBg').style.background = 'linear-gradient(180deg, rgb(' + pal.top + ') 0%, rgb(' + pal.mid + ') ' + (hp * 0.5).toFixed(1) + '%, rgb(' + pal.pink + ') ' + (hp * 0.86).toFixed(1) + '%, rgb(' + pal.hor + ') ' + hp + '%, rgb(' + pal.hor + ') 100%)';
+    var skyCss = 'linear-gradient(180deg, rgb(' + pal.top + ') 0%, rgb(' + pal.mid + ') ' + (hp * 0.5).toFixed(1) + '%, rgb(' + pal.pink + ') ' + (hp * 0.86).toFixed(1) + '%, rgb(' + pal.hor + ') ' + hp + '%, rgb(' + pal.hor + ') 100%)';
+    if (skyCss !== lastSkyCss) { lastSkyCss = skyCss; $('skyBg').style.background = skyCss; }
     var hz = pal.haze;
-    $('haze').style.background = 'linear-gradient(to top, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 0%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',' + hz[3] + ') 55%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 100%)';
+    var hazeCss = 'linear-gradient(to top, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 0%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',' + hz[3] + ') 55%, rgba(' + hz[0] + ',' + hz[1] + ',' + hz[2] + ',0) 100%)';
+    if (hazeCss !== lastHazeCss) { lastHazeCss = hazeCss; $('haze').style.background = hazeCss; }
     var cl = $('clouds');
     tintClouds(pal.cloud, pal.cloud[3]);
     cl.style.transform = 'translateX(' + (-clamp((mNow - D0) / (D1 - D0)) * 120).toFixed(1) + 'px)';
@@ -544,21 +550,38 @@
         { duration: (this.h / this.speed) * 1000, iterations: Infinity, easing: 'linear' });
     }
   };
+  // Remesure : le texte peut grandir après le chargement des polices ou des données.
+  AutoLoop.prototype.check = function () {
+    var h = this.inner.offsetHeight, need = h > this.vp.clientHeight + 2;
+    if (need !== this.loop || (need && Math.abs(h - this.h) > 2)) this.refresh();
+  };
   AutoLoop.prototype.step = function (dt) {
     if (!this.loop || this.anim) return;
     this.pos += this.speed * (dt / 1000);
     if (this.h > 0 && this.pos >= this.h) this.pos -= this.h;
     this.track.style.transform = 'translate3d(0,' + (-this.pos) + 'px,0)';
   };
-  var etudeLoop = new AutoLoop($('etudeLoop'), 9), hayomLoop = new AutoLoop($('hayomLoop'), 14);
+  var etudeLoop = new AutoLoop($('etudeLoop'), 9), hayomLoop = new AutoLoop($('hayomLoop'), 9);
+  var recheckLoops = function () { etudeLoop.check(); hayomLoop.check(); };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(recheckLoops, 100); });
+  window.addEventListener('load', function () { setTimeout(recheckLoops, 300); });
+  setInterval(recheckLoops, 4000);
 
   /* ===== Boucle d'animation unique (soleil 30 i/s, ciel toutes les 2 s, pluie, neige, défilements) ===== */
-  var lastSun = 0, lastSky = 0, lastT = 0;
+  var lastSun = 0, lastSky = 0, lastT = 0, sunCost = 0, sunFpsNow = CONFIG.sunFps;
   var NIGHT = false;
   function loop(t) {
     if (!document.hidden && !NIGHT) {
       var dt = Math.min(t - (lastT || t), 100); lastT = t;
-      if (t - lastSun >= 1000 / CONFIG.sunFps) { lastSun = t; drawSun(t); }
+      if (t - lastSun >= 1000 / sunFpsNow) {
+        lastSun = t;
+        var t0 = performance.now(); drawSun(t); var cost = performance.now() - t0;
+        // Cadence adaptative : si la télé peine, le soleil passe à 20 puis 15 i/s ; il remonte quand ça va mieux.
+        sunCost = sunCost * 0.9 + cost * 0.1;
+        if (sunCost > 22 && sunFpsNow > 15) sunFpsNow = 15;
+        else if (sunCost > 12 && sunFpsNow > 20) sunFpsNow = 20;
+        else if (sunCost < 6 && sunFpsNow < CONFIG.sunFps) sunFpsNow = CONFIG.sunFps;
+      }
       if (t - lastSky > 2000) { lastSky = t; updateSky(nowMF()); }
       rainFrame(); snowFrame(t);
       etudeLoop.step(dt); hayomLoop.step(dt);
@@ -661,7 +684,20 @@
   }
 
   /* ===== Cartes horaires (uniquement les horaires à venir) ===== */
-  var cardsSig = '';
+  // Mise à jour sur place : les cartes existantes sont modifiées, jamais effacées puis recréées
+  // (une reconstruction complète peut afficher une zone noire un instant sur certaines TV).
+  var cardsSig = '', cardEls = [], headEls = [];
+  function makeCard() {
+    var c = el('div', 'card'), kind = el('span', 'c-kind'), kt = el('span'), badge = el('span', 'c-badge', 'Prochain');
+    var strong = el('strong', 'c-name'), nm = document.createTextNode(''), he = el('span', 'font-hebrew');
+    he.setAttribute('dir', 'rtl'); strong.appendChild(nm); strong.appendChild(he);
+    kind.appendChild(kt); kind.appendChild(badge);
+    var note = el('span', 'c-note'), time = el('div', 'c-time');
+    c.appendChild(kind); c.appendChild(strong); c.appendChild(note); c.appendChild(time);
+    return { el: c, kt: kt, badge: badge, nm: nm, he: he, note: note, time: time };
+  }
+  function makeHead() { var h = el('div', 'cards-head'), t = el('span'); h.appendChild(t); h.appendChild(el('span')); return { el: h, t: t }; }
+  function setText(node, v) { if (node.textContent !== v) node.textContent = v; }
   function renderCards(now) {
     var m = now.mf, events = data ? todayTimes(now) : [], tomorrow = data ? tomorrowTimes(now) : null;
     var evMin = events.map(function (e) { return { label: e.label, value: e.value, min: toM(e.value) }; });
@@ -669,33 +705,37 @@
     var cards = visible.concat(tomorrow || []).slice(0, 9);
     var sig = JSON.stringify(cards) + '|' + visible.length;
     if (sig === cardsSig) return; cardsSig = sig;
-    var box = $('cards'); clear(box);
-    box.style.gridTemplateColumns = 'repeat(' + Math.max(1, cards.length) + ', minmax(0,1fr))';
+    var box = $('cards');
+    var cols = 'repeat(' + Math.max(1, cards.length) + ', minmax(0,1fr))';
+    if (box.style.gridTemplateColumns !== cols) box.style.gridTemplateColumns = cols;
     var nToday = Math.min(visible.length, cards.length), nTom = cards.length - nToday;
-    var head = function (txt, span, start) {
-      var h = el('div', 'cards-head'); h.style.gridColumn = start + ' / span ' + span;
-      h.appendChild(el('span', null, txt)); h.appendChild(el('span')); box.appendChild(h);
-    };
-    if (nToday > 0 && nTom > 0) head('Aujourd\'hui', nToday, 1);
-    if (nTom > 0) head('Samedi · Chabbat', nTom, nToday + 1);
-    cards.forEach(function (e, i) {
+    var heads = [];
+    if (nToday > 0 && nTom > 0) heads.push({ txt: 'Aujourd\'hui', span: nToday, start: 1 });
+    if (nTom > 0) heads.push({ txt: 'Samedi · Chabbat', span: nTom, start: nToday + 1 });
+    while (headEls.length < heads.length) { var hh = makeHead(); headEls.push(hh); box.insertBefore(hh.el, box.firstChild); }
+    headEls.forEach(function (h, i) {
+      var d = heads[i];
+      h.el.style.display = d ? '' : 'none';
+      if (d) { setText(h.t, d.txt); h.el.style.gridColumn = d.start + ' / span ' + d.span; }
+    });
+    while (cardEls.length < cards.length) { var nc = makeCard(); cardEls.push(nc); box.appendChild(nc.el); }
+    cardEls.forEach(function (c, i) {
+      var e = cards[i];
+      if (!e) { c.el.style.display = 'none'; return; }
+      c.el.style.display = '';
       var cur = i === 0 && visible.length > 0;
       var raw = e.label.replace(/^Sam\.\s*/, '');
       var parts = raw.split(' · '), name0 = parts[0], note = parts.slice(1).join(' · ');
       var name = name0.replace(/^Entrée de Chabbat$/i, 'Entrée').replace(/^Sortie de Chabbat$/i, 'Sortie');
       var office = kindOf(name0) === 'Office' || kindOf(e.label) === 'Office';
       var he = heOf(name0) || heOf(e.label);
-      var c = el('div', 'card' + (cur ? ' cur' : '') + (office ? ' office' : ''));
-      c.style.gridColumn = String(i + 1);
-      var kind = el('span', 'c-kind'); kind.appendChild(el('span', null, kindOf(name0)));
-      if (cur) kind.appendChild(el('span', 'c-badge', 'Prochain'));
-      c.appendChild(kind);
-      var strong = el('strong', 'c-name', name);
-      if (he) { var hs = el('span', 'font-hebrew', he); hs.setAttribute('dir', 'rtl'); strong.appendChild(hs); }
-      c.appendChild(strong);
-      c.appendChild(el('span', 'c-note', note));
-      c.appendChild(el('div', 'c-time', e.value));
-      box.appendChild(c);
+      var cls = 'card' + (cur ? ' cur' : '') + (office ? ' office' : '');
+      if (c.el.className !== cls) c.el.className = cls;
+      if (c.el.style.gridColumn !== String(i + 1)) c.el.style.gridColumn = String(i + 1);
+      setText(c.kt, kindOf(name0)); c.badge.style.display = cur ? '' : 'none';
+      if (c.nm.nodeValue !== name) c.nm.nodeValue = name;
+      setText(c.he, he); c.he.style.display = he ? '' : 'none';
+      setText(c.note, note); setText(c.time, e.value);
     });
   }
 
@@ -804,7 +844,7 @@
     if (on) {
       $('bigShabbat').hidden = !isShabbatNow(paris());
       $('bigFrame').insertBefore(player, $('bigFrame').firstChild);
-      bigTimer = setTimeout(function () { setBig(false); }, CONFIG.bigLiveMaxMs);
+      if (CONFIG.bigLiveMaxMs > 0) bigTimer = setTimeout(function () { setBig(false); }, CONFIG.bigLiveMaxMs);
     } else if (player.parentNode !== $('thumb')) $('thumb').insertBefore(player, $('thumb').firstChild);
     playV();
   }
@@ -887,11 +927,12 @@
     try { window.TVNative.setSchedule(ON_AT, OFF_AT); } catch (e) {}
   } else {
     // Sans l'appli (navigateur) : la page gère seule l'écran noir de nuit.
-    setInterval(function () {
+    var nightCheck = function () {
       var n = paris().min, on = toMinTop(ON_AT), off = toMinTop(OFF_AT);
       if (on == null || off == null || on === off) return;
       window.tvNight(off < on ? (n >= off && n < on) : (n >= off || n < on));
-    }, 30000);
+    };
+    nightCheck(); setInterval(nightCheck, 30000);
   }
 
   /* ===== Mise à jour à distance ===== */

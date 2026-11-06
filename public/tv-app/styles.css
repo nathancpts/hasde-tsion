@@ -28,7 +28,7 @@ ul { margin: 0; }
 /* Nuages : images pré-dessinées (app.js), seulement déplacées : aucun flou calculé en continu */
 .tv-cloud { position: absolute; display: block; pointer-events: none; will-change: transform;
   animation: tv-drift var(--t, 50s) ease-in-out infinite alternate; }
-@keyframes tv-drift { to { transform: translateX(60px); } }
+@keyframes tv-drift { to { transform: translateX(220px); } }
 .moon { position: absolute; left: 0; top: 0; width: 108px; height: 108px; margin-left: -54px; margin-top: -54px;
   filter: drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 34px rgba(126,181,246,.9)) brightness(1.25); }
 .moon svg { display: block; width: 100%; height: 100%; }
@@ -57,7 +57,9 @@ ul { margin: 0; }
 .h-note { margin-top: 12.96px; font-size: 12.42px; color: #9FB0CF; max-width: 24ch; margin-left: auto; }
 
 /* Cartes horaires (uniquement les horaires à venir) */
-.cards-wrap { position: absolute; left: 0; bottom: 0; right: 37.6%; z-index: 10; padding: 0 38.4px 28.08px; }
+.cards-wrap { position: absolute; left: 0; bottom: 0; right: 37.6%; z-index: 10; padding: 0 38.4px 28.08px;
+  /* couche d'affichage propre et stable : les changements d'horaires ne la recréent pas */
+  transform: translateZ(0); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .cards { display: grid; column-gap: 10px; row-gap: 0; }
 .cards-head { display: flex; align-items: center; grid-row: 1; gap: 15.36px; margin-bottom: 10.8px; font-family: var(--mont); font-size: 12.42px; font-weight: 800; letter-spacing: .28em; text-transform: uppercase; color: #F3F6FC; text-shadow: 0 2px 12px rgba(5,13,32,.5); }
 .cards-head span:first-child { white-space: nowrap; }
@@ -107,7 +109,12 @@ ul { margin: 0; }
 
 .etude { display: flex; flex-direction: column; min-height: 16%; flex: 1.6 1 0; padding: 19.44px 26.88px; }
 .loop-box { position: relative; margin-top: 10.8px; min-height: 0; flex: 1; overflow: hidden; }
-.loop-viewport { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; }
+.loop-viewport { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden;
+  /* fondu en haut et en bas : les lignes s'estompent au lieu d'être coupées net */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  /* couche d'affichage dédiée : évite les bandes que certains navigateurs (Safari) dessinent sous un fondu animé */
+  -webkit-transform: translateZ(0); transform: translateZ(0); will-change: transform; }
 .loop-track { will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .p-intro { margin-top: 6.48px; font-size: 15.66px; line-height: 1.65; color: #9FB0CF; font-style: italic; white-space: pre-line; }
 .p-bloc { margin-top: 15.12px; }
