@@ -1,7 +1,5 @@
 {
-  "version": "2026-11-04.8",
-  "allumage": "09:00",
-  "extinction": "01:00",
+  "version": "2026-11-10.2",
   "sunFps": 30,
   "video": true,
   "liveGrandMinutes": 0

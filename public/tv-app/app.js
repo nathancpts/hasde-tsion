@@ -699,7 +699,9 @@
   function makeHead() { var h = el('div', 'cards-head'), t = el('span'); h.appendChild(t); h.appendChild(el('span')); return { el: h, t: t }; }
   function setText(node, v) { if (node.textContent !== v) node.textContent = v; }
   function renderCards(now) {
-    var m = now.mf, events = data ? todayTimes(now) : [], tomorrow = data ? tomorrowTimes(now) : null;
+    // Le serveur change de jour à minuit UTC (1 h ou 2 h à Paris) : d'ici là, on n'affiche pas les horaires de la veille.
+    var fresh = !!data && (!data.date || !data.date.gregorian || data.date.gregorian === now.iso);
+    var m = now.mf, events = fresh ? todayTimes(now) : [], tomorrow = fresh ? tomorrowTimes(now) : null;
     var evMin = events.map(function (e) { return { label: e.label, value: e.value, min: toM(e.value) }; });
     var visible = evMin.filter(function (e) { return e.min > m - 1; }).slice(0, 5);
     var cards = visible.concat(tomorrow || []).slice(0, 9);
@@ -848,7 +850,15 @@
     } else if (player.parentNode !== $('thumb')) $('thumb').insertBefore(player, $('thumb').firstChild);
     playV();
   }
-  window.tvKey = function (k) { if (k === 'ok') setBig($('bigLive').hidden); };
+  window.tvKey = function (k) {
+    if (k !== 'ok') return;
+    if (NIGHT) {
+      try { localStorage.setItem('tv-wake-until', String(Date.now() + 60 * 60 * 1000)); } catch (e) {}
+      window.tvNight(false);
+      return;
+    }
+    setBig($('bigLive').hidden);
+  };
   window.tvBack = function () { if (!$('bigLive').hidden) { setBig(false); return true; } return false; };
   document.addEventListener('keydown', function (e) { if (e.key === 'Enter') window.tvKey('ok'); if (e.key === 'Escape') window.tvBack(); });
 
@@ -914,22 +924,31 @@
   /* ===== Veille de nuit et allumage programmé ===== */
   // Horaires réglables à distance dans version.json : "allumage": "09:00", "extinction": "01:00".
   var R0 = window.TV_REMOTE || {};
-  var ON_AT = String(R0.allumage || '09:00'), OFF_AT = String(R0.extinction || '01:00');
+  // Veille désactivée par défaut : l'écran reste allumé toute la nuit (lune, étoiles).
+  // Pour la réactiver, ajouter "allumage" et "extinction" (heures différentes) dans version.json.
+  var ON_AT = String(R0.allumage || ''), OFF_AT = String(R0.extinction || '');
+  var SCHEDULE = toMinTop(ON_AT) != null && toMinTop(OFF_AT) != null && ON_AT !== OFF_AT;
+  // Touche OK la nuit : l'écran se rallume pendant 1 heure (mémorisé, même après un rechargement).
+  var wakeUntil = function () { try { return +localStorage.getItem('tv-wake-until') || 0; } catch (e) { return 0; } };
   window.tvNight = function (on) {
     on = !!on;
+    if (on && Date.now() < wakeUntil()) on = false;
     if (on === NIGHT) return;
     NIGHT = on;
     $('night').hidden = !on;
     if (on) { liveOn = false; teardown(); setBig(false); }
     else location.reload();   // au réveil : écran rechargé, données fraîches
   };
+  var nh = $('nightHint');
+  if (nh && SCHEDULE) { var hp = ON_AT.split(':'); nh.textContent = 'Écran en veille jusqu’à ' + (+hp[0]) + ' h' + (hp[1] && hp[1] !== '00' ? ' ' + hp[1] : '') + ' · appuyez sur OK pour l’allumer'; }
   if (window.TVNative && window.TVNative.setSchedule) {
-    try { window.TVNative.setSchedule(ON_AT, OFF_AT); } catch (e) {}
+    try { window.TVNative.setSchedule(SCHEDULE ? ON_AT : '00:00', SCHEDULE ? OFF_AT : '00:00'); } catch (e) {}
   } else {
     // Sans l'appli (navigateur) : la page gère seule l'écran noir de nuit.
     var nightCheck = function () {
       var n = paris().min, on = toMinTop(ON_AT), off = toMinTop(OFF_AT);
       if (on == null || off == null || on === off) return;
+      if (Date.now() < wakeUntil()) { window.tvNight(false); return; }
       window.tvNight(off < on ? (n >= off && n < on) : (n >= off || n < on));
     };
     nightCheck(); setInterval(nightCheck, 30000);
