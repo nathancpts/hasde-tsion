@@ -1302,6 +1302,8 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
   })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const sArvit = getCommunityTime(saturdayKey, "Arvit");
   if (sArvit) { sTimes.push({ label: "Arvit", value: sArvit }); sTimes.sort(cmp); }
+  const sTorah = getCommunityTime(saturdayKey, "Torah");
+  if (sTorah) { sTimes.push({ label: "Torah", value: sTorah }); sTimes.sort(cmp); }
 
   // Selected day is driven by dayOffset (0 = today, up to +6 = next week)
   const today = new Date();
@@ -2024,6 +2026,8 @@ function PlanningTV() {
   })) as { label: string; value: string; tone?: "gold" | "red" }[];
   const sArvit = getCommunityTime(saturdayKey, "Arvit");
   if (sArvit) { sTimes.push({ label: "Arvit", value: sArvit }); sTimes.sort(cmp); }
+  const sTorah = getCommunityTime(saturdayKey, "Torah");
+  if (sTorah) { sTimes.push({ label: "Torah", value: sTorah }); sTimes.sort(cmp); }
 
   const clock = now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });

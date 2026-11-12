@@ -43,6 +43,25 @@ describe("Noah 16 et 17 octobre 2026", () => {
   });
 });
 
+describe("Toldot 13 et 14 novembre 2026", () => {
+  test("vendredi : allumage 16:55, Minha 17:00, Arvit 17:45", () => {
+    assert.equal(getCommunityTime("2026-11-13", "Entrée de Chabbat"), "16:55");
+    assert.equal(getCommunityMinha("2026-11-13"), "17:00");
+    assert.equal(getCommunityTime("2026-11-13", "Minha"), "17:00");
+    assert.equal(getCommunityTime("2026-11-13", "Arvit"), "17:45");
+  });
+  test("samedi : Chaharit 09:15, Torah 10:15, Minha 16:30, Arvit 18:00", () => {
+    assert.equal(getCommunityTime("2026-11-14", "Chaharit"), "09:15");
+    assert.equal(getCommunityTime("2026-11-14", "Torah"), "10:15");
+    assert.equal(getCommunityMinha("2026-11-14"), "16:30");
+    assert.equal(getCommunityTime("2026-11-14", "Minha"), "16:30");
+    assert.equal(getCommunityTime("2026-11-14", "Arvit"), "18:00");
+  });
+  test("aucune exception le dimanche 15 novembre", () => {
+    assert.equal(getCommunitySchedule("2026-11-15"), null);
+  });
+});
+
 describe("exceptions limitées aux dates indiquées", () => {
   test("aucune exception hors des deux weekends", () => {
     assert.equal(getCommunitySchedule("2026-10-11"), null);

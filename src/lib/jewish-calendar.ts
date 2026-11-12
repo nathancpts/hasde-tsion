@@ -182,7 +182,10 @@ export async function fetchZmanim(now = new Date(), loc?: GeoLoc): Promise<Zmani
   // Programme exceptionnel communiqué par la communauté pour cette date seulement.
   const communitySchedule = getCommunitySchedule(date);
   if (communitySchedule) {
-    times.splice(0, times.length, ...communitySchedule.times);
+    // Garder le coucher du soleil calculé si la communauté ne l'a pas communiqué.
+    const sheqyia = times.find(z => z.label === "Sheqyia");
+    const keepSheqyia = sheqyia && !communitySchedule.times.some(z => /sheq|chekia/i.test(z.label));
+    times.splice(0, times.length, ...communitySchedule.times, ...(keepSheqyia ? [sheqyia] : []));
   }
 
   // Toujours afficher les horaires par ordre chronologique

@@ -123,6 +123,8 @@ export const COMMUNITY_MINHA_OVERRIDES: Record<string, string> = {
   "2026-10-10": "18:30",
   "2026-10-16": "18:40",
   "2026-10-17": "18:20",
+  "2026-11-13": "17:00",
+  "2026-11-14": "16:30",
 };
 
 export function getCommunityMinha(ymd: string): string | null {
@@ -166,6 +168,21 @@ const COMMUNITY_SCHEDULES: Record<string, CommunitySchedule> = {
       { label: "Minha", value: "18:20" },
       { label: "Sheqyia", value: "18:59" },
       { label: "Arvit", value: "19:40" },
+    ],
+  },
+  "2026-11-13": {
+    times: [
+      { label: "Entrée de Chabbat", value: "16:55" },
+      { label: "Minha", value: "17:00" },
+      { label: "Arvit", value: "17:45" },
+    ],
+  },
+  "2026-11-14": {
+    times: [
+      { label: "Chaharit", value: "09:15" },
+      { label: "Torah", value: "10:15" },
+      { label: "Minha", value: "16:30" },
+      { label: "Arvit", value: "18:00" },
     ],
   },
   "2026-09-20": {
