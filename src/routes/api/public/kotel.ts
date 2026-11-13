@@ -75,17 +75,33 @@ export const Route = createFileRoute("/api/public/kotel")({
 
         const get = () =>
           fetch(target!, { headers: UPSTREAM_HEADERS, signal: AbortSignal.timeout(8000) }).catch(() => null);
+        const isSegmentRequest = !!requested && !requested.includes(".m3u8");
         let upstream = await get();
-        if (!upstream || !upstream.ok) upstream = await get();
+        // Un segment expiré (404/403/410) ne reviendra pas : inutile de réessayer.
+        if (!upstream || (!upstream.ok && !(isSegmentRequest && upstream.status < 500))) {
+          upstream = await get();
+        }
         if (!upstream && !requested) {
           master = null;
           target = await getMasterUrl();
           if (target) upstream = await get();
         }
+        if (upstream && !upstream.ok && upstream.status < 500) {
+          // La caméra ne garde que les derniers segments : on renvoie le vrai statut
+          // (souvent 404) pour que le lecteur recharge la playlist, sans fausse erreur serveur.
+          if (!isSegmentRequest) master = null;
+          return new Response("Not found", {
+            status: upstream.status === 403 || upstream.status === 410 ? upstream.status : 404,
+            headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
+          });
+        }
         if (!upstream || !upstream.ok) {
           // Le jeton signé a peut-être expiré : on force un rafraîchissement.
-          master = null;
-          return new Response("Stream unavailable", { status: 502 });
+          if (!isSegmentRequest) master = null;
+          return new Response("Stream unavailable", {
+            status: 502,
+            headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
+          });
         }
         if (!target) return new Response("Stream unavailable", { status: 502 });
         const type = upstream.headers.get("content-type") ?? "";
