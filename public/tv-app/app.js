@@ -742,6 +742,29 @@
     });
   }
 
+  /* ===== Birkat Hachana 5787 : donateurs annuels (copie de src/lib/birkat-hachana.ts du site) ===== */
+  // Liste du site ; si la route /api/public/tv l'envoie un jour (birkatHachana.donors), c'est elle qui sera utilisée.
+  var BIRKAT_DONORS = ['Jonathan Sebbag', 'Sidney Broutinovski', 'Bruno Cohen', 'Raphaël Niddam', 'Rudy Setti', 'Julien Seknagi', 'Gaon Niddam', 'Avram Niddam'];
+  function birkatDonors() {
+    var b = data && data.birkatHachana;
+    return b && Array.isArray(b.donors) && b.donors.length ? b.donors : BIRKAT_DONORS;
+  }
+  // Lundi, jeudi et Chabbat (du vendredi à l'allumage des bougies jusqu'à la fin du samedi)
+  function isBirkatDay(now) {
+    if (now.dow === 1 || now.dow === 4 || now.dow === 6) return true;
+    if (now.dow !== 5) return false;
+    var sh = currentShabbat(now.iso), c = sh && sh.friDate === now.iso ? toMinTop(sh.candle) : null;
+    if (c == null) { var ss = toMinTop((rawToday().filter(function (t) { return /chekia|sheq|coucher/i.test(t.label); })[0] || {}).value); c = ss != null ? ss - 18 : null; }
+    return c != null && now.min >= c;
+  }
+  var birkatSig = '';
+  function renderBirkat(now) {
+    var show = isBirkatDay(now), donors = birkatDonors(), sig = show + '|' + donors.join('|');
+    if (sig === birkatSig) return; birkatSig = sig;
+    $('birkatHead').hidden = !show;
+    if (show) $('birkatHeadNames').textContent = donors.join(' · ');
+  }
+
   /* ===== Colonne de droite ===== */
   // Copie de la vue TV du site (6 et 13 novembre) : dédicace une seule fois en haut,
   // noms sur deux colonnes à partir de 4 familles, taille selon le nombre.
@@ -882,20 +905,29 @@
     var ss = (z.filter(function (t) { return /chekia|sheq|coucher/i.test(t.label); })[0] || {}).value;
     SR = toM(sr || '07:43'); SS = toM(ss || '19:32');
     var now = paris();
-    measure(); renderDates(); renderHead(now); renderCards(now);
-    renderSeouda(); renderEtude(); renderHayom(); updateLive(now);
+    // Chaque bloc est protégé : si l'un échoue sur une télé, les autres s'affichent quand même.
+    [function () { measure(); }, function () { renderDates(); }, function () { renderHead(now); }, function () { renderCards(now); },
+     function () { renderSeouda(); }, function () { renderBirkat(now); }, function () { renderEtude(); }, function () { renderHayom(); },
+     function () { updateLive(now); }].forEach(safeRun);
   }
+  var lastError = '', bootTime = Date.now();
+  function safeRun(fn) { try { fn(); } catch (e) { lastError = (e && e.message) || String(e); try { updateStatus(); } catch (e2) {} } }
+  window.addEventListener('error', function (ev) { lastError = (ev && ev.message) || 'erreur'; });
   function load() {
     return fetchJson(CONFIG.api + '?t=' + Date.now()).then(function (d) {
       lastOk = Date.now();
       try { localStorage.setItem('tv-data', JSON.stringify(d)); localStorage.setItem('tv-data-at', String(lastOk)); } catch (e) {}
       applyData(d); updateStatus();
-    }).catch(function () { updateStatus(); });
+    }).catch(function (e) { lastError = 'données indisponibles (' + ((e && e.message) || 'réseau') + ')'; updateStatus(); });
   }
   function updateStatus() {
     var st = $('status');
     if (lastOk && Date.now() - lastOk > CONFIG.staleMs) {
       st.textContent = 'Hors ligne · données de ' + new Intl.DateTimeFormat('fr-FR', { timeZone: CONFIG.tz, hour: '2-digit', minute: '2-digit' }).format(new Date(lastOk));
+      st.hidden = false;
+    } else if (!data && Date.now() - bootTime > 30000) {
+      // Diagnostic visible : aucune donnée reçue depuis 30 s
+      st.textContent = 'Horaires en cours de chargement' + (lastError ? ' · ' + lastError : '') + ' · touche Menu pour recharger';
       st.hidden = false;
     } else st.hidden = true;
   }
@@ -903,6 +935,11 @@
   /* ===== Horloge (seconde) ===== */
   var lastMin = -1, lastIso = '', bootAt = Date.now(), lastCards = 0;
   function tick() {
+    // L'horloge se relance toujours, même si une étape échoue.
+    try { tickBody(); } catch (e) { lastError = (e && e.message) || String(e); }
+    setTimeout(tick, 1000 - (Date.now() % 1000) + 20);
+  }
+  function tickBody() {
     var now = paris();
     renderClock(fmt(now.mf));
     if (Date.now() - lastCards > 15000) { lastCards = Date.now(); if (data) renderCards(now); }
@@ -910,13 +947,12 @@
       lastMin = now.min;
       $('phase').textContent = sunPhase(now.mf, SR, SS);
       if (now.iso !== lastIso) { lastIso = now.iso; renderDates(); $('moon').innerHTML = moonSVG(moonData(new Date()).phase); }
-      if (data) { renderHead(now); renderCards(now); updateLive(now); }
+      if (data) { renderHead(now); renderCards(now); renderBirkat(now); updateLive(now); }
       updateStatus();
       if (data && data.date && data.date.gregorian && data.date.gregorian !== now.iso && now.m % 2 === 0) load();
       if (now.m % 10 === 0) { shift.x = Math.round(Math.random() * 4 - 2); shift.y = Math.round(Math.random() * 4 - 2); fit(); }
       if (now.h === 4 && now.m === 0 && Date.now() - bootAt > 3600000) location.reload();
     }
-    setTimeout(tick, 1000 - (Date.now() % 1000) + 20);
   }
 
   /* ===== Démarrage ===== */
@@ -931,6 +967,8 @@
   requestAnimationFrame(loop);
   load(); loadWeather();
   setInterval(load, CONFIG.refreshMs);
+  // Pas encore de données (premier lancement, réseau lent) : nouvel essai toutes les 30 s.
+  setInterval(function () { if (!data) load(); }, 30000);
   setInterval(loadWeather, CONFIG.weatherMs);
 
   /* ===== Veille de nuit et allumage programmé ===== */

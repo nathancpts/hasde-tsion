@@ -154,3 +154,8 @@ ul { margin: 0; }
 /* Veille de nuit : écran noir, aucune animation */
 .night { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 99999; background: #000; }
 .night-hint { position: absolute; left: 0; right: 0; bottom: 64px; margin: 0; text-align: center; font-family: 'Inter', system-ui, sans-serif; font-size: 22px; letter-spacing: .02em; color: rgba(243,246,252,.22); }
+
+/* Birkat Hachana : donateurs annuels sous la météo (lundi, jeudi, Chabbat) — copie de la vue TV du site */
+.h-birkat { margin-top: 9.72px; max-width: 34ch; }
+.h-birkat-t { font-family: var(--mont); font-size: 11.34px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: #F0D689; }
+.h-birkat-n { margin-top: 4.32px; font-family: var(--mont); font-size: 13.5px; font-weight: 600; line-height: 1.45; color: #F3F6FC; text-shadow: 0 2px 12px rgba(5,13,32,.5); }
