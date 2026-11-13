@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import RealisticSun from "./RealisticSun";
 import { sunWeather } from "@/lib/sun-weather";
+import { BIRKAT_HACHANA_DONORS, isBirkatHachanaDay } from "@/lib/birkat-hachana";
 
 export interface TVSkyEvent {
   label: string;
@@ -525,6 +526,16 @@ export function TVSky({
           {wx && (
             <div style={{ marginTop: "0.6vh", fontFamily: MONT, fontSize: "1.5vh", letterSpacing: "0.08em", color: "#DBE7FB", opacity: 0.9 }} aria-live="polite">
               Actuellement · {wxLabel(wx.code)}{wx.temp != null ? ` · ${Math.round(wx.temp)} °C` : ""}
+            </div>
+          )}
+          {isBirkatHachanaDay(new Date()) && (
+            <div style={{ marginTop: "0.9vh", maxWidth: "34ch" }}>
+              <p className="uppercase" style={{ fontFamily: MONT, fontSize: "1.05vh", fontWeight: 700, letterSpacing: "0.28em", color: "#F0D689" }}>
+                Birkat Hachana 5787 · Nos donateurs annuels
+              </p>
+              <p style={{ marginTop: "0.4vh", fontFamily: MONT, fontSize: "1.25vh", fontWeight: 600, lineHeight: 1.45, color: "#F3F6FC", textShadow: "0 2px 12px rgba(5,13,32,.5)" }}>
+                {BIRKAT_HACHANA_DONORS.join(" · ")}
+              </p>
             </div>
           )}
         </div>
