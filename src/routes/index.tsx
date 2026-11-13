@@ -2223,12 +2223,17 @@ function PlanningTV() {
             <h3 className="mt-[0.3vh]" style={{ ...TV_TITLE, fontSize: "2.2vh", lineHeight: 1.15 }}>
               La Séouda est offerte par
             </h3>
+            {DONATIONS_REPAS[0]?.dedicace && (
+              <p style={{ marginTop: "0.3vh", fontSize: "1.5vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.25 }}>
+                {DONATIONS_REPAS[0].dedicace}
+              </p>
+            )}
             <div className="mt-[0.5vh] min-h-0 flex-1 overflow-hidden">
               {DONATIONS_REPAS.length > 0 ? (
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: DONATIONS_REPAS.length >= 5 ? "1fr 1fr" : "1fr",
+                    gridTemplateColumns: DONATIONS_REPAS.length >= 4 ? "1fr 1fr" : "1fr",
                     columnGap: "1vw",
                     alignContent: "start",
                   }}
@@ -2241,7 +2246,7 @@ function PlanningTV() {
                     >
                       <span
                         style={{
-                          fontSize: DONATIONS_REPAS.length > 6 ? "1.5vh" : "2.1vh",
+                          fontSize: DONATIONS_REPAS.length > 6 ? "1.5vh" : DONATIONS_REPAS.length >= 4 ? "1.8vh" : "2.1vh",
                           fontWeight: 700,
                           color: "#F3F6FC",
                           lineHeight: 1.2,
@@ -2249,11 +2254,6 @@ function PlanningTV() {
                       >
                         {d.donateur}
                       </span>
-                      {d.dedicace && (
-                        <span style={{ fontSize: "1.6vh", fontStyle: "italic", color: "#9FB0CF", lineHeight: 1.3 }}>
-                          {d.dedicace}
-                        </span>
-                      )}
                     </div>
                   ))}
                 </div>
