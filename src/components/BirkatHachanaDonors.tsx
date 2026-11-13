@@ -1,16 +1,30 @@
-// Donateurs annuels Birkat Hachana 5787 — noms seuls (jamais de téléphone ni d'e-mail).
-const DONORS = [
-  "Jonathan Sebbag",
-  "Sidney Broutinovski",
-  "Bruno Cohen",
-  "Raphaël Niddam",
-  "Rudy Setti",
-  "Julien Seknagi",
-  "Gaon Niddam",
-  "Avram Niddam",
-];
+import { useEffect, useState } from "react";
+import { BIRKAT_HACHANA_DONORS as DONORS, isBirkatHachanaDay } from "@/lib/birkat-hachana";
 
 export default function BirkatHachanaDonors() {
+  // Lu après hydratation pour éviter un décalage serveur/navigateur ; revérifié chaque minute.
+  const [show, setShow] = useState<boolean | null>(null);
+  useEffect(() => {
+    const check = () => setShow(isBirkatHachanaDay(new Date()));
+    check();
+    const id = setInterval(check, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  if (show === null) return null;
+
+  if (!show) {
+    return (
+      <article className="rounded-2xl bg-white p-5 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+        <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-[#1f4ea8] mb-1">
+          Birkat Hachana 5787
+        </p>
+        <p className="text-[13px] text-muted-foreground">
+          Nos donateurs annuels sont affichés le lundi, le jeudi et le Chabbat.
+        </p>
+      </article>
+    );
+  }
+
   return (
     <div className="space-y-3">
       <article

@@ -18,6 +18,7 @@ import { useParashaContent } from "@/lib/parasha-content";
 import { getHayomYom } from "@/lib/hayom-yom";
 import CommunitySection from "@/components/community/CommunitySection";
 import BirkatHachanaDonors from "@/components/BirkatHachanaDonors";
+import { BIRKAT_HACHANA_DONORS, isBirkatHachanaDay } from "@/lib/birkat-hachana";
 import KotelLive from "@/components/KotelLive";
 import { TVAppQrPopup } from "@/components/TVAppQrPopup";
 import MobileChants from "@/components/MobileChants";
@@ -2271,6 +2272,34 @@ function PlanningTV() {
             </span>
           </div>}
           </div>
+
+          {/* BIRKAT HACHANA — donateurs annuels, lundi, jeudi et Chabbat seulement */}
+          {isBirkatHachanaDay(now) && (
+            <article className="shrink-0" style={{ ...GLASS, padding: "1.3vh 1.2vw" }}>
+              <div className="flex items-baseline justify-between gap-[1vw]">
+                <p className="uppercase" style={LABEL}>
+                  Birkat Hachana 5787
+                </p>
+                <h3 style={{ ...TV_TITLE, fontSize: "2vh", lineHeight: 1.15 }}>Nos donateurs annuels</h3>
+              </div>
+              <div
+                style={{
+                  marginTop: "0.8vh",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  columnGap: "1.1vw",
+                  rowGap: "0.5vh",
+                }}
+              >
+                {BIRKAT_HACHANA_DONORS.map((name) => (
+                  <span key={name} className="whitespace-nowrap" style={{ fontSize: "1.5vh", fontWeight: 700, color: "#F3F6FC", lineHeight: 1.25 }}>
+                    <span style={{ color: "#F0D689", marginRight: "0.4em" }}>✦</span>
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </article>
+          )}
 
           {/* PARASHA — défilement doux */}
           <article className="flex min-h-0 flex-col" style={{ ...GLASS, flex: "1.6 1 0", minHeight: "16%", padding: "1.8vh 1.4vw" }}>

@@ -121,7 +121,7 @@ async function buildPayload() {
 
   // ---- Séouda de la semaine ----
   const seouda = await safe(() =>
-    DONATIONS_REPAS.map((d) => ({ donateur: d.donateur, occasion: d.occasion ?? null })),
+    DONATIONS_REPAS.map((d) => ({ donateur: d.donateur, occasion: d.occasion ?? null, dedicace: d.dedicace ?? null })),
   );
 
   return {
