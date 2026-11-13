@@ -22,6 +22,13 @@
       "when": 1792004096463,
       "tag": "0002_admin_email_jsebbagh",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794582883460,
+      "tag": "0003_tighten_push_subscription_insert",
+      "breakpoints": true
     }
   ]
 }
