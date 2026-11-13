@@ -17,8 +17,7 @@ import { PARASHA_NOM, DONATIONS_REPAS } from "@/lib/weekly-content";
 import { useParashaContent } from "@/lib/parasha-content";
 import { getHayomYom } from "@/lib/hayom-yom";
 import CommunitySection from "@/components/community/CommunitySection";
-import SouccotMenu from "@/components/SouccotMenu";
-import SimhatTorahEvent from "@/components/SimhatTorahEvent";
+import BirkatHachanaDonors from "@/components/BirkatHachanaDonors";
 import KotelLive from "@/components/KotelLive";
 import { TVAppQrPopup } from "@/components/TVAppQrPopup";
 import MobileChants from "@/components/MobileChants";
@@ -1325,8 +1324,6 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
 
   // Section tab in white surface
-  // Événement Souccot : affiché jusqu'au 27 septembre 2026 inclus, puis « événement passé » compact
-  const souccotVisible = new Date() <= new Date(2026, 8, 27, 23, 59, 59);
   const [sectionTab, setSectionTab] = useState<"horaires" | "etude" | "chants" | "communaute">("horaires");
   const [accountLabel, setAccountLabel] = useState("Connexion");
 
@@ -1871,8 +1868,7 @@ function MobileLayout({ live, chabad, zmanim, dayOffset, setDayOffset }: { live:
 
           {sectionTab === "communaute" && (
             <div className="space-y-5">
-              <SimhatTorahEvent />
-              <SouccotMenu past={!souccotVisible} />
+              <BirkatHachanaDonors />
             </div>
           )}
 
