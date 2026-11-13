@@ -542,6 +542,7 @@
     this.pos = 0; this.track.style.transform = 'translate3d(0,0,0)';
     this.h = this.inner.offsetHeight;
     this.loop = this.h > this.vp.clientHeight + 2;
+    this.vp.classList.toggle('looping', this.loop);
     if (!this.loop) return;
     this.clone = this.inner.cloneNode(true); this.clone.removeAttribute('id'); this.clone.setAttribute('aria-hidden', 'true'); this.track.appendChild(this.clone);
     // Défilement sur le compositeur (Web Animations) : aucune saccade quand le soleil ou la météo travaillent.
@@ -561,8 +562,8 @@
     if (this.h > 0 && this.pos >= this.h) this.pos -= this.h;
     this.track.style.transform = 'translate3d(0,' + (-this.pos) + 'px,0)';
   };
-  var etudeLoop = new AutoLoop($('etudeLoop'), 9), hayomLoop = new AutoLoop($('hayomLoop'), 9);
-  var recheckLoops = function () { etudeLoop.check(); hayomLoop.check(); };
+  var etudeLoop = new AutoLoop($('etudeLoop'), 9), hayomLoop = new AutoLoop($('hayomLoop'), 9), seoudaLoop = new AutoLoop($('seoudaLoop'), 9);
+  var recheckLoops = function () { etudeLoop.check(); hayomLoop.check(); seoudaLoop.check(); };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(recheckLoops, 100); });
   window.addEventListener('load', function () { setTimeout(recheckLoops, 300); });
   setInterval(recheckLoops, 4000);
@@ -742,15 +743,24 @@
   }
 
   /* ===== Colonne de droite ===== */
+  // Copie de la vue TV du site (6 et 13 novembre) : dédicace une seule fois en haut,
+  // noms sur deux colonnes à partir de 4 familles, taille selon le nombre.
   function renderSeouda() {
     var box = $('seoudaList'); clear(box);
     var dons = arr(data && data.seouda);
-    if (!dons.length) { box.appendChild(el('p', 'don-empty', 'Aucune donation pour le moment.')); return; }
-    dons.forEach(function (d) {
-      var row = el('div', 'don'); row.appendChild(el('span', 'don-name', d.donateur || ''));
-      if (d.dedicace) row.appendChild(el('span', 'don-ded', d.dedicace));
+    var ded = dons[0] && dons[0].dedicace ? String(dons[0].dedicace) : '';
+    $('seoudaDed').textContent = ded; $('seoudaDed').hidden = !ded;
+    if (!dons.length) { box.className = 'seouda-list'; box.appendChild(el('p', 'don-empty', 'Aucune donation pour le moment.')); seoudaLoop.refresh(); return; }
+    // deux colonnes à partir de 4 noms, comme le site, sauf si le bloc est trop étroit (miniature du live à côté)
+    var wide = $('seoudaLoop').clientWidth >= 420;
+    box.className = 'seouda-list' + (dons.length >= 4 && wide ? ' two' : '');
+    var size = dons.length > 6 ? 'sm' : dons.length >= 4 ? 'md' : 'lg';
+    dons.forEach(function (d, i) {
+      var row = el('div', 'don' + (i > 0 ? ' sep' : ''));
+      row.appendChild(el('span', 'don-name ' + size, d.donateur || ''));
       box.appendChild(row);
     });
+    seoudaLoop.refresh();
   }
   var etudeSig = '', hayomSig = '';
   function renderEtude() {
@@ -831,7 +841,9 @@
   function updateLive(now) {
     if (NIGHT) return;
     var show = CONFIG.video && !noLiveAt(now);
+    var thumbWas = $('thumb').hidden;
     $('liveBar').hidden = !show; $('thumb').hidden = !show;
+    if (thumbWas !== !show && data) renderSeouda();   // largeur du bloc séouda modifiée
     if (show && !liveOn) { liveOn = true; setStatus('loading'); startLive(); }
     else if (!show && liveOn) { liveOn = false; teardown(); setBig(false); }
   }

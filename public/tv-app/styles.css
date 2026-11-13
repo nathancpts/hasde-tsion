@@ -91,16 +91,21 @@ ul { margin: 0; }
 .live-btn { flex-shrink: 0; border-radius: 999px; padding: 11.88px 28.8px; font-family: var(--mont); font-size: 13.5px; font-weight: 700; letter-spacing: .14em; color: #0A1128;
   background: linear-gradient(135deg, #D4AF37 0%, #E8C97A 100%); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 4px 18px rgba(212,175,55,.35); }
 
-.community { display: flex; min-height: 0; gap: 19.2px; flex: 0 0 auto; height: 17%; }
+.community { display: flex; min-height: 0; gap: 19.2px; flex: 0 0 auto; height: 20.5%; }
 .seouda { display: flex; flex-direction: column; min-height: 0; min-width: 0; flex: 1; padding: 15.12px 23.04px; }
 .seouda-title { margin-top: 3.24px; font-size: 23.76px; line-height: 1.15; }
-.seouda-list { margin-top: 5.4px; min-height: 0; flex: 1; overflow: hidden; }
-.don { display: flex; flex-direction: column; padding: 3.24px 0; }
-.don + .don { border-top: 1px dashed rgba(219,231,251,.14); }
+.seouda-ded { margin-top: 0; font-size: 16.2px; font-style: italic; color: #9FB0CF; line-height: 1.25; }
+.seouda-box { margin-top: 5.4px; }
+.seouda-list { margin-top: 5.4px; display: grid; grid-template-columns: 1fr; column-gap: 19.2px; align-content: start; }
+.seouda-list.two { grid-template-columns: 1fr 1fr; }
+.don { display: flex; flex-direction: column; padding: 2.7px 0; min-width: 0; }
+.don.sep { border-top: 1px dashed rgba(219,231,251,.14); }
 .don-name { font-size: 22.68px; font-weight: 700; color: #F3F6FC; line-height: 1.2; }
+.don-name.md { font-size: 19.44px; }
+.don-name.sm { font-size: 16.2px; }
 .don-ded { font-size: 17.28px; font-style: italic; color: #9FB0CF; line-height: 1.3; }
 .don-empty { padding: 4.32px 0; font-size: 15.12px; font-style: italic; color: #9FB0CF; }
-.thumb { position: relative; overflow: hidden; flex: 0 0 auto; height: 100%; width: 309.4px; max-width: 50%; padding: 0; border-radius: 22px; }
+.thumb { position: relative; overflow: hidden; flex: 0 0 auto; height: 100%; width: 373.2px; max-width: 50%; padding: 0; border-radius: 22px; }
 .player { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border-radius: 22px; }
 .player video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; background: #0b1c3a; }
 .player-msg { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: #0b1c3a; color: rgba(255,255,255,.7); font-size: 12px; letter-spacing: .025em; }
@@ -110,11 +115,13 @@ ul { margin: 0; }
 .etude { display: flex; flex-direction: column; min-height: 16%; flex: 1.6 1 0; padding: 19.44px 26.88px; }
 .loop-box { position: relative; margin-top: 10.8px; min-height: 0; flex: 1; overflow: hidden; }
 .loop-viewport { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden;
-  /* fondu en haut et en bas : les lignes s'estompent au lieu d'être coupées net */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
   /* couche d'affichage dédiée : évite les bandes que certains navigateurs (Safari) dessinent sous un fondu animé */
   -webkit-transform: translateZ(0); transform: translateZ(0); will-change: transform; }
+/* fondu en haut et en bas, seulement quand le bloc défile : les lignes s'estompent au lieu d'être coupées net */
+.loop-viewport.looping { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 34px, #000 calc(100% - 34px), transparent 100%); }
+.seouda-box .loop-viewport.looping { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%); }
 .loop-track { will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .p-intro { margin-top: 6.48px; font-size: 15.66px; line-height: 1.65; color: #9FB0CF; font-style: italic; white-space: pre-line; }
 .p-bloc { margin-top: 15.12px; }
