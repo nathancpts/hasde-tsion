@@ -127,8 +127,10 @@ async function fetchCaljUncached(date: string): Promise<{
   const set = (key: string, v: string | null) => {
     if (v) times[key] = v;
   };
-  set("Alot haShahar", pick(z, "alot haShaḥar", "Rav Ovadia") ?? pick(z, "alot haShaḥar"));
-  set("Misheyakir / Tefilin", pick(z, "début tefilin", "Rav Ovadia") ?? pick(z, "début tefilin"));
+  // Aube et Téfilines selon le Rav Posen (16,1°), cohérent avec la limite du Chema M"A ;
+  // l'avis du Rav Ovadia ne laissait que 5 min entre l'aube et les Téfilines.
+  set("Alot haShahar", pick(z, "alot haShaḥar", "Rav Posen") ?? pick(z, "alot haShaḥar"));
+  set("Misheyakir / Tefilin", pick(z, "début tefilin", "Rav Posen") ?? pick(z, "début tefilin"));
   set("Hanetz haHama", pick(z, "hanetz"));
   set('Limite Shema M"A', pick(z, 'limite shéma (M"A)'));
   set('Limite Shema GR"A', pick(z, 'limite shéma (GR"A)'));
