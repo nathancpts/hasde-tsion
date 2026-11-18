@@ -918,12 +918,14 @@
       lastOk = Date.now();
       try { localStorage.setItem('tv-data', JSON.stringify(d)); localStorage.setItem('tv-data-at', String(lastOk)); } catch (e) {}
       applyData(d); updateStatus();
-    }).catch(function (e) { lastError = 'données indisponibles (' + ((e && e.message) || 'réseau') + ')'; updateStatus(); });
+    }).catch(function (e) { lastError = 'échec ' + ((e && e.name === 'AbortError') ? 'délai dépassé' : ((e && e.message) || 'réseau')); updateStatus(); });
   }
   function updateStatus() {
     var st = $('status');
     if (lastOk && Date.now() - lastOk > CONFIG.staleMs) {
-      st.textContent = 'Hors ligne · données de ' + new Intl.DateTimeFormat('fr-FR', { timeZone: CONFIG.tz, hour: '2-digit', minute: '2-digit' }).format(new Date(lastOk));
+      // Diagnostic : date des dernières données + cause de l'échec + version affichée
+      st.textContent = 'Données du ' + new Intl.DateTimeFormat('fr-FR', { timeZone: CONFIG.tz, weekday: 'long', hour: '2-digit', minute: '2-digit' }).format(new Date(lastOk))
+        + (lastError ? ' · ' + lastError : '') + ' · v' + (window.TV_VERSION || '?') + ' · touche Menu pour recharger';
       st.hidden = false;
     } else if (!data && Date.now() - bootTime > 30000) {
       // Diagnostic visible : aucune donnée reçue depuis 30 s
