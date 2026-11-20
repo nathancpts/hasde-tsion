@@ -1,6 +1,12 @@
 {
-  "version": "2026-11-18.1",
+  "version": "2026-11-20.1",
   "sunFps": 30,
   "video": true,
-  "liveGrandMinutes": 0
+  "liveGrandMinutes": 0,
+  "annonces": {
+    "du": "2026-11-20T00:00",
+    "au": "2026-11-23T00:00",
+    "minutes": 5,
+    "images": ["annonce-mi-sheberakh.jpg", "annonce-halakhot-shabat.jpg"]
+  }
 }

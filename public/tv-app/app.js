@@ -572,7 +572,7 @@
   var lastSun = 0, lastSky = 0, lastT = 0, sunCost = 0, sunFpsNow = CONFIG.sunFps;
   var NIGHT = false;
   function loop(t) {
-    if (!document.hidden && !NIGHT) {
+    if (!document.hidden && !NIGHT && !ANN_ON) {
       var dt = Math.min(t - (lastT || t), 100); lastT = t;
       if (t - lastSun >= 1000 / sunFpsNow) {
         lastSun = t;
@@ -1005,6 +1005,38 @@
     };
     nightCheck(); setInterval(nightCheck, 30000);
   }
+
+  /* ===== Annonces plein écran en alternance ===== */
+  // version.json : "annonces": { "du": "2026-11-20T00:00", "au": "2026-11-23T00:00", "minutes": 5, "images": ["a.jpg", "b.jpg"] }
+  // Cycle calé sur l'horloge (toutes les télés en même temps) : image 1 pendant 5 min, écran normal 5 min,
+  // image 2 pendant 5 min, écran normal 5 min, et ainsi de suite.
+  var ANN = (window.TV_REMOTE && window.TV_REMOTE.annonces) || null, ANN_ON = false, annOk = {};
+  if (ANN && Array.isArray(ANN.images) && ANN.images.length) {
+    ANN.images.forEach(function (src) {
+      var im = new Image();
+      im.onload = function () { annOk[src] = true; };
+      im.onerror = function () { annOk[src] = false; };
+      im.src = src + '?v=' + (window.TV_VERSION || '');
+    });
+  } else ANN = null;
+  function updateAnnonce(now) {
+    var show = '';
+    if (ANN && !NIGHT && $('bigLive').hidden) {
+      var stamp = now.iso + 'T' + pad2(now.h) + ':' + pad2(now.m);
+      if ((!ANN.du || stamp >= ANN.du) && (!ANN.au || stamp < ANN.au)) {
+        var step = Math.max(1, +ANN.minutes || 5), n = ANN.images.length;
+        var slot = Math.floor(now.min / step) % (2 * n);
+        if (slot % 2 === 0) { var src = ANN.images[slot / 2]; if (annOk[src]) show = src; }
+      }
+    }
+    var box = $('annonce'), img = $('annonceImg');
+    if (show) {
+      var url = show + '?v=' + (window.TV_VERSION || '');
+      if (img.getAttribute('src') !== url) img.setAttribute('src', url);
+      box.classList.add('on'); ANN_ON = true;
+    } else { box.classList.remove('on'); ANN_ON = false; }
+  }
+  setInterval(function () { try { updateAnnonce(paris()); } catch (e) {} }, 1000);
 
   /* ===== Mise à jour à distance ===== */
   // Si version.json a changé sur le site, la télé recharge l'écran (nouveau design, corrections).
