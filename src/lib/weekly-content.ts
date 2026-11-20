@@ -31,16 +31,15 @@ export const PARASHA_BLOCS: ParashaBloc[] = _current.blocs;
 
 // Date (lundi) de la semaine pour laquelle ces donateurs sont valables.
 // Format YYYY-MM-DD. Dès le lundi suivant, la liste se vide automatiquement.
-const DONATIONS_WEEK_MONDAY = "2026-11-09";
+const DONATIONS_WEEK_MONDAY = "2026-11-16";
 
 const _DONATIONS_RAW: Donation[] = [
   {
-    donateur: "Famille Zarhi Rudy",
-    dedicace: "Hazak aux Familles Zarhi Rudy, Wais Tsion, Niddam Raphael & Niddam Avram, qui prennent sur Elles, la Parachat Toldot ✨",
+    donateur: "Famille Cohen Bruno",
+    dedicace: "Hazak aux Familles Cohen Bruno, Zarhi Rudy et Mimouni Bryan, qui prennent sur eux la Parachat Vayetse ✨",
   },
-  { donateur: "Famille Wais Tsion" },
-  { donateur: "Famille Niddam Raphael" },
-  { donateur: "Famille Niddam Avram" },
+  { donateur: "Famille Zarhi Rudy" },
+  { donateur: "Famille Mimouni Bryan" },
 ];
 
 function currentMondayISO(now = new Date()): string {
@@ -53,8 +52,11 @@ function currentMondayISO(now = new Date()): string {
 
 // Vide la liste chaque lundi : si la semaine en cours est postérieure
 // à DONATIONS_WEEK_MONDAY, on renvoie un tableau vide.
-export const DONATIONS_REPAS: Donation[] =
-  currentMondayISO() > DONATIONS_WEEK_MONDAY ? [] : _DONATIONS_RAW;
+export function getDonationsRepas(now = new Date()): Donation[] {
+  return currentMondayISO(now) > DONATIONS_WEEK_MONDAY ? [] : _DONATIONS_RAW;
+}
+
+export const DONATIONS_REPAS: Donation[] = getDonationsRepas();
 
 
 
