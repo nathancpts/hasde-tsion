@@ -20,6 +20,7 @@ import CommunitySection from "@/components/community/CommunitySection";
 import BirkatHachanaDonors from "@/components/BirkatHachanaDonors";
 import KotelLive from "@/components/KotelLive";
 import { TVAppQrPopup } from "@/components/TVAppQrPopup";
+import { TVVisualsPopup } from "@/components/TVVisualsPopup";
 import MobileChants from "@/components/MobileChants";
 import { HayomYomCard } from "@/components/HayomYomCard";
 
@@ -2352,6 +2353,7 @@ function PlanningTV() {
       </div>
 
       <TVAppQrPopup />
+      <TVVisualsPopup />
       {liveOpen && !noLive && typeof document !== "undefined" && createPortal(
         <div
           className="fixed inset-0 z-[9000] flex items-center justify-center"
