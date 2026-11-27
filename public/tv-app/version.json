@@ -1,12 +1,14 @@
 {
-  "version": "2026-11-20.1",
+  "version": "2026-11-27.1",
   "sunFps": 30,
   "video": true,
   "liveGrandMinutes": 0,
-  "annonces": {
-    "du": "2026-11-20T00:00",
-    "au": "2026-11-23T00:00",
-    "minutes": 5,
-    "images": ["annonce-mi-sheberakh.jpg", "annonce-halakhot-shabat.jpg"]
+  "visuels": {
+    "toutes": 3,
+    "pendant": 1,
+    "images": [
+      "https://hasde-tsion.com/__l5e/assets-v1/96dbc2eb-99a1-41bc-abaa-16ee7d8945eb/siha-rabbi-seouda-chlichit.jpg",
+      "https://hasde-tsion.com/__l5e/assets-v1/9108d73c-6a9d-4409-b982-bcbe154ccb75/lois-lachone-hara.jpg"
+    ]
   }
 }
