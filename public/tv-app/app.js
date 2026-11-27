@@ -850,9 +850,22 @@
       if (video.readyState < 2 || video.currentTime === lastTime) stalled += 1; else stalled = 0;
       lastTime = video.currentTime;
       if (stalled >= 4) retry();
+      liveDiag();
     }, 7000);
   }
   video.addEventListener('playing', function () { stalled = 0; mediaRetries = 0; setStatus('playing'); });
+  // Diagnostic du live : taille de l'image reçue et nombre d'images décodées.
+  // Si la télé ne reçoit que le son (aucune image), on l'indique dans la miniature au lieu d'un carré noir.
+  function liveDiag() {
+    var w = video.videoWidth, h = video.videoHeight, frames = -1;
+    try { var q = video.getVideoPlaybackQuality && video.getVideoPlaybackQuality(); if (q) frames = q.totalVideoFrames; } catch (e) {}
+    if (!video.paused && video.readyState >= 2 && status === 'playing' && (w === 0 || frames === 0)) {
+      msg.hidden = false; msg.textContent = 'Live : la télé reçoit le son mais pas l’image';
+    }
+    var d = $('liveDiag'), on = !!(window.TV_REMOTE && window.TV_REMOTE.diagLive);
+    d.hidden = !on;
+    if (on) d.textContent = (w || 0) + '×' + (h || 0) + ' · ' + (frames < 0 ? '?' : frames) + ' img · ' + (hls ? 'hls' : 'natif') + ' · ' + video.readyState;
+  }
   video.addEventListener('error', function () { retry(); });
 
   // Live masqué du vendredi 12 h au dimanche 00 h 01, comme sur le site
