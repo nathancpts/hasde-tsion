@@ -1006,17 +1006,18 @@
     nightCheck(); setInterval(nightCheck, 30000);
   }
 
-  /* ===== Annonces plein écran en alternance ===== */
-  // version.json : "annonces": { "du": "2026-11-20T00:00", "au": "2026-11-23T00:00", "minutes": 5, "images": ["a.jpg", "b.jpg"] }
-  // Cycle calé sur l'horloge (toutes les télés en même temps) : image 1 pendant 5 min, écran normal 5 min,
-  // image 2 pendant 5 min, écran normal 5 min, et ainsi de suite.
-  var ANN = (window.TV_REMOTE && window.TV_REMOTE.annonces) || null, ANN_ON = false, annOk = {};
+  /* ===== Visuels / annonces plein écran (copie de TVVisualsPopup du site) ===== */
+  // version.json → "visuels": { "toutes": 3, "pendant": 1, "images": ["https://…/a.jpg", "https://…/b.jpg"], "du": "…", "au": "…" }
+  //   un visuel pendant « pendant » minutes toutes les « toutes » minutes, en alternance ; du/au facultatifs.
+  // Ancien format "annonces" (5 min visuel / 5 min écran normal) toujours accepté.
+  var R1 = window.TV_REMOTE || {};
+  var ANN = R1.visuels || R1.annonces || null, ANN_ON = false, annOk = {};
   if (ANN && Array.isArray(ANN.images) && ANN.images.length) {
     ANN.images.forEach(function (src) {
       var im = new Image();
       im.onload = function () { annOk[src] = true; };
       im.onerror = function () { annOk[src] = false; };
-      im.src = src + '?v=' + (window.TV_VERSION || '');
+      im.src = src;
     });
   } else ANN = null;
   function updateAnnonce(now) {
@@ -1024,15 +1025,20 @@
     if (ANN && !NIGHT && $('bigLive').hidden) {
       var stamp = now.iso + 'T' + pad2(now.h) + ':' + pad2(now.m);
       if ((!ANN.du || stamp >= ANN.du) && (!ANN.au || stamp < ANN.au)) {
-        var step = Math.max(1, +ANN.minutes || 5), n = ANN.images.length;
-        var slot = Math.floor(now.min / step) % (2 * n);
-        if (slot % 2 === 0) { var src = ANN.images[slot / 2]; if (annOk[src]) show = src; }
+        var n = ANN.images.length, idx = -1;
+        if (ANN.toutes) {
+          var every = Math.max(1, +ANN.toutes), dur = Math.max(1, +ANN.pendant || 1);
+          if (now.min % every < dur) idx = Math.floor(now.min / every) % n;
+        } else {
+          var step = Math.max(1, +ANN.minutes || 5), slot = Math.floor(now.min / step) % (2 * n);
+          if (slot % 2 === 0) idx = slot / 2;
+        }
+        if (idx >= 0 && annOk[ANN.images[idx]]) show = ANN.images[idx];
       }
     }
-    var box = $('annonce'), img = $('annonceImg');
+    var box = $('annonce');
     if (show) {
-      var url = show + '?v=' + (window.TV_VERSION || '');
-      if (img.getAttribute('src') !== url) img.setAttribute('src', url);
+      if ($('annonceImg').getAttribute('src') !== show) { $('annonceImg').setAttribute('src', show); $('annonceBg').setAttribute('src', show); }
       box.classList.add('on'); ANN_ON = true;
     } else { box.classList.remove('on'); ANN_ON = false; }
   }
