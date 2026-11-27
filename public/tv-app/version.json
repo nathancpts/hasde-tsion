@@ -1,8 +1,9 @@
 {
-  "version": "2026-11-27.1",
+  "version": "2026-11-27.2",
   "sunFps": 30,
   "video": true,
   "liveGrandMinutes": 0,
+  "diagLive": true,
   "visuels": {
     "toutes": 3,
     "pendant": 1,
